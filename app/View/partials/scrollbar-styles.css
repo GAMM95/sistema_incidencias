@@ -1,0 +1,52 @@
+/* Personalización general de la barra de desplazamiento */
+::-webkit-scrollbar {
+  width: 8px;
+  /* Ancho de la barra de desplazamiento */
+}
+
+/* Fondo de la barra de desplazamiento */
+::-webkit-scrollbar-track {
+  background: #7a7a7a;
+  /* Color de fondo de la pista de desplazamiento */
+}
+
+/* Estilo de la parte móvil de la barra de desplazamiento */
+::-webkit-scrollbar-thumb {
+  background: #dbdbdb;
+  /* Color inicial de la parte móvil de la barra de desplazamiento */
+  border-radius: 5px;
+  /* Bordes redondeados para la parte móvil */
+  transition: background-color 0.8s ease;
+  /* Transición suave y lenta para el color de la parte móvil */
+}
+
+/* Estilo de la parte móvil al pasar el cursor */
+::-webkit-scrollbar-thumb:hover {
+  background: #1abc9c;
+  /* Color de la parte móvil cuando el cursor pasa sobre ella */
+}
+
+/* Aplicación específica para el aside */
+aside::-webkit-scrollbar {
+  width: 8px;
+  /* Ancho de la barra de desplazamiento dentro de aside */
+}
+
+aside::-webkit-scrollbar-track {
+  background: #424242;
+  /* Color de fondo de la pista de desplazamiento dentro de aside */
+}
+
+aside::-webkit-scrollbar-thumb {
+  background: #888888;
+  /* Color inicial de la parte móvil de la barra de desplazamiento dentro de aside */
+  border-radius: 5px;
+  /* Bordes redondeados para la parte móvil en aside */
+  transition: background-color 0.8s ease;
+  /* Transición suave y lenta para el color de la parte móvil dentro de aside */
+}
+
+aside::-webkit-scrollbar-thumb:hover {
+  background: #555555;
+  /* Color de la parte móvil cuando el cursor pasa sobre ella dentro de aside */
+}
