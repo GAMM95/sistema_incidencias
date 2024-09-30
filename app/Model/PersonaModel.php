@@ -1,5 +1,6 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class PersonaModel extends Conexion
 {
@@ -35,30 +36,36 @@ class PersonaModel extends Conexion
   {
     $conector = parent::getConexion();
     try {
-      // Primero validamos la existencia del DNI
-      if ($this->validarDniExistente($dni)) {
-        throw new Exception("El DNI ya está registrado.");
+      if ($conector != null) {
+        // Primero validamos la existencia del DNI
+        if ($this->validarDniExistente($dni)) {
+          throw new Exception("El DNI ya está registrado.");
+        }
+
+        // Si el DNI no existe, procedemos a registrar la nueva persona
+        $sql = "EXEC sp_registrar_persona :dni, :nombres, :apellidoPaterno, :apellidoMaterno, :celular, :email";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':dni', $dni);
+        $stmt->bindParam(':nombres', $nombres);
+        $stmt->bindParam(':apellidoPaterno', $apellidoPaterno);
+        $stmt->bindParam(':apellidoMaterno', $apellidoMaterno);
+        $stmt->bindParam(':celular', $celular);
+        $stmt->bindParam(':email', $email);
+        $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector); // Crear la instancia de la clase Auditoria
+        $auditoria->registrarEvento('PERSONA', 'Registro de persona');
+
+        // Confirmar que se ha actualizado al menos una fila
+        if ($stmt->rowCount() > 0) {
+          return true;
+        } else {
+          return false;
+        }
+      } else {
+        throw new Exception("Error de conexion a la base de datos");
       }
-
-      // Si el DNI no existe, procedemos a registrar la nueva persona
-      $sql = "INSERT INTO PERSONA (PER_DNI, PER_nombres, PER_apellidoPaterno, 
-                PER_apellidoMaterno, PER_celular, PER_email) VALUES (?, ?, ?, ?, ?, ?)";
-      $stmt = $conector->prepare($sql);
-      $stmt->execute([
-        $dni,
-        $nombres,
-        $apellidoPaterno,
-        $apellidoMaterno,
-        $celular,
-        $email
-      ]);
-
-
-
-      return $conector->lastInsertId();
-      // Registrar el evento en la auditoría
-      $auditoria = new AuditoriaModel($conector); // Crear la instancia de la clase Auditoria
-      $auditoria->registrarEvento('PERSONA', 'Registro de persona');
     } catch (Exception $e) {
       throw new Exception("Error al registrar nueva persona: " . $e->getMessage());
     }
