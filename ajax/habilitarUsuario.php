@@ -13,7 +13,7 @@ class HabilitarUsuario extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_habilitarUsuario :codigoUsuario";
+        $sql = "EXEC sp_habilitar_usuario :codigoUsuario";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
         $stmt->execute();
@@ -25,9 +25,11 @@ class HabilitarUsuario extends Conexion
         }
       } else {
         throw new Exception("Error de conexion a la base de datos");
+        return null;
       }
     } catch (PDOException $e) {
-      return false;
+      throw new PDOException("Error al habilitar usuario: " . $e->getMessage());
+      return null;
     }
   }
 }

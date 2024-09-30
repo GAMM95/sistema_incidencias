@@ -1,5 +1,6 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class AreaModel extends Conexion
 {
@@ -36,12 +37,16 @@ class AreaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_registrarArea :nombreArea";
+        $sql = "EXEC sp_registrar_area :nombreArea";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':nombreArea', $nombreArea);
         $stmt->execute();
+
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('AREA', 'Registro de área');
           return true;
         } else {
           return false;
@@ -109,6 +114,9 @@ class AreaModel extends Conexion
           $nombreArea,
           $codigoArea
         ]);
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('AREA', 'Actualización de área');
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -171,12 +179,15 @@ class AreaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_habilitarArea :codigoArea";
+        $sql = "EXEC sp_habilitar_area :codigoArea";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoArea', $codigoArea, PDO::PARAM_INT);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('AREA', 'Habilitar de área');
           return true;
         } else {
           return false;
@@ -197,12 +208,15 @@ class AreaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_deshabilitarArea :codigoArea";
+        $sql = "EXEC sp_deshabilitar_area :codigoArea";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoArea', $codigoArea, PDO::PARAM_INT);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('AREA', 'Deshabilitar de área');
           return true;
         } else {
           return false;

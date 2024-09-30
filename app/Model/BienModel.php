@@ -1,5 +1,6 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class BienModel extends Conexion
 {
@@ -39,7 +40,7 @@ class BienModel extends Conexion
         // Extraer los primeros 8 dígitos del código patrimonial
         $codigoParcial = substr($codigoIdentificador, 0, 8);
         $sql = "SELECT COUNT(*) FROM BIEN WHERE BIE_codigoIdentificador = ?
-        AND BIE_estado = 1";
+        AND EST_codigo = 1";
         $stmt = $conector->prepare($sql);
         $stmt->execute([$codigoParcial]);
         // Obtener el conteo de coincidencias
@@ -61,13 +62,16 @@ class BienModel extends Conexion
     try {
       if ($conector != null) {
         // $sql = "INSERT INTO BIEN (BIE_codigoIdentificador, BIE_nombre) VALUES (?, ?)";
-        $sql = "EXEC sp_registrarBien :codigoIdentificador, :nombreBien";
+        $sql = "EXEC sp_registrar_bien :codigoIdentificador, :nombreBien";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoIdentificador', $codigoIdentificador);
         $stmt->bindParam(':nombreBien', $nombreBien);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('BIEN', 'Registrar bien');
           return true;
         } else {
           return false;
@@ -92,6 +96,10 @@ class BienModel extends Conexion
                 WHERE BIE_codigo = ?";
         $stmt = $conector->prepare($sql);
         $stmt->execute([$codigoIdentificador, $nombreTipoBien, $codigoBien]);
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('BIEN', 'Actualización de bien');
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -104,24 +112,24 @@ class BienModel extends Conexion
   }
 
   // Metodo para eliminar categoria
-  public function eliminarBien($codigoBien)
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        $sql = "DELETE FROM BIEN WHERE BIE_codigo = ?";
-        $stmt = $conector->prepare($sql);
-        $stmt->execute([$codigoBien]);
-        return $stmt->rowCount();
-      } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new PDOException("Error al eliminar el bien: " . $e->getMessage());
-      return null;
-    }
-  }
+  // public function eliminarBien($codigoBien)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+  //       $sql = "DELETE FROM BIEN WHERE BIE_codigo = ?";
+  //       $stmt = $conector->prepare($sql);
+  //       $stmt->execute([$codigoBien]);
+  //       return $stmt->rowCount();
+  //     } else {
+  //       throw new Exception("Error de conexion a la base de datos");
+  //       return null;
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al eliminar el bien: " . $e->getMessage());
+  //     return null;
+  //   }
+  // }
 
   // Metodo para listar los bienes
   public function listarBienes()
@@ -150,12 +158,15 @@ class BienModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_habilitarBien :codigoBien";
+        $sql = "EXEC sp_habilitar_bien :codigoBien";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoBien', $codigoBien, PDO::PARAM_INT);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('BIEN', 'Habilitar bien');
           return true;
         } else {
           return false;
@@ -176,12 +187,15 @@ class BienModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_deshabilitarBien :codigoBien";
+        $sql = "EXEC sp_deshabilitar_bien :codigoBien";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoBien', $codigoBien, PDO::PARAM_INT);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('BIEN', 'Deshabilitar bien');
           return true;
         } else {
           return false;

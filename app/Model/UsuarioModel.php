@@ -1,5 +1,6 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class UsuarioModel extends Conexion
 {
@@ -209,36 +210,6 @@ class UsuarioModel extends Conexion
   }
 
   // Método para registrar un nuevo usuario
-  // public function guardarUsuario($username, $password, $persona, $rol, $area)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       // Obtener IP del cliente
-  //       $ipCliente = $this->obtenerIP();
-
-  //       // Obtener el nombre del equipo usando el IP
-  //       $nombreEquipo = gethostbyaddr($ipCliente);
-
-  //       $sql = "EXEC sp_registrar_usuario :username, :password, :persona, :rol, :area";
-  //       $stmt = $conector->prepare($sql);
-  //       $stmt->bindParam(':username', $username);
-  //       $stmt->bindParam(':password', $password);
-  //       $stmt->bindParam(':persona', $persona, PDO::PARAM_INT);
-  //       $stmt->bindParam(':rol', $rol, PDO::PARAM_INT);
-  //       $stmt->bindParam(':area', $area, PDO::PARAM_INT);
-  //       $stmt->execute();
-  //       return true; // Registro exitoso
-  //     } else {
-  //       throw new Exception("Error de conexión a la base de datos.");
-  //       return null;
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new PDOException("Error al guardar usuario: " . $e->getMessage());
-  //     return null;
-  //   }
-  // }
-
   public function guardarUsuario($username, $password, $persona, $rol, $area)
   {
     $conector = parent::getConexion();
@@ -255,7 +226,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector); // Crear la instancia de la clase Auditoria
+        $auditoria = new AuditoriaModel($conector);
         $auditoria->registrarEvento('USUARIO', 'Registro de usuario');
 
         return true; // Registro exitoso
@@ -274,7 +245,7 @@ class UsuarioModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_editarUsuario :codigoUsuario, :username, :password, :persona, :rol, :area";
+        $sql = "EXEC sp_editar_usuario :codigoUsuario, :username, :password, :persona, :rol, :area";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':username', $username);
@@ -283,6 +254,10 @@ class UsuarioModel extends Conexion
         $stmt->bindParam(':rol', $rol, PDO::PARAM_INT);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
         $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('USUARIO', 'Actualización de usuario');
 
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
@@ -388,7 +363,7 @@ class UsuarioModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $query = "EXEC EditarPersonaYUsuario :codigoUsuario, :username, :password, :dni, :nombrePersona, :apellidoPaterno, :apellidoMaterno, :celular, :email";
+        $query = "EXEC sp_editar_perfil :codigoUsuario, :username, :password, :dni, :nombrePersona, :apellidoPaterno, :apellidoMaterno, :celular, :email";
         $stmt = $conector->prepare($query);
         $stmt->bindParam(':codigoUsuario', $codigoUsuario);
         $stmt->bindParam(':username', $username);
@@ -400,6 +375,11 @@ class UsuarioModel extends Conexion
         $stmt->bindParam(':celular', $celular);
         $stmt->bindParam(':email', $email);
         $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('PERSONA - USUARIO', 'Actualizacion de perfil');
+
         return true;
       } else {
         throw new Exception("Error de conexión a la base de datos.");
@@ -438,54 +418,64 @@ class UsuarioModel extends Conexion
     }
   }
 
-  // Método para habilitar usuarios
-  public function habilitarUsuario($codigoUsuario)
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        $sql = "EXEC sp_habilitarUsuario :codigoUsuario";
-        $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
-        $stmt->execute();
-        // Confirmar que se ha actualizado al menos una fila
-        if ($stmt->rowCount() > 0) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new PDOException("Error al habilitar usuario: " . $e->getMessage());
-      return null;
-    }
-  }
+  // // Método para habilitar usuarios
+  // public function habilitarUsuario($codigoUsuario)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+  //       $sql = "EXEC sp_habilitar_usuario :codigoUsuario";
+  //       $stmt = $conector->prepare($sql);
+  //       $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
+  //       $stmt->execute();
 
-  // METODO PARA DESHABILITAR USUARIO
-  public function deshabilitarUsuario($codigoUsuario)
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        $sql = "EXEC sp_deshabilitarUsuario :codigoUsuario";
-        $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
-        $stmt->execute();
-        // Confirmar que se ha actualizado al menos una fila
-        if ($stmt->rowCount() > 0) {
-          return true;
-        } else {
-          return false;
-        }
-      } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new PDOException("Error al deshabilitar usuario: " . $e->getMessage());
-    }
-  }
+
+  //       // Confirmar que se ha actualizado al menos una fila
+  //       if ($stmt->rowCount() > 0) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+  //       // Registrar el evento en la auditoría
+  //       $auditoria = new AuditoriaModel($conector);
+  //       $auditoria->registrarEvento('USUARIO', 'Habilitar usuario');
+  //     } else {
+  //       throw new Exception("Error de conexion a la base de datos");
+  //       return null;
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al habilitar usuario: " . $e->getMessage());
+  //     return null;
+  //   }
+  // }
+
+  // // METODO PARA DESHABILITAR USUARIO
+  // public function deshabilitarUsuario($codigoUsuario)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+  //       $sql = "EXEC sp_deshabilitar_usuario :codigoUsuario";
+  //       $stmt = $conector->prepare($sql);
+  //       $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
+  //       $stmt->execute();
+
+  //       // Confirmar que se ha actualizado al menos una fila
+  //       if ($stmt->rowCount() > 0) {
+  //         return true;
+  //       } else {
+  //         return false;
+  //       }
+
+  //       // Registrar el evento en la auditoría
+  //       $auditoria = new AuditoriaModel($conector);
+  //       $auditoria->registrarEvento('USUARIO', 'Deshabilitar usuario');
+  //     } else {
+  //       throw new Exception("Error de conexion a la base de datos");
+  //       return null;
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al deshabilitar usuario: " . $e->getMessage());
+  //   }
+  // }
 }

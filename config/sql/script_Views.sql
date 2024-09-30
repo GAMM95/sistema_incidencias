@@ -28,9 +28,7 @@ INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo;
 GO
 
 
-
-
---Vista para listar las nuevas incidencias para el administrador
+-- VISTA LISTAR INCIDENCIAS ADMINISTRADOR
 CREATE VIEW vista_incidencias_administrador AS
 SELECT 
   I.INC_numero,
@@ -53,7 +51,9 @@ FROM
   INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
   INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
   LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-  LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+  LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+  LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+  LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
   LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
   LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
   LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
@@ -133,7 +133,9 @@ INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
 LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+LEFT JOIN CIERRE C ON R.REC_numero = C.MAN_codigo
 LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
 LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
@@ -167,7 +169,9 @@ INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
 LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+LEFT JOIN CIERRE C ON R.REC_numero = C.MAN_codigo
 LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
 LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
@@ -179,7 +183,7 @@ WHERE
     AND NOT EXISTS (  
         SELECT 1 
         FROM CIERRE C2
-        WHERE C2.REC_numero = R.REC_numero
+        WHERE C2.MAN_codigo = MAN.MAN_codigo
         AND C2.EST_codigo = 5
     )
 GROUP BY 
@@ -371,7 +375,9 @@ RIGHT JOIN INCIDENCIA I ON R.INC_numero = I.INC_numero
 INNER JOIN  AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+LEFT JOIN CIERRE C ON R.REC_numero = C.MAN_codigo
 LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
 INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo

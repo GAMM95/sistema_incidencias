@@ -132,51 +132,6 @@ BEGIN
 END;
 GO
 
---PROCEDIMIENTO ALMACENADO PARA REGISTRAR USUARIOS
---CREATE PROCEDURE sp_registrar_usuario (
---	@USU_nombre VARCHAR(20),
---	@USU_password VARCHAR(10),
---	@PER_codigo SMALLINT,
---	@ROL_codigo SMALLINT,
---	@ARE_codigo SMALLINT
---)
---AS
---BEGIN
---	-- Verificar si la persona ya tiene un usuario registrado
---	IF EXISTS (SELECT 1 FROM USUARIO WHERE PER_codigo = @PER_codigo)
---	BEGIN
---		-- Si la persona ya tiene un usuario, retornar un mensaje de error o un código de error
---		RAISERROR('La persona ya tiene un usuario registrado.', 16, 1);
---		RETURN;
---	END
-
---	-- Insertar el nuevo usuario con EST_codigo siempre igual a 1
---	INSERT INTO USUARIO (USU_nombre, USU_password, PER_codigo, ROL_codigo, ARE_codigo, EST_codigo)
---	VALUES (@USU_nombre, @USU_password, @PER_codigo, @ROL_codigo, @ARE_codigo, 1);
-
---	-- Registrar la operación en la tabla AUDITORIA
---	INSERT INTO AUDITORIA (
---		AUD_fecha, 
---		AUD_hora, 
---		AUD_usuario, 
---		AUD_tabla, 
---		AUD_operacion, 
---		AUD_ip, 
---		AUD_nombreEquipo
---	)
---	VALUES (
---		GETDATE(),             -- Fecha actual
---		CONVERT(TIME, GETDATE()), -- Hora actual
---		NULL,                   -- Usuario que realizó la operación (puedes dejar NULL o cambiar según necesidad)
---		'USUARIO',              -- Tabla afectada
---		'Registro de usuario',  -- Operación de registro de usuario
---		NULL,                   -- Dirección IP (puedes calcularla desde la aplicación si es necesario)
---		HOST_NAME()             -- Nombre del equipo del cliente
---	);
---END;
---GO
-
-
 --PROCEDIMIENTO ALMACENADO PARA REGISTRAR PERSONA
 CREATE PROCEDURE sp_registrar_persona (
 	@PER_dni CHAR(8),
@@ -189,7 +144,7 @@ CREATE PROCEDURE sp_registrar_persona (
 AS
 BEGIN
 	--Insertar la nueva persona
-	INSERT INTO PERSONA (PER_dni, @PER_nombres, @PER_apellidoPaterno, @PER_apellidoMaterno, @PER_celular, @PER_email)
+	INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_celular, PER_email)
 	VALUES (@PER_dni, @PER_nombres, @PER_apellidoPaterno, @PER_apellidoMaterno, @PER_celular, @PER_email);
 END
 GO
@@ -218,31 +173,55 @@ BEGIN
 END;
 GO
 
---PROCEDIMIENTO ALMACENADO PARA REGISTRAR PERSONA
-CREATE PROCEDURE sp_registrar_persona (
-	@PER_DNI, 
-	@PER_nombres, 
-	@PER_apellidoPaterno, 
-    @PER_apellidoMaterno, 
-	@PER_celular, 
-	@PER_email
-)
+--PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR DATOS DE USUARIO
+CREATE PROCEDURE sp_editar_usuario
+    @USU_codigo SMALLINT,
+    @USU_nombre VARCHAR(20),
+    @USU_password VARCHAR(10),
+    @PER_codigo SMALLINT,
+    @ROL_codigo SMALLINT,
+    @ARE_codigo SMALLINT
 AS
 BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Verificar si el nombre de usuario ya existe excluyendo el usuario actual
+        IF EXISTS (
+            SELECT 1 FROM USUARIO 
+            WHERE USU_nombre = @USU_nombre AND USU_codigo != @USU_codigo
+        )
+        BEGIN
+            -- En caso de que el nombre ya exista, devolver un error
+            RAISERROR('El nombre de usuario ya está en uso.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        -- Actualizar los datos del usuario
+        UPDATE USUARIO
+        SET 
+            USU_nombre = @USU_nombre,
+            USU_password = @USU_password,
+            PER_codigo = @PER_codigo,
+            ROL_codigo = @ROL_codigo,
+            ARE_codigo = @ARE_codigo
+        WHERE 
+            USU_codigo = @USU_codigo;
+
+        COMMIT TRANSACTION;
+        PRINT 'Usuario actualizado correctamente.';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        PRINT 'Error al actualizar usuario: ' + ERROR_MESSAGE();
+    END CATCH
+END;
+GO
 
 
 
-
-
-
-
-
-
-
-
-
-
-CREATE PROCEDURE EditarPersonaYUsuario
+--PROCEDIMIENTO ALMACENADO PARA EDITAR PERFIL  
+CREATE PROCEDURE sp_editar_perfil
   @USU_codigo SMALLINT,
   @USU_nombre VARCHAR(20),
   @USU_password VARCHAR(10),
@@ -254,42 +233,14 @@ CREATE PROCEDURE EditarPersonaYUsuario
   @PER_email VARCHAR(45)
 AS
 BEGIN
-  -- Declarar variables para la auditoría
-  DECLARE @AUD_ip VARCHAR(50), @AUD_nombreEquipo VARCHAR(200);
-  
-  -- Asignar valores a las variables de auditoría
-  SET @AUD_ip = HOST_NAME();  -- Obtener IP del cliente (puedes ajustar según tu entorno)
-  SET @AUD_nombreEquipo = HOST_NAME();  -- Obtener nombre del equipo (también puedes ajustar)
-
   BEGIN TRY
     BEGIN TRANSACTION; -- Inicia una transacción para asegurar la consistencia de los datos
-
       -- Actualiza los datos del usuario
       UPDATE USUARIO
       SET 
           USU_nombre = @USU_nombre,
           USU_password = @USU_password
       WHERE USU_codigo = @USU_codigo;
-
-      -- Registrar la operación en la tabla AUDITORIA para la tabla USUARIO
-      INSERT INTO AUDITORIA (
-          AUD_fecha, 
-          AUD_hora, 
-          AUD_usuario, 
-          AUD_tabla, 
-          AUD_operacion, 
-          AUD_ip, 
-          AUD_nombreEquipo
-      ) 
-      VALUES (
-          GETDATE(),                    -- Fecha actual
-          CONVERT(TIME, GETDATE()),     -- Hora actual
-          @USU_codigo,                 -- Código del usuario que realizó la operación
-          'USUARIO',                   -- Tabla afectada
-          'Actualización de datos de usuario', -- Descripción de la operación
-          @AUD_ip,                      -- IP del cliente
-          @AUD_nombreEquipo             -- Nombre del equipo del cliente
-      );
 
       -- Actualiza los datos de la persona vinculada al usuario
       UPDATE PERSONA
@@ -305,34 +256,10 @@ BEGIN
           FROM USUARIO 
           WHERE USU_codigo = @USU_codigo
       );
-
-      -- Registrar la operación en la tabla AUDITORIA para la tabla PERSONA
-      INSERT INTO AUDITORIA (
-          AUD_fecha, 
-          AUD_hora, 
-          AUD_usuario, 
-          AUD_tabla, 
-          AUD_operacion, 
-          AUD_ip, 
-          AUD_nombreEquipo
-      ) 
-      VALUES (
-          GETDATE(),                    -- Fecha actual
-          CONVERT(TIME, GETDATE()),     -- Hora actual
-          @USU_codigo,                 -- Código del usuario que realizó la operación
-          'PERSONA',                   -- Tabla afectada
-          'Actualización de datos de persona', -- Descripción de la operación
-          @AUD_ip,                      -- IP del cliente
-          @AUD_nombreEquipo             -- Nombre del equipo del cliente
-      );
-
     COMMIT TRANSACTION; 
   END TRY
   BEGIN CATCH   
-    -- Si ocurre un error, deshacer la transacción
     ROLLBACK TRANSACTION; 
-
-    -- Capturar el mensaje de error y lanzarlo
     DECLARE @ErrorMessage NVARCHAR(4000);
     DECLARE @ErrorSeverity INT;
     DECLARE @ErrorState INT;
@@ -344,6 +271,247 @@ BEGIN
 
     RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
   END CATCH
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA HABILITAR USUARIO
+--CREATE PROCEDURE sp_habilitar_usuario
+--	@codigoUsuario SMALLINT
+--AS
+--BEGIN
+--	UPDATE USUARIO SET EST_codigo = 1
+--    WHERE EST_codigo = 2 AND  USU_codigo = @codigoUsuario;
+--END;
+--GO
+
+
+
+--CREATE PROCEDURE sp_habilitar_usuario
+--    @codigoUsuario SMALLINT
+--AS
+--BEGIN
+--    -- Actualizar el estado del usuario
+--    UPDATE USUARIO 
+--    SET EST_codigo = 1
+--    WHERE EST_codigo = 2 AND USU_codigo = @codigoUsuario;
+
+--    -- Insertar en la tabla AUDITORIA después de actualizar al usuario
+--    INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo)
+--    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), @codigoUsuario, 'USUARIO', 'Habilitar Usuario', HOST_NAME(), HOST_NAME());
+--END;
+--GO
+
+CREATE PROCEDURE sp_habilitar_usuario
+    @codigoUsuario SMALLINT
+AS
+BEGIN
+    -- Actualizar el estado del usuario
+    UPDATE USUARIO 
+    SET EST_codigo = 1
+    WHERE EST_codigo = 2 AND USU_codigo = @codigoUsuario;
+
+    -- Capturar la dirección IP del cliente con conversión a NVARCHAR
+    DECLARE @ipCliente NVARCHAR(50);
+    SET @ipCliente = CONVERT(NVARCHAR(50), CONNECTIONPROPERTY('client_net_address'));
+
+    -- Insertar en la tabla AUDITORIA después de actualizar al usuario
+    INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo)
+    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), @codigoUsuario, 'USUARIO', 'Habilitar Usuario', @ipCliente, HOST_NAME());
+END;
+GO
+
+
+
+-- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR USUARIO
+CREATE PROCEDURE sp_deshabilitar_usuario
+	@codigoUsuario SMALLINT
+AS
+BEGIN
+    -- Actualizar el estado del usuario
+	UPDATE USUARIO SET EST_codigo = 2 
+    WHERE EST_codigo = 1 AND  USU_codigo = @codigoUsuario;
+
+	-- Capturar la dirección IP del cliente con conversión a NVARCHAR
+	DECLARE @ipCliente NVARCHAR(50);
+    SET @ipCliente = CONVERT(NVARCHAR(50), CONNECTIONPROPERTY('client_net_address'));
+
+    -- Insertar en la tabla AUDITORIA después de actualizar al usuario
+    INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo)
+    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), @codigoUsuario, 'USUARIO', 'Deshabilitar Usuario', @ipCliente, HOST_NAME());
+END;
+GO
+
+--PROCEDIMIENTO ALMACENADO PARA REGISTRAR AREAS
+CREATE PROCEDURE sp_registrar_area
+    @NombreArea VARCHAR(100)
+AS
+BEGIN
+    -- Manejo de errores y transacciones
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Inserta el área con ARE_estado siempre en 1
+        INSERT INTO AREA (ARE_nombre, EST_codigo)
+        VALUES (@NombreArea, 1);
+
+        -- Confirmar la transacción si todo sale bien
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir la transacción en caso de error
+        ROLLBACK TRANSACTION;
+
+        -- Mostrar mensaje de error
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
+
+        -- Lanzar el error capturado
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR AREA
+CREATE PROCEDURE sp_deshabilitar_area
+	@codigoArea SMALLINT
+AS
+BEGIN
+	UPDATE AREA SET EST_codigo = 2 
+   WHERE (EST_codigo = 1 OR  EST_codigo = '')
+	AND  ARE_codigo = @codigoArea;
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA HABILITAR AREA
+CREATE PROCEDURE sp_habilitar_area
+	@codigoArea SMALLINT
+AS
+BEGIN
+	UPDATE AREA SET EST_codigo = 1
+    WHERE (EST_codigo = 2 OR  EST_codigo = '')
+	AND  ARE_codigo = @codigoArea;
+END;
+GO
+
+--PROCEDIMIENTO ALMACENADO PARA REGISTRAR BIEN
+CREATE PROCEDURE sp_registrar_bien
+    @codigoIdentificador VARCHAR(12),
+    @NombreBien VARCHAR(100)
+AS
+BEGIN
+    -- Manejo de errores y transacciones
+    BEGIN TRY
+        BEGIN TRANSACTION;
+	        -- Inserta el área con ARE_estado siempre en 1
+        INSERT INTO BIEN (BIE_codigoIdentificador, BIE_nombre, EST_codigo)
+        VALUES (@codigoIdentificador, @NombreBien, 1);
+
+        -- Confirmar la transacción si todo sale bien
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir la transacción en caso de error
+        ROLLBACK TRANSACTION;
+
+        -- Mostrar mensaje de error
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
+
+        -- Lanzar el error capturado
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA HABILITAR BIEN
+CREATE PROCEDURE sp_habilitar_bien
+	@codigoBien SMALLINT
+AS
+BEGIN
+	UPDATE BIEN SET EST_codigo = 1
+    WHERE (EST_codigo = 2 OR  EST_codigo = '')
+	AND  BIE_codigo = @codigoBien;
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR BIEN
+CREATE PROCEDURE sp_deshabilitar_bien
+	@codigoBien SMALLINT
+AS
+BEGIN
+	UPDATE BIEN SET EST_codigo = 2 
+   WHERE (EST_codigo = 1 OR  EST_codigo = '')
+	AND  BIE_codigo = @codigoBien;
+END;
+GO
+
+
+--PROCEDIMIENTO ALMACENADO PARA REGISTRAR CATEGORIAS
+CREATE PROCEDURE sp_registrar_categoria
+    @NombreCategoria VARCHAR(60)
+AS
+BEGIN
+    -- Manejo de errores y transacciones
+    BEGIN TRY
+        BEGIN TRANSACTION;
+	        -- Inserta el área con ARE_estado siempre en 1
+        INSERT INTO CATEGORIA (CAT_nombre, EST_codigo)
+        VALUES (@NombreCategoria, 1);
+
+        -- Confirmar la transacción si todo sale bien
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir la transacción en caso de error
+        ROLLBACK TRANSACTION;
+
+        -- Mostrar mensaje de error
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
+
+        -- Lanzar el error capturado
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR CATEGORIA
+CREATE PROCEDURE sp_deshabilitar_categoria
+	@codigoCategoria SMALLINT
+AS
+BEGIN
+	UPDATE CATEGORIA SET EST_codigo = 2 
+   WHERE (EST_codigo = 1 OR  EST_codigo = '')
+	AND  CAT_codigo = @codigoCategoria;
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA HABILITAR BIEN
+CREATE PROCEDURE sp_habilitar_categoria
+	@codigoCategoria SMALLINT
+AS
+BEGIN
+	UPDATE CATEGORIA SET EST_codigo = 1
+    WHERE (EST_codigo = 2 OR  EST_codigo = '')
+	AND  CAT_codigo = @codigoCategoria;
 END;
 GO
 

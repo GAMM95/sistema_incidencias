@@ -1,5 +1,6 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class CategoriaModel extends Conexion
 {
@@ -15,12 +16,16 @@ class CategoriaModel extends Conexion
     try {
       if ($conector != null) {
         // $sql = "INSERT INTO CATEGORIA (CAT_nombre) VALUES (?)";
-        $sql = "EXEC sp_registrarCategoria :nombreCategoria";
+        $sql = "EXEC sp_registrar_categoria :nombreCategoria";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':nombreCategoria', $nombreCategoria);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('CATEGORIA', 'Registrar categoria');
+
           return true;
         } else {
           return false;
@@ -41,7 +46,7 @@ class CategoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT CAT_codigo, CAT_nombre, CAT_estado FROM CATEGORIA 
+        $sql = "SELECT CAT_codigo, CAT_nombre, EST_codigo FROM CATEGORIA 
                 ORDER BY CAT_codigo ASC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -89,6 +94,11 @@ class CategoriaModel extends Conexion
           $nombreCategoria,
           $codigoCategoria
         ]);
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('CATEGORIA', 'Actualizar categoría');
+
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -101,24 +111,24 @@ class CategoriaModel extends Conexion
   }
 
   // Metodo para eliminar categoria
-  public function eliminarCategoria($codigoCategoria)
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        $sql = "DELETE FROM CATEGORIA WHERE CAT_codigo = ?";
-        $stmt = $conector->prepare($sql);
-        $stmt->execute([$codigoCategoria]);
-        return $stmt->rowCount();
-      } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new PDOException("Error al eliminar la categoría: " . $e->getMessage());
-      return null;
-    }
-  }
+  // public function eliminarCategoria($codigoCategoria)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+  //       $sql = "DELETE FROM CATEGORIA WHERE CAT_codigo = ?";
+  //       $stmt = $conector->prepare($sql);
+  //       $stmt->execute([$codigoCategoria]);
+  //       return $stmt->rowCount();
+  //     } else {
+  //       throw new Exception("Error de conexion a la base de datos");
+  //       return null;
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al eliminar la categoría: " . $e->getMessage());
+  //     return null;
+  //   }
+  // }
 
   // Metodo para filtrar categoria por termino de busqueda
   public function filtrarBusqueda($termino)
@@ -171,12 +181,16 @@ class CategoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_habilitarCategoria :codigoCategoria";
+        $sql = "EXEC sp_habilitar_categoria :codigoCategoria";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoCategoria', $codigoCategoria, PDO::PARAM_INT);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('CATEGORIA', 'Habilitar categoría');
+
           return true;
         } else {
           return false;
@@ -197,12 +211,16 @@ class CategoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_deshabilitarCategoria :codigoCategoria";
+        $sql = "EXEC sp_deshabilitar_categoria :codigoCategoria";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoCategoria', $codigoCategoria, PDO::PARAM_INT);
         $stmt->execute();
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('CATEGORIA', 'Deshabilitar categoria');
+
           return true;
         } else {
           return false;
