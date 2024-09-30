@@ -52,7 +52,13 @@ class PersonaModel extends Conexion
         $celular,
         $email
       ]);
+
+
+
       return $conector->lastInsertId();
+      // Registrar el evento en la auditoría
+      $auditoria = new AuditoriaModel($conector); // Crear la instancia de la clase Auditoria
+      $auditoria->registrarEvento('PERSONA', 'Registro de persona');
     } catch (Exception $e) {
       throw new Exception("Error al registrar nueva persona: " . $e->getMessage());
     }

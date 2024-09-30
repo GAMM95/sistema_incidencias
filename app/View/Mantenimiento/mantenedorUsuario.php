@@ -142,7 +142,7 @@
                 <?php
                 $estado = htmlspecialchars($usuario['EST_descripcion']);
                 $isActive = ($estado === 'ACTIVO');
-                $areaEstado = htmlspecialchars($usuario['ARE_estado']);
+                $areaEstado = htmlspecialchars($usuario['EST_codigo']);
                 // Aplicar clase de texto rojo si el ARE_estado es 2
                 $areaInactiva = ($areaEstado == 2) ? 'text-red-600' : 'text-gray-900';
                 ?>

@@ -30,30 +30,45 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Obtener el resultado del procedimiento
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC); // Usar fetch asociativo
 
-        // Verificar si se encontraron resultados
-        if ($resultado && !isset($resultado['MensajeError'])) {
-          // Credenciales correctas, inicia sesión
-          session_start();
-          $_SESSION['nombreDePersona'] = $resultado['PER_nombres'] . ' ' . $resultado['PER_apellidoPaterno'];
-          $_SESSION['area'] = $resultado['ARE_nombre'];
-          $_SESSION['codigoArea'] = $resultado['ARE_codigo'];
-          $informacionUsuario = $this->obtenerInformacionUsuario($username, $password);
-          $codigo = $informacionUsuario['codigo'];
-          $usuario = $informacionUsuario['usuario'];
-          $_SESSION['codigoUsuario'] = $codigo;
-          $_SESSION['usuario'] = $usuario;
-          $_SESSION['rol'] = $this->obtenerRolPorId($username);
+        if ($resultado) {
+          if (isset($resultado['ErrorMessage'])) {
+            // Manejar el mensaje de error
+            if ($resultado['ErrorMessage'] === 'Usuario inactivo') {
+              // Redirigir si el usuario está inactivo
+              header("Location: index.php?state=inactive");
+            } else {
+              // Redirigir si las credenciales son incorrectas
+              header("Location: index.php?state=failed&message=" . urlencode($resultado['ErrorMessage']));
+            }
+            exit();
+          } else {
+            session_start();
+            $_SESSION['nombreDePersona'] = $resultado['PER_nombres'] . ' ' . $resultado['PER_apellidoPaterno'];
+            $_SESSION['area'] = $resultado['ARE_nombre'];
+            $_SESSION['codigoArea'] = $resultado['ARE_codigo'];
+            $informacionUsuario = $this->obtenerInformacionUsuario($username, $password);
+            $codigo = $informacionUsuario['codigo'];
+            $usuario = $informacionUsuario['usuario'];
+            $_SESSION['codigoUsuario'] = $codigo;
+            $_SESSION['usuario'] = $usuario;
+            $_SESSION['rol'] = $this->obtenerRolPorId($username);
 
-          // Log de inicio de sesión
-          $this->registrarLog($username, $codigo, $ipCliente, $nombreEquipo);
 
-          return true;
+            // $_SESSION['codigoUsuario'] = $resultado['USU_codigo'];
+            // $_SESSION['usuario'] = $username;
+            // $_SESSION['rol'] = $resultado['ROL_nombre'];
+            // Log de inicio de sesión
+            $this->registrarLog($username, $codigo, $ipCliente, $nombreEquipo);
+            // $this->registrarLog($username, $_SESSION['codigoUsuario'], $ipCliente, $nombreEquipo);
+
+
+            return true;
+          }
         } else {
-          // Si las credenciales son incorrectas o hay un mensaje de error
-          $mensajeError = isset($resultado['MensajeError']) ? $resultado['MensajeError'] : "Credenciales incorrectas.";
-          header("Location: index.php?state=failed&message=" . urlencode($mensajeError));
+          // Redirigir si las credenciales son incorrectas
+          header("Location: index.php?state=failed&message=" . urlencode("Credenciales incorrectas."));
           exit();
         }
       } else {
@@ -63,7 +78,7 @@ class UsuarioModel extends Conexion
       throw new PDOException("Error al iniciar sesión: " . $e->getMessage());
     }
   }
-
+ 
   // Metodo para obtener la ip del equipo
   private function obtenerIP()
   {
@@ -77,14 +92,12 @@ class UsuarioModel extends Conexion
       $ip = $_SERVER['REMOTE_ADDR'];
     }
 
-    // Validar que la IP sea válida (IPv4 o IPv6)
+    // Validar que la IP sea una dirección IPv4
     if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-      return $ip; // Si es IPv4
-    } elseif (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-      return $ip; // Si es IPv6
+      return $ip;
     } else {
       // Devolver una dirección IP por defecto si no es válida
-      return 'IP no válida';
+      return '0.0.0.0'; // O maneja este caso como desees
     }
   }
 
@@ -106,6 +119,44 @@ class UsuarioModel extends Conexion
   }
 
   /// Método para obtener la información del usuario logueado
+  // private function obtenerInformacionUsuario($username, $password)
+  // {
+  //   $conector = parent::getConexion();  // Obtiene la conexión de la clase padre
+  //   try {
+  //     if ($conector != null) {
+  //       // Consulta para obtener el código y nombre del usuario
+  //       $consulta = "SELECT USU_codigo as codigo, USU_nombre as usuario 
+  //                        FROM USUARIO 
+  //                        WHERE USU_nombre = :username AND USU_password = :password";
+
+  //       $stmt = $conector->prepare($consulta);
+  //       $stmt->bindParam(':username', $username);
+  //       $stmt->bindParam(':password', $password);
+
+  //       // Ejecuta la consulta
+  //       $stmt->execute();
+
+  //       // Obtiene el resultado como un array asociativo
+  //       $fila = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  //       // Verifica si se encontró el usuario
+  //       if ($fila) {
+  //         return $fila;  // Devuelve la información del usuario
+  //       } else {
+  //         // Si no se encontró, podrías devolver un mensaje o manejarlo en otra parte
+  //         file_put_contents('logs/debug_log.txt', "No se encontró el usuario: $username" . PHP_EOL, FILE_APPEND);
+  //         return null;
+  //       }
+  //     } else {
+  //       throw new Exception("Error de conexión a la base de datos.");
+  //     }
+  //   } catch (PDOException $e) {
+  //     // En caso de excepción, registrar el error
+  //     file_put_contents('logs/error_log.txt', "Error de PDO: " . $e->getMessage() . PHP_EOL, FILE_APPEND);
+  //     throw new PDOException("Error al obtener información del usuario: " . $e->getMessage());
+  //   }
+  // }
+
   private function obtenerInformacionUsuario($username, $password)
   {
     $conector = parent::getConexion();
@@ -209,43 +260,12 @@ class UsuarioModel extends Conexion
   }
 
   // Método para registrar un nuevo usuario
-  // public function guardarUsuario($username, $password, $persona, $rol, $area)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       // Obtener IP del cliente
-  //       $ipCliente = $this->obtenerIP();
-
-  //       // Obtener el nombre del equipo usando el IP
-  //       $nombreEquipo = gethostbyaddr($ipCliente);
-
-  //       $sql = "EXEC sp_registrar_usuario :username, :password, :persona, :rol, :area";
-  //       $stmt = $conector->prepare($sql);
-  //       $stmt->bindParam(':username', $username);
-  //       $stmt->bindParam(':password', $password);
-  //       $stmt->bindParam(':persona', $persona, PDO::PARAM_INT);
-  //       $stmt->bindParam(':rol', $rol, PDO::PARAM_INT);
-  //       $stmt->bindParam(':area', $area, PDO::PARAM_INT);
-  //       $stmt->execute();
-  //       return true; // Registro exitoso
-  //     } else {
-  //       throw new Exception("Error de conexión a la base de datos.");
-  //       return null;
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new PDOException("Error al guardar usuario: " . $e->getMessage());
-  //     return null;
-  //   }
-  // }
-
   public function guardarUsuario($username, $password, $persona, $rol, $area)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        // Ejecutar el procedimiento almacenado para registrar el usuario
-        $sql = "EXEC sp_registrar_usuario :username, :password, :persona, :rol, :area";
+        $sql = "EXEC SP_Registrar_Usuario :username, :password, :persona, :rol, :area";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
@@ -253,20 +273,16 @@ class UsuarioModel extends Conexion
         $stmt->bindParam(':rol', $rol, PDO::PARAM_INT);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
         $stmt->execute();
-
-        // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector); // Crear la instancia de la clase Auditoria
-        $auditoria->registrarEvento('USUARIO', 'Registro de usuario');
-
         return true; // Registro exitoso
       } else {
         throw new Exception("Error de conexión a la base de datos.");
+        return null;
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al guardar usuario: " . $e->getMessage());
+      return null;
     }
   }
-
 
   // Metodo para editar datos del usuario utilizando un procedimiento almacenado
   public function editarUsuario($codigoUsuario, $username, $password, $persona, $rol, $area)

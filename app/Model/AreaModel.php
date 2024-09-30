@@ -61,7 +61,7 @@ class AreaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT ARE_codigo, ARE_nombre, ARE_estado FROM AREA ORDER BY ARE_codigo DESC";
+        $sql = "SELECT ARE_codigo, ARE_nombre, EST_codigo FROM AREA ORDER BY ARE_codigo DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultados = $stmt->fetchAll(PDO::FETCH_ASSOC);

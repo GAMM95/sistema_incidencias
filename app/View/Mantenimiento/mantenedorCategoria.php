@@ -73,7 +73,7 @@
               <?php if (!empty($resultado)): ?>
                 <?php foreach ($resultado as $categoria) : ?>
                   <?php
-                  $estado = htmlspecialchars($categoria['CAT_estado']);
+                  $estado = htmlspecialchars($categoria['EST_codigo']);
                   $isActive = ($estado === '1');
                   $codigoCategoria = htmlspecialchars($categoria['CAT_codigo']);
                   // Aplicar clase de texto rojo si el ARE_estado es 2

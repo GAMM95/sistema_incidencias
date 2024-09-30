@@ -85,7 +85,7 @@
               <?php if (!empty($resultado)) : ?>
                 <?php foreach ($resultado as $area) : ?>
                   <?php
-                  $estado = htmlspecialchars($area['ARE_estado']);
+                  $estado = htmlspecialchars($area['EST_codigo']);
                   $isActive = ($estado === '1');
                   $codigoArea = htmlspecialchars($area['ARE_codigo']); 
                   $areaInactiva = ($estado == 2) ? 'text-red-600' : 'text-gray-900';

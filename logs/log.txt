@@ -1,5 +1,305 @@
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 03:14:04
+Fecha y Hora: 2024-09-29 16:30:23
+Nombre de Persona:  
+Rol: Soporte
+Codigo Area: 
+Área: 
+Código de Usuario: 
+Usuario: 
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 16:30:49
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:06:48
+Nombre de Persona:  
+Rol: Soporte
+Codigo Area: 
+Área: 
+Código de Usuario: 
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:10:18
+Nombre de Persona:  
+Rol: Soporte
+Codigo Area: 
+Área: 
+Código de Usuario: 
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:10:32
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:13:53
+Nombre de Persona:  
+Rol: Soporte
+Codigo Area: 
+Área: 
+Código de Usuario: 
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:14:11
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:14:19
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:14:30
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:15:00
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:18:04
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:18:14
+Nombre de Persona: Maria Blas
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 6
+Usuario: MBLAS
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:18:26
+Nombre de Persona:  
+Rol: Soporte
+Codigo Area: 
+Área: 
+Código de Usuario: 
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:26:47
+Nombre de Persona: Maria Blas
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 6
+Usuario: MBLAS
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:27:04
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:27:22
+Nombre de Persona: Maria Blas
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 6
+Usuario: MBLAS
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:30:50
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:30:57
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 17:31:37
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 19:32:00
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 19:39:08
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 19:40:01
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 19:42:29
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 23:13:53
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 23:14:51
+Nombre de Persona: Carlos Leyva
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 5
+Usuario: CLEYVA
+IP: 0.0.0.0
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-09-29 23:18:23
 Nombre de Persona: Jhonatan Mantilla
 Rol: Soporte
 Codigo Area: 1
@@ -11,7 +311,7 @@ Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 03:15:04
+Fecha y Hora: 2024-09-29 23:20:11
 Nombre de Persona: Carlos Leyva
 Rol: Soporte
 Codigo Area: 1
@@ -23,458 +323,14 @@ Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 03:16:53
+Fecha y Hora: 2024-09-30 01:04:37
 Nombre de Persona: Jhonatan Mantilla
 Rol: Soporte
 Codigo Area: 1
 Área: Subgerencia de Informática y Sistemas
 Código de Usuario: 8
 Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 03:23:22
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 03:29:40
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 04:06:25
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 04:48:20
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:03:20
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:19:33
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:19:48
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: SFABIAN
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:21:18
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:21:38
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:26:46
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:35:05
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:38:56
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 05:39:17
-Nombre de Persona: Carlos Leyva
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: CLEYVA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:12:49
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:13:46
-Nombre de Persona: Jose Castro
-Rol: Administrador
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JCASTRO
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:23:44
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 7
-Usuario: SFABIAN
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:24:26
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:25:18
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 6
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:35:08
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 6
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:36:30
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 6
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:37:56
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:38:12
-Nombre de Persona:  
-Rol: 
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:38:45
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 6
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:39:52
-Nombre de Persona:  
-Rol: 
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:40:26
-Nombre de Persona:  
-Rol: 
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: SFABIAN
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:40:43
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:50:17
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:50:45
-Nombre de Persona:  
-Rol: 
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:52:21
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:54:07
-Nombre de Persona:  
-Rol: 
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:56:14
-Nombre de Persona:  
-Rol: 
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: JMANTILLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:56:28
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:57:27
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:57:46
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: MBLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 06:59:09
-Nombre de Persona:  
-Rol: 
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: JMANTILLAS
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 07:01:58
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: 0.0.0.0
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-09-29 07:02:19
-Nombre de Persona:  
-Rol: Soporte
-Codigo Area: 
-Área: 
-Código de Usuario: 
-Usuario: JMANTILLA
-IP: 0.0.0.0
+IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 

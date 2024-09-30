@@ -12,7 +12,7 @@ class AreaModel extends Conexion
     public function getAreaData()
     {
         $conector = parent::getConexion();
-        $query = "SELECT * FROM AREA WHERE ARE_estado <> 2 
+        $query = "SELECT * FROM AREA WHERE EST_codigo <> 2 
                 ORDER BY ARE_nombre ASC";
         $stmt = $conector->prepare($query);
         $stmt->execute();

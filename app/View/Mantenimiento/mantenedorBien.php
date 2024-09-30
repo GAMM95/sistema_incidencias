@@ -87,7 +87,7 @@
               <?php if (!empty($resultado)) : ?>
                 <?php foreach ($resultado as $bien) : ?>
                   <?php
-                  $estado = htmlspecialchars($bien['BIE_estado']);
+                  $estado = htmlspecialchars($bien['EST_codigo']);
                   $isActive = ($estado === '1');
                   $codigoBien = htmlspecialchars($bien['BIE_codigo']);
 
