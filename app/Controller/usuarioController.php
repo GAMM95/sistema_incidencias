@@ -184,5 +184,71 @@ class UsuarioController
         'message' => 'Método no permitido.'
       ]);
     }
-  } 
+  }
+
+  // Controlador para habilitar usuario
+  public function habilitarUsuario()
+  {
+    if ($_SERVER["REQUEST_METHOD"] == 'POST') {
+      $codigoUsuario = isset($_POST['codigoUsuario']) ? $_POST['codigoUsuario'] : '';
+
+      try {
+        $resultados = $this->usuarioModel->habilitarUsuario($codigoUsuario);
+        if ($resultados) {
+          echo json_encode([
+            'success' => true,
+            'message' => 'Usuario habilitado.'
+          ]);
+        } else {
+          echo json_encode([
+            'success' => false,
+            'message' => 'No se pudo habilitar usuario.'
+          ]);
+        }
+      } catch (Exception $e) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Error: ' . $e->getMessage()
+        ]);
+      }
+    } else {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Método no permitido.'
+      ]);
+    }
+  }
+
+  // Controlador para deshabilitar usuario
+  public function deshabilitarUsuario()
+  {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $codigoUsuario = isset($_POST['codigoUsuario']) ? $_POST['codigoUsuario'] : '';
+
+      try {
+        $resultados = $this->usuarioModel->deshabilitarUsuario($codigoUsuario);
+        if ($resultados) {
+          echo json_encode([
+            'success' => true,
+            'message' => '&Usuario deshabilitado.'
+          ]);
+        } else {
+          echo json_encode([
+            'success' => false,
+            'message' => 'No se pudo deshabilitar usuario.'
+          ]);
+        }
+      } catch (Exception $e) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Error: ' . $e->getMessage()
+        ]);
+      }
+    } else {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Método no permitido.'
+      ]);
+    }
+  }
 }

@@ -34,7 +34,9 @@ class ReporteIncidencia extends Conexion
     INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
     INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
     LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-    LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+    LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+    LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+    LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
     LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
     LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
     LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo

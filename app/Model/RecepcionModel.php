@@ -1,5 +1,6 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class RecepcionModel extends Conexion
 {
@@ -31,7 +32,7 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_InsertarRecepcionActualizarIncidencia :fecha, :hora, :incidencia, :prioridad, :impacto, :usuario";
+        $sql = "EXEC sp_insertar_recepcion :fecha, :hora, :incidencia, :prioridad, :impacto, :usuario";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':fecha', $fecha);
         $stmt->bindParam(':hora', $hora);
@@ -40,6 +41,10 @@ class RecepcionModel extends Conexion
         $stmt->bindParam(':impacto', $impacto);
         $stmt->bindParam(':usuario', $usuario);
         $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('RECEPCION', 'Recepcionar incidencia');
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -57,10 +62,14 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_eliminarRecepcion :codigoRecepcion";
+        $sql = "EXEC sp_eliminar_recepcion :codigoRecepcion";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoRecepcion', $codigoRecepcion);
         $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('RECEPCION', 'Eliminar incidencia recepcionada');
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -98,18 +107,18 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_ActualizarRecepcion :num_recepcion, :prioridad, :impacto";
+        $sql = "EXEC sp_actualizar_recepcion :num_recepcion, :prioridad, :impacto";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':num_recepcion', $recepcion);
         $stmt->bindParam(':prioridad', $prioridad);
         $stmt->bindParam(':impacto', $impacto);
         $stmt->execute(); // Ejecutar el procedimiento almacenado
         // Confirmar que se ha actualizado al menos una fila
-        if ($stmt->rowCount() > 0) {
-          return true;
-        } else {
-          return false;
-        }
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('RECEPCION', 'Actualizar incidencia recepcionada');
+        return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexión con la base de datos.");
       }

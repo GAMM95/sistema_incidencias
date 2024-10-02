@@ -1,4 +1,4 @@
-<div class="pcoded-main-container mt-5">
+var url = isChecked ? 'modulo-area.php?action=habilitar' : 'modulo-area.php?action=deshabilitar';<div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
 
     <?php

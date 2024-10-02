@@ -14,7 +14,7 @@ class CategoryModel extends Conexion
     {
         try {
             $conector = parent::getConexion();
-            $query = "SELECT * FROM CATEGORIA WHERE CAT_estado <> 2"; 
+            $query = "SELECT * FROM CATEGORIA WHERE EST_codigo <> 2"; 
             $stmt = $conector->prepare($query);
             $stmt->execute();
             $categorias = $stmt->fetchAll(PDO::FETCH_ASSOC); 

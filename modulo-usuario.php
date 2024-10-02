@@ -35,12 +35,12 @@ switch ($action) {
   case 'filtrar':
     $usuarioController->filtrarUsuarios();
     break;
-    // case 'habilitar':
-    //   $usuarioController->habilitarUsuario($USU_codigo);
-    //   break;
-    // case 'deshabilitar':
-    //   $usuarioController->deshabilitarUsuario($USU_codigo);
-    //   break;
+  case 'habilitar':
+    $usuarioController->habilitarUsuario();
+    break;
+  case 'deshabilitar':
+    $usuarioController->deshabilitarUsuario();
+    break;
   default:
     break;
 }

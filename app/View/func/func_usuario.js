@@ -296,11 +296,15 @@ function filtrarTablaUsuario() {
 // Habilitar y desahbilitar usuario
 $(document).ready(function () {
   // Manejar el cambio en los switches
-  $('input[type="checkbox"]').change(function () {
-    const checkbox = $(this);
-    const usuarioCodigo = checkbox.attr('id').replace('customswitch', '');
-    const nuevoEstado = checkbox.is(':checked') ? 'ACTIVO' : 'INACTIVO';
-    const url = checkbox.is(':checked') ? 'ajax/habilitarUsuario.php' : 'ajax/deshabilitarUsuario.php';
+  // $('.switch-usuario').change(function () {
+  //   const checkbox = $(this);
+  //   const usuarioCodigo = checkbox.attr('id').replace('customswitch', '');
+  //   const nuevoEstado = checkbox.is(':checked') ? 'ACTIVO' : 'INACTIVO';
+  // const url = checkbox.is(':checked') ? 'ajax/habilitarUsuario.php' : 'ajax/deshabilitarUsuario.php';
+  $('.switch-usuario').on('change', function () {
+    var isChecked = $(this).is(':checked');
+    var usuarioCodigo = $(this).data('id');
+    var url = isChecked ? 'modulo-usuario.php?action=habilitar' : 'modulo-usuario.php?action=deshabilitar';
 
     $.ajax({
       url: url, // Cambia esto a la ruta correcta dependiendo del estado

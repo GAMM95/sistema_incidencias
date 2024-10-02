@@ -1,5 +1,6 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class IncidenciaModel extends Conexion
 {
@@ -66,7 +67,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC SP_Registrar_Incidencia :fecha, :hora, :asunto, :descripcion, :documento, :codigoPatrimonial, :categoria, :area, :usuario";
+        $sql = "EXEC sp_registrar_incidencia :fecha, :hora, :asunto, :descripcion, :documento, :codigoPatrimonial, :categoria, :area, :usuario";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':fecha', $INC_fecha);
         $stmt->bindParam(':hora', $INC_hora);
@@ -78,6 +79,10 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':area', $ARE_codigo);
         $stmt->bindParam(':usuario', $USU_codigo);
         $success = $stmt->execute(); // Ejecutar la consulta
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('INCIDENCIA', 'Registrar incidencia');
         return $success;
       }
       return false;
@@ -93,7 +98,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_ActualizarIncidencia :num_incidencia, :categoria, :area, :codigoPatrimonial, :asunto, :documento, :descripcion";
+        $sql = "EXEC sp_actualizar_incidencia :num_incidencia, :categoria, :area, :codigoPatrimonial, :asunto, :documento, :descripcion";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':num_incidencia', $num_incidencia, PDO::PARAM_INT);
         $stmt->bindParam(':categoria', $categoria, PDO::PARAM_INT);
@@ -103,6 +108,9 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':documento', $documento);
         $stmt->bindParam(':descripcion', $descripcion);
         $stmt->execute(); // Ejecutar el procedimiento almacenado
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia');
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -120,7 +128,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_ActualizarIncidenciaUsuario :num_incidencia, :categoria, :codigoPatrimonial, :asunto, :documento, :descripcion";
+        $sql = "EXEC sp_actualizar_incidencia_usuario :num_incidencia, :categoria, :codigoPatrimonial, :asunto, :documento, :descripcion";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':num_incidencia', $num_incidencia, PDO::PARAM_INT);
         $stmt->bindParam(':categoria', $categoria, PDO::PARAM_INT);
@@ -129,6 +137,9 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':documento', $documento);
         $stmt->bindParam(':descripcion', $descripcion);
         $stmt->execute(); // Ejecutar el procedimiento almacenado
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia');
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -146,10 +157,13 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_eliminarIncidencia :codigoIncidencia";
+        $sql = "EXEC sp_eliminar_incidencia :codigoIncidencia";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoIncidencia', $codigoIncidencia);
         $stmt->execute();
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('INCIDENCIA', 'Eliminar incidencia');
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");

@@ -515,3 +515,218 @@ BEGIN
 END;
 GO
 
+-- PROCEDIMIENTO ALMACENADO PARA REGISTRAR INCIDENCIA - ADMINISTRADOR / USUARIO
+CREATE PROCEDURE sp_registrar_incidencia
+  @INC_fecha DATE,
+  @INC_hora TIME,
+  @INC_asunto VARCHAR(500),
+  @INC_descripcion VARCHAR(800),
+  @INC_documento VARCHAR(500),
+  @INC_codigoPatrimonial CHAR(12) = NULL,
+  @CAT_codigo SMALLINT,
+  @ARE_codigo SMALLINT,
+  @USU_codigo SMALLINT
+AS 
+BEGIN 
+  DECLARE @numero_formato VARCHAR(20);  -- Número de incidencia
+
+  -- Verificar si ya existe una incidencia similar
+  IF NOT EXISTS (
+      SELECT 1 
+      FROM INCIDENCIA 
+      WHERE 
+          INC_fecha = @INC_fecha 
+          AND INC_hora = @INC_hora 
+          AND INC_asunto = @INC_asunto 
+          AND INC_descripcion = @INC_descripcion 
+          AND INC_documento = @INC_documento
+          AND (INC_codigoPatrimonial = @INC_codigoPatrimonial OR (@INC_codigoPatrimonial IS NULL AND INC_codigoPatrimonial IS NULL))
+          AND CAT_codigo = @CAT_codigo 
+          AND ARE_codigo = @ARE_codigo 
+          AND USU_codigo = @USU_codigo
+  )
+  BEGIN
+      -- Generar el número de incidencia formateado
+      SET @numero_formato = dbo.GenerarNumeroIncidencia();
+
+      -- Insertar la nueva incidencia
+      INSERT INTO INCIDENCIA (INC_fecha, INC_hora, INC_asunto, INC_descripcion, INC_documento, INC_codigoPatrimonial, EST_codigo, CAT_codigo, ARE_codigo,  USU_codigo, INC_numero_formato)
+      VALUES (@INC_fecha, @INC_hora, @INC_asunto, @INC_descripcion, @INC_documento, @INC_codigoPatrimonial, 3, @CAT_codigo, @ARE_codigo, @USU_codigo, @numero_formato);
+  END
+  ELSE
+  BEGIN
+      -- RETORNAR MENSAJE QUE LA INCIDENCIA YA EXISTE
+      PRINT 'La incidencia ya existe y no se puede registrar nuevamente.';
+  END
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR INCIDENCIA - ADMINISTRADOR
+CREATE PROCEDURE sp_actualizar_incidencia
+  @INC_numero SMALLINT,
+  @CAT_codigo SMALLINT,
+  @ARE_codigo SMALLINT,
+  @INC_codigoPatrimonial CHAR(12),
+  @INC_asunto VARCHAR(500),
+  @INC_documento VARCHAR(500),
+  @INC_descripcion VARCHAR(800)
+AS
+BEGIN
+  -- Actualizar el registro en la tabla INCIDENCIA solo si el estado es 3
+  UPDATE INCIDENCIA
+  SET CAT_codigo = @CAT_codigo,
+      ARE_codigo = @ARE_codigo,
+      INC_codigoPatrimonial = @INC_codigoPatrimonial,
+      INC_asunto = @INC_asunto,
+      INC_documento = @INC_documento,
+      INC_descripcion = @INC_descripcion
+  WHERE INC_numero = @INC_numero
+  AND EST_codigo = 3;
+END;
+GO 
+
+-- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR INCIDENCIA - USUARIO
+CREATE PROCEDURE sp_actualizar_incidencia_usuario
+  @INC_numero SMALLINT,
+  @CAT_codigo SMALLINT,
+  @INC_codigoPatrimonial CHAR(12),
+  @INC_asunto VARCHAR(500),
+  @INC_documento VARCHAR(500),
+  @INC_descripcion VARCHAR(800)
+AS
+BEGIN
+  -- Actualizar el registro en la tabla INCIDENCIA solo si el estado es 3
+  UPDATE INCIDENCIA
+  SET CAT_codigo = @CAT_codigo,
+      INC_codigoPatrimonial = @INC_codigoPatrimonial,
+      INC_asunto = @INC_asunto,
+      INC_documento = @INC_documento,
+      INC_descripcion = @INC_descripcion
+  WHERE INC_numero = @INC_numero
+  AND EST_codigo = 3;
+END;
+GO 
+
+---- PROCEDIMIENTO ALMACENADO PARA ELIMINAR INCIDENCIA
+CREATE PROCEDURE sp_eliminar_incidencia
+    @NumeroIncidencia INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        -- Eliminar la incidencia basada en el número de incidencia
+        DELETE FROM INCIDENCIA
+        WHERE INC_numero = @NumeroIncidencia;
+
+        -- Confirmar la transacción
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
+
+
+
+-- PROCEDIMIENTO ALMACENADO PARA INSERTAR LA RECEPCION Y ACTUALIZAR ESTADO DE INCIDENCIA
+CREATE PROCEDURE sp_insertar_recepcion (
+    @REC_fecha DATE,
+    @REC_hora TIME,
+    @INC_numero INT,
+    @PRI_codigo INT,
+    @IMP_codigo INT,
+    @USU_codigo INT
+)
+AS 
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY 
+        BEGIN TRANSACTION;
+
+        -- Verificar si ya existe una recepción con los mismos valores
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM RECEPCION 
+            WHERE 
+                REC_fecha = @REC_fecha 
+                AND REC_hora = @REC_hora 
+                AND INC_numero = @INC_numero 
+                AND PRI_codigo = @PRI_codigo 
+                AND IMP_codigo = @IMP_codigo 
+                AND USU_codigo = @USU_codigo
+        )
+        BEGIN
+            -- Insertar la nueva recepción
+            INSERT INTO RECEPCION (REC_fecha, REC_hora, INC_numero, PRI_codigo, IMP_codigo, USU_codigo, EST_codigo)
+            VALUES (@REC_fecha, @REC_hora, @INC_numero, @PRI_codigo, @IMP_codigo, @USU_codigo, 4);
+            
+            -- Actualizar el estado de la incidencia
+            UPDATE INCIDENCIA 
+            SET EST_codigo = 4
+            WHERE INC_numero = @INC_numero;
+        END
+        ELSE
+        BEGIN
+            -- Mensaje que la recepción ya existe
+            PRINT 'La recepción ya existe y no se puede registrar nuevamente.';
+        END
+
+        COMMIT TRANSACTION;
+    END TRY 
+    BEGIN CATCH 
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+
+-- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR RECEPCION
+CREATE PROCEDURE sp_actualizar_recepcion
+  @REC_numero SMALLINT,
+  @PRI_codigo SMALLINT,
+  @IMP_codigo SMALLINT
+AS
+BEGIN
+  -- Actualizar el registro en la tabla RECEPCION solo si el estado es 4
+  UPDATE RECEPCION
+  SET PRI_codigo = @PRI_codigo,
+      IMP_codigo = @IMP_codigo
+  WHERE REC_numero = @REC_numero
+	AND EST_codigo = 4;
+END;
+GO 
+
+---- PROCEDIMIENTO ALMACENADO PARA ELIMINAR RECEPCION
+CREATE PROCEDURE sp_eliminar_recepcion
+    @IdRecepcion INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        DECLARE @NumeroIncidencia INT;
+
+        -- Obtener el número de incidencia basado en el ID de recepción
+        SELECT @NumeroIncidencia = INC_numero
+        FROM RECEPCION
+        WHERE REC_numero = @IdRecepcion;
+
+        -- Actualizar el estado de la incidencia a 3
+        UPDATE INCIDENCIA
+        SET EST_codigo = 3
+        WHERE INC_numero = @NumeroIncidencia;
+
+        -- Eliminar la recepción basada en el ID de recepción
+        DELETE FROM RECEPCION
+        WHERE REC_numero = @IdRecepcion;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
