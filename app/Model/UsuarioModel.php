@@ -18,13 +18,14 @@ class UsuarioModel extends Conexion
       if ($conector != null) {
 
         // Obtener IP del cliente
-        $ipCliente = $this->obtenerIP();
+        $auditoria = new AuditoriaModel($conector);
+        $ipCliente = $auditoria->getIP();
 
         // Obtener el nombre del equipo usando el IP
         $nombreEquipo = gethostbyaddr($ipCliente);
 
         // Ejecutar el procedimiento almacenado
-        $query = "EXEC SP_Usuario_login :username, :password";
+        $query = "EXEC sp_login :username, :password";
         $stmt = $conector->prepare($query);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
@@ -50,6 +51,8 @@ class UsuarioModel extends Conexion
           // Log de inicio de sesión
           $this->registrarLog($username, $codigo, $ipCliente, $nombreEquipo);
 
+          // Registrar el evento en la auditoría
+          $auditoria->registrarEvento('USUARIO', 'Iniciar sesión');
           return true;
         } else {
           // Si las credenciales son incorrectas o hay un mensaje de error
@@ -62,30 +65,6 @@ class UsuarioModel extends Conexion
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al iniciar sesión: " . $e->getMessage());
-    }
-  }
-
-  // Metodo para obtener la ip del equipo
-  private function obtenerIP()
-  {
-    // Comprobar si hay proxies
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-      $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      // En caso de que esté detrás de un proxy
-      $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
-    } else {
-      $ip = $_SERVER['REMOTE_ADDR'];
-    }
-
-    // Validar que la IP sea válida (IPv4 o IPv6)
-    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-      return $ip; // Si es IPv4
-    } elseif (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-      return $ip; // Si es IPv6
-    } else {
-      // Devolver una dirección IP por defecto si no es válida
-      return 'IP no válida';
     }
   }
 

@@ -8,6 +8,35 @@ class AuditoriaModel extends Conexion
     parent::__construct();
   }
 
+  public function getIP()
+  {
+    return $this->obtenerIP();
+  }
+  
+  // Metodo para obtener la ip del equipo
+  private function obtenerIP()
+  {
+    // Comprobar si hay proxies
+    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
+      $ip = $_SERVER['HTTP_CLIENT_IP'];
+    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
+      // En caso de que esté detrás de un proxy
+      $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
+    } else {
+      $ip = $_SERVER['REMOTE_ADDR'];
+    }
+
+    // Validar que la IP sea válida (IPv4 o IPv6)
+    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
+      return $ip; // Si es IPv4
+    } elseif (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
+      return $ip; // Si es IPv6
+    } else {
+      // Devolver una dirección IP por defecto si no es válida
+      return 'IP no válida';
+    }
+  }
+
   // Método para registrar un evento de auditoría
   public function registrarEvento($tabla, $operacion)
   {
@@ -39,31 +68,6 @@ class AuditoriaModel extends Conexion
     } catch (PDOException $e) {
       throw new PDOException("Error al registrar en la auditoría: " . $e->getMessage());
       return null;
-    }
-  }
-
-
-  // Metodo para obtener la ip del equipo
-  private function obtenerIP()
-  {
-    // Comprobar si hay proxies
-    if (!empty($_SERVER['HTTP_CLIENT_IP'])) {
-      $ip = $_SERVER['HTTP_CLIENT_IP'];
-    } elseif (!empty($_SERVER['HTTP_X_FORWARDED_FOR'])) {
-      // En caso de que esté detrás de un proxy
-      $ip = explode(',', $_SERVER['HTTP_X_FORWARDED_FOR'])[0];
-    } else {
-      $ip = $_SERVER['REMOTE_ADDR'];
-    }
-
-    // Validar que la IP sea válida (IPv4 o IPv6)
-    if (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV4)) {
-      return $ip; // Si es IPv4
-    } elseif (filter_var($ip, FILTER_VALIDATE_IP, FILTER_FLAG_IPV6)) {
-      return $ip; // Si es IPv6
-    } else {
-      // Devolver una dirección IP por defecto si no es válida
-      return 'IP no válida';
     }
   }
 }
