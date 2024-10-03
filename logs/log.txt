@@ -22,3 +22,51 @@ IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-03 18:22:35
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: INF04.muniesperanza.gob.pe
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-03 18:41:47
+Nombre de Persona: Jose Castro
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 1
+Usuario: JCASTRO
+IP: ::1
+Nombre de Equipo: INF04.muniesperanza.gob.pe
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-03 19:57:16
+Nombre de Persona: Carlos Leyva
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 5
+Usuario: CLEYVA
+IP: ::1
+Nombre de Equipo: INF04.muniesperanza.gob.pe
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-03 20:07:35
+Nombre de Persona: Alan Collantes
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 3
+Usuario: ACOLLANTES
+IP: ::1
+Nombre de Equipo: INF04.muniesperanza.gob.pe
+------- END LOGIN LOGS ---------
+

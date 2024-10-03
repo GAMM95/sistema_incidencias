@@ -158,10 +158,10 @@
         </div>
 
         <!-- ASUNTO DEL CIERRE -->
-        <div class="w-full md:w-2/5 px-2 mb-2">
+        <!-- <div class="w-full md:w-2/5 px-2 mb-2">
           <label for="asunto" class="block mb-1 font-bold text-xs">Asunto de cierre: *</label>
           <input type="text" id="asunto" name="asunto" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese asunto de cierre">
-        </div>
+        </div> -->
 
         <!-- DOCUMENTO DE CIERRE -->
         <div class="w-full md:w-2/5 px-2 mb-2">

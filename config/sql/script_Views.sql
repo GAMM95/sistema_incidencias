@@ -9,7 +9,7 @@
 -- Creado por	 : Jhonatan Mantilla Miñano
 --		         : 16 de mayo del 2024
 
-USE SISTEMA_HELPDESK;
+USE BD_INCIDENCIAS;
 GO
 
 -------------------------------------------------------------------------------------------------------
@@ -299,7 +299,9 @@ INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
 LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
 LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
 LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
@@ -338,7 +340,9 @@ INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
 LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
 LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
 LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
@@ -389,17 +393,6 @@ INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
 WHERE  I.EST_codigo = 5 OR C.EST_codigo = 5;
 GO
 
--- Vista para listar usuarios
-CREATE VIEW vista_usuarios AS
-SELECT USU_codigo, (p.PER_nombres + ' ' + p.PER_apellidoPaterno + ' '+ p.PER_apellidoMaterno) as persona, 
-a.ARE_nombre, a.ARE_estado, USU_nombre, USU_password, r.ROL_nombre, e.EST_descripcion 
-FROM USUARIO u
-INNER JOIN PERSONA p on p.PER_codigo = u.PER_codigo
-INNER JOIN AREA a on a.ARE_codigo = u.ARE_codigo
-INNER JOIN ESTADO e on e.EST_codigo = u.EST_codigo
-INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo;
-GO
-
 --VISTA PARA MOSTRAR NOTIFICACIONES PARA LOS USUARIOS
 CREATE VIEW vista_notificaciones_usuario AS
 SELECT 
@@ -435,7 +428,9 @@ INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
 LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
 LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
 LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo

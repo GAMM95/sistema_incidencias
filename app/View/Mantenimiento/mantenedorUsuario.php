@@ -143,6 +143,7 @@
                 $estado = htmlspecialchars($usuario['EST_descripcion']);
                 $isActive = ($estado === 'ACTIVO');
                 $areaEstado = htmlspecialchars($usuario['EST_codigo']);
+                $codigoUsuario = htmlspecialchars($usuario['USU_codigo']);
                 // Aplicar clase de texto rojo si el ARE_estado es 2
                 $areaInactiva = ($areaEstado == 2) ? 'text-red-600' : 'text-gray-900';
                 ?>
@@ -155,8 +156,8 @@
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['ROL_nombre']); ?></td>
                   <td class="px-6 py-2 text-center">
                     <div class="custom-control custom-switch cursor-pointer">
-                      <input type="checkbox" class="custom-control-input switch-usuario" id="customswitch<?= $usuario['USU_codigo']; ?>" <?= $isActive ? 'checked' : ''; ?>>
-                      <label class="custom-control-label" for="customswitch<?= $usuario['USU_codigo']; ?>"><?= $isActive ? 'Activo' : 'Inactivo'; ?></label>
+                      <input type="checkbox" class="custom-control-input switch-usuario" id="customswitch<?= $codigoUsuario; ?>" data-id="<?= $codigoUsuario; ?>" <?= $isActive ? 'checked' : ''; ?>>
+                      <label class="custom-control-label" for="customswitch<?= $codigoUsuario; ?>"><?= $isActive ? 'Activo' : 'Inactivo'; ?></label>
                     </div>
                   </td>
                 </tr>

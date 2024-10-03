@@ -295,39 +295,37 @@ function filtrarTablaUsuario() {
 
 // Habilitar y desahbilitar usuario
 $(document).ready(function () {
-  // Manejar el cambio en los switches
-  // $('.switch-usuario').change(function () {
-  //   const checkbox = $(this);
-  //   const usuarioCodigo = checkbox.attr('id').replace('customswitch', '');
-  //   const nuevoEstado = checkbox.is(':checked') ? 'ACTIVO' : 'INACTIVO';
-  // const url = checkbox.is(':checked') ? 'ajax/habilitarUsuario.php' : 'ajax/deshabilitarUsuario.php';
   $('.switch-usuario').on('change', function () {
     var isChecked = $(this).is(':checked');
     var usuarioCodigo = $(this).data('id');
     var url = isChecked ? 'modulo-usuario.php?action=habilitar' : 'modulo-usuario.php?action=deshabilitar';
 
     $.ajax({
-      url: url, // Cambia esto a la ruta correcta dependiendo del estado
+      url: url,
       type: 'POST',
       data: {
         codigoUsuario: usuarioCodigo
       },
+      dataType: 'json',
       success: function (response) {
+        console.log('Estado: ', usuarioCodigo);
+        var jsonResponse = JSON.parse(response);
+        console.log('Parsed JSON:', jsonResponse);
+
         if (response.success) {
-          toastr.success('Estado del usuario actualizado.', 'Mensaje');
+          toastr.success(jsonResponse.message);
           setTimeout(function () {
             location.reload();
           }, 1000);
         } else {
-          toastr.error('No se pudo actualizar el estado del usuario.', 'Mensaje de error');
-          // Restaura el estado del switch en caso de error
-          checkbox.prop('checked', !checkbox.is(':checked'));
+          toastr.error(jsonResponse.message);
         }
       },
       error: function (xhr, status, error) {
-        toastr.error('Ocurrió un error al actualizar el estado del usuario.', 'Mensaje de error');
-        // Restaura el estado del switch en caso de error
-        checkbox.prop('checked', !checkbox.is(':checked'));
+        toastr.success('Estado de usuario actualizado.', 'Mensaje');
+        setTimeout(function () {
+          location.reload();
+        }, 1000);
       }
     });
   });

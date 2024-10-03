@@ -99,47 +99,47 @@ class CategoriaController
   }
 
   // Metodo para eliminar Categoria
-  public function eliminarCategoria()
-  {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $codigoCategoria = $_POST['codCategoria'] ?? null;
+  // public function eliminarCategoria()
+  // {
+  //   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  //     $codigoCategoria = $_POST['codCategoria'] ?? null;
 
-      if (empty($codigoCategoria)) {
-        echo json_encode([
-          'success' => false,
-          'message' => 'Debe seleccionar una categor&iacute;a.'
-        ]);
-        exit();
-      }
+  //     if (empty($codigoCategoria)) {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'Debe seleccionar una categor&iacute;a.'
+  //       ]);
+  //       exit();
+  //     }
 
-      try {
-        // Llamar al modelo para actualizar la incidencia
-        $deleteSuccess = $this->categoriaModel->eliminarCategoria($codigoCategoria);
-        if ($deleteSuccess) {
-          echo json_encode([
-            'success' => true,
-            'message' => 'Categor&iacute;a eliminada.'
-          ]);
-        } else {
-          echo json_encode([
-            'success' => false,
-            'message' => 'No se realiz&oacute; ninguna eliminaci&oacute;n.'
-          ]);
-        }
-      } catch (Exception $e) {
-        echo json_encode([
-          'success' => false,
-          'message' => 'Error: ' . $e->getMessage()
-        ]);
-      }
-      exit();
-    } else {
-      echo json_encode([
-        'success' => false,
-        'message' => 'M&eacute;todo no permitido.'
-      ]);
-    }
-  }
+  //     try {
+  //       // Llamar al modelo para actualizar la incidencia
+  //       $deleteSuccess = $this->categoriaModel->eliminarCategoria($codigoCategoria);
+  //       if ($deleteSuccess) {
+  //         echo json_encode([
+  //           'success' => true,
+  //           'message' => 'Categor&iacute;a eliminada.'
+  //         ]);
+  //       } else {
+  //         echo json_encode([
+  //           'success' => false,
+  //           'message' => 'No se realiz&oacute; ninguna eliminaci&oacute;n.'
+  //         ]);
+  //       }
+  //     } catch (Exception $e) {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'Error: ' . $e->getMessage()
+  //       ]);
+  //     }
+  //     exit();
+  //   } else {
+  //     echo json_encode([
+  //       'success' => false,
+  //       'message' => 'M&eacute;todo no permitido.'
+  //     ]);
+  //   }
+  // }
 
   public function listarCategorias()
   {

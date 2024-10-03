@@ -15,16 +15,16 @@
 USE master;
 GO
 
-IF EXISTS (SELECT name FROM sys.databases WHERE name = 'SISTEMA_HELPDESK')
+IF EXISTS (SELECT name FROM sys.databases WHERE name = 'BD_INCIDENCIAS')
 BEGIN
-    DROP DATABASE SISTEMA_HELPDESK;
+    DROP DATABASE BD_INCIDENCIAS;
 END
 GO
 
-CREATE DATABASE SISTEMA_HELPDESK;
+CREATE DATABASE BD_INCIDENCIAS;
 GO
 
-USE SISTEMA_HELPDESK;
+USE BD_INCIDENCIAS;
 GO
 
 -------------------------------------------------------------------------------------------------------

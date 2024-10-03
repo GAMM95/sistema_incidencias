@@ -9,7 +9,7 @@
 -- Creado por	 : Jhonatan Mantilla Miñano
 --		         : 16 de mayo del 2024
 
-USE SISTEMA_HELPDESK;
+USE BD_INCIDENCIAS;
 GO
 
 -------------------------------------------------------------------------------------------------------
@@ -17,7 +17,7 @@ GO
 -------------------------------------------------------------------------------------------------------
 
 -- PROCEDIMIENTO ALMACENADO PARA INICIAR SESION 
-CREATE PROCEDURE SP_Usuario_login(
+CREATE PROCEDURE sp_login (
     @USU_usuario VARCHAR(20),
     @USU_password VARCHAR(10)
 ) 
@@ -27,14 +27,6 @@ BEGIN
 
     DECLARE @USU_codigo SMALLINT;
     DECLARE @EST_codigo SMALLINT;
-    DECLARE @AUD_ip VARCHAR(50);
-    DECLARE @AUD_nombreEquipo VARCHAR(50);
-
-    -- Obtener la dirección IP del cliente
-    SET @AUD_ip = HOST_NAME(); 
-
-    -- Obtener el nombre del equipo
-    SET @AUD_nombreEquipo = HOST_NAME();
 
     -- Intento de login: Asignar el código de usuario y estado
     SELECT @USU_codigo = u.USU_codigo, @EST_codigo = u.EST_codigo
@@ -55,26 +47,6 @@ BEGIN
                 AND u.USU_password = @USU_password
             )
             BEGIN
-                -- Credenciales correctas, registrar inicio de sesión
-                INSERT INTO AUDITORIA (
-                    AUD_fecha, 
-                    AUD_hora, 
-                    AUD_usuario, 
-                    AUD_tabla, 
-                    AUD_operacion, 
-                    AUD_ip, 
-                    AUD_nombreEquipo
-                )
-                VALUES (
-                    GETDATE(),             -- Fecha actual
-                    CONVERT(TIME, GETDATE()), -- Hora actual
-                    @USU_codigo,           -- Código de usuario que inició sesión
-                    'USUARIO',             -- Tabla afectada
-                    'Inicio de sesión',    -- Operación de inicio de sesión
-                    @AUD_ip,               -- Dirección IP del cliente
-                    @AUD_nombreEquipo      -- Nombre del equipo del cliente
-                );
-
                 -- Devolver datos del usuario para la sesión
                 SELECT 
 					u.USU_codigo,
@@ -94,26 +66,6 @@ BEGIN
             END
             ELSE
             BEGIN
-			 -- Si las credenciales no son correctas, registrar intento fallido en auditoría
-				INSERT INTO AUDITORIA (
-					AUD_fecha, 
-					AUD_hora, 
-					AUD_usuario, 
-					AUD_tabla, 
-					AUD_operacion, 
-					AUD_ip, 
-					AUD_nombreEquipo
-				)
-				VALUES (
-					GETDATE(),
-					CONVERT(TIME, GETDATE()),
-					NULL,               -- Usuario no identificado
-					'USUARIO',
-					'Inicio de sesión fallido',     -- Intento fallido de inicio de sesión
-					@AUD_ip,           -- Dirección IP del cliente
-					@AUD_nombreEquipo   -- Nombre del equipo del cliente
-				);
-
                 -- Credenciales incorrectas
                 SELECT 'Credenciales incorrectas' AS MensajeError;
             END
@@ -275,32 +227,6 @@ END;
 GO
 
 -- PROCEDIMIENTO ALMACENADO PARA HABILITAR USUARIO
---CREATE PROCEDURE sp_habilitar_usuario
---	@codigoUsuario SMALLINT
---AS
---BEGIN
---	UPDATE USUARIO SET EST_codigo = 1
---    WHERE EST_codigo = 2 AND  USU_codigo = @codigoUsuario;
---END;
---GO
-
-
-
---CREATE PROCEDURE sp_habilitar_usuario
---    @codigoUsuario SMALLINT
---AS
---BEGIN
---    -- Actualizar el estado del usuario
---    UPDATE USUARIO 
---    SET EST_codigo = 1
---    WHERE EST_codigo = 2 AND USU_codigo = @codigoUsuario;
-
---    -- Insertar en la tabla AUDITORIA después de actualizar al usuario
---    INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo)
---    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), @codigoUsuario, 'USUARIO', 'Habilitar Usuario', HOST_NAME(), HOST_NAME());
---END;
---GO
-
 CREATE PROCEDURE sp_habilitar_usuario
     @codigoUsuario SMALLINT
 AS
@@ -309,18 +235,8 @@ BEGIN
     UPDATE USUARIO 
     SET EST_codigo = 1
     WHERE EST_codigo = 2 AND USU_codigo = @codigoUsuario;
-
-    -- Capturar la dirección IP del cliente con conversión a NVARCHAR
-    DECLARE @ipCliente NVARCHAR(50);
-    SET @ipCliente = CONVERT(NVARCHAR(50), CONNECTIONPROPERTY('client_net_address'));
-
-    -- Insertar en la tabla AUDITORIA después de actualizar al usuario
-    INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo)
-    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), @codigoUsuario, 'USUARIO', 'Habilitar Usuario', @ipCliente, HOST_NAME());
 END;
 GO
-
-
 
 -- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR USUARIO
 CREATE PROCEDURE sp_deshabilitar_usuario
@@ -330,14 +246,6 @@ BEGIN
     -- Actualizar el estado del usuario
 	UPDATE USUARIO SET EST_codigo = 2 
     WHERE EST_codigo = 1 AND  USU_codigo = @codigoUsuario;
-
-	-- Capturar la dirección IP del cliente con conversión a NVARCHAR
-	DECLARE @ipCliente NVARCHAR(50);
-    SET @ipCliente = CONVERT(NVARCHAR(50), CONNECTIONPROPERTY('client_net_address'));
-
-    -- Insertar en la tabla AUDITORIA después de actualizar al usuario
-    INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo)
-    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), @codigoUsuario, 'USUARIO', 'Deshabilitar Usuario', @ipCliente, HOST_NAME());
 END;
 GO
 

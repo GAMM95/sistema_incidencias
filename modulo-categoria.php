@@ -2,7 +2,7 @@
 session_start();
 // Verificar si no hay una sesión iniciada
 if (!isset($_SESSION['usuario'])) {
-  header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
+  header("Location: inicio.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
   exit();
 }
 $action = $_GET['action'] ?? '';
@@ -29,9 +29,6 @@ switch ($action) {
     break;
   case 'editar':
     $categoriaController->actualizarCategoria();
-    break;
-  case 'eliminar':
-    $categoriaController->eliminarCategoria();
     break;
   case 'habilitar':
     $categoriaController->habilitarCategoria();

@@ -17,8 +17,7 @@ class UsuarioAsignado extends Conexion
       (PER_nombres + ' ' + PER_apellidoPaterno) as usuarioAsignado
       FROM USUARIO u
       INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-      WHERE ROL_codigo NOT IN (1,3) AND
-      EST_codigo <> 2";
+      WHERE ROL_codigo IN (1,2) AND EST_codigo <> 2 AND USU_codigo <> 1";
       $stmt = $conector->prepare($query);
       $stmt->execute();
       $resultado = $stmt->fetchAll();

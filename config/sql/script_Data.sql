@@ -9,7 +9,7 @@
 -- Creado por	 : Jhonatan Mantilla Miñano
 --		         : 16 de mayo del 2024
 
-USE SISTEMA_HELPDESK;
+USE BD_INCIDENCIAS;
 GO
 -------------------------------------------------------------------------------------------------------
   -- VOLCADO DE DATOS PARA LAS TABLAS CREADAS

@@ -408,7 +408,6 @@ class UsuarioModel extends Conexion
         $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
         $stmt->execute();
 
-
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
