@@ -536,8 +536,6 @@ BEGIN
 END;
 GO
 
-
-
 -- PROCEDIMIENTO ALMACENADO PARA INSERTAR LA RECEPCION Y ACTUALIZAR ESTADO DE INCIDENCIA
 CREATE PROCEDURE sp_insertar_recepcion (
     @REC_fecha DATE,
@@ -636,5 +634,52 @@ BEGIN
         ROLLBACK TRANSACTION;
         THROW;
     END CATCH;
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA REGISTRAR ASINACION - ADMINISTRADOR / USUARIO
+CREATE PROCEDURE sp_registrar_asignacion
+  @ASI_fecha DATE,
+  @ASI_hora TIME,
+  @USU_codigo SMALLINT,
+  @REC_numero SMALLINT
+AS 
+BEGIN
+    SET NOCOUNT ON;
+    BEGIN TRY 
+        BEGIN TRANSACTION;
+
+        -- Verificar si ya existe una recepción con los mismos valores
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM ASIGNACION 
+            WHERE 
+                ASI_fecha = @ASI_fecha 
+                AND ASI_hora = @ASI_hora 
+                AND USU_codigo = @USU_codigo 
+                AND REC_numero = @REC_numero 
+        )
+        BEGIN
+            -- Insertar la nueva recepción
+            INSERT INTO ASIGNACION(ASI_fecha, ASI_hora, USU_codigo, REC_numero, EST_codigo)
+            VALUES (@ASI_fecha, @ASI_hora, @USU_codigo, @REC_numero, 5); -- ESTADO "EN ESPERA"
+            
+            -- Actualizar el estado de la incidencia
+            UPDATE RECEPCION 
+            SET EST_codigo = 5
+            WHERE REC_numero = @REC_numero;
+        END
+        ELSE
+        BEGIN
+            -- Mensaje que la recepción ya existe
+            PRINT 'La incidencia ya esta asignada a un usuario y no se puede registrar nuevamente.';
+        END
+
+        COMMIT TRANSACTION;
+    END TRY 
+    BEGIN CATCH 
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
 END;
 GO

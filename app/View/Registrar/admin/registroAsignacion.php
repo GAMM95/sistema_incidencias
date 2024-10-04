@@ -23,50 +23,30 @@
     </div>
     <!-- Fin de miga de pan -->
 
-    <!-- Titulo de incidencias y paginador -->
-    <div id="noIncidencias" class="flex justify-between items-center mb-2">
-      <h1 class="text-xl text-gray-400">Incidencias recepcionadas</h1>
-      <div id="paginadorNuevasIncidencias" class="flex justify-end items-center mt-1">
-        <?php if ($totalPages > 1) : // Mostrar el contenedor solo si hay más de una página
-        ?>
-          <div class="flex justify-end items-center mt-1">
-            <?php if ($page > 1) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageTablaSinRecepcionar(<?php echo $page - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
-            <?php endif; ?>
-            <span class="px-2 py-1 bg-gray-400 text-gray-200"><?php echo $page; ?> de <?php echo $totalPages; ?></span>
-            <?php if ($page < $totalPages) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageTablaSinRecepcionar(<?php echo $page + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
-            <?php endif; ?>
-          </div>
+    <!-- Titulo y paginacion de tabla de recepciones -->
+    <div class="flex justify-between items-center mb-2">
+      <h1 class="text-xl text-gray-400">Seguimiento de incidencias</h1>
+      <div id="paginadorRecepciones" class="flex justify-end items-center mt-1">
+        <?php if ($totalPagesRecepciones > 1) : ?>
+          <?php if ($pageRecepciones > 1) : ?>
+            <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageTablaRecepciones(<?php echo $pageRecepciones - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
+          <?php endif; ?>
+          <span class="px-2 py-1 bg-gray-400 text-gray-200"><?php echo $pageRecepciones; ?> de <?php echo $totalPagesRecepciones; ?></span>
+          <?php if ($pageRecepciones < $totalPagesRecepciones) : ?>
+            <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageTablaRecepciones(<?php echo $pageRecepciones + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
+          <?php endif; ?>
         <?php endif; ?>
       </div>
     </div>
-    <!-- Fin de titulo y paginador -->
+    <!-- Fin de titulo y paginacion -->
 
     <!-- Segundo apartado -->
-    <div class="w-full">
-      <!-- Titulo y paginacion de tabla de recepciones -->
-      <div class="flex justify-between items-center mb-2">
-        <h1 class="text-xl text-gray-400">Seguimiento de incidencias</h1>
-        <div id="paginadorRecepciones" class="flex justify-end items-center mt-1">
-          <?php if ($totalPagesRecepciones > 1) : ?>
-            <?php if ($pageRecepciones > 1) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageTablaRecepciones(<?php echo $pageRecepciones - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
-            <?php endif; ?>
-            <span class="px-2 py-1 bg-gray-400 text-gray-200"><?php echo $pageRecepciones; ?> de <?php echo $totalPagesRecepciones; ?></span>
-            <?php if ($pageRecepciones < $totalPagesRecepciones) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageTablaRecepciones(<?php echo $pageRecepciones + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
-            <?php endif; ?>
-          <?php endif; ?>
-        </div>
-      </div>
-      <!-- Fin de titulo y paginacion -->
-
+    <div class="w-full mb-3">
       <!-- Tabla de incidencias recepcionadas -->
       <div class="relative max-h-[500px] overflow-x-hidden shadow-md sm:rounded-lg">
         <table id="tablaIncidenciasRecepcionadas" class="w-full text-xs text-left rtl:text-right text-gray-500 cursor-pointer bg-white">
           <!-- Encabezado de la tabla -->
-          <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-blue-300">
+          <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-orange-300">
             <tr>
               <th scope="col" class="px-6 py-2 hidden">Recepci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Incidencia</th>
@@ -231,22 +211,27 @@
             <tr>
               <th scope="col" class="px-6 py-2 hidden">Recepci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Incidencia</th>
-              <th scope="col" class="px-6 py-2 text-center">Fecha recepci&oacute;n</th>
+              <th scope="col" class="px-6 py-2 text-center">Fecha asignaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 text-center">C&oacute;d. Patrimonial</th>
-              <th scope="col" class="px-6 py-2 text-center">Categor&iacute;a</th>
+              <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Prioridad</th>
               <th scope="col" class="px-6 py-2 text-center">Impacto</th>
-              <th scope="col" class="px-6 py-2 text-center">Usuario receptor</th>
-              <th scope="col" class="px-6 py-2 text-center">Acci&oacute;n</th>
+              <th scope="col" class="px-6 py-2 text-center">Usuario asignado</th>
+              <th scope="col" class="px-6 py-2 text-center">Estado</th>
             </tr>
           </thead>
           <!-- Fin de encabezado -->
 
           <!-- Cuerpo de la tabla -->
+           <!-- TODO: cambios aqui -->
           <tbody>
             <?php if (!empty($resultadoRecepciones)) : ?>
               <?php foreach ($resultadoRecepciones as $recepcion) : ?>
+                <?php
+                $estado = htmlspecialchars($recepcion['EST_descripcion']);
+                $isInProgress = ($estado === 'EN ESPERA');
+                ?>
                 <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $recepcion['REC_numero']; ?>">
                   <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $recepcion['REC_numero']; ?></th>
                   <td class='px-6 py-2 text-center'><?= $recepcion['INC_numero_formato']; ?></td>
@@ -257,10 +242,11 @@
                   <td class='px-6 py-2 text-center'><?= $recepcion['PRI_nombre']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['IMP_descripcion']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioRecepcion']; ?></td>
-                  <td class="px-6 py-2 text-center flex space-x-2">
-                    <button type="button" class="eliminar-recepcion bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center">
-                      <i class="feather icon-trash-2"></i>
-                    </button>
+                  <td class="px-6 py-2 text-center">
+                    <div class="custom-control custom-switch cursor-pointer">
+                      <input type="checkbox" class="custom-control-input switch-asignacion" id="customswitch<?= $codigoUsuario; ?>" data-id="<?= $codigoUsuario; ?>" <?= $isInProgress ? 'checked' : ''; ?>>
+                      <label class="custom-control-label" for="customswitch<?= $codigoUsuario; ?>"><?= $isInProgress ? 'EN ESPERA' : 'FINALIZADO'; ?></label>
+                    </div>
                   </td>
                 </tr>
               <?php endforeach; ?>
