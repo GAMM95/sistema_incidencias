@@ -4,9 +4,19 @@ require_once 'app/Model/AuditoriaModel.php';
 
 class RecepcionModel extends Conexion
 {
+  private $auditoria;
+
   public function __construct()
   {
     parent::__construct();
+    $conector = parent::getConexion();
+
+    // Inicializar la instancia de AuditoriaModel
+    if ($conector != null) {
+      $this->auditoria = new AuditoriaModel($conector);
+    } else {
+      throw new Exception("Error de conexión a la base de datos");
+    }
   }
 
   // Metodo para obtener recepcion por ID
@@ -43,8 +53,7 @@ class RecepcionModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('RECEPCION', 'Recepcionar incidencia');
+        $this->auditoria->registrarEvento('RECEPCION', 'Recepcionar incidencia');
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -68,8 +77,7 @@ class RecepcionModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('RECEPCION', 'Eliminar incidencia recepcionada');
+        $this->auditoria->registrarEvento('RECEPCION', 'Eliminar incidencia recepcionada');
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -116,8 +124,7 @@ class RecepcionModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('RECEPCION', 'Actualizar incidencia recepcionada');
+        $this->auditoria->registrarEvento('RECEPCION', 'Actualizar incidencia recepcionada');
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexión con la base de datos.");

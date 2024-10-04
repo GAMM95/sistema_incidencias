@@ -2,7 +2,7 @@
 session_start();
 // Verificar si no hay una sesión iniciada
 if (!isset($_SESSION['usuario'])) {
-  header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
+  header("Location: inicio.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
   exit();
 }
 $action = $_GET['action'] ?? '';
@@ -12,23 +12,13 @@ $REC_numero = $_GET['REC_numero'] ?? '';
 $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
 
-require_once 'app/Controller/recepcionController.php';
+require_once 'app/Controller/asignacionController.php';
+require_once 'app/Model/asignacionModel.php';
 require_once 'app/Model/recepcionModel.php';
-require_once 'app/Model/incidenciaModel.php';
 
-$recepcionController = new RecepcionController();
+$asignacionController = new AsignacionController();
 $recepcionModel = new RecepcionModel();
-$incidenciaModel = new IncidenciaModel();
-
-// Paginacion de la tabla de incidencias sin recepcionar
-$limit = 2; // Número de filas por página
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Página actual
-$start = ($page - 1) * $limit; // Calcula el índice de inicio
-// Obtener el total de registros
-$totalIncidenciasSinRecepcionar = $incidenciaModel->contarIncidenciasAdministrador();
-$totalPages = ceil($totalIncidenciasSinRecepcionar / $limit);
-// Listar las incidencias para la pagina actual
-$resultadoIncidencias = $incidenciaModel->listarIncidenciasRecepcion($start, $limit);
+$asignacionModel = new AsignacionModel();
 
 // Paginacion para la tabla de incidencias recepcionadas
 $limite = 3; // Numero de filas para la tabla de recepciones
@@ -49,7 +39,7 @@ if ($REC_numero != '') {
 
 switch ($action) {
   case 'registrar':
-    $recepcionController->registrarRecepcion();
+    $asignacionController->registrarAsignacion();
     break;
   case 'editar':
     $recepcionController->actualizarRecepcion();

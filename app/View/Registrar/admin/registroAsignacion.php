@@ -25,7 +25,7 @@
 
     <!-- Titulo y paginacion de tabla de recepciones -->
     <div class="flex justify-between items-center mb-2">
-      <h1 class="text-xl text-gray-400">Seguimiento de incidencias</h1>
+      <h1 class="text-xl text-gray-400">Incidencias recepcionadas</h1>
       <div id="paginadorRecepciones" class="flex justify-end items-center mt-1">
         <?php if ($totalPagesRecepciones > 1) : ?>
           <?php if ($pageRecepciones > 1) : ?>
@@ -96,7 +96,7 @@
     <!-- Fin de la tabla -->
 
     <!-- Formulario de registro de recepción de incidencias -->
-    <form id="formRecepcion" action="registro-recepcion.php?action=registrar" method="POST" class="card table-card bg-white shadow-md p-4 w-full text-xs mb-3">
+    <form id="formAsignacion" action="registro-asignacion.php?action=registrar" method="POST" class="card table-card bg-white shadow-md p-4 w-full text-xs mb-3">
       <input type="hidden" id="form-action" name="action" value="registrar">
 
       <div class="flex flex-wrap -mx-2 justify-center">
@@ -116,21 +116,21 @@
           </div>
         </div>
 
-        <!-- Numero de recepcion -->
+        <!-- Numero de asignacion -->
         <div class="flex justify-center mx-2 mb-2 hidden">
           <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center">
-            <label for="num_recepcion" class="block font-bold mb-1 mr-3 text-lime-500">Número de Recepción:</label>
-            <input type="text" id="num_recepcion" name="num_recepcion" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
+            <label for="num_asignacion" class="block font-bold mb-1 mr-3 text-lime-500">Número de Asignacion:</label>
+            <input type="text" id="num_asignacion" name="num_asignacion" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
           </div>
         </div>
 
-        <!-- FECHA DE RECEPCION -->
+        <!-- FECHA DE ASIGNACION -->
         <div class="w-full md:w-1/5 px-2 mb-2 hidden">
           <label for="fecha_recepcion" class="block font-bold mb-1">Fecha de Recepci&oacute;n:</label>
           <input type="date" id="fecha_recepcion" name="fecha_recepcion" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo date('Y-m-d'); ?>" readonly>
         </div>
 
-        <!-- HORA DE RECEPCION -->
+        <!-- HORA DE ASIGNACION -->
         <div class="w-full md:w-1/5 px-2 mb-2 hidden">
           <label for="hora" class="block font-bold mb-1">Hora:</label>
           <?php
@@ -143,11 +143,11 @@
           <input type="text" id="hora" name="hora" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $hora_actual; ?>" readonly>
         </div>
 
-        <!-- USUARIO QUE REGISTRA LA RECEPCION -->
-        <div class="w-full md:w-1/5 px-2 mb-2 hidden">
+        <!-- USUARIO QUE REGISTRA LA ASIGNACION -->
+        <!-- <div class="w-full md:w-1/5 px-2 mb-2 hidden">
           <label for="usuarioDisplay" class="block font-bold mb-1">Usuario:</label>
           <input type="text" id="usuarioDisplay" name="usuarioDisplay" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['usuario']; ?>" readonly>
-        </div>
+        </div> -->
         <div class="w-full md:w-1/5 px-2 mb-2 hidden">
           <label for="usuario" class="block font-bold mb-1">Usuario:</label>
           <input type="text" id="usuario" name="usuario" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>">
@@ -216,7 +216,6 @@
               <th scope="col" class="px-6 py-2 text-center">C&oacute;d. Patrimonial</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Prioridad</th>
-              <th scope="col" class="px-6 py-2 text-center">Impacto</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario asignado</th>
               <th scope="col" class="px-6 py-2 text-center">Estado</th>
             </tr>
@@ -240,7 +239,6 @@
                   <td class='px-6 py-2 text-center'><?= $recepcion['INC_codigoPatrimonial']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['CAT_nombre']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['PRI_nombre']; ?></td>
-                  <td class='px-6 py-2 text-center'><?= $recepcion['IMP_descripcion']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioRecepcion']; ?></td>
                   <td class="px-6 py-2 text-center">
                     <div class="custom-control custom-switch cursor-pointer">
