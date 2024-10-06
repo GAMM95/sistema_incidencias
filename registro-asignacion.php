@@ -30,6 +30,16 @@ $totalPagesRecepciones = ceil($totalRecepciones / $limite);
 // Listar incidencias recepcionadas
 $resultadoRecepciones = $recepcionModel->listarRecepciones($inicio, $limite);
 
+
+// Paginaciona para la tabla de incidencias asignadas
+$limite2 = 5;
+$pageAsignaciones = isset($_GET['pageAsignaciones']) ? (int) $_GET['pageAsignaciones'] : 1; // Pagina de la tabla asignacioenes
+$inicio2 = ($pageAsignaciones - 1) * $limite2;
+// Obtener el total de registros de asignaciones
+$totalAsignaciones = $asignacionModel -> contarAsignaciones();
+$totalPagesAsignaciones = ceil($totalAsignaciones /$limite2);
+$resultadoAsignaciones = $asignacionModel -> listarAsignaciones ($inicio2, $limite2);
+
 if ($REC_numero != '') {
   global $recepcionRegistrada;
   $recepcionRegistrada = $recepcionModel->obtenerRecepcionPorId($REC_numero);

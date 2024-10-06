@@ -35,7 +35,7 @@ class AsignacionModel extends Conexion
         throw new Exception("Error de conexion a la base de datos");
       }
     } catch (PDOException $e) {
-      throw new PDOException("Error al obtener asignaciones por ID: " . $e);
+      throw new PDOException("Error al obtener asignaciones por ID: " . $e->getMessage());
     }
   }
 
@@ -61,10 +61,55 @@ class AsignacionModel extends Conexion
         throw new Exception("Error de conexion a la base de datos");
       }
     } catch (PDOException $e) {
-      throw new PDOException("Error al insertar asignacion: " . $e);
+      throw new PDOException("Error al insertar asignacion: " . $e->getMessage());
     }
   }
 
+  // Metodo para contar el total de asignaciones
+  public function contarAsignaciones()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS total FROM ASIGNACION a
+      WHERE a.EST_codigo = 5";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+      } else {
+        throw new Exception("Error de conexion a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al contar asignaciones: " . $e->getMessage());
+      return null;
+    }
+  }
 
-  
+  // Metodo para listar incidencias asignadas
+  public function listarAsignaciones($start, $limit)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vista_asignaciones
+            ORDER BY ASI_codigo
+            OFFSET :start ROWS
+            FETCH NEXT :limit ROWS ONLY";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $registros;
+      } else {
+        throw new Exception("Error de conexión a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al listar incidencias asignadas: " . $e->getMessage());
+      return null;
+    }
+  }
 }

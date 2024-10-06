@@ -336,7 +336,7 @@ function changePageCierres(page) {
     });
 }
 
-// TODO: VERIFICAR LA CANTIDAD DE REGISTROS Y OCULTAR/MOSTRAR ELEMENTOS
+// VERIFICAR LA CANTIDAD DE REGISTROS Y OCULTAR/MOSTRAR ELEMENTOS
 document.addEventListener("DOMContentLoaded", function () {
   const tablaContainer = document.getElementById("tablaContainer");
   const noRecepcion = document.getElementById("noRecepcion");
@@ -351,7 +351,7 @@ document.addEventListener("DOMContentLoaded", function () {
   }
 })
 
-// TODO: Seteo de los valores de los inputs y combos
+// Seteo de los valores de los inputs y combos
 document.addEventListener('DOMContentLoaded', (event) => {
   // Obtener todas las filas de la tabla
   const filas = document.querySelectorAll('#tablaIncidenciasCerradas tbody tr');

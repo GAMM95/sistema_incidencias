@@ -38,7 +38,7 @@ $(document).ready(function () {
 });
 
 
-// TODO: BUSCADOR PARA EL COMBO PERSONA AREA
+// BUSCADOR PARA EL COMBO PERSONA AREA
 $(document).ready(function () {
   $('#area').select2({
     allowClear: true,

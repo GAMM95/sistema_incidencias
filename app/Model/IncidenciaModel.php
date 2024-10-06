@@ -677,7 +677,7 @@ class IncidenciaModel extends Conexion
     }
   }
 
-  // TODO: notificaciones por usuario que resuelve la incidencia
+  // Notificaciones por usuario que resuelve la incidencia
   public function notificacionesSoporte($codigoUsuario)
   {
     $conector = parent::getConexion();

@@ -15,7 +15,7 @@ class IncidenciaController
   }
 
   /**
-   * TODO: Método de controlador para registrar una incidencia - ADMINISTRADOR 
+   * Método de controlador para registrar una incidencia - ADMINISTRADOR 
    * 
    * Este método se ejecuta cuando el administrador envía un formulario para registrar una nueva
    * incidencia. Recoge los datos del formulario, los valida, y luego llama al método del modelo
@@ -117,7 +117,7 @@ class IncidenciaController
   }
 
   /**
-   * TODO: Método de controlador para registrar una incidencia - USUARIO.
+   * Método de controlador para registrar una incidencia - USUARIO.
    * 
    * Este método se ejecuta cuando un usuario envía un formulario para registrar una nueva
    * incidencia. Recoge los datos del formulario, los valida, y luego llama al método del modelo
@@ -297,7 +297,7 @@ class IncidenciaController
     }
   }
   /**
-   * TODO: Método de controlador para consultar incidencias filtradas - ADMINISTRADOR
+   * Método de controlador para consultar incidencias filtradas - ADMINISTRADOR
    * 
    * Este método permite al administrador consultar incidencias basadas en varios filtros opcionales,
    * incluyendo área, estado, fecha de inicio y fecha de fin. Los parámetros se obtienen de la solicitud
@@ -323,7 +323,7 @@ class IncidenciaController
   }
 
   /**
-   * TODO: Método de controlador para consultar las incidencias totales - ADMINISTRADOR
+   * Método de controlador para consultar las incidencias totales - ADMINISTRADOR
    * 
    * Este método permite al administrador consultar todas las incidencias basadas en varios filtros
    * opcionales, incluyendo área, código patrimonial, fecha de inicio y fecha de fin. Los parámetros
@@ -351,7 +351,7 @@ class IncidenciaController
 
 
   /**
-   * TODO: Método de controlador para consultar incidencias filtradas - USUARIO
+   * Método de controlador para consultar incidencias filtradas - USUARIO
    * 
    * Este método permite a los usuarios consultar incidencias basadas en varios filtros opcionales,
    * incluyendo área, código patrimonial, estado, fecha de inicio y fecha de fin. Los parámetros se obtienen

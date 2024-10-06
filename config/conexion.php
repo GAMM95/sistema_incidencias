@@ -1,5 +1,4 @@
 <?php
-// Importamos las credenciales
 require 'settings.php';
 
 class Conexion

@@ -156,7 +156,7 @@ class CierreModel extends Conexion
   //   }
   // }
 
-  // TODO: Metodo para obtener la lista de incidencias cerradas para la tabla listar cierres
+  // Metodo para obtener la lista de incidencias cerradas para la tabla listar cierres
   public function listarCierres()
   {
     $conector = parent::getConexion();

@@ -82,7 +82,7 @@ class UsuarioController
       $area = $_POST['area'] ?? null;
 
       try {
-        // TODO: Validar si el usuario ya está registrado
+        // Validar si el usuario ya está registrado
         if (!$this->usuarioModel->validarUsuarioExistente($username)) {
           echo json_encode([
             'success' => true,

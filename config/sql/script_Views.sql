@@ -352,6 +352,30 @@ INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
 WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5));
 GO
 
+--Vista para listar asignaciones
+CREATE VIEW vista_asignaciones AS
+SELECT 
+ASI.ASI_codigo,
+R.REC_numero,
+I.INC_numero_formato,
+(CONVERT(VARCHAR(10),ASI.ASI_fecha,103) + ' - '+   STUFF(RIGHT('0' + CONVERT(VarChar(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
+A.ARE_nombre,
+I.INC_asunto,
+I.INC_codigoPatrimonial,
+p.PER_nombres + ' ' + p.PER_apellidoPaterno AS usuarioAsignado,
+pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
+E.EST_descripcion
+FROM ASIGNACION ASI
+INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo 
+LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+GO
+
 -- Vista para listar cierres
 CREATE VIEW vista_cierres AS
 SELECT

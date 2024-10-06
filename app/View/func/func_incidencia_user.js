@@ -78,7 +78,7 @@ $(document).ready(function () {
 
 
 
-// TODO: CAMBIAR PAGINAS DE LA TABLA DE INCIDENCIAS
+// CAMBIAR PAGINAS DE LA TABLA DE INCIDENCIAS
 function changePageTablaListarIncidencias(page) {
   fetch(`?page=${page}`)
     .then(response => response.text())

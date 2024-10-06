@@ -98,7 +98,7 @@
         </div>
       </div>
 
-      <!-- TODO: SEGUNDA FILA DEL FORMULARIO -->
+      <!-- SEGUNDA FILA DEL FORMULARIO -->
       <div class="flex flex-wrap -mx-2">
 
         <!-- ASUNTO DE LA INCIDENCIA -->
@@ -119,7 +119,7 @@
         </div>
       </div>
 
-      <!-- TODO: TERCERA FILA DEL FORMULARIO -->
+      <!-- TERCERA FILA DEL FORMULARIO -->
       <div class="flex flex-wrap -mx-2">
         <!-- DESCRIPCION DE LA INCIDENCIA -->
         <div class="w-full md:w-1/1 px-2 mb-2">
@@ -127,7 +127,7 @@
           <input type="text" id="descripcion" name="descripcion" class="border p-2 w-full text-xs mb-3 rounded-md" placeholder="Ingrese descripci&oacute;n (opcional)">
         </div>
       </div>
-      <!-- TODO: RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
+      <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
       <script>
         // Asignación de valores predefinidos al cargar la página
         document.getElementById('numero_incidencia').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_incidencia'] : $fecha_actual; ?>';

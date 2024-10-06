@@ -6,7 +6,7 @@ $(document).ready(function () {
     "timeOut": "2000"
   };
 
-  // TODO: SETEO DE COMBO ESTADO
+  // SETEO DE COMBO ESTADO
   $.ajax({
     url: 'ajax/getEstadoConsulta.php',
     type: 'POST',
@@ -24,7 +24,7 @@ $(document).ready(function () {
     }
   });
 
-  // TODO: BUSCADOR PARA EL COMBO AREA Y ESTADO
+  // BUSCADOR PARA EL COMBO AREA Y ESTADO
   $('#estado').select2({
     allowClear: true,
     width: '100%',

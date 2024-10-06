@@ -273,7 +273,7 @@ $(document).on('click', '#tablaIncidenciasRecepcionadas tbody tr', function () {
 });
 
 
-// TODO: Manejo de la paginacion de la tabla de incidencias sin recepcionar
+// Manejo de la paginacion de la tabla de incidencias sin recepcionar
 $(document).on('click', '.pagination-link', function (e) {
   e.preventDefault();
   var page = $(this).attr('href').split('page=')[1];
@@ -321,7 +321,7 @@ function changePageTablaSinRecepcionar(page) {
     });
 }
 
-// TODO: FUNCION PARA CAMBIAR PAGINAS DE LA TABLA DE RECEPCIONES 
+// FUNCION PARA CAMBIAR PAGINAS DE LA TABLA DE RECEPCIONES 
 function changePageTablaRecepciones(page) {
   fetch(`?pageRecepciones=${page}`)
     .then(response => response.text())
@@ -348,7 +348,7 @@ function changePageTablaRecepciones(page) {
     });
 }
 
-// TODO: Verificar la cantidad de registros y ocultar/ mostrar elementos
+// Verificar la cantidad de registros y ocultar/ mostrar elementos
 document.addEventListener("DOMContentLoaded", function () {
   const tablaContainer = document.getElementById("tablaContainer");
   const noIncidencias = document.getElementById("noIncidencias");
@@ -366,7 +366,7 @@ document.addEventListener("DOMContentLoaded", function () {
 });
 
 
-// TODO: Seteo de los valores de los inputs y combos
+// Seteo de los valores de los inputs y combos
 document.addEventListener('DOMContentLoaded', (event) => {
   // Obtener todas las filas de la tabla
   const filas = document.querySelectorAll('#tablaIncidenciasRecepcionadas tbody tr');

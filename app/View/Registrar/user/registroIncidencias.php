@@ -74,7 +74,7 @@
         </div>
       </div>
 
-      <!-- TODO: SEGUNDA FILA DEL FORMULARIO -->
+      <!-- SEGUNDA FILA DEL FORMULARIO -->
       <div class="flex flex-wrap -mx-2">
         <!-- CATEGORIA SELECCIONADA -->
         <div class="w-full sm:w-1/2 px-2 mb-2">
@@ -100,7 +100,7 @@
         </div>
       </div>
 
-      <!-- TODO: TERCERA FILA DEL FORMULARIO -->
+      <!-- TERCERA FILA DEL FORMULARIO -->
       <div class="flex flex-wrap -mx-2">
         <!-- ASUNTO DE LA INCIDENCIA -->
         <div class="w-full sm:w-1/2 px-2 mb-2">
@@ -119,7 +119,7 @@
         </div>
       </div>
 
-      <!-- TODO: CUARTA FILA DEL FORMULARIO -->
+      <!-- CUARTA FILA DEL FORMULARIO -->
       <div class="flex flex-wrap -mx-2">
         <!-- DESCRIPCION DE LA INCIDENCIA -->
         <div class="w-full md:w-1/1 px-2 mb-2">
@@ -129,7 +129,7 @@
       </div>
 
 
-      <!-- TODO: RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
+      <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
       <script>
         // Asignación de valores predefinidos al cargar la página
         document.getElementById('fecha').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_fecha'] : $fecha_actual; ?>';
@@ -171,7 +171,6 @@
     <!-- Paginacion de la tabla -->
     <div id="noIncidencias" class="flex justify-between items-center mb-2">
       <h1 class="text-xl text-gray-400">Lista de incidencias</h1>
-      <!-- TODO: Metodo javascript para filtrar incidencia -->
       <!-- Busqueda de termino -->
       <div class="flex justify-between items-center">
         <input type="text" id="termino" class="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 text-xs" placeholder="Buscar incidencia..." oninput="filtrarTablaIncidencias()" />

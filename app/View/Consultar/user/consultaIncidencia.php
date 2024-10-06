@@ -63,7 +63,7 @@
     <!-- Fin de formulario de consultas -->
 
 
-    <!-- TODO: TABLA DE RESULTADOS DE LAS INCIDENCIAS -->
+    <!-- TABLA DE RESULTADOS DE LAS INCIDENCIAS -->
     <div class="relative shadow-md sm:rounded-lg">
       <div class="max-w-full overflow-hidden">
         <table id="tablaIncidencias" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">

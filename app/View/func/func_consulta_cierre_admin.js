@@ -6,7 +6,7 @@ $(document).ready(function () {
     "timeOut": "2000"
   };
 
-  // TODO: SETEO DE COMBO AREA
+  // SETEO DE COMBO AREA
   $.ajax({
     url: 'ajax/getAreaData.php',
     type: 'GET',
@@ -27,7 +27,7 @@ $(document).ready(function () {
   });
 
 
-  // TODO: BUSCADOR PARA EL COMBO AREA Y ESTADO
+  // BUSCADOR PARA EL COMBO AREA Y ESTADO
   $('#area').select2({
     allowClear: true,
     width: '100%',
