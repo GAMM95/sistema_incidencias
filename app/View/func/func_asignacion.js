@@ -53,14 +53,14 @@ $(document).ready(function () {
     }
   });
 
-  // Evento para guardar la recepcion
-  $('#guardar-recepcion').on('click', function (e) {
+  // Evento para guardar la asignacion
+  $('#guardar-asignacion').on('click', function (e) {
     e.preventDefault();
     enviarFormulario($('#form-action').val());
   });
 
   // Evento para editar la recepcion
-  $('#editar-recepcion').on('click', function (e) {
+  $('#editar-asignacion').on('click', function (e) {
     e.preventDefault();
     enviarFormulario('editar');
   });
@@ -72,17 +72,17 @@ $(document).ready(function () {
 // Funcion para las validaciones de campos vacios y registro - actualizacion de recepcion
 function enviarFormulario(action) {
   if (action === 'registrar') {
-    if (!validarCamposRegistro()) {
+    if (!validarCamposRegistroAsignacion()) {
       return; // Si la validación de registro falla, salimos
     }
   } else if (action === 'editar') {
-    if (!validarCamposActualizacion()) {
+    if (!validarCamposActualizacionAsignacion()) {
       return; // Si la validación de actualización falla, salimos
     }
   }
 
-  var url = 'registro-recepcion.php?action=' + action;
-  var data = $('#formRecepcion').serialize();
+  var url = 'registro-asignacion.php?action=' + action;
+  var data = $('#formAsignacion').serialize();
 
   $.ajax({
     url: url,
@@ -120,12 +120,12 @@ function enviarFormulario(action) {
 }
 
 // Validar campos de registro de recepcion antes de enviar el formulario
-function validarCamposRegistro() {
+function validarCamposRegistroAsignacion() {
   var valido = true;
   var mensajeError = '';
 
   // Validar campo de número de incidencia
-  if ($('#incidencia').val() === '') {
+  if ($('#num_recepcion').val() === '') {
     mensajeError += 'Debe seleccionar una incidencia.';
     valido = false;
   }
@@ -133,17 +133,10 @@ function validarCamposRegistro() {
   // Solo validamos los otros campos si la incidencia es valida
   if (valido) {
     // Validar campo de prioridad e impacto
-    var faltaPrioridad = ($('#prioridad').val() === null || $('#prioridad').val() === '');
-    var faltaImpacto = ($('#impacto').val() === null || $('#impacto').val() === '');
+    var faltaUsuario = ($('#usuarioAsignado').val() === null || $('#usuarioAsignado').val() === '');
 
-    if (faltaPrioridad && faltaImpacto) {
-      mensajeError += 'Debe seleccionar una prioridad y un impacto.';
-      valido = false;
-    } else if (faltaPrioridad) {
-      mensajeError += 'Debe seleccionar una prioridad.';
-      valido = false;
-    } else if (faltaImpacto) {
-      mensajeError += 'Debe seleccionar un impacto.';
+    if (faltaUsuario) {
+      mensajeError += 'Debe seleccionar un usuario.';
       valido = false;
     }
   }
@@ -156,7 +149,7 @@ function validarCamposRegistro() {
 }
 
 // Validar campos antes de enviar el formulario
-function validarCamposActualizacion() {
+function validarCamposActualizacionAsignacion() {
   var valido = true;
   var mensajeError = '';
 
@@ -169,17 +162,10 @@ function validarCamposActualizacion() {
   // Validar otros campos solo si el número de recepción es válido
   if (valido) {
     // Validar campo de prioridad e impacto
-    var faltaPrioridad = ($('#prioridad').val() === null || $('#prioridad').val() === '');
-    var faltaImpacto = ($('#impacto').val() === null || $('#impacto').val() === '');
+    var faltaUsuario = ($('#usuarioAsignado').val() === null || $('#usuarioAsignado').val() === '');
 
-    if (faltaPrioridad && faltaImpacto) {
-      mensajeError += 'Debe seleccionar una prioridad y un impacto.';
-      valido = false;
-    } else if (faltaPrioridad) {
-      mensajeError += 'Debe seleccionar una prioridad.';
-      valido = false;
-    } else if (faltaImpacto) {
-      mensajeError += 'Debe seleccionar un impacto.';
+    if (faltaUsuario) {
+      mensajeError += 'Debe seleccionar un usuario.';
       valido = false;
     }
   }

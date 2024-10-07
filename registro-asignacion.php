@@ -7,7 +7,7 @@ if (!isset($_SESSION['usuario'])) {
 }
 $action = $_GET['action'] ?? '';
 $state = $_GET['state'] ?? '';
-$REC_numero = $_GET['REC_numero'] ?? '';
+$ASI_codigo = $_GET['ASI_codigo'] ?? '';
 
 $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
@@ -36,15 +36,15 @@ $limite2 = 5;
 $pageAsignaciones = isset($_GET['pageAsignaciones']) ? (int) $_GET['pageAsignaciones'] : 1; // Pagina de la tabla asignacioenes
 $inicio2 = ($pageAsignaciones - 1) * $limite2;
 // Obtener el total de registros de asignaciones
-$totalAsignaciones = $asignacionModel -> contarAsignaciones();
-$totalPagesAsignaciones = ceil($totalAsignaciones /$limite2);
-$resultadoAsignaciones = $asignacionModel -> listarAsignaciones ($inicio2, $limite2);
+$totalAsignaciones = $asignacionModel->contarAsignaciones();
+$totalPagesAsignaciones = ceil($totalAsignaciones / $limite2);
+$resultadoAsignaciones = $asignacionModel->listarAsignaciones($inicio2, $limite2);
 
-if ($REC_numero != '') {
-  global $recepcionRegistrada;
-  $recepcionRegistrada = $recepcionModel->obtenerRecepcionPorId($REC_numero);
+if ($ASI_codigo != '') {
+  global $asignacionRegistrada;
+  $asignacionRegistrada = $asignacionModel->obtenerAsignacionesPorId($ASI_codigo);
 } else {
-  $incidenciaRegistrada = null;
+  $asignacionRegistrada = null;
 }
 
 switch ($action) {

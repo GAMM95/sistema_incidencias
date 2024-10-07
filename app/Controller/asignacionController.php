@@ -15,13 +15,13 @@ class AsignacionController
   {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // Obtener los datos del formulario
-      $fecha = $_POST['fecha_recepcion'] ?? null;
+      $fecha = $_POST['fecha'] ?? null;
       $hora = $_POST['hora'] ?? null;
-      $usuario = $_POST['usuario'] ?? null;
-      $recepcion = $_POST['recepcion'] ?? null;
+      $usuario = $_POST['codigoUsuario'] ?? null;
+      $recepcion = $_POST['num_recepcion'] ?? null;
 
       // Validar que todos los campos requeridos estén completos
-      if (empty($fecha) || empty($hora) || empty($incidencia) || empty($prioridad) || empty($impacto) || empty($usuario)) {
+      if (empty($usuario) || empty($recepcion)) {
         echo json_encode([
           'success' => false,
           'message' => 'Todos los campos son obligatorios.'
@@ -36,13 +36,13 @@ class AsignacionController
         if ($insertSuccessId) {
           echo json_encode([
             'success' => false,
-            'message' => 'Error al registrar la recepci&oacute;n.',
+            'message' => 'Error al asignar incidencia.',
             'REC_numero' => $insertSuccessId
           ]);
         } else {
           echo json_encode([
             'success' => true,
-            'message' => 'Recepci&oacute;n registrada.',
+            'message' => 'Incidencia asignada.',
           ]);
         }
       } catch (Exception $e) {

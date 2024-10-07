@@ -126,8 +126,8 @@
 
         <!-- FECHA DE ASIGNACION -->
         <div class="w-full md:w-1/5 px-2 mb-2">
-          <label for="fecha_recepcion" class="block font-bold mb-1">Fecha de Asignaci&oacute;n:</label>
-          <input type="date" id="fecha_recepcion" name="fecha_recepcion" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo date('Y-m-d'); ?>" readonly>
+          <label for="fecha" class="block font-bold mb-1">Fecha de Asignaci&oacute;n:</label>
+          <input type="date" id="fecha" name="fecha" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo date('Y-m-d'); ?>" readonly>
         </div>
 
         <!-- HORA DE ASIGNACION -->
@@ -215,7 +215,7 @@
               <th scope="col" class="px-6 py-2 text-center">Fecha asignaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea solicitante</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
-              <th scope="col" class="px-6 py-2 text-center">EQUIPO</th>
+              <th scope="col" class="px-6 py-2 text-center">Equipo</th>
 
               <th scope="col" class="px-6 py-2 text-center">Usuario Asignado</th>
               <th scope="col" class="px-6 py-2 text-center">Estado</th>
