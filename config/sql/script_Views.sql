@@ -105,8 +105,8 @@ LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
 INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
 WHERE 
     (EC.EST_codigo = 4 OR 
-    (I.EST_codigo = 4 AND C.CIE_numero IS NULL))
-    AND (I.EST_codigo IN (3, 4, 5) OR EC.EST_codigo IN (3, 4, 5));
+    (I.EST_codigo = 4 AND ASI.ASI_codigo IS NULL))
+    AND (I.EST_codigo IN (3, 4, 5,6) OR EC.EST_codigo IN (3, 4, 5, 6));
 GO
 
 --Vista para listar las incidencias totales para el administrador

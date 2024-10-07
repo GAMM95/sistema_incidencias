@@ -222,19 +222,19 @@ $(document).ready(function () {
   });
 });
 
-// Evento de clic en las filas de la tabla de incidencias sin recepcionar
-$(document).on('click', '#tablaIncidenciasSinRecepcionar tbody tr', function () {
+// Evento de clic en las filas de la tabla de incidencias recepcionadas
+$(document).on('click', '#tablaIncidenciasRecepcionadas tbody tr', function () {
   var id = $(this).find('th').html();
-  $('#tablaIncidenciasSinRecepcionar tbody tr').removeClass('bg-blue-200 font-semibold');
+  $('#tablaIncidenciasRecepcionadas tbody tr').removeClass('bg-blue-200 font-semibold');
   $(this).addClass('bg-blue-200 font-semibold');
-  $('#incidencia').val(id);
+  $('#num_recepcion').val(id);
 
   var incidenciaSeleccionada = $(this).find('td').eq(0).html();
   $('#incidenciaSeleccionada').val(incidenciaSeleccionada);
 
   // Bloquear la tabla de incidencias recepcionadas
-  $('#tablaIncidenciasRecepcionadas tbody tr').addClass('pointer-events-none opacity-50');
-  document.getElementById('guardar-recepcion').disabled = false;
+  $('#tablaIncidenciasAsignadas tbody tr').addClass('pointer-events-none opacity-50');
+  document.getElementById('guardar-asignacion').disabled = false;
   document.getElementById('nuevo-registro').disabled = false;
 
   // Reactivar el botón "Nuevo"
@@ -242,17 +242,17 @@ $(document).on('click', '#tablaIncidenciasSinRecepcionar tbody tr', function () 
 });
 
 // Evento de clic en las filas de la tabla de incidencias recepcionadas
-$(document).on('click', '#tablaIncidenciasRecepcionadas tbody tr', function () {
-  var numRecepcion = $(this).attr('data-id');
-  $('#tablaIncidenciasRecepcionadas tbody tr').removeClass('bg-blue-200 font-semibold');
+$(document).on('click', '#tablaIncidenciasAsignadas tbody tr', function () {
+  var numAsignacion = $(this).attr('data-id');
+  $('#tablaIncidenciasAsignadas tbody tr').removeClass('bg-blue-200 font-semibold');
   $(this).addClass('bg-blue-200 font-semibold');
-  $('#num_recepcion').val(numRecepcion);
+  $('#num_asignacion').val(numAsignacion);
 
   var incidenciaSeleccionada = $(this).find('td').eq(0).html();
   $('#incidenciaSeleccionada').val(incidenciaSeleccionada);
 
   // Bloquear la tabla de incidencias sin recepcionar
-  $('#tablaIncidenciasSinRecepcionar tbody tr').addClass('pointer-events-none opacity-50');
+  $('#tablaIncidenciasRecepcionadas tbody tr').addClass('pointer-events-none opacity-50');
 
   // Reactivar el botón "Nuevo"
   $('#nuevo-registro').prop('disabled', false);
@@ -337,10 +337,10 @@ function changePageTablaRecepciones(page) {
 // Verificar la cantidad de registros y ocultar/ mostrar elementos
 document.addEventListener("DOMContentLoaded", function () {
   const tablaContainer = document.getElementById("tablaContainer");
-  const noIncidencias = document.getElementById("noIncidencias");
+  const noRecepciones = document.getElementById("noRecepciones");
 
   // Ocultar tabla y buscador superior si no hay registros
-  if (parseInt(document.getElementById("incidenciaCount").value) === 0) {
+  if (parseInt(document.getElementById("recepcionCount").value) === 0) {
     // if (<? php echo count($incidencias); ?> === 0) {
 
     tablaContainer.classList.add("hidden");
@@ -355,7 +355,7 @@ document.addEventListener("DOMContentLoaded", function () {
 // Seteo de los valores de los inputs y combos
 document.addEventListener('DOMContentLoaded', (event) => {
   // Obtener todas las filas de la tabla
-  const filas = document.querySelectorAll('#tablaIncidenciasRecepcionadas tbody tr');
+  const filas = document.querySelectorAll('#tablaIncidenciasAsignadas tbody tr');
 
   filas.forEach(fila => {
     fila.addEventListener('click', () => {
@@ -363,20 +363,20 @@ document.addEventListener('DOMContentLoaded', (event) => {
       const celdas = fila.querySelectorAll('td');
 
       // Mapeo de los valores de las celdas a los inputs del formulario
-      const codRecepcion = fila.querySelector('th').innerText.trim();
-      const prioridadValue = celdas[5].innerText.trim();
-      const impactoValue = celdas[6].innerText.trim();
+      const codAsignacion = fila.querySelector('th').innerText.trim();
+      const codRecepcion = celdas[1].innerText.trim();
+      const usuarioValue = celdas[5].innerText.trim();
 
       // Seteo de valores en los inputs
+      document.getElementById('num_asignacion').value = codAsignacion;
       document.getElementById('num_recepcion').value = codRecepcion;
 
       // Seteo de los valores en los combos
-      setComboValue('prioridad', prioridadValue);
-      setComboValue('impacto', impactoValue);
+      setComboValue('usuarioAsignado', usuarioValue);
 
       // Cambiar estado de los botones
-      document.getElementById('guardar-recepcion').disabled = true;
-      document.getElementById('editar-recepcion').disabled = false;
+      document.getElementById('guardar-asignacion').disabled = true;
+      document.getElementById('editar-asignacion').disabled = false;
       document.getElementById('nuevo-registro').disabled = false;
     });
   });
@@ -407,27 +407,26 @@ function setComboValue(comboId, value) {
 
 // Función para limpiar los campos del formulario y reactivar tablas
 function nuevoRegistro() {
-  document.getElementById('formRecepcion').reset(); // Resetear el formulario completo
+  document.getElementById('formAsignacion').reset(); // Resetear el formulario completo
 
   // Limpiar los valores específicos de inputs y combos
   $('#rec_numero').val('');
-  $('#incidencia').val('');
+  $('#num_asignacion').val('');
   $('#incidenciaSeleccionada').val('');
 
   // Limpiar los combos y forzar la actualización con Select2
-  $('#prioridad').val('').trigger('change');  // Limpiar y actualizar combo de prioridad
-  $('#impacto').val('').trigger('change');    // Limpiar y actualizar combo de impacto
+  $('#usuarioAsignado').val('').trigger('change');  // Limpiar y actualizar combo de prioridad
 
   // Remover clases de selección y estilos de todas las filas de ambas tablas
   $('tr').removeClass('bg-blue-200 font-semibold');
 
   // Reactivar ambas tablas
+  $('#tablaIncidenciasAsignadas tbody tr').removeClass('pointer-events-none opacity-50');
   $('#tablaIncidenciasRecepcionadas tbody tr').removeClass('pointer-events-none opacity-50');
-  $('#tablaIncidenciasSinRecepcionar tbody tr').removeClass('pointer-events-none opacity-50');
 
   // Configurar los botones en su estado inicial
   $('#form-action').val('registrar');  // Cambiar la acción a registrar
-  $('#guardar-recepcion').prop('disabled', false);  // Activar el botón de guardar
-  $('#editar-recepcion').prop('disabled', true);    // Desactivar el botón de editar
+  $('#guardar-asignacion').prop('disabled', false);  // Activar el botón de guardar
+  $('#editar-asignacion').prop('disabled', true);    // Desactivar el botón de editar
   $('#nuevo-registro').prop('disabled', false);     // Asegurarse que el botón de nuevo registro está activo
 }

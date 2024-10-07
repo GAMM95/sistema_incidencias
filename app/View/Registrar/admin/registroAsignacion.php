@@ -24,7 +24,7 @@
     <!-- Fin de miga de pan -->
 
     <!-- Titulo y paginacion de tabla de recepciones -->
-    <div class="flex justify-between items-center mb-2">
+    <div id="noRecepciones" class="flex justify-between items-center mb-2">
       <h1 class="text-xl text-gray-400">Incidencias recepcionadas</h1>
       <div id="paginadorRecepciones" class="flex justify-end items-center mt-1">
         <?php if ($totalPagesRecepciones > 1) : ?>
@@ -41,9 +41,10 @@
     <!-- Fin de titulo y paginacion -->
 
     <!-- Segundo apartado -->
+    <input type="hidden" id="recepcionCount" value="<?php echo count($resultadoRecepciones); ?>">
     <div class="w-full mb-3">
       <!-- Tabla de incidencias recepcionadas -->
-      <div class="relative max-h-[500px] overflow-x-hidden shadow-md sm:rounded-lg">
+      <div id="tablaContainer" class="relative max-h-[500px] overflow-x-hidden shadow-md sm:rounded-lg">
         <table id="tablaIncidenciasRecepcionadas" class="w-full text-xs text-left rtl:text-right text-gray-500 cursor-pointer bg-white">
           <!-- Encabezado de la tabla -->
           <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-orange-300">
@@ -101,7 +102,7 @@
 
       <div class="flex flex-wrap -mx-2 justify-center">
         <!-- Numero de recepcion -->
-        <div class="flex justify-center items-center mr-5 ml-5">
+        <div class="flex justify-center items-center mr-5 ml-5 hidden">
           <div class="text-center">
             <label for="num_recepcion" class="block font-bold mb-1 mr-3 text-[#32cfad]">C&oacute;digo de recepci&oacute;n:</label>
             <input type="text" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" id="num_recepcion" name="num_recepcion" readonly required>
@@ -117,7 +118,7 @@
         </div>
 
         <!-- Numero de asignacion -->
-        <div class="flex justify-center items-center">
+        <div class="flex justify-center items-center hidden">
           <div class="text-center">
             <label for="num_asignacion" class="block font-bold mb-1 mr-3 text-lime-500">Número de Asignacion:</label>
             <input type="text" id="num_asignacion" name="num_asignacion" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
@@ -125,13 +126,13 @@
         </div>
 
         <!-- FECHA DE ASIGNACION -->
-        <div class="w-full md:w-1/5 px-2 mb-2">
+        <div class="w-full md:w-1/5 px-2 mb-2 hidden">
           <label for="fecha" class="block font-bold mb-1">Fecha de Asignaci&oacute;n:</label>
           <input type="date" id="fecha" name="fecha" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo date('Y-m-d'); ?>" readonly>
         </div>
 
         <!-- HORA DE ASIGNACION -->
-        <div class="w-full md:w-1/5 px-2 mb-2">
+        <div class="w-full md:w-1/5 px-2 mb-2 hidden">
           <label for="hora" class="block font-bold mb-1">Hora Asignaci&oacute;n:</label>
           <?php
           // Establecer la zona horaria deseada
@@ -144,7 +145,7 @@
         </div>
 
         <!-- USUARIO QUE REGISTRA LA ASIGNACION -->
-        <div class="w-full md:w-1/5 px-2 mb-2">
+        <div class="w-full md:w-1/5 px-2 mb-2 hidden">
           <label for="usuarioDisplay" class="block font-bold mb-1">Usuario:</label>
           <input type="text" id="usuarioDisplay" name="usuarioDisplay" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['usuario']; ?>" readonly>
         </div>
@@ -205,12 +206,12 @@
 
       <!-- Tabla de incidencias recepcionadas -->
       <div class="relative max-h-[500px] overflow-x-hidden shadow-md sm:rounded-lg">
-        <table id="tablaIncidenciasRecepcionadas" class="w-full text-xs text-left rtl:text-right text-gray-500 cursor-pointer bg-white">
+        <table id="tablaIncidenciasAsignadas" class="w-full text-xs text-left rtl:text-right text-gray-500 cursor-pointer bg-white">
           <!-- Encabezado de la tabla -->
           <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-blue-300">
             <tr>
-              <th scope="col" class="px-6 py-2 ">Asignaci&oacute;n</th>
-              <th scope="col" class="px-6 py-2 ">Recepci&oacute;n</th>
+              <th scope="col" class="px-6 py-2 hidden">Asignaci&oacute;n</th>
+              <th scope="col" class="px-6 py-2 hidden">Recepci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Incidencia</th>
               <th scope="col" class="px-6 py-2 text-center">Fecha asignaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea solicitante</th>
@@ -232,8 +233,8 @@
                 $isFinalizado = ($estado === 'FINALIZADO');
                 ?>
                 <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $asignaciones['ASI_codigo']; ?>">
-                  <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap'><?= $asignaciones['ASI_codigo']; ?></th>
-                  <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap'><?= $asignaciones['REC_numero']; ?></th>
+                  <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $asignaciones['ASI_codigo']; ?></th>
+                  <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $asignaciones['REC_numero']; ?></th>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_numero_formato']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['fechaAsignacionFormateada']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['ARE_nombre']; ?></td>
