@@ -62,64 +62,63 @@ class AsignacionController
 
 
   // Metodo para editar la recepcion 
-  // public function actualizarRecepcion()
-  // {
-  //   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  //     // Obtener y validar los parámetros
-  //     $numeroRecepcion = $_POST['num_recepcion'] ?? null;
-  //     $prioridad = $_POST['prioridad'] ?? null;
-  //     $impacto = $_POST['impacto'] ?? null;
+  public function actualizarAsignacion()
+  {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      // Obtener y validar los parámetros
+      $numeroAsignacion = $_POST['num_asignacion'] ?? null;
+      $usuario = $_POST['codigoUsuario'] ?? null;
 
-  //     if (empty($numeroRecepcion) || empty($prioridad) || empty($impacto)) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'Ingrese campos requeridos (*).'
-  //       ]);
-  //       exit();
-  //     }
+      if (empty($numeroAsignacion) || empty($usuario)) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Ingrese campos requeridos (*).'
+        ]);
+        exit();
+      }
 
-  //     try {
-  //       // Verificar el estado de la incidencia
-  //       $estado = $this->recepcionModel->obtenerEstadoRecepcion($numeroRecepcion);
+      try {
+        // Verificar el estado de la incidencia
+        $estado = $this->asignacionModel->obtenerAsignacionesPorId($numeroAsignacion);
 
-  //       // Suponiendo que el estado "4" permite la actualización
-  //       if ($estado === 4) {
-  //         // Estado no permitido para actualización
-  //         echo json_encode([
-  //           'success' => false,
-  //           'message' => 'La recepci&oacute;n no est&aacute; en un estado que permita actualizaci&oacute;n.'
-  //         ]);
-  //         exit();
-  //       }
+        // Suponiendo que el estado "4" permite la actualización
+        if ($estado === 5) {
+          // Estado no permitido para actualización
+          echo json_encode([
+            'success' => false,
+            'message' => 'La asignaci&oacute;n no est&aacute; en un estado que permita actualizaci&oacute;n.'
+          ]);
+          exit();
+        }
 
-  //       // Llamar al modelo para actualizar la incidencia
-  //       $updateSuccess = $this->recepcionModel->editarRecepcion($prioridad, $impacto, $numeroRecepcion);
+        // Llamar al modelo para actualizar la incidencia
+        $updateSuccess = $this->asignacionModel->editarAsignacion($usuario, $numeroAsignacion);
 
-  //       if ($updateSuccess) {
-  //         echo json_encode([
-  //           'success' => true,
-  //           'message' => 'Recepci&oacute;n actualizada.'
-  //         ]);
-  //       } else {
-  //         echo json_encode([
-  //           'success' => false,
-  //           'message' => 'No se realiz&oacute; ninguna actualizaci&oacute;n.'
-  //         ]);
-  //       }
-  //     } catch (Exception $e) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'Error: ' . $e->getMessage()
-  //       ]);
-  //     }
-  //     exit();
-  //   } else {
-  //     echo json_encode([
-  //       'success' => false,
-  //       'message' => 'M&eacute;todo no permitido.'
-  //     ]);
-  //   }
-  // }
+        if ($updateSuccess) {
+          echo json_encode([
+            'success' => true,
+            'message' => 'Asignaci&oacute;n actualizada.'
+          ]);
+        } else {
+          echo json_encode([
+            'success' => false,
+            'message' => 'No se realiz&oacute; ninguna actualizaci&oacute;n.'
+          ]);
+        }
+      } catch (Exception $e) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Error: ' . $e->getMessage()
+        ]);
+      }
+      exit();
+    } else {
+      echo json_encode([
+        'success' => false,
+        'message' => 'M&eacute;todo no permitido.'
+      ]);
+    }
+  }
 
   // Metodo para eliinar la recepcion 
   // public function eliminarRecepcion()

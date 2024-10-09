@@ -52,7 +52,7 @@ switch ($action) {
     $asignacionController->registrarAsignacion();
     break;
   case 'editar':
-    $recepcionController->actualizarRecepcion();
+    $asignacionController->actualizarAsignacion();
     break;
   case 'eliminar':
     $recepcionController->eliminarRecepcion();

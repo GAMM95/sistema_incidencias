@@ -6,7 +6,7 @@
 -- Responsable	 : Subgerente de informatica y Sistemas - SGIS
 --				   jhonatanmm.1995@gmail.com
 -- Repositorio	 : https://github.com/GAMM95/helpdeskMDE/tree/main/config/sql
--- Creado por	 : Jhonatan Mantilla Miñano
+-- Creado por	 : Jhonatan Mantilla Miï¿½ano
 --		         : 16 de mayo del 2024
 
 USE BD_INCIDENCIAS;
@@ -28,7 +28,7 @@ BEGIN
     DECLARE @USU_codigo SMALLINT;
     DECLARE @EST_codigo SMALLINT;
 
-    -- Intento de login: Asignar el código de usuario y estado
+    -- Intento de login: Asignar el cï¿½digo de usuario y estado
     SELECT @USU_codigo = u.USU_codigo, @EST_codigo = u.EST_codigo
     FROM USUARIO u
     WHERE u.USU_nombre = @USU_usuario;
@@ -36,7 +36,7 @@ BEGIN
     -- Verificar si el usuario existe
     IF @USU_codigo IS NOT NULL
     BEGIN
-        -- Verificar si el usuario está activo
+        -- Verificar si el usuario estï¿½ activo
         IF @EST_codigo = 1
         BEGIN
             -- Verificar si las credenciales son correctas
@@ -47,7 +47,7 @@ BEGIN
                 AND u.USU_password = @USU_password
             )
             BEGIN
-                -- Devolver datos del usuario para la sesión
+                -- Devolver datos del usuario para la sesiï¿½n
                 SELECT 
 					u.USU_codigo,
                     u.USU_nombre, 
@@ -114,7 +114,7 @@ BEGIN
 	-- Verificar si la persona ya tiene un usuario registrado
 	IF EXISTS (SELECT 1 FROM USUARIO WHERE PER_codigo = @PER_codigo)
 	BEGIN
-		-- Si la persona ya tiene un usuario, retornar un mensaje de error o un código de error
+		-- Si la persona ya tiene un usuario, retornar un mensaje de error o un cï¿½digo de error
 		RAISERROR('La persona ya tiene un usuario registrado.', 16, 1);
 		RETURN;
 	END
@@ -145,7 +145,7 @@ BEGIN
         )
         BEGIN
             -- En caso de que el nombre ya exista, devolver un error
-            RAISERROR('El nombre de usuario ya está en uso.', 16, 1);
+            RAISERROR('El nombre de usuario ya estï¿½ en uso.', 16, 1);
             ROLLBACK TRANSACTION;
             RETURN;
         END
@@ -186,7 +186,7 @@ CREATE PROCEDURE sp_editar_perfil
 AS
 BEGIN
   BEGIN TRY
-    BEGIN TRANSACTION; -- Inicia una transacción para asegurar la consistencia de los datos
+    BEGIN TRANSACTION; -- Inicia una transacciï¿½n para asegurar la consistencia de los datos
       -- Actualiza los datos del usuario
       UPDATE USUARIO
       SET 
@@ -258,15 +258,15 @@ BEGIN
     BEGIN TRY
         BEGIN TRANSACTION;
 
-        -- Inserta el área con ARE_estado siempre en 1
+        -- Inserta el ï¿½rea con ARE_estado siempre en 1
         INSERT INTO AREA (ARE_nombre, EST_codigo)
         VALUES (@NombreArea, 1);
 
-        -- Confirmar la transacción si todo sale bien
+        -- Confirmar la transacciï¿½n si todo sale bien
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Revertir la transacción en caso de error
+        -- Revertir la transacciï¿½n en caso de error
         ROLLBACK TRANSACTION;
 
         -- Mostrar mensaje de error
@@ -316,15 +316,15 @@ BEGIN
     -- Manejo de errores y transacciones
     BEGIN TRY
         BEGIN TRANSACTION;
-	        -- Inserta el área con ARE_estado siempre en 1
+	        -- Inserta el ï¿½rea con ARE_estado siempre en 1
         INSERT INTO BIEN (BIE_codigoIdentificador, BIE_nombre, EST_codigo)
         VALUES (@codigoIdentificador, @NombreBien, 1);
 
-        -- Confirmar la transacción si todo sale bien
+        -- Confirmar la transacciï¿½n si todo sale bien
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Revertir la transacción en caso de error
+        -- Revertir la transacciï¿½n en caso de error
         ROLLBACK TRANSACTION;
 
         -- Mostrar mensaje de error
@@ -374,15 +374,15 @@ BEGIN
     -- Manejo de errores y transacciones
     BEGIN TRY
         BEGIN TRANSACTION;
-	        -- Inserta el área con ARE_estado siempre en 1
+	        -- Inserta el ï¿½rea con ARE_estado siempre en 1
         INSERT INTO CATEGORIA (CAT_nombre, EST_codigo)
         VALUES (@NombreCategoria, 1);
 
-        -- Confirmar la transacción si todo sale bien
+        -- Confirmar la transacciï¿½n si todo sale bien
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
-        -- Revertir la transacción en caso de error
+        -- Revertir la transacciï¿½n en caso de error
         ROLLBACK TRANSACTION;
 
         -- Mostrar mensaje de error
@@ -436,7 +436,7 @@ CREATE PROCEDURE sp_registrar_incidencia
   @USU_codigo SMALLINT
 AS 
 BEGIN 
-  DECLARE @numero_formato VARCHAR(20);  -- Número de incidencia
+  DECLARE @numero_formato VARCHAR(20);  -- Nï¿½mero de incidencia
 
   -- Verificar si ya existe una incidencia similar
   IF NOT EXISTS (
@@ -454,7 +454,7 @@ BEGIN
           AND USU_codigo = @USU_codigo
   )
   BEGIN
-      -- Generar el número de incidencia formateado
+      -- Generar el nï¿½mero de incidencia formateado
       SET @numero_formato = dbo.GenerarNumeroIncidencia();
 
       -- Insertar la nueva incidencia
@@ -522,11 +522,11 @@ AS
 BEGIN
     BEGIN TRANSACTION;
     BEGIN TRY
-        -- Eliminar la incidencia basada en el número de incidencia
+        -- Eliminar la incidencia basada en el nï¿½mero de incidencia
         DELETE FROM INCIDENCIA
         WHERE INC_numero = @NumeroIncidencia;
 
-        -- Confirmar la transacción
+        -- Confirmar la transacciï¿½n
         COMMIT TRANSACTION;
     END TRY
     BEGIN CATCH
@@ -551,7 +551,7 @@ BEGIN
     BEGIN TRY 
         BEGIN TRANSACTION;
 
-        -- Verificar si ya existe una recepción con los mismos valores
+        -- Verificar si ya existe una recepciï¿½n con los mismos valores
         IF NOT EXISTS (
             SELECT 1 
             FROM RECEPCION 
@@ -564,7 +564,7 @@ BEGIN
                 AND USU_codigo = @USU_codigo
         )
         BEGIN
-            -- Insertar la nueva recepción
+            -- Insertar la nueva recepciï¿½n
             INSERT INTO RECEPCION (REC_fecha, REC_hora, INC_numero, PRI_codigo, IMP_codigo, USU_codigo, EST_codigo)
             VALUES (@REC_fecha, @REC_hora, @INC_numero, @PRI_codigo, @IMP_codigo, @USU_codigo, 4);
             
@@ -575,8 +575,8 @@ BEGIN
         END
         ELSE
         BEGIN
-            -- Mensaje que la recepción ya existe
-            PRINT 'La recepción ya existe y no se puede registrar nuevamente.';
+            -- Mensaje que la recepciï¿½n ya existe
+            PRINT 'La recepciï¿½n ya existe y no se puede registrar nuevamente.';
         END
 
         COMMIT TRANSACTION;
@@ -587,7 +587,6 @@ BEGIN
     END CATCH
 END;
 GO
-
 
 -- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR RECEPCION
 CREATE PROCEDURE sp_actualizar_recepcion
@@ -614,7 +613,7 @@ BEGIN
     BEGIN TRY
         DECLARE @NumeroIncidencia INT;
 
-        -- Obtener el número de incidencia basado en el ID de recepción
+        -- Obtener el nï¿½mero de incidencia basado en el ID de recepciï¿½n
         SELECT @NumeroIncidencia = INC_numero
         FROM RECEPCION
         WHERE REC_numero = @IdRecepcion;
@@ -624,7 +623,7 @@ BEGIN
         SET EST_codigo = 3
         WHERE INC_numero = @NumeroIncidencia;
 
-        -- Eliminar la recepción basada en el ID de recepción
+        -- Eliminar la recepciï¿½n basada en el ID de recepciï¿½n
         DELETE FROM RECEPCION
         WHERE REC_numero = @IdRecepcion;
 
@@ -649,7 +648,7 @@ BEGIN
     BEGIN TRY 
         BEGIN TRANSACTION;
 
-        -- Verificar si ya existe una recepción con los mismos valores
+        -- Verificar si ya existe una recepciï¿½n con los mismos valores
         IF NOT EXISTS (
             SELECT 1 
             FROM ASIGNACION 
@@ -660,7 +659,7 @@ BEGIN
                 AND REC_numero = @REC_numero 
         )
         BEGIN
-            -- Insertar la nueva recepción
+            -- Insertar la nueva recepciï¿½n
             INSERT INTO ASIGNACION(ASI_fecha, ASI_hora, USU_codigo, REC_numero, EST_codigo)
             VALUES (@ASI_fecha, @ASI_hora, @USU_codigo, @REC_numero, 5); -- ESTADO "EN ESPERA"
             
@@ -671,7 +670,7 @@ BEGIN
         END
         ELSE
         BEGIN
-            -- Mensaje que la recepción ya existe
+            -- Mensaje que la recepciï¿½n ya existe
             PRINT 'La incidencia ya esta asignada a un usuario y no se puede registrar nuevamente.';
         END
 
@@ -683,3 +682,17 @@ BEGIN
     END CATCH
 END;
 GO
+
+-- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR ASIGNACION
+CREATE PROCEDURE sp_actualizar_asignacion
+  @ASI_codigo SMALLINT,
+  @USU_codigo SMALLINT
+AS
+BEGIN
+  -- Actualizar el registro en la tabla ASIGNACION solo si el estado es 5
+  UPDATE ASIGNACION
+  SET USU_codigo = @USU_codigo
+  WHERE ASI_codigo = @ASI_codigo
+	AND EST_codigo = 5;
+END;
+GO 

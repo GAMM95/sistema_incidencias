@@ -6,7 +6,7 @@
 -- Responsable	 : Subgerente de informatica y Sistemas - SGIS
 --				   jhonatanmm.1995@gmail.com
 -- Repositorio	 : https://github.com/GAMM95/helpdeskMDE/tree/main/config/sql
--- Creado por	 : Jhonatan Mantilla Miñano
+-- Creado por	 : Jhonatan Mantilla Miï¿½ano
 --		         : 16 de mayo del 2024
 
 USE BD_INCIDENCIAS;
@@ -163,7 +163,7 @@ SELECT
         ELSE E.EST_descripcion
     END AS ESTADO,
     p.PER_nombres + ' ' + PER_apellidoPaterno AS Usuario,
-    -- Última modificación (fecha y hora más reciente)
+    -- ï¿½ltima modificaciï¿½n (fecha y hora mï¿½s reciente)
     MAX(COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha)) AS ultimaFecha,
     MAX(COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora)) AS ultimaHora
 FROM INCIDENCIA I

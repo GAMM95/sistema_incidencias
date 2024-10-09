@@ -25,7 +25,7 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM ASIGNACION as WHERE ASI_numero = :numAsignacion";
+        $sql = "SELECT * FROM ASIGNACION WHERE ASI_codigo = :numAsignacion";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':numAsignacion', $numAsignacion, PDO::PARAM_INT);
         $stmt->execute();
@@ -112,4 +112,52 @@ class AsignacionModel extends Conexion
       return null;
     }
   }
+
+  // Metodo para editar asignacion
+  public function editarAsignacion($usuario, $asignacion)
+  {
+    $conector = parent::getConexion();
+    if ($conector != null) {
+      $sql = "EXEC sp_actualizar_asignacion :num_asignacion, :usuario";
+      $stmt = $conector->prepare($sql);
+      $stmt->bindParam(':num_asignacion', $asignacion);
+      $stmt->bindParam(':usuario', $usuario);
+      $stmt->execute();
+
+      $this->auditoria->registrarEvento('ASIGNACION', 'Actualiazr asignacion');
+      return $stmt->rowCount() > 0 ? true : false;
+    } else {
+      throw new Exception("Error de conexion a la base de datos");
+      return null;
+    }
+    try {
+    } catch (PDOException $e) {
+      throw new PDOException("Error al editar asignacion: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener el estado de la asignacion
+  public function obtenerEstadoAsignacion($numeroAsignacion)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT EST_codigo FROM ASIGNACION WHERE ASI_codigo = :numeroAsignacion";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':numeroAsignacion', $numeroAsignacion, PDO::PARAM_INT);
+        $stmt->execute(); // Ejecutar la consulta
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); // Obtener el resultado
+        return $result ? $result['EST_codigo'] : null;
+      } else {
+        throw new Exception("Error de conexion a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener estado de la asignacion: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  
 }
