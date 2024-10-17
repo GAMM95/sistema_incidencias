@@ -7,6 +7,7 @@ class InicioController extends Conexion
   private $usuarioModel;
   private $areaModel;
   private $categoriaModel;
+  private $asignacionModel;
 
   public function __construct()
   {
@@ -16,6 +17,7 @@ class InicioController extends Conexion
     $this->usuarioModel = new UsuarioModel();
     $this->areaModel = new AreaModel();
     $this->categoriaModel = new CategoriaModel();
+    $this->asignacionModel = new AsignacionModel();
   }
 
   public function mostrarCantidadesAdministrador()
@@ -24,6 +26,7 @@ class InicioController extends Conexion
       $cantidadIncidenciasMesActualAdmin = $this->incidenciasModel->contarIncidenciasUltimoMesAdministrador();
       $cantidadPendientessMesActualAdmin = $this->incidenciasModel->contarPendientesUltimoMesAdministrador();
       $cantidadRecepcionesMesActualAdmin = $this->recepcionModel->contarRecepcionesUltimoMesAdministrador();
+      $cantidadRecepcionesEnEsperaMesActualAdmin = $this->asignacionModel->contarRecepcionesEnEsperaUltimoMesAdministrador();
       $cantidadCierresMesActualAdmin = $this->cierreModel->contarCierresUltimoMesAdministrador();
       $cantidadAreas = $this->areaModel->contarAreas();
       $cantidadUsuarios = $this->usuarioModel->contarUsuarios();
@@ -35,6 +38,7 @@ class InicioController extends Conexion
         'incidencias_mes_actual' => $cantidadIncidenciasMesActualAdmin,
         'pendientes_mes_actual' => $cantidadPendientessMesActualAdmin,
         'recepciones_mes_actual' => $cantidadRecepcionesMesActualAdmin,
+        'recepciones_en_espera_mes_actual' => $cantidadRecepcionesEnEsperaMesActualAdmin,
         'cierres_mes_actual' => $cantidadCierresMesActualAdmin,
         'usuarios_total' => $cantidadUsuarios,
         'cantidadAreas' => $cantidadAreas,

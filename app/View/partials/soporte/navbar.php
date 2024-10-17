@@ -55,6 +55,9 @@ if (session_status() == PHP_SESSION_NONE) {
           </a>
           <ul class="pcoded-submenu space-y-2 mt-2">
             <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="registro-incidencia.php">Incidencia</a>
+            </li>
+            <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-recepcion.php">Recepci&oacute;n</a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
@@ -62,9 +65,6 @@ if (session_status() == PHP_SESSION_NONE) {
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-cierre.php">Cierre</a>
-            </li>
-            <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="registro-incidencia.php">Incidencia</a>
             </li>
           </ul>
         </li>

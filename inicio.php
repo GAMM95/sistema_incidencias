@@ -8,6 +8,7 @@ if (!isset($_SESSION['username'])) {
 require_once 'config/conexion.php';
 require_once 'app/Model/IncidenciaModel.php';
 require_once 'app/Model/RecepcionModel.php';
+require_once 'app/Model/AsignacionModel.php';
 require_once 'app/Model/CierreModel.php';
 require_once 'app/Model/UsuarioModel.php';
 require_once 'app/Model/AreaModel.php';
@@ -22,6 +23,7 @@ $area = $_SESSION['codigoArea'];
 // Creacion de instancias de los modelos
 $incidenciasModel =  new IncidenciaModel();
 $recepcionesModel = new RecepcionModel();
+$asignacionModel = new AsignacionModel();
 $cierresModel = new CierreModel();
 $usuarioModel = new UsuarioModel();
 $areaModel = new AreaModel();

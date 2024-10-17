@@ -13,6 +13,7 @@ if (session_status() == PHP_SESSION_NONE) {
         <div class="main-menu-header">
           <img class="img-radius" src="public/assets/logo.ico">
           <div class="user-details">
+            <!-- En caso de que el usuario no esté logueado, aparecerá el nombre de usuario -->
             <?php
             if (isset($_SESSION['nombreDePersona'])) {
               echo htmlspecialchars($_SESSION['area'], ENT_QUOTES, 'UTF-8');
@@ -55,6 +56,9 @@ if (session_status() == PHP_SESSION_NONE) {
           </a>
           <ul class="pcoded-submenu space-y-2 mt-2">
             <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="registro-incidencia.php">Incidencia</a>
+            </li>
+            <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-recepcion.php">Recepci&oacute;n</a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
@@ -62,9 +66,6 @@ if (session_status() == PHP_SESSION_NONE) {
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-cierre.php">Cierre</a>
-            </li>
-            <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="registro-incidencia.php">Incidencia</a>
             </li>
           </ul>
         </li>

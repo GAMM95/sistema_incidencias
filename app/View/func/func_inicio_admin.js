@@ -13,13 +13,13 @@ $(function () {
     dataLabels: {
       enabled: true
     },
-    colors: ["#1abc9c", "#3498db", "#e74c3c"], // Colores para cada barra
+    colors: ["#1abc9c", "#3498db", "#e74c3c"], 
     series: [{
       name: 'Incidencias',
       data: incidenciasData
     }],
     xaxis: {
-      categories: ['Abiertas', 'Recepcionadas', 'Cerradas'], // Etiquetas de categorías
+      categories: ['Nuevas', 'Pendientes', 'Cerradas'], // Etiquetas de categorías
     },
     tooltip: {
       fixed: {
@@ -42,6 +42,52 @@ $(function () {
   };
 
   new ApexCharts(document.querySelector("#support-chart"), options1).render();
+});
+
+$(function () {
+  var options2 = {
+    chart: {
+      type: 'area',
+      height: 200
+    },
+    plotOptions: {
+      bar: {
+        horizontal: false,
+        columnWidth: '50%'
+      },
+    },
+    dataLabels: {
+      enabled: false
+    },
+    colors: ["#1abc9c", "#3498db", "#e74c3c"], 
+    series: [{
+      name: 'Recepciones',
+      data: recepcionesData
+    }],
+    xaxis: {
+      categories: ['En espera', 'Finalizadas'],
+    },
+    tooltip: {
+      fixed: {
+        enabled: false
+      },
+      x: {
+        show: true
+      },
+      y: {
+        title: {
+          formatter: function (seriesName) {
+            return 'Cantidad ';
+          }
+        }
+      },
+      marker: {
+        show: true
+      }
+    }
+  };
+
+  new ApexCharts(document.querySelector("#support-chart2"), options2).render();
 });
 
 // Establece el intervalo para recargar la página (30000 ms = 30 segundos)

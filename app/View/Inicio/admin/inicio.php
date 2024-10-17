@@ -74,22 +74,24 @@
 
           </div>
           <div id="support-chart"></div>
+          <!-- etiquetas inferiores del gráfico -->
           <div class="card-footer bg-primary text-white">
             <div class="row text-center">
               <div class="col">
                 <h4 class="m-0 text-white font-bold"><?php echo $cantidades['pendientes_mes_actual']; ?></h4>
-                <span>Abiertas</span>
+                <span>Incidencias Nuevas</span>
               </div>
               <div class="col">
                 <h4 class="m-0 text-white font-bold"><?php echo $cantidades['recepciones_mes_actual']; ?></h4>
-                <span>Recepcionadas</span>
+                <span>Incidencias Pendientes</span>
               </div>
               <div class="col">
                 <h4 class="m-0 text-white font-bold"><?php echo $cantidades['cierres_mes_actual']; ?></h4>
-                <span>Cerradas</span>
+                <span>Incidencias Cerradas</span>
               </div>
             </div>
           </div>
+          <!-- fin de etiquetas inferiores del gráfico -->
         </div>
       </div>
 
@@ -97,7 +99,6 @@
         document.getElementById('mes-selector').addEventListener('change', function() {
           var mesNombre = this.options[this.selectedIndex].text;
           document.getElementById('mes-nombre').textContent = mesNombre;
-          // Aquí puedes agregar una llamada AJAX para actualizar los datos según el mes seleccionado
         });
       </script>
       <!-- Fin del widget del grafico -->
@@ -117,71 +118,40 @@
 
       <!-- Inicio del widget de los contadores -->
       <div id="contador" class="col-md-12 col-xl-4">
-        <div class="card flat-card">
-          <div class="row-table">
-            <div class="col-sm-6 card-body br">
-              <div class="row">
-                <div class="col-sm-4">
-                  <i class="icon feather icon-users text-c-green mb-1 d-block"></i>
-                </div>
-                <div class="col-sm-8 text-md-center">
-                  <h5 class="font-bold text-lg"> <?php echo $cantidades['usuarios_total']; ?></h5>
-                  <span>Usuarios activos</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 card-body">
-              <div class="row">
-                <div class="col-sm-4">
-                  <i class="icon feather icon-flag text-c-red mb-1 d-block"></i>
-                </div>
-                <div class="col-sm-8 text-md-center">
-                  <h5 class="font-bold text-lg"><?php echo $cantidades['cantidadAreas']; ?></h5>
-                  <span>&Aacute;reas activas</span>
-                </div>
-              </div>
-            </div>
-          </div>
-          <div class="row-table">
-            <div class="col-sm-6 card-body br">
-              <div class="row">
-                <div class="col-sm-4">
-                  <i class="icon feather icon-file-text text-c-blue mb-1 d-block"></i>
-                </div>
-                <div class="col-sm-8 text-md-center">
-                  <h5 class="font-bold text-lg"><?php echo $cantidades['cantidadIncidencias']; ?></h5>
-                  <span>Incidencias registradas</span>
-                </div>
-              </div>
-            </div>
-            <div class="col-sm-6 card-body">
-              <div class="row">
-                <div class="col-sm-4">
-                  <i class="icon feather icon-target text-c-yellow mb-1 d-block"></i>
-                </div>
-                <div class="col-sm-8 text-md-center">
-                  <h5 class="font-bold text-lg"><?php echo $cantidades['cantidadCategorias']; ?></h5>
-                  <span>categor&iacute;as</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-        <!-- Fin del widget de los contadores -->
+        <!-- Widget del grafico -->
+        <div id="grafico" class="">
+          <div class="card support-bar overflow-hidden">
+            <div class="card-body pb-0">
+              <span class="text-c-blue font-bold">INCIDENCIAS RECEPCIONADAS</span>
 
-        <!-- widget del area con mas incidencias -->
-        <div class="card flat-card widget-primary-card">
-          <div class="row-table">
-            <div class="col-sm-3 card-body">
-              <i class="feather icon-alert-triangle"></i>
-            </div>
-            <div class="col-sm-9">
-              <h6 class="text-xs mb-2">
-                <!-- &Aacute;rea con m&aacute;s incidencias del mes actual -->
+              <?php
+              // Establecer la configuración regional para el idioma español
+              setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish');
 
-              <p>
-              &Aacute;rea con m&aacute;s incidencias en el mes  <?php echo $nombreMes; ?>
-              <!-- <select id="mes-selector" class="bg-transparent text-md font-bold outline-none cursor-pointer">
+              // Establecer la zona horaria
+              date_default_timezone_set('America/Lima');
+
+              // Crear un objeto DateTime para la fecha actual
+              $dateTimeObj = new DateTime('now', new DateTimeZone('America/Lima'));
+
+              // Crear un objeto IntlDateFormatter para formatear la fecha
+              $formatter = new IntlDateFormatter(
+                'es_ES', // Configuración regional para el idioma español
+                IntlDateFormatter::NONE, // Sin formato de fecha completa
+                IntlDateFormatter::NONE, // Sin formato de tiempo
+                null, // Usar la zona horaria predeterminada
+                null, // Calendario gregoriano
+                'MMMM' // Formato para mes
+              );
+
+              // Obtener el nombre del mes
+              $nombreMes = $formatter->format($dateTimeObj);
+              ?>
+
+              <!-- Integrar el selector de mes en la línea de texto sin bordes -->
+              <p class="mb-2 mt-3 text-center">
+                Incidencias recepcionadas en el mes de <?php echo $nombreMes; ?>
+                <!-- <select id="mes-selector" class="bg-transparent text-md font-bold outline-none cursor-pointer">
                 <?php
                 // Crear opciones de mes
                 for ($i = 1; $i <= 12; $i++) {
@@ -194,8 +164,61 @@
                 }
                 ?>
               </select> -->
-              del <?php echo date('Y'); ?>.
-            </p>
+                del <?php echo date('Y'); ?>.
+              </p>
+
+            </div>
+            <div id="support-chart2"></div>
+          </div>
+        </div>
+        <script>
+          document.getElementById('mes-selector').addEventListener('change', function() {
+            var mesNombre = this.options[this.selectedIndex].text;
+            document.getElementById('mes-nombre').textContent = mesNombre;
+            // Aquí puedes agregar una llamada AJAX para actualizar los datos según el mes seleccionado
+          });
+        </script>
+        <!-- Fin del widget del grafico -->
+
+        <!-- Tarjetas de las cantidades  -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script>
+          // Pasar datos de PHP a JavaScript
+          var recepcionesData = <?php echo json_encode([
+                                  (int)$cantidades['recepciones_en_espera_mes_actual'],
+                                  (int)$cantidades['recepciones_mes_actual'],
+                                ]); ?>;
+        </script>
+        <!-- Fin de las tarjetas de las cantidades -->
+
+        <!-- widget del area con mas incidencias -->
+        <div class="card flat-card widget-primary-card">
+          <div class="row-table">
+            <div class="col-sm-3 card-body">
+              <i class="feather icon-alert-triangle"></i>
+            </div>
+            <div class="col-sm-9">
+              <h6 class="text-xs mb-2">
+                <!-- &Aacute;rea con m&aacute;s incidencias del mes actual -->
+
+                <p>
+                  &Aacute;rea con m&aacute;s incidencias en el mes <?php echo $nombreMes; ?>
+                  <!-- <select id="mes-selector" class="bg-transparent text-md font-bold outline-none cursor-pointer">
+                <?php
+                // Crear opciones de mes
+                for ($i = 1; $i <= 12; $i++) {
+                  // Crear un objeto DateTime para cada mes
+                  $mesObj = DateTime::createFromFormat('!m', $i);
+                  $nombreMesOption = $formatter->format($mesObj);
+                  // Si el mes actual coincide con el mes en el bucle, seleccionarlo
+                  $selected = ($i == $dateTimeObj->format('n')) ? 'selected' : '';
+                  echo "<option value=\"$i\" $selected>$nombreMesOption</option>";
+                }
+                ?>
+              </select> -->
+                  del <?php echo date('Y'); ?>.
+                </p>
               </h6>
               <h5 class="text-white font-bold"><?php echo $cantidades['areaMasIncidencia']; ?></h5>
             </div>

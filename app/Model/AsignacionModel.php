@@ -159,5 +159,26 @@ class AsignacionModel extends Conexion
     }
   }
 
-  
+    // Contar recepciones del ultimo mes para el administrador
+    public function contarRecepcionesEnEsperaUltimoMesAdministrador()
+    {
+      $conector = parent::getConexion();
+      try {
+        if ($conector != null) {
+          $sql = "SELECT COUNT(*) as recepciones_en_espera_mes_actual FROM ASIGNACION 
+          WHERE ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+          AND EST_codigo = 5";
+          $stmt = $conector->prepare($sql);
+          $stmt->execute();
+          $result = $stmt->fetch(PDO::FETCH_ASSOC);
+          return $result['recepciones_en_espera_mes_actual'];
+        } else {
+          echo "Error de conexión con la base de datos.";
+          return null;
+        }
+      } catch (PDOException $e) {
+        echo "Error al contar recepciones en espera del ultimo mes para el administrador: " . $e->getMessage();
+        return null;
+      }
+    }
 }

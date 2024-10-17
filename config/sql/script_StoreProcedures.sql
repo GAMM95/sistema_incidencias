@@ -648,7 +648,7 @@ BEGIN
     BEGIN TRY 
         BEGIN TRANSACTION;
 
-        -- Verificar si ya existe una recepci�n con los mismos valores
+        -- Verificar si ya existe una recepción con los mismos valores
         IF NOT EXISTS (
             SELECT 1 
             FROM ASIGNACION 
