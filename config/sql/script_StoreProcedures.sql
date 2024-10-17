@@ -636,19 +636,67 @@ BEGIN
 END;
 GO
 
--- PROCEDIMIENTO ALMACENADO PARA REGISTRAR ASINACION - ADMINISTRADOR / USUARIO
-CREATE PROCEDURE sp_registrar_asignacion
-  @ASI_fecha DATE,
-  @ASI_hora TIME,
-  @USU_codigo SMALLINT,
-  @REC_numero SMALLINT
+-- PROCEDIMIENTO ALMACENADO PARA ISNERTAR MANTENIMIENTO
+CREATE PROCEDURE sp_registrar_mantenimiento
+    @EST_codigo SMALLINT,
+    @ASI_codigo SMALLINT
 AS 
 BEGIN
+    -- Declarar variables para almacenar la fecha y la hora del sistema
+    DECLARE @FechaSistema DATE = CONVERT(DATE, GETDATE());
+    DECLARE @HoraSistema TIME(0) = CONVERT(TIME(0), GETDATE()); -- Hora en formato hh:mm:ss
+
     SET NOCOUNT ON;
+
     BEGIN TRY 
         BEGIN TRANSACTION;
 
         -- Verificar si ya existe una recepción con los mismos valores
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM MANTENIMIENTO 
+            WHERE 
+                MAN_fecha = @FechaSistema 
+                AND MAN_hora = @HoraSistema 
+                AND EST_codigo = @EST_codigo 
+                AND ASI_codigo = @ASI_codigo
+        )
+        BEGIN
+            -- Insertar la nueva recepción
+            INSERT INTO MANTENIMIENTO (MAN_fecha, MAN_hora, EST_codigo, ASI_codigo)
+            VALUES (@FechaSistema, @HoraSistema, @EST_codigo, @ASI_codigo); -- ESTADO "EN ESPERA"         
+        END
+        ELSE
+        BEGIN
+            -- Mensaje que la recepción ya existe
+            PRINT 'La incidencia ya está en mantenimiento y no se puede registrar nuevamente.';
+        END
+
+        COMMIT TRANSACTION;
+    END TRY 
+    BEGIN CATCH 
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+
+-- PROCEDIMIENTO ALMACENADO PARA REGISTRAR ASINACION - ADMINISTRADOR / USUARIO
+CREATE PROCEDURE sp_registrar_asignacion
+    @ASI_fecha DATE,
+    @ASI_hora TIME,
+    @USU_codigo SMALLINT,
+    @REC_numero SMALLINT
+AS 
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY 
+        -- Iniciar la transacción
+        BEGIN TRANSACTION;
+
+        -- Verificar si ya existe una recepci�n con los mismos valores
         IF NOT EXISTS (
             SELECT 1 
             FROM ASIGNACION 
@@ -659,26 +707,25 @@ BEGIN
                 AND REC_numero = @REC_numero 
         )
         BEGIN
-            -- Insertar la nueva recepci�n
-            INSERT INTO ASIGNACION(ASI_fecha, ASI_hora, USU_codigo, REC_numero, EST_codigo)
+            -- Insertar la nueva asignación
+            INSERT INTO ASIGNACION (ASI_fecha, ASI_hora, USU_codigo, REC_numero, EST_codigo)
             VALUES (@ASI_fecha, @ASI_hora, @USU_codigo, @REC_numero, 5); -- ESTADO "EN ESPERA"
-            
-            -- Actualizar el estado de la incidencia
-            UPDATE RECEPCION 
-            SET EST_codigo = 5
-            WHERE REC_numero = @REC_numero;
-        END
-        ELSE
-        BEGIN
-            -- Mensaje que la recepci�n ya existe
-            PRINT 'La incidencia ya esta asignada a un usuario y no se puede registrar nuevamente.';
-        END
+        END;
 
+        -- Confirmar la transacción
         COMMIT TRANSACTION;
-    END TRY 
-    BEGIN CATCH 
-        ROLLBACK TRANSACTION;
-        THROW;
+    END TRY
+    BEGIN CATCH
+        -- Hacer rollback en caso de error
+        IF @@TRANCOUNT > 0
+            ROLLBACK TRANSACTION;
+
+        -- Devolver el mensaje de error
+        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
+        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
+        DECLARE @ErrorState INT = ERROR_STATE();
+
+        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
 GO
@@ -695,4 +742,60 @@ BEGIN
   WHERE ASI_codigo = @ASI_codigo
 	AND EST_codigo = 5;
 END;
-GO 
+GO
+
+
+-- PROCEDIMIENTO ALMAENADO PARA INSERTAR CIERRES Y ACTUALIZAR ESTADO DE ASIGNACION
+CREATE PROCEDURE sp_registrar_cierre
+  @CIE_fecha DATE,
+  @CIE_hora TIME,
+  @CIE_diagnostico VARCHAR(1000),
+  @CIE_documento VARCHAR(500),
+  @CIE_asunto VARCHAR(500),
+  @CIE_recomendaciones VARCHAR(1000),
+  @CON_codigo SMALLINT,
+  @REC_numero SMALLINT,
+  @USU_codigo SMALLINT
+AS BEGIN
+SET 
+	NOCOUNT ON;
+  BEGIN TRY 
+    BEGIN TRANSACTION;
+
+	  -- VERIFICAR SI YA EXISTE UN CIERRE CON LOS MISMOS VALORES
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM CIERRE 
+            WHERE 
+                CIE_fecha = @CIE_fecha 
+                AND CIE_hora = @CIE_hora 
+                AND CIE_diagnostico = @CIE_diagnostico 
+                AND CIE_documento = @CIE_documento 
+                AND CIE_asunto = @CIE_asunto 
+                AND CIE_recomendaciones = @CIE_recomendaciones
+                AND CON_codigo = @CON_codigo
+                AND REC_numero = @REC_numero
+                AND USU_codigo = @USU_codigo
+        )
+		BEGIN
+			-- Insertar el nuevo cierre
+			INSERT INTO CIERRE (CIE_fecha, CIE_hora, CIE_diagnostico, CIE_documento, CIE_asunto, CIE_recomendaciones, CON_codigo, REC_numero, USU_codigo, EST_codigo)
+			VALUES (@CIE_fecha, @CIE_hora , @CIE_diagnostico, @CIE_documento, @CIE_asunto, @CIE_recomendaciones, @CON_codigo, @REC_numero, @USU_codigo, 5);
+    
+			-- Actualizar el estado de la recepcion
+			UPDATE RECEPCION SET EST_codigo = 5
+			WHERE REC_numero = @REC_numero;
+		END
+        ELSE
+        BEGIN
+		     -- MENSAJE QUE EL CIERRE YA EXISTE
+            PRINT 'El cierre ya existe y no se puede registrar nuevamente.';
+        END
+		COMMIT TRANSACTION;
+  END TRY 
+  BEGIN CATCH 
+    ROLLBACK TRANSACTION;
+    THROW;
+  END CATCH
+END;
+GO
