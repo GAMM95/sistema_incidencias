@@ -16,10 +16,12 @@ GO
   -- PROCEDIMIENTOS ALMACENADOS
 -------------------------------------------------------------------------------------------------------
 
--- PROCEDIMIENTO ALMACENADO PARA INICIAR SESION 
+-- -- PROCEDIMIENTO ALMACENADO PARA INICIAR SESION 
+-- drop procedure sp_login
+-- GO
 CREATE PROCEDURE sp_login (
     @USU_usuario VARCHAR(20),
-    @USU_password VARCHAR(10)
+    @USU_password VARCHAR(50)  -- Aumentamos la longitud para contraseñas más complejas
 ) 
 AS 
 BEGIN
@@ -27,8 +29,9 @@ BEGIN
 
     DECLARE @USU_codigo SMALLINT;
     DECLARE @EST_codigo SMALLINT;
+    DECLARE @hashed_password VARBINARY(32);
 
-    -- Intento de login: Asignar el c�digo de usuario y estado
+    -- Intento de login: Asignar el código de usuario y estado
     SELECT @USU_codigo = u.USU_codigo, @EST_codigo = u.EST_codigo
     FROM USUARIO u
     WHERE u.USU_nombre = @USU_usuario;
@@ -36,20 +39,23 @@ BEGIN
     -- Verificar si el usuario existe
     IF @USU_codigo IS NOT NULL
     BEGIN
-        -- Verificar si el usuario est� activo
+        -- Verificar si el usuario está activo
         IF @EST_codigo = 1
         BEGIN
-            -- Verificar si las credenciales son correctas
+            -- Generar el hash de la contraseña ingresada
+            SET @hashed_password = HASHBYTES('SHA2_256', @USU_password);
+
+            -- Verificar si las credenciales son correctas comparando el hash
             IF EXISTS (
                 SELECT 1 
                 FROM USUARIO u
                 WHERE u.USU_nombre = @USU_usuario 
-                AND u.USU_password = @USU_password
+                AND u.USU_password = @hashed_password
             )
             BEGIN
-                -- Devolver datos del usuario para la sesi�n
+                -- Devolver datos del usuario para la sesión
                 SELECT 
-					u.USU_codigo,
+                    u.USU_codigo,
                     u.USU_nombre, 
                     p.PER_nombres, 
                     p.PER_apellidoPaterno, 
@@ -84,6 +90,73 @@ BEGIN
 END;
 GO
 
+-- CREATE PROCEDURE sp_login (
+--     @USU_usuario VARCHAR(20),
+--     @USU_password VARCHAR(10)
+-- ) 
+-- AS 
+-- BEGIN
+--     SET NOCOUNT ON;
+
+--     DECLARE @USU_codigo SMALLINT;
+--     DECLARE @EST_codigo SMALLINT;
+
+--     -- Intento de login: Asignar el c�digo de usuario y estado
+--     SELECT @USU_codigo = u.USU_codigo, @EST_codigo = u.EST_codigo
+--     FROM USUARIO u
+--     WHERE u.USU_nombre = @USU_usuario;
+
+--     -- Verificar si el usuario existe
+--     IF @USU_codigo IS NOT NULL
+--     BEGIN
+--         -- Verificar si el usuario est� activo
+--         IF @EST_codigo = 1
+--         BEGIN
+--             -- Verificar si las credenciales son correctas
+--             IF EXISTS (
+--                 SELECT 1 
+--                 FROM USUARIO u
+--                 WHERE u.USU_nombre = @USU_usuario 
+--                 AND u.USU_password = @USU_password
+--             )
+--             BEGIN
+--                 -- Devolver datos del usuario para la sesi�n
+--                 SELECT 
+-- 					u.USU_codigo,
+--                     u.USU_nombre, 
+--                     p.PER_nombres, 
+--                     p.PER_apellidoPaterno, 
+--                     r.ROL_codigo, 
+--                     r.ROL_nombre, 
+--                     a.ARE_codigo, 
+--                     a.ARE_nombre, 
+--                     u.EST_codigo
+--                 FROM USUARIO u
+--                 INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
+--                 INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo
+--                 INNER JOIN AREA a ON a.ARE_codigo = u.ARE_codigo
+--                 WHERE u.USU_codigo = @USU_codigo;
+--             END
+--             ELSE
+--             BEGIN
+--                 -- Credenciales incorrectas
+--                 SELECT 'Credenciales incorrectas' AS MensajeError;
+--             END
+--         END
+--         ELSE
+--         BEGIN
+--             -- Usuario inactivo, devolver mensaje de error
+--             SELECT 'Usuario inactivo. Por favor, contacte al administrador.' AS MensajeError;
+--         END
+--     END
+--     ELSE
+--     BEGIN
+--         -- Si el usuario no existe
+--         SELECT 'Usuario no encontrado' AS MensajeError;
+--     END
+-- END;
+-- GO
+
 --PROCEDIMIENTO ALMACENADO PARA REGISTRAR PERSONA
 CREATE PROCEDURE sp_registrar_persona (
 	@PER_dni CHAR(8),
@@ -102,28 +175,76 @@ END
 GO
 
 -- PROCEDIMIENTO ALMACENADO PARA REGISTRAR USUARIO
+-- CREATE PROCEDURE sp_registrar_usuario (
+-- 	@USU_nombre VARCHAR(50),  -- Aumenté la longitud permitida para nombres de usuario
+-- 	@USU_password VARCHAR(50),  -- Aumenté la longitud para permitir contraseñas más complejas
+-- 	@PER_codigo SMALLINT,
+-- 	@ROL_codigo SMALLINT,
+-- 	@ARE_codigo SMALLINT
+-- )
+-- AS
+-- BEGIN
+-- 	-- Verificar si la persona ya tiene un usuario registrado
+-- 	IF EXISTS (SELECT 1 FROM USUARIO WHERE PER_codigo = @PER_codigo)
+-- 	BEGIN
+-- 		-- Si la persona ya tiene un usuario, retornar un mensaje de error o un código de error
+-- 		RAISERROR('La persona ya tiene un usuario registrado.', 16, 1);
+-- 		RETURN;
+-- 	END
+
+-- 	-- Hashear la contraseña utilizando SHA2_256
+-- 	DECLARE @hashed_password VARBINARY(32);
+-- 	SET @hashed_password = HASHBYTES('SHA2_256', @USU_password);
+
+-- 	-- Insertar el nuevo usuario con EST_codigo siempre igual a 1
+-- 	INSERT INTO USUARIO (USU_nombre, USU_password, PER_codigo, ROL_codigo, ARE_codigo, EST_codigo)
+-- 	VALUES (@USU_nombre, @hashed_password, @PER_codigo, @ROL_codigo, @ARE_codigo, 1);
+-- END;
+-- GO
+
+ALTER TABLE USUARIO ADD USU_salt UNIQUEIDENTIFIER;
+GO
+
 CREATE PROCEDURE sp_registrar_usuario (
-	@USU_nombre VARCHAR(20),
-	@USU_password VARCHAR(10),
-	@PER_codigo SMALLINT,
-	@ROL_codigo SMALLINT,
-	@ARE_codigo SMALLINT
+    @USU_nombre NVARCHAR(50),
+    @USU_password NVARCHAR(100),
+    @PER_codigo SMALLINT,
+    @ROL_codigo SMALLINT,
+    @ARE_codigo SMALLINT
 )
 AS
 BEGIN
-	-- Verificar si la persona ya tiene un usuario registrado
-	IF EXISTS (SELECT 1 FROM USUARIO WHERE PER_codigo = @PER_codigo)
-	BEGIN
-		-- Si la persona ya tiene un usuario, retornar un mensaje de error o un c�digo de error
-		RAISERROR('La persona ya tiene un usuario registrado.', 16, 1);
-		RETURN;
-	END
+    -- Verificar si la persona ya tiene un usuario registrado
+    IF EXISTS (SELECT 1 FROM USUARIO WHERE PER_codigo = @PER_codigo)
+    BEGIN
+        RAISERROR('La persona ya tiene un usuario registrado.', 16, 1);
+        RETURN;
+    END
 
-	-- Insertar el nuevo usuario con EST_codigo siempre igual a 1
-	INSERT INTO USUARIO (USU_nombre, USU_password, PER_codigo, ROL_codigo, ARE_codigo, EST_codigo)
-	VALUES (@USU_nombre, @USU_password, @PER_codigo, @ROL_codigo, @ARE_codigo, 1);
+    -- Generar un salt aleatorio
+    DECLARE @salt UNIQUEIDENTIFIER = NEWID();
+    
+    -- Hashear la contraseña utilizando PBKDF2
+    DECLARE @hashed_password VARBINARY(32);
+    SET @hashed_password = HASHBYTES('SHA2_512', 
+        CONCAT(@USU_password, CAST(@salt AS NVARCHAR(36))));
+
+    -- Aplicar PBKDF2 con 10000 iteraciones
+    DECLARE @iterations INT = 10000;
+    WHILE @iterations > 0
+    BEGIN
+        SET @hashed_password = HASHBYTES('SHA2_512', 
+            CONCAT(@hashed_password, CAST(@salt AS NVARCHAR(36))));
+        SET @iterations = @iterations - 1;
+    END
+
+    -- Insertar el nuevo usuario
+    INSERT INTO USUARIO (USU_nombre, USU_password, USU_salt, PER_codigo, ROL_codigo, ARE_codigo, EST_codigo)
+    VALUES (@USU_nombre, @hashed_password, @salt, @PER_codigo, @ROL_codigo, @ARE_codigo, 1);
 END;
 GO
+
+
 
 --PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR DATOS DE USUARIO
 CREATE PROCEDURE sp_editar_usuario
@@ -636,9 +757,8 @@ BEGIN
 END;
 GO
 
--- PROCEDIMIENTO ALMACENADO PARA ISNERTAR MANTENIMIENTO
+
 CREATE PROCEDURE sp_registrar_mantenimiento
-    @EST_codigo SMALLINT,
     @ASI_codigo SMALLINT
 AS 
 BEGIN
@@ -651,20 +771,24 @@ BEGIN
     BEGIN TRY 
         BEGIN TRANSACTION;
 
-        -- Verificar si ya existe una recepción con los mismos valores
+        -- Verificar si ya existe un registro con los mismos valores
         IF NOT EXISTS (
             SELECT 1 
             FROM MANTENIMIENTO 
             WHERE 
                 MAN_fecha = @FechaSistema 
                 AND MAN_hora = @HoraSistema 
-                AND EST_codigo = @EST_codigo 
                 AND ASI_codigo = @ASI_codigo
         )
         BEGIN
-            -- Insertar la nueva recepción
+            -- Insertar la nueva recepción con el estado "ATENDIDO"
             INSERT INTO MANTENIMIENTO (MAN_fecha, MAN_hora, EST_codigo, ASI_codigo)
-            VALUES (@FechaSistema, @HoraSistema, @EST_codigo, @ASI_codigo); -- ESTADO "EN ESPERA"         
+            VALUES (@FechaSistema, @HoraSistema, 6, @ASI_codigo); 
+
+            -- Actualizar estado de la asignacion
+            UPDATE ASIGNACION SET EST_codigo = 6
+            WHERE (EST_codigo = 5 OR  EST_codigo = '')
+	          AND  ASI_codigo = @ASI_codigo;        
         END
         ELSE
         BEGIN
@@ -680,7 +804,6 @@ BEGIN
     END CATCH
 END;
 GO
-
 
 -- PROCEDIMIENTO ALMACENADO PARA REGISTRAR ASINACION - ADMINISTRADOR / USUARIO
 CREATE PROCEDURE sp_registrar_asignacion

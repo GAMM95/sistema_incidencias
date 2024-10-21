@@ -4,14 +4,80 @@ require_once 'app/Model/AuditoriaModel.php';
 
 class UsuarioModel extends Conexion
 {
+  private $auditoria;
 
   public function __construct()
   {
     parent::__construct();
+    $conector = parent::getConexion();
+    // Inicializar la instancia de AuditoriaModel
+    if ($conector != null) {
+      $this->auditoria = new AuditoriaModel($conector);
+    } else {
+      throw new Exception("Error de conexión a la base de datos");
+    }
   }
 
   // Método para iniciar sesión
-  public function iniciarSesion($username, $password)
+  // public function iniciarSesion($username, $password)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+
+  //       Obtener IP del cliente
+  //       $auditoria = new AuditoriaModel($conector);
+  //       $ipCliente = $auditoria->getIP();
+
+  //       Obtener el nombre del equipo usando el IP
+  //       $nombreEquipo = gethostbyaddr($ipCliente);
+
+  //       Ejecutar el procedimiento almacenado
+  //       $query = "EXEC sp_login :username, :password";
+  //       $stmt = $conector->prepare($query);
+  //       $stmt->bindParam(':username', $username);
+  //       $stmt->bindParam(':password', $password);
+  //       $stmt->execute();
+
+  //       Obtener el resultado del procedimiento
+  //       $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+  //       Verificar si se encontraron resultados
+  //       if ($resultado && !isset($resultado['MensajeError'])) {
+  //         Credenciales correctas, inicia sesión
+  //         session_start();
+  //         $_SESSION['nombreDePersona'] = $resultado['PER_nombres'] . ' ' . $resultado['PER_apellidoPaterno'];
+  //         $_SESSION['area'] = $resultado['ARE_nombre'];
+  //         $_SESSION['codigoArea'] = $resultado['ARE_codigo'];
+  //         $informacionUsuario = $this->obtenerInformacionUsuario($username, $password);
+  //         $codigo = $informacionUsuario['codigo'];
+  //         $usuario = $informacionUsuario['usuario'];
+  //         $_SESSION['codigoUsuario'] = $codigo;
+  //         $_SESSION['usuario'] = $usuario;
+  //         $_SESSION['rol'] = $this->obtenerRolPorId($username);
+
+  //         Log de inicio de sesión
+  //         $this->registrarLog($username, $codigo, $ipCliente, $nombreEquipo);
+
+  //         Registrar el evento en la auditoría
+  //         $this->auditoria->registrarEvento('USUARIO', 'Iniciar sesión');
+  //         return true;
+  //       } else {
+  //         Si las credenciales son incorrectas o hay un mensaje de error
+  //         $mensajeError = isset($resultado['MensajeError']) ? $resultado['MensajeError'] : "Credenciales incorrectas.";
+  //         header("Location: index.php?state=failed&message=" . urlencode($mensajeError));
+  //         exit();
+  //       }
+  //     } else {
+  //       throw new Exception("Error de conexión a la base de datos.");
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al iniciar sesión: " . $e->getMessage());
+  //   }
+  // }
+
+
+  public function iniciarSesion($username, $password, $digitos = null)
   {
     $conector = parent::getConexion();
     try {
@@ -24,11 +90,24 @@ class UsuarioModel extends Conexion
         // Obtener el nombre del equipo usando el IP
         $nombreEquipo = gethostbyaddr($ipCliente);
 
+        // Verificar si el usuario es "ADMIN" o si no se proporcionaron los dos primeros campos
+        if (strtoupper($username) === 'ADMIN' || empty($username) || empty($password)) {
+          $digitos = null; // No se requiere autenticación en 2 pasos
+        }
+
         // Ejecutar el procedimiento almacenado
-        $query = "EXEC sp_login :username, :password";
+        $query = "EXEC sp_login :username, :password, :digitos";
         $stmt = $conector->prepare($query);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
+
+        // Manejar el valor de digitos
+        if ($digitos !== null) {
+          $stmt->bindParam(':digitos', $digitos);
+        } else {
+          $stmt->bindValue(':digitos', null, PDO::PARAM_NULL);
+        }
+
         $stmt->execute();
 
         // Obtener el resultado del procedimiento
@@ -52,7 +131,7 @@ class UsuarioModel extends Conexion
           $this->registrarLog($username, $codigo, $ipCliente, $nombreEquipo);
 
           // Registrar el evento en la auditoría
-          $auditoria->registrarEvento('USUARIO', 'Iniciar sesión');
+          $this->auditoria->registrarEvento('USUARIO', 'Iniciar sesión');
           return true;
         } else {
           // Si las credenciales son incorrectas o hay un mensaje de error
@@ -67,6 +146,7 @@ class UsuarioModel extends Conexion
       throw new PDOException("Error al iniciar sesión: " . $e->getMessage());
     }
   }
+
 
   // Metodo para registrar los logeos
   private function registrarLog($username, $codigo, $ipCliente, $nombreEquipo)
@@ -85,34 +165,75 @@ class UsuarioModel extends Conexion
     file_put_contents('logs/log.txt', $logData, FILE_APPEND);
   }
 
-  /// Método para obtener la información del usuario logueado
+  // /// Método para obtener la información del usuario logueado
+  // private function obtenerInformacionUsuario($username, $password)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+  //       $consulta = "SELECT USU_codigo as codigo, USU_nombre as usuario 
+  //       FROM USUARIO u 
+  //       WHERE USU_nombre = :username AND USU_password = :password";
+
+
+  //       $consulta = 'EXEC sp_verificar_usuario :username, :password';
+  //       $stmt = $conector->prepare($consulta);
+  //       $stmt->bindParam(':username', $username);
+  //       $stmt->bindParam(':password', $password);
+  //       $stmt->execute();
+
+  //       $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+
+
+  //       if ($resultado) {
+  //         return $resultado;
+  //       } else {
+  //         return null;
+  //       }
+  //     } else {
+  //       throw new Exception("Error de conexión a la base de datos.");
+  //       return null;
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al obtener información del usuario: " . $e->getMessage());
+  //     return null;
+  //   }
+  // }
   private function obtenerInformacionUsuario($username, $password)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $consulta = "SELECT USU_codigo as codigo, USU_nombre as usuario 
-        FROM USUARIO u 
-        WHERE USU_nombre = :username AND USU_password = :password";
+        // Preparar la llamada al procedimiento almacenado
+        $consulta = 'EXEC sp_verificar_usuario :username, :password';
         $stmt = $conector->prepare($consulta);
         $stmt->bindParam(':username', $username);
         $stmt->bindParam(':password', $password);
         $stmt->execute();
 
-        $fila = $stmt->fetch();
+        // Obtener el resultado
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
 
-        if ($fila) {
-          return $fila;
+        // Validar el resultado
+        if ($resultado) {
+          if (isset($resultado['Resultado']) && $resultado['Resultado'] === 'Autenticación exitosa') {
+            // Devolver información del usuario si la autenticación es exitosa
+            return [
+              'codigo' => $resultado['codigo'],
+              'usuario' => $resultado['usuario']
+            ];
+          } else {
+            // Devolver el mensaje de error
+            return $resultado['Resultado'];
+          }
         } else {
           return null;
         }
       } else {
         throw new Exception("Error de conexión a la base de datos.");
-        return null;
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al obtener información del usuario: " . $e->getMessage());
-      return null;
     }
   }
 
@@ -205,8 +326,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('USUARIO', 'Registro de usuario');
+        $this->auditoria->registrarEvento('USUARIO', 'Registro de usuario');
 
         return true; // Registro exitoso
       } else {
@@ -235,15 +355,10 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('USUARIO', 'Actualización de usuario');
+        $this->auditoria->registrarEvento('USUARIO', 'Actualización de usuario');
 
         // Confirmar que se ha actualizado al menos una fila
-        if ($stmt->rowCount() > 0) {
-          return true;
-        } else {
-          return false;
-        }
+        return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexión a la base de datos");
       }
@@ -356,8 +471,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('PERSONA - USUARIO', 'Actualizacion de perfil');
+        $this->auditoria->registrarEvento('PERSONA - USUARIO', 'Actualizacion de perfil');
 
         return true;
       } else {
@@ -411,8 +525,7 @@ class UsuarioModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('USUARIO', 'Habilitar usuario');
+          $this->auditoria->registrarEvento('USUARIO', 'Habilitar usuario');
           return true;
         } else {
           return false;

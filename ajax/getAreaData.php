@@ -13,6 +13,7 @@ class AreaModel extends Conexion
     {
         $conector = parent::getConexion();
         $query = "SELECT * FROM AREA WHERE EST_codigo <> 2 
+                AND ARE_codigo <> 0
                 ORDER BY ARE_nombre ASC";
         $stmt = $conector->prepare($query);
         $stmt->execute();

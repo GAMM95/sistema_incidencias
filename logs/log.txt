@@ -1,212 +1,312 @@
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-03 14:27:45
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-03 14:28:18
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-03 18:22:35
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: INF04.muniesperanza.gob.pe
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-03 18:41:47
-Nombre de Persona: Jose Castro
+Fecha y Hora: 2024-10-20 08:02:00
+Nombre de Persona: Jhonatan asd
 Rol: Administrador
 Codigo Area: 1
 Área: Subgerencia de Informática y Sistemas
 Código de Usuario: 1
-Usuario: JCASTRO
+Usuario: JMANTILLA
 IP: ::1
-Nombre de Equipo: INF04.muniesperanza.gob.pe
+Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-03 19:57:16
-Nombre de Persona: Carlos Leyva
+Fecha y Hora: 2024-10-20 15:25:36
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-20 15:40:25
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-20 15:55:28
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-20 16:30:37
+Nombre de Persona: jhojnatan mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-20 19:33:24
+Nombre de Persona: Jhonatan manti
 Rol: Soporte
 Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 5
-Usuario: CLEYVA
+Área: nueva area
+Código de Usuario: 2
+Usuario: ALMANRO
 IP: ::1
-Nombre de Equipo: INF04.muniesperanza.gob.pe
+Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-03 20:07:35
-Nombre de Persona: Alan Collantes
+Fecha y Hora: 2024-10-20 19:36:04
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-20 23:31:33
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-20 23:33:40
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 00:50:49
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 00:51:07
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 01:03:21
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 01:39:22
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 01:53:21
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 02:11:04
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 02:17:34
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 02:19:06
+Nombre de Persona: Silvia Miñano
+Rol: Usuario
+Codigo Area: 2
+Área: Alcaldía
+Código de Usuario: 2
+Usuario: STORRES
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 02:20:07
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 02:21:09
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 02:21:37
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 02:42:54
+Nombre de Persona: Jhonatamn Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: nueva area
+Código de Usuario: 1
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 03:05:09
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-21 03:07:26
+Nombre de Persona: Jhonatan Mantilla
 Rol: Administrador
 Codigo Area: 1
 Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 3
-Usuario: ACOLLANTES
-IP: ::1
-Nombre de Equipo: INF04.muniesperanza.gob.pe
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-04 15:43:35
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: INF04.muniesperanza.gob.pe
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-04 16:50:37
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: INF04.muniesperanza.gob.pe
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-04 21:17:57
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: SGIS05.muniesperanza.gob.pe
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-05 16:52:12
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
+Código de Usuario: 1
 Usuario: JMANTILLA
 IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-06 03:40:46
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
+Fecha y Hora: 2024-10-21 04:55:42
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
 IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-06 04:03:25
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
+Fecha y Hora: 2024-10-21 05:20:08
+Nombre de Persona: Admin System
+Rol: Administrador
+Codigo Area: 0
+Área: General
+Código de Usuario: 0
+Usuario: ADMIN
 IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
 ------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-07 13:52:21
+Fecha y Hora: 2024-10-21 05:21:15
 Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
+Rol: Administrador
+Codigo Area: 59
+Área: nueva area
+Código de Usuario: 1
 Usuario: JMANTILLA
 IP: ::1
 Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-07 16:07:07
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: SGIS05.muniesperanza.gob.pe
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-08 17:47:18
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: JhonatanMM
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-<<<<<<< HEAD
-Fecha y Hora: 2024-10-17 01:53:59
-=======
-Fecha y Hora: 2024-10-10 21:06:57
->>>>>>> 0f4667d954c44aac5cfc678910b45941a0b7959c
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-<<<<<<< HEAD
-Nombre de Equipo: JhonatanMM
-=======
-Nombre de Equipo: INF08.muniesperanza.gob.pe
-------- END LOGIN LOGS ---------
-
-------- START LOGIN LOGS ---------
-Fecha y Hora: 2024-10-11 21:06:43
-Nombre de Persona: Jhonatan Mantilla
-Rol: Soporte
-Codigo Area: 1
-Área: Subgerencia de Informática y Sistemas
-Código de Usuario: 8
-Usuario: JMANTILLA
-IP: ::1
-Nombre de Equipo: INF08.muniesperanza.gob.pe
->>>>>>> 0f4667d954c44aac5cfc678910b45941a0b7959c
 ------- END LOGIN LOGS ---------
 

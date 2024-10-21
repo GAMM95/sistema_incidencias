@@ -18,13 +18,14 @@ GO
 
 -- VISTA LISTAR USUARIOS
 CREATE VIEW vista_usuarios AS
-SELECT USU_codigo, (p.PER_nombres + ' ' + p.PER_apellidoPaterno + ' '+ p.PER_apellidoMaterno) as persona, 
+SELECT USU_codigo, (p.PER_nombres + ' ' + p.PER_apellidoPaterno + ' '+ p.PER_apellidoMaterno) as persona,
 a.ARE_nombre, a.EST_codigo, USU_nombre, USU_password, r.ROL_nombre, e.EST_descripcion 
 FROM USUARIO u
-INNER JOIN PERSONA p on p.PER_codigo = u.PER_codigo
-INNER JOIN AREA a on a.ARE_codigo = u.ARE_codigo
-INNER JOIN ESTADO e on e.EST_codigo = u.EST_codigo
-INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo;
+INNER JOIN PERSONA p on p.PER_codigo = u.PER_codigo 
+LEFT JOIN AREA a on a.ARE_codigo = u.ARE_codigo
+LEFT JOIN ESTADO e on e.EST_codigo = u.EST_codigo
+LEFT JOIN ROL r ON r.ROL_codigo = u.ROL_codigo
+where USU_codigo <>0
 GO
 
 

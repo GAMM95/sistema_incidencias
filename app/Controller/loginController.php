@@ -24,6 +24,7 @@ class LoginController
       // Obtén los valores de usuario y contraseña del formulario
       $username = $_POST['username'];
       $password = $_POST['password'];
+      $digitos = $_POST['digitos'];
 
       // Obtener IP del cliente
       $ipCliente = $_SERVER['REMOTE_ADDR'];
@@ -35,7 +36,7 @@ class LoginController
       $usuario = new UsuarioModel();
 
       // Intenta iniciar sesión con los datos proporcionados
-      if ($usuario->iniciarSesion($username, $password)) {
+      if ($usuario->iniciarSesion($username, $password, $digitos)) {
         // Si el inicio de sesión es exitoso, inicia la sesión y redirige al menú
         session_start();
         $_SESSION['username'] = $username;

@@ -51,8 +51,8 @@ var url = isChecked ? 'modulo-area.php?action=habilitar' : 'modulo-area.php?acti
 
           <!-- BOTONES -->
           <div class="flex justify-center space-x-4">
-            <button type="submit" id="guardar-area" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Guardar</button>
-            <button type="button" id="editar-area" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Editar</button>
+            <button type="submit" id="guardar-area" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Registrar</button>
+            <button type="button" id="editar-area" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Actualizar</button>
             <button type="button" id="nuevo-registro" class="bn btn-secondary text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-plus-square"></i>Limpiar</button>
           </div>
         </form>
@@ -111,7 +111,6 @@ var url = isChecked ? 'modulo-area.php?action=habilitar' : 'modulo-area.php?acti
             <!-- Fin del cuerpo de la tabla -->
           </table>
         </div>
-
         <!-- Fin de tabla de areas -->
       </div>
       <!-- Fin de Busqueda y Tabla -->

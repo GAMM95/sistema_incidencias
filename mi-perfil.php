@@ -5,6 +5,7 @@ if (!isset($_SESSION['usuario'])) {
   header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
   exit();
 }
+
 $action = $_GET['action'] ?? '';
 $rol = $_SESSION['rol'];
 
