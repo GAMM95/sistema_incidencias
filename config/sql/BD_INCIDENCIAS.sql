@@ -272,6 +272,25 @@ INSERT INTO ROL (ROL_nombre) VALUES ('Soporte');
 INSERT INTO ROL (ROL_nombre) VALUES ('Usuario');
 GO
 
+-- VOLCADO DE DATOS PARA LA TABLA PERSONA
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('70555000', 'Jose', 'Castro', 'Gonzales', '', '');
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('11111111', 'Percy', 'Carranza', 'X', '', '');
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('42761038', 'Alan', 'Collantes', 'Arana', '', '');
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('70400300', 'Freysi', 'Benites', 'Torres', '', '');
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('70400307', 'Carlos', 'Leyva', 'Campos', '', '');
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('70400000', 'Maria', 'Blas', 'Vera', '', '');
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('70401204', 'Stiven', 'Fabian', 'Bustamante', '', '');
+INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
+VALUES ('70555743', 'Jhonatan', 'Mantilla', 'Miñano', 'jhonatanmm.1995@gmail.com', '950212909');
+GO 
+
 -- VOLCADO DE DATOS PARA LA TABLA ESTADO
 INSERT INTO ESTADO (EST_descripcion) VALUES ('ACTIVO');
 INSERT INTO ESTADO (EST_descripcion) VALUES ('INACTIVO');
@@ -1225,6 +1244,46 @@ BEGIN
 END;
 GO
 
+--VOLCADO DE DATOS PARA LOS USUARIOS EJECUTANDO sp_registrar_usuario
+EXEC sp_registrar_usuario 'JCASTRO', 'garbalenus', 1, 1, 1;
+EXEC sp_registrar_usuario 'PERCY', '123456', 2, 2, 1;
+EXEC sp_registrar_usuario 'ACOLLANTES', '123456', 3, 2, 1;
+EXEC sp_registrar_usuario 'FBENITES', 'mde123', 4, 2, 1;
+EXEC sp_registrar_usuario 'CLEYVA', '123456', 5, 2, 1;
+EXEC sp_registrar_usuario 'MBLAS', '123456', 6, 2, 1;
+EXEC sp_registrar_usuario 'SFABIAN', '123456', 7, 2, 1;
+EXEC sp_registrar_usuario 'JMANTILLA', '123456', 8, 2, 1;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA HABILITAR USUARIO
+CREATE OR ALTER PROCEDURE sp_habilitar_usuario
+    @codigoUsuario SMALLINT
+AS
+BEGIN
+    -- Actualizar el estado del usuario
+    UPDATE USUARIO 
+    SET EST_codigo = 1
+    WHERE EST_codigo = 2 AND USU_codigo = @codigoUsuario;
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR USUARIO
+CREATE OR ALTER PROCEDURE sp_deshabilitar_usuario
+	@codigoUsuario SMALLINT
+AS
+BEGIN
+    -- Actualizar el estado del usuario
+	UPDATE USUARIO SET EST_codigo = 2 
+    WHERE EST_codigo = 1 AND  USU_codigo = @codigoUsuario;
+END;
+GO
+
+--EJECUTAR sp_deshabilitar_usuario
+EXEC sp_deshabilitar_usuario 2;
+EXEC sp_deshabilitar_usuario 6;
+EXEC sp_deshabilitar_usuario 7; 
+GO 
+
 --PROCEDIMIENTO ALMACENADO PARA INCIAR SESION
 CREATE OR ALTER PROCEDURE sp_login 
     @USU_usuario NVARCHAR(50),
@@ -1411,29 +1470,6 @@ BEGIN
 	INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_celular, PER_email)
 	VALUES (@PER_dni, @PER_nombres, @PER_apellidoPaterno, @PER_apellidoMaterno, @PER_celular, @PER_email);
 END
-GO
-
--- PROCEDIMIENTO ALMACENADO PARA HABILITAR USUARIO
-CREATE OR ALTER PROCEDURE sp_habilitar_usuario
-    @codigoUsuario SMALLINT
-AS
-BEGIN
-    -- Actualizar el estado del usuario
-    UPDATE USUARIO 
-    SET EST_codigo = 1
-    WHERE EST_codigo = 2 AND USU_codigo = @codigoUsuario;
-END;
-GO
-
--- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR USUARIO
-CREATE OR ALTER PROCEDURE sp_deshabilitar_usuario
-	@codigoUsuario SMALLINT
-AS
-BEGIN
-    -- Actualizar el estado del usuario
-	UPDATE USUARIO SET EST_codigo = 2 
-    WHERE EST_codigo = 1 AND  USU_codigo = @codigoUsuario;
-END;
 GO
 
 --PROCEDIMIENTO ALMACENADO PARA REGISTRAR BIEN
