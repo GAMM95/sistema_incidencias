@@ -15,7 +15,7 @@
             <ul class="breadcrumb">
               <li class="breadcrumb-item"><a href=""><i class="feather icon-edit"></i></a></li>
               <li class="breadcrumb-item"><a href="#">Registros</a></li>
-              <li class="breadcrumb-item"><a href="">Recepci&oacute;n</a></li>
+              <li class="breadcrumb-item"><a href="">Asignaci&oacute;n</a></li>
             </ul>
           </div>
         </div>
@@ -230,7 +230,7 @@
               <?php foreach ($resultadoAsignaciones as $asignaciones) : ?>
                 <?php
                 $estado = htmlspecialchars($asignaciones['EST_descripcion']);
-                $isFinalizado = ($estado === 'FINALIZADO');
+                $isFinalizado = ($estado === 'Resuelto');
                 ?>
                 <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $asignaciones['ASI_codigo']; ?>">
                   <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $asignaciones['ASI_codigo']; ?></th>
@@ -244,10 +244,10 @@
 
                   <td class="px-6 py-2 text-center">
                     <div class="custom-control custom-switch cursor-pointer">
-                      <!-- Activamos el switch si el estado es 'FINALIZADO' -->
+                      <!-- Activamos el switch si el estado es 'Resuelto' -->
                       <input type="checkbox" class="custom-control-input switch-asignacion" id="customswitch<?= $asignaciones['ASI_codigo']; ?>" data-id="<?= $asignaciones['ASI_codigo']; ?>" <?= $isFinalizado ? 'checked' : ''; ?>>
                       <!-- Mostramos el estado correspondiente -->
-                      <label class="custom-control-label" for="customswitch<?= $asignaciones['ASI_codigo']; ?>"><?= $isFinalizado ? 'FINALIZADO' : 'EN ESPERA'; ?></label>
+                      <label class="custom-control-label" for="customswitch<?= $asignaciones['ASI_codigo']; ?>"><?= $isFinalizado ? 'Resuelto' : 'En espera'; ?></label>
                     </div>
                   </td>
                 </tr>

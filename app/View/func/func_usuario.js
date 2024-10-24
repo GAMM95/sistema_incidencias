@@ -199,10 +199,10 @@ $(document).on('click', '#tablaListarUsuarios tbody tr', function () {
   const celdas = $(this).find('td');
   const codUsuario = $(this).find('th').text().trim();
   const personaValue = celdas.eq(0).text().trim();
-  const areaValue = celdas.eq(1).text().trim();
-  const usernameValue = celdas.eq(2).text().trim();
-  const passwordValue = celdas.eq(3).text().trim();
-  const rolValue = celdas.eq(4).text().trim();
+  const areaValue = celdas.eq(2).text().trim();
+  const usernameValue = celdas.eq(3).text().trim();
+  const passwordValue = celdas.eq(4).text().trim();
+  const rolValue = celdas.eq(5).text().trim();
 
   $('#CodUsuario').val(codUsuario);
   $('#username').val(usernameValue);

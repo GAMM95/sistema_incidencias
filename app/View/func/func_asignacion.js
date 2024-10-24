@@ -241,7 +241,7 @@ $(document).on('click', '#tablaIncidenciasRecepcionadas tbody tr', function () {
   $('#nuevo-registro').prop('disabled', false);
 });
 
-// Evento de clic en las filas de la tabla de incidencias recepcionadas
+// Evento de clic en las filas de la tabla de incidencias asignadas
 $(document).on('click', '#tablaIncidenciasAsignadas tbody tr', function () {
   var numAsignacion = $(this).attr('data-id');
   $('#tablaIncidenciasAsignadas tbody tr').removeClass('bg-blue-200 font-semibold');

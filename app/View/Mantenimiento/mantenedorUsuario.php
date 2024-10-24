@@ -125,6 +125,7 @@
           <thead class="sticky top-0 text-xs text-gray-70 uppercase bg-lime-300">
             <tr>
               <th scope="col" class="px-6 py-2 text-center hidden">N&deg;</th>
+              <th scope="col" class="px-6 py-2 text-center">DNI</th>
               <th scope="col" class="px-6 py-2 text-center">Trabajador</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario</th>
@@ -149,6 +150,7 @@
                 ?>
                 <tr class="hover:bg-green-100 hover:scale-[101%] transition-all hover:cursor-pointer border-b" data-id="<?= $usuario['USU_codigo']; ?>">
                   <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap hidden"><?= htmlspecialchars($usuario['USU_codigo']); ?></th>
+                  <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['PER_dni']); ?></td>
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['persona']); ?></td>
                   <td class="px-6 py-2 text-center <?= $areaInactiva; ?>"><?= htmlspecialchars($usuario['ARE_nombre']); ?></td>
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['USU_nombre']); ?></td>

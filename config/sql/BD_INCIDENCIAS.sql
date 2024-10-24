@@ -297,7 +297,7 @@ INSERT INTO ESTADO (EST_descripcion) VALUES ('INACTIVO');
 INSERT INTO ESTADO (EST_descripcion) VALUES ('ABIERTO');
 INSERT INTO ESTADO (EST_descripcion) VALUES ('RECEPCIONADO');
 INSERT INTO ESTADO (EST_descripcion) VALUES ('EN ESPERA');
-INSERT INTO ESTADO (EST_descripcion) VALUES ('ATENDIDO');
+INSERT INTO ESTADO (EST_descripcion) VALUES ('RESUELTO');
 INSERT INTO ESTADO (EST_descripcion) VALUES ('CERRADO');
 GO
 
@@ -875,6 +875,57 @@ BEGIN
     SET @resultado = @formato;
 
     RETURN @resultado;
+END;
+GO
+
+--Funcion para mostrar el tiempo de mantenimiento
+CREATE OR ALTER FUNCTION dbo.fn_tiempo_mantenimiento (
+    @ASI_fecha DATE, 
+    @ASI_hora TIME(0), 
+    @MAN_fecha DATE, 
+    @MAN_hora TIME(0)
+)
+RETURNS VARCHAR(100)
+AS
+BEGIN
+    DECLARE @FechaHoraAsignacion DATETIME;
+    DECLARE @FechaHoraMantenimiento DATETIME;
+    DECLARE @DiferenciaDias INT;
+    DECLARE @DiferenciaHoras INT;
+    DECLARE @DiferenciaMinutos INT;
+    DECLARE @Resultado VARCHAR(100);
+
+    -- Combinar fecha y hora de asignación en un solo valor de tipo DATETIME
+    SET @FechaHoraAsignacion = CAST(@ASI_fecha AS DATETIME) + CAST(@ASI_hora AS DATETIME);
+
+    -- Combinar fecha y hora de mantenimiento en un solo valor de tipo DATETIME
+    SET @FechaHoraMantenimiento = CAST(@MAN_fecha AS DATETIME) + CAST(@MAN_hora AS DATETIME);
+
+    -- Calcular la diferencia en días
+    SET @DiferenciaDias = DATEDIFF(DAY, @FechaHoraAsignacion, @FechaHoraMantenimiento);
+
+    -- Calcular la diferencia total en minutos
+    SET @DiferenciaMinutos = DATEDIFF(MINUTE, @FechaHoraAsignacion, @FechaHoraMantenimiento);
+
+    -- Calcular las horas y minutos restantes (diferencia después de calcular los días)
+    SET @DiferenciaHoras = (@DiferenciaMinutos % (60 * 24)) / 60;  -- Horas después de descontar días
+    SET @DiferenciaMinutos = @DiferenciaMinutos % 60;  -- Minutos restantes después de descontar horas
+
+    -- Verificar si hay días y formatear el resultado adecuadamente
+    IF @DiferenciaDias > 0
+    BEGIN
+        SET @Resultado = CAST(@DiferenciaDias AS VARCHAR(10)) + ' días ' 
+                        + CAST(@DiferenciaHoras AS VARCHAR(10)) + ' horas y ' 
+                        + CAST(@DiferenciaMinutos AS VARCHAR(10)) + ' minutos';
+    END
+    ELSE
+    BEGIN
+        SET @Resultado = CAST(@DiferenciaHoras AS VARCHAR(10)) + ' horas y ' 
+                        + CAST(@DiferenciaMinutos AS VARCHAR(10)) + ' minutos';
+    END
+
+    -- Devolver la diferencia en el formato adecuado
+    RETURN @Resultado;
 END;
 GO
 
@@ -1801,56 +1852,8 @@ BEGIN
 END;
 GO
 
---PROCEDIMIENTO ALMACENADO PARA REGISTRAR EL MANTENIMIENTO DE LA INCIDENCIA
-CREATE PROCEDURE sp_registrar_mantenimiento
-    @ASI_codigo SMALLINT
-AS 
-BEGIN
-    -- Declarar variables para almacenar la fecha y la hora del sistema
-    DECLARE @FechaSistema DATE = CONVERT(DATE, GETDATE());
-    DECLARE @HoraSistema TIME(0) = CONVERT(TIME(0), GETDATE()); -- Hora en formato hh:mm:ss
-
-    SET NOCOUNT ON;
-
-    BEGIN TRY 
-        BEGIN TRANSACTION;
-
-        -- Verificar si ya existe un registro con los mismos valores
-        IF NOT EXISTS (
-            SELECT 1 
-            FROM MANTENIMIENTO 
-            WHERE 
-                MAN_fecha = @FechaSistema 
-                AND MAN_hora = @HoraSistema 
-                AND ASI_codigo = @ASI_codigo
-        )
-        BEGIN
-            -- Insertar la nueva recepción con el estado "ATENDIDO"
-            INSERT INTO MANTENIMIENTO (MAN_fecha, MAN_hora, EST_codigo, ASI_codigo)
-            VALUES (@FechaSistema, @HoraSistema, 6, @ASI_codigo); 
-
-            -- Actualizar estado de la asignacion
-            UPDATE ASIGNACION SET EST_codigo = 6
-            WHERE (EST_codigo = 5 OR  EST_codigo = '')
-	          AND  ASI_codigo = @ASI_codigo;        
-        END
-        ELSE
-        BEGIN
-            -- Mensaje que la recepción ya existe
-            PRINT 'La incidencia ya está en mantenimiento y no se puede registrar nuevamente.';
-        END
-
-        COMMIT TRANSACTION;
-    END TRY 
-    BEGIN CATCH 
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH
-END;
-GO
-
 -- PROCEDIMIENTO ALMACENADO PARA REGISTRAR ASINACION - ADMINISTRADOR / SOPORTE
-CREATE PROCEDURE sp_registrar_asignacion
+CREATE OR ALTER PROCEDURE sp_registrar_asignacion
     @ASI_fecha DATE,
     @ASI_hora TIME,
     @USU_codigo SMALLINT,
@@ -1898,7 +1901,7 @@ END;
 GO
 
 -- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR ASIGNACION
-CREATE PROCEDURE sp_actualizar_asignacion
+CREATE OR ALTER PROCEDURE sp_actualizar_asignacion
   @ASI_codigo SMALLINT,
   @USU_codigo SMALLINT
 AS
@@ -1911,6 +1914,98 @@ BEGIN
 END;
 GO
 
+--PROCEDIMIENTO ALMACENADO PARA REGISTRAR EL MANTENIMIENTO DE LA INCIDENCIA
+CREATE OR ALTER PROCEDURE sp_resolver_incidencia
+    @ASI_codigo SMALLINT
+AS 
+BEGIN
+    -- Declarar variables para almacenar la fecha y la hora del sistema
+    DECLARE @FechaSistema DATE = CONVERT(DATE, GETDATE());
+    DECLARE @HoraSistema TIME(0) = CONVERT(TIME(0), GETDATE()); -- Hora en formato hh:mm:ss
+
+    SET NOCOUNT ON;
+
+    BEGIN TRY 
+        BEGIN TRANSACTION;
+
+        -- Verificar si ya existe un registro con los mismos valores
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM MANTENIMIENTO 
+            WHERE 
+                MAN_fecha = @FechaSistema 
+                AND MAN_hora = @HoraSistema 
+                AND ASI_codigo = @ASI_codigo
+        )
+        BEGIN
+            -- Insertar la nueva recepción con el estado "ATENDIDO"
+            INSERT INTO MANTENIMIENTO (MAN_fecha, MAN_hora, EST_codigo, ASI_codigo)
+            VALUES (@FechaSistema, @HoraSistema, 6, @ASI_codigo); 
+
+            -- Actualizar estado de la asignacion
+            UPDATE ASIGNACION SET EST_codigo = 6
+            WHERE (EST_codigo = 5 OR  EST_codigo = '')
+	          AND  ASI_codigo = @ASI_codigo;        
+        END
+        ELSE
+        BEGIN
+            -- Mensaje que la recepción ya existe
+            PRINT 'La incidencia ya está en mantenimiento y no se puede registrar nuevamente.';
+        END
+
+        COMMIT TRANSACTION;
+    END TRY 
+    BEGIN CATCH 
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA ENCOLAR INCIDENCIA
+CREATE OR ALTER PROCEDURE sp_encolar_incidencia
+    @ASI_codigo SMALLINT
+AS 
+BEGIN
+    SET NOCOUNT ON;
+
+    BEGIN TRY 
+        BEGIN TRANSACTION;
+
+        -- Verificar si existe un registro con el código de asignación
+        IF EXISTS (
+            SELECT 1 
+            FROM MANTENIMIENTO 
+            WHERE ASI_codigo = @ASI_codigo
+        )
+        BEGIN
+            -- Eliminar el último registro del mantenimiento
+            DELETE FROM MANTENIMIENTO 
+            WHERE ASI_codigo = @ASI_codigo;
+
+            -- Actualizar el estado de la asignación a "EN ESPERA"
+            UPDATE ASIGNACION 
+            SET EST_codigo = 5
+            WHERE (EST_codigo = 6 OR EST_codigo = '')
+            AND ASI_codigo = @ASI_codigo;        
+        END
+        ELSE
+        BEGIN
+            -- Mensaje indicando que la incidencia no tiene mantenimiento activo
+            PRINT 'La incidencia no tiene mantenimiento activo para ser encolada.';
+        END
+
+        COMMIT TRANSACTION;
+    END TRY 
+    BEGIN CATCH 
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH
+END;
+GO
+
+EXEC sp_encolar_incidencia 1;
+GO
 
 -- PROCEDIMIENTO ALMAENADO PARA INSERTAR CIERRES Y ACTUALIZAR ESTADO DE ASIGNACION
 --CREATE PROCEDURE sp_registrar_cierre
@@ -1965,4 +2060,14 @@ GO
 --    THROW;
 --  END CATCH
 --END;
+--GO
+
+
+--select ASI_codigo, ASI_fecha, ASI_hora, A.EST_codigo, E.EST_descripcion, USU_codigo, REC_numero
+--from ASIGNACION A
+--LEFT JOIN ESTADO E ON E.EST_codigo = A.EST_codigo;
+--GO
+
+--SELECT MAN_codigo, MAN_fecha, MAN_hora, M.EST_codigo, E.EST_descripcion, ASI_codigo FROM MANTENIMIENTO M
+--LEFT JOIN ESTADO E ON E.EST_codigo = M.EST_codigo;
 --GO

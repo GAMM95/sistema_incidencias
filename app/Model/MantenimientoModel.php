@@ -20,14 +20,13 @@ class MantenimientoModel extends Conexion
   }
 
   // Metodo para registrar mantenimiento
-  public function registrarMantenimiento($estado, $asignacion)
+  public function resolverIncidencia($asignacion)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_registrar_mantenimiento :estado, :asignacion";
+        $sql = "EXEC sp_resolver_incidencia :asignacion";
         $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':estado', $estado);
         $stmt->bindParam(':asignacion', $asignacion);
         $stmt->execute();
 
@@ -39,7 +38,31 @@ class MantenimientoModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      throw new Exception("Error al registrar mantenimiento: " . $e->getMessage());
+      throw new Exception("Error al resolver incidencia: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para registrar mantenimiento
+  public function encolarIncidencia($asignacion)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_encolar_incidencia :asignacion";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':asignacion', $asignacion);
+        $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $this->auditoria->registrarEvento('MANTENIMIENTO', 'Encolar mantenimiento');
+        return $stmt->rowCount() > 0 ? true : false;
+      } else {
+        throw new Exception("Error de conexion a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al encolar incidencia: " . $e->getMessage());
       return null;
     }
   }
