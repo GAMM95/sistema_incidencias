@@ -24,7 +24,7 @@
     <!-- Fin de miga de pan -->
 
     <!-- Formulario de registro de asignacion de incidencias -->
-    <form id="formMantenimiento" action="registro-mantenimiento.php?action=habilitar" method="POST" class="card table-card bg-white shadow-md p-4 w-full text-xs mb-3">
+    <form id="formMantenimiento" action="registro-mantenimiento.php?action=habilitar" method="POST" class="card table-card bg-white shadow-md p-4 w-full text-xs mb-3 hidden">
       <input type="hidden" id="form-action" name="action" value="habilitar">
 
       <div class="flex flex-wrap -mx-2 justify-center">
@@ -58,7 +58,7 @@
         </div>
         <!-- Fin de hora de mantenimiento -->
 
-       <!-- Usuario de inicio de sesion -->
+        <!-- Usuario de inicio de sesion -->
         <div class="w-full md:w-1/6 px-2 mb-2 ">
           <label for="usuarioDisplay" class="block font-bold mb-1">Usuario:</label>
           <input type="text" id="usuarioDisplay" name="usuarioDisplay" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['usuario']; ?>" readonly>
@@ -93,7 +93,7 @@
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea solicitante</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Equipo</th>
-              <th scope="col" class="px-6 py-2 text-center">Usuario Asignado</th>
+              <th scope="col" class="px-6 py-2 text-center">Nombre del bien</th>
               <th scope="col" class="px-6 py-2 text-center">Estado Actual</th>
             </tr>
           </thead>
@@ -104,26 +104,24 @@
             <?php if (!empty($resultadoAsignaciones)) : ?>
               <?php foreach ($resultadoAsignaciones as $asignaciones) : ?>
                 <?php
-                // $numeroAsignacion = htmlspecialchars($asignaciones['ASI_codigo']);
+                $numeroAsignacion = htmlspecialchars($asignaciones['ASI_codigo']);
                 $estado = htmlspecialchars($asignaciones['EST_descripcion']);
-                $isFinalizado = ($estado === 'Resuelto');
+                $Finalizado = ($estado === 'RESUELTO'); // Comparación forzada como entero
                 ?>
-                <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $asignaciones['ASI_codigo'] ?>">
-                  <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $asignaciones['ASI_codigo']; ?></th>
+                <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $numeroAsignacion; ?>">
+                  <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $numeroAsignacion; ?></th>
                   <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $asignaciones['REC_numero']; ?></th>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_numero_formato']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['fechaAsignacionFormateada']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['ARE_nombre']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_asunto']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_codigoPatrimonial']; ?></td>
-                  <td class='px-6 py-2 text-center'><?= $asignaciones['usuarioAsignado']; ?></td>
-
+                  <td class='px-6 py-2 text-center'><?= $asignaciones['BIE_nombre']; ?></td>
                   <td class="px-6 py-2 text-center">
                     <div class="custom-control custom-switch cursor-pointer">
-                      <!-- Activamos el switch si el estado es 'Resuelto' -->
-                      <input type="checkbox" class="custom-control-input switch-mantenimiento" id="customswitch<?= $asignaciones['ASI_codigo']; ?>" data-id="<?= $asignaciones['ASI_codigo']; ?>" <?= $isFinalizado ? 'checked' : ''; ?>>
-                      <!-- Mostramos el estado correspondiente -->
-                      <label class="custom-control-label" for="customswitch<?= $asignaciones['ASI_codigo']; ?>"><?= $isFinalizado ? 'Resuelto' : 'En espera'; ?></label>
+                      <input type="checkbox" class="custom-control-input switch-mantenimiento" id="customswitch<?= $numeroAsignacion; ?>" data-id="<?= $numeroAsignacion; ?>" <?= $Finalizado ? 'checked' : ''; ?>>
+                      <!-- Mostramos el estado exacto desde la base de datos -->
+                      <label class="custom-control-label" for="customswitch<?= $numeroAsignacion; ?>"><?= $Finalizado ? 'Finalizado' : 'En espera'; ?></label>
                     </div>
                   </td>
                 </tr>

@@ -2,7 +2,7 @@
 session_start();
 // Verificar si no hay una sesión iniciada
 if (!isset($_SESSION['usuario'])) {
-  header("Location: index.php"); 
+  header("Location: index.php");
   exit();
 }
 
@@ -10,6 +10,7 @@ $action = $_GET['action'] ?? '';
 $state = $_GET['state'] ?? '';
 $ASI_codigo = $_GET['ASI_codigo'] ?? '';
 $rol = $_SESSION['rol'];
+$usuario = $_SESSION['codigoUsuario'] ?? '';
 
 require_once 'app/Controller/MantenimientoController.php';
 require_once 'app/Model/MantenimientoModel.php';
@@ -19,14 +20,7 @@ $mantenimientoController = new MantenimientoController();
 $mantenimientoModel = new MantenimientoModel();
 $asignacionModel = new AsignacionModel();
 
-// Paginaciona para la tabla de incidencias asignadas
-$limite2 = 5;
-$pageAsignaciones = isset($_GET['pageAsignaciones']) ? (int) $_GET['pageAsignaciones'] : 1; // Pagina de la tabla asignacioenes
-$inicio2 = ($pageAsignaciones - 1) * $limite2;
-// Obtener el total de registros de asignaciones
-$totalAsignaciones = $asignacionModel->contarAsignaciones();
-$totalPagesAsignaciones = ceil($totalAsignaciones / $limite2);
-$resultadoAsignaciones = $asignacionModel->listarAsignaciones($inicio2, $limite2);
+$resultadoAsignaciones = $asignacionModel->listarAsignacionesSoporte($usuario);
 
 if ($ASI_codigo != '') {
   global $asignacionRegistrada;
@@ -95,7 +89,7 @@ switch ($action) {
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_asignacion.js"></script>
+  <!-- <script src="./app/View/func/func_asignacion.js"></script> -->
   <script src="./app/View/func/func_mantenimiento.js"></script>
 
   <!-- Framework CSS -->

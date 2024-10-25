@@ -187,7 +187,7 @@
           // Pasar datos de PHP a JavaScript
           var recepcionesData = <?php echo json_encode([
                                   (int)$cantidades['recepciones_en_espera_mes_actual'],
-                                  (int)$cantidades['recepciones_mes_actual'],
+                                  (int)$cantidades['recepciones_finalizadas_mes_actual'],
                                 ]); ?>;
         </script>
         <!-- Fin de las tarjetas de las cantidades -->

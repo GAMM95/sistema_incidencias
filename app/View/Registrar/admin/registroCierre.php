@@ -49,17 +49,17 @@
           <!-- Encabezado de la tabla -->
           <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-lime-300">
             <tr>
-              <th scope="col" class="px-6 py-2 text-center hidden">N&deg; recepci&oacute;n</th>
+              <th scope="col" class="px-6 py-2 text-center hidden">N&deg; mantenimiento</th>
               <th scope="col" class="px-6 py-2 text-center hidden">N&deg; inc</th>
               <th scope="col" class="px-6 py-2 text-center">INCIDENCIA</th>
               <th scope="col" class="px-6 py-2 text-center">Fecha recepci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 text-center">C&oacute;digo Patrimonial</th>
+              <th scope="col" class="px-6 py-2 text-center">NOMBRE BIEN</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Documento</th>
-              <th scope="col" class="px-6 py-2 text-center">Prioridad</th>
               <!-- <th scope="col" class="px-6 py-2">Impacto</th> -->
-              <th scope="col" class="px-6 py-2 text-center">Usuario receptor</th>
+              <th scope="col" class="px-6 py-2 text-center">Usuario Soporte</th>
             </tr>
           </thead>
           <!-- Fin de encabezado -->
@@ -68,17 +68,17 @@
           <tbody>
             <?php foreach ($recepciones as $recepcion) : ?>
               <tr class='hover:bg-green-100 hover:scale-[101%] transition-all hover:cursor-pointer border-b '>
-                <th scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap hidden'><?= $recepcion['REC_numero']; ?></th>
+                <th scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap hidden'><?= $recepcion['MAN_codigo']; ?></th>
                 <th scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap hidden'><?= $recepcion['INC_numero']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['INC_numero_formato']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['fechaRecepcionFormateada']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['ARE_nombre']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['INC_codigoPatrimonial']; ?></th>
+                <td class='px-6 py-2 text-center'><?= $recepcion['BIE_nombre']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['INC_asunto']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['INC_documento']; ?></th>
-                <td class='px-6 py-2 text-center'><?= $recepcion['PRI_nombre']; ?></th>
                   <!-- <td class='px-6 py-2 text-center'><?= $recepcion['IMP_descripcion']; ?></th> -->
-                <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioRecepcion']; ?></th>
+                <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioSoporte']; ?></th>
               </tr>
             <?php endforeach; ?>
 

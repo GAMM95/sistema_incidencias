@@ -14,19 +14,20 @@ $area = $_SESSION['codigoArea'];
 
 require_once 'app/Controller/cierreController.php';
 require_once 'app/Model/cierreModel.php';
-require_once './app/Model/RecepcionModel.php';
+// require_once './app/Model/RecepcionModel.php';
+require_once 'app/Model/MantenimientoModel.php';
 
 $cierreController = new CierreController();
 $cierreModel = new CierreModel();
-$recepcionModel = new RecepcionModel();
+$mantenmientoModel = new MantenimientoModel();
 
 // Paginacion de la tabla de incidencias recepcionadas
 $limit = 2; //Numero de filas por pagina
 $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Página actual
 $start = ($page - 1) * $limit; // Calcula el índice de inicio
-$totalRecepcionesSinCerrar = $recepcionModel->contarRecepciones();
+$totalRecepcionesSinCerrar = $mantenmientoModel->contarIncidenciasFinalizadas();
 $totalPages = ceil($totalRecepcionesSinCerrar / $limit);
-$recepciones = $recepcionModel->listarRecepciones($start, $limit);
+$recepciones = $mantenmientoModel->listarIncidenciasFinalizadas($start, $limit);
 
 
 // Paginacion de la tabla de incidencias cerradas

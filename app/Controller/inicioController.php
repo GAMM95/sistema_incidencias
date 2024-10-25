@@ -27,6 +27,7 @@ class InicioController extends Conexion
       $cantidadPendientessMesActualAdmin = $this->incidenciasModel->contarPendientesUltimoMesAdministrador();
       $cantidadRecepcionesMesActualAdmin = $this->recepcionModel->contarRecepcionesUltimoMesAdministrador();
       $cantidadRecepcionesEnEsperaMesActualAdmin = $this->asignacionModel->contarRecepcionesEnEsperaUltimoMesAdministrador();
+      $cantidadRecepcionesFinalizadasMesActualAdmin = $this->asignacionModel->contarRecepcionesFinalizadasUltimoMesAdministrador();
       $cantidadCierresMesActualAdmin = $this->cierreModel->contarCierresUltimoMesAdministrador();
       $cantidadAreas = $this->areaModel->contarAreas();
       $cantidadUsuarios = $this->usuarioModel->contarUsuarios();
@@ -39,6 +40,7 @@ class InicioController extends Conexion
         'pendientes_mes_actual' => $cantidadPendientessMesActualAdmin,
         'recepciones_mes_actual' => $cantidadRecepcionesMesActualAdmin,
         'recepciones_en_espera_mes_actual' => $cantidadRecepcionesEnEsperaMesActualAdmin,
+        'recepciones_finalizadas_mes_actual' => $cantidadRecepcionesFinalizadasMesActualAdmin,
         'cierres_mes_actual' => $cantidadCierresMesActualAdmin,
         'usuarios_total' => $cantidadUsuarios,
         'cantidadAreas' => $cantidadAreas,
@@ -69,5 +71,4 @@ class InicioController extends Conexion
       throw new Exception('Error al obtener las cantidades: ' . $e->getMessage());
     }
   }
-
 }

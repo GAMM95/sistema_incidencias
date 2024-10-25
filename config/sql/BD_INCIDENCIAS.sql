@@ -127,7 +127,7 @@ CREATE TABLE IMPACTO (
 );
 GO
 
--- CREACI�N DE LA TABLA BIEN
+-- CREACIÓN DE LA TABLA BIEN
 CREATE TABLE BIEN (
     BIE_codigo SMALLINT IDENTITY(1,1),
     BIE_codigoIdentificador VARCHAR(12) NULL,
@@ -138,7 +138,7 @@ CREATE TABLE BIEN (
 );
 GO
 
--- CREACI�N DE LA TABLA INCIDENCIA
+-- CREACIÓN DE LA TABLA INCIDENCIA
 CREATE TABLE INCIDENCIA (
     INC_numero SMALLINT NOT NULL,
     INC_numero_formato VARCHAR(20) NULL,
@@ -356,7 +356,7 @@ GO
   -- VISTAS
 -------------------------------------------------------------------------------------------------------
 -- VISTA LISTAR USUARIOS
-CREATE VIEW vista_usuarios AS
+CREATE OR ALTER VIEW vista_usuarios AS
 SELECT 
     u.USU_codigo, 
     p.PER_dni, 
@@ -379,7 +379,7 @@ GO
 
 
 -- VISTA LISTAR INCIDENCIAS ADMINISTRADOR
-CREATE VIEW vista_incidencias_administrador AS
+CREATE OR ALTER VIEW vista_incidencias_administrador AS
 SELECT 
   I.INC_numero,
   I.INC_numero_formato,
@@ -415,7 +415,7 @@ WHERE
 GO
 
 --Vista para listar las incidencias recepionadas para el administrador
-CREATE VIEW vista_recepciones AS
+CREATE OR ALTER VIEW vista_recepciones AS
 SELECT 
     I.INC_numero,
     I.INC_numero_formato,
@@ -456,11 +456,35 @@ INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
 WHERE 
     (EC.EST_codigo = 4 OR 
     (I.EST_codigo = 4 AND ASI.ASI_codigo IS NULL))
-    AND (I.EST_codigo IN (3, 4, 5,6) OR EC.EST_codigo IN (3, 4, 5, 6));
+    AND (I.EST_codigo IN (3, 4, 5, 6) OR EC.EST_codigo IN (3, 4, 5, 6));
+GO
+
+--Vista para listar incidencias finalizadas
+CREATE OR ALTER VIEW vista_matenimiento AS
+SELECT 
+	MAN_codigo,
+	I.INC_numero,
+    I.INC_numero_formato,
+	AR.ARE_nombre,
+    I.INC_codigoPatrimonial,
+	B.BIE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+	R.REC_numero,
+    (CONVERT(VARCHAR(10), R.REC_fecha, 103)) AS fechaRecepcionFormateada,
+	 pR.PER_nombres + ' ' + pR.PER_apellidoPaterno AS UsuarioSoporte
+	FROM MANTENIMIENTO M
+INNER JOIN ASIGNACION A ON A.ASI_codigo = M.ASI_codigo
+LEFT JOIN USUARIO uR ON uR.USU_codigo = A.USU_codigo 
+LEFT JOIN PERSONA pR ON pR.PER_codigo = uR.PER_codigo 
+LEFT JOIN RECEPCION R ON R.REC_numero = A.REC_numero
+LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+INNER JOIN AREA AR ON I.ARE_codigo = AR.ARE_codigo
 GO
 
 --Vista para listar las incidencias totales para el administrador
-CREATE VIEW vista_incidencias_totales_administrador AS
+CREATE OR ALTER VIEW vista_incidencias_totales_administrador AS
 SELECT
     I.INC_numero,
     I.INC_numero_formato,
@@ -497,7 +521,7 @@ WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5));
 GO
 
 -- Vista para listar incidencias pendientes de cierre
-CREATE VIEW vista_incidencias_pendientes AS
+CREATE OR ALTER VIEW vista_incidencias_pendientes AS
 SELECT 
     I.INC_numero,
     INC_numero_formato,
@@ -557,7 +581,7 @@ GROUP BY
 GO
 
 --Vista para listar las nuevas incidencias para el usuario
-CREATE VIEW vista_incidencias_usuario AS 
+CREATE OR ALTER VIEW vista_incidencias_usuario AS 
 SELECT
     I.INC_numero,
     I.INC_numero_formato,
@@ -582,7 +606,7 @@ WHERE I.EST_codigo IN (3);
 GO
 
 --Vista para listar las incidencias totales para el usuario en la consulta
-CREATE VIEW vista_incidencias_totales_usuario AS
+CREATE OR ALTER VIEW vista_incidencias_totales_usuario AS
 SELECT
     I.INC_numero,
     I.INC_numero_formato,
@@ -622,7 +646,7 @@ WHERE I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5);
 GO
 
 -- Vista para listar incidencias por fecha para el administrador
-CREATE VIEW vista_incidencias_fecha_admin AS
+CREATE OR ALTER VIEW vista_incidencias_fecha_admin AS
 SELECT 
     I.INC_numero,
     I.INC_numero_formato,
@@ -662,7 +686,7 @@ WHERE I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5);
 GO
 
 -- Vista para listar incidencias por fecha para el usuario
-CREATE VIEW vista_incidencias_fecha_user AS
+CREATE OR ALTER VIEW vista_incidencias_fecha_user AS
 SELECT 
 	I.INC_numero,
     I.INC_numero_formato,
@@ -703,31 +727,36 @@ WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5));
 GO
 
 --Vista para listar asignaciones
-CREATE VIEW vista_asignaciones AS
+CREATE OR ALTER VIEW vista_asignaciones AS
 SELECT 
-ASI.ASI_codigo,
-R.REC_numero,
-I.INC_numero_formato,
-(CONVERT(VARCHAR(10),ASI.ASI_fecha,103) + ' - '+   STUFF(RIGHT('0' + CONVERT(VarChar(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
-A.ARE_nombre,
-I.INC_asunto,
-I.INC_codigoPatrimonial,
-p.PER_nombres + ' ' + p.PER_apellidoPaterno AS usuarioAsignado,
-pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
-E.EST_descripcion
-FROM ASIGNACION ASI
-INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
-LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
-LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
-INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
-LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
-LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo 
-LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
-INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+    ASI.ASI_codigo,
+    R.REC_numero,
+    I.INC_numero_formato,
+    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
+    A.ARE_nombre,
+    I.INC_asunto,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    U.USU_codigo,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioAsignado,
+    pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
+    E.EST_descripcion,
+    E.EST_codigo
+FROM 
+    ASIGNACION ASI
+    INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+    LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+    LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+    LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+    LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+    INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo;
 GO
 
 -- Vista para listar cierres
-CREATE VIEW vista_cierres AS
+CREATE OR ALTER VIEW vista_cierres AS
 SELECT
     I.INC_numero,
     I.INC_numero_formato,
@@ -768,7 +797,7 @@ WHERE  I.EST_codigo = 5 OR C.EST_codigo = 5;
 GO
 
 --VISTA PARA MOSTRAR NOTIFICACIONES PARA LOS USUARIOS
-CREATE VIEW vista_notificaciones_usuario AS
+CREATE OR ALTER VIEW vista_notificaciones_usuario AS
 SELECT 
 I.INC_numero,
 I.INC_numero_formato,
@@ -818,7 +847,7 @@ AND CONVERT(DATE, C.CIE_fecha) = CONVERT(DATE, GETDATE());
 GO
 
 --VISTA PARA MOSTRAR NOTIFICACIONES PARA EL ADMINISTRADOR 
-CREATE VIEW vista_notificaciones_administrador AS
+CREATE OR ALTER VIEW vista_notificaciones_administrador AS
 SELECT 
 I.INC_numero,
 (CONVERT(VARCHAR(10), I.INC_fecha, 103) + ' - ' + CONVERT(VARCHAR(5), I.INC_hora, 108)) AS fechaIncidenciaFormateada,
@@ -2004,8 +2033,7 @@ BEGIN
 END;
 GO
 
-EXEC sp_encolar_incidencia 1;
-GO
+
 
 -- PROCEDIMIENTO ALMAENADO PARA INSERTAR CIERRES Y ACTUALIZAR ESTADO DE ASIGNACION
 --CREATE PROCEDURE sp_registrar_cierre

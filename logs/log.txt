@@ -406,3 +406,27 @@ IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-25 21:52:01
+Nombre de Persona: Carlos Leyva
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 5
+Usuario: CLEYVA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-25 22:18:54
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+

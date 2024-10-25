@@ -19,64 +19,6 @@ class UsuarioModel extends Conexion
   }
 
   // Método para iniciar sesión
-  // public function iniciarSesion($username, $password)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-
-  //       Obtener IP del cliente
-  //       $auditoria = new AuditoriaModel($conector);
-  //       $ipCliente = $auditoria->getIP();
-
-  //       Obtener el nombre del equipo usando el IP
-  //       $nombreEquipo = gethostbyaddr($ipCliente);
-
-  //       Ejecutar el procedimiento almacenado
-  //       $query = "EXEC sp_login :username, :password";
-  //       $stmt = $conector->prepare($query);
-  //       $stmt->bindParam(':username', $username);
-  //       $stmt->bindParam(':password', $password);
-  //       $stmt->execute();
-
-  //       Obtener el resultado del procedimiento
-  //       $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-  //       Verificar si se encontraron resultados
-  //       if ($resultado && !isset($resultado['MensajeError'])) {
-  //         Credenciales correctas, inicia sesión
-  //         session_start();
-  //         $_SESSION['nombreDePersona'] = $resultado['PER_nombres'] . ' ' . $resultado['PER_apellidoPaterno'];
-  //         $_SESSION['area'] = $resultado['ARE_nombre'];
-  //         $_SESSION['codigoArea'] = $resultado['ARE_codigo'];
-  //         $informacionUsuario = $this->obtenerInformacionUsuario($username, $password);
-  //         $codigo = $informacionUsuario['codigo'];
-  //         $usuario = $informacionUsuario['usuario'];
-  //         $_SESSION['codigoUsuario'] = $codigo;
-  //         $_SESSION['usuario'] = $usuario;
-  //         $_SESSION['rol'] = $this->obtenerRolPorId($username);
-
-  //         Log de inicio de sesión
-  //         $this->registrarLog($username, $codigo, $ipCliente, $nombreEquipo);
-
-  //         Registrar el evento en la auditoría
-  //         $this->auditoria->registrarEvento('USUARIO', 'Iniciar sesión');
-  //         return true;
-  //       } else {
-  //         Si las credenciales son incorrectas o hay un mensaje de error
-  //         $mensajeError = isset($resultado['MensajeError']) ? $resultado['MensajeError'] : "Credenciales incorrectas.";
-  //         header("Location: index.php?state=failed&message=" . urlencode($mensajeError));
-  //         exit();
-  //       }
-  //     } else {
-  //       throw new Exception("Error de conexión a la base de datos.");
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new PDOException("Error al iniciar sesión: " . $e->getMessage());
-  //   }
-  // }
-
-
   public function iniciarSesion($username, $password, $digitos = null)
   {
     $conector = parent::getConexion();

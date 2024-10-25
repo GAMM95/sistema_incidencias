@@ -1,3 +1,12 @@
+$(document).ready(function () {
+  // Configurar la posición de Toastr
+  toastr.options = {
+    "positionClass": "toast-bottom-right",
+    "progressBar": true,
+    "timeOut": "2000"
+  };
+});
+
 // Evento de clic en las filas de la tabla de incidencias asignadas
 $(document).on('click', '#tablaIncidenciasMantenimiento tbody tr', function () {
   var numAsignacion = $(this).attr('data-id'); // Obtener el número de asignación desde el atributo data-id

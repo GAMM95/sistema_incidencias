@@ -66,4 +66,52 @@ class MantenimientoModel extends Conexion
       return null;
     }
   }
+
+  // Metodo para contar incidencias finalizadas
+  public function contarIncidenciasFinalizadas()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) as total FROM MANTENIMIENTO m
+      WHERE m.EST_codigo = 6";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al contar incidencias finalizadas sin cerrar: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para listar incidencias finalizadas en mantenimiento
+  public function listarIncidenciasFinalizadas($start, $limit)
+  {
+    $conector = parent::getConexion();
+    if ($conector != null) {
+      try {
+        $sql = "SELECT * FROM vista_matenimiento
+            ORDER BY 
+              SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
+              INC_numero_formato DESC
+              OFFSET :start ROWS
+              FETCH NEXT :limit ROWS ONLY";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':start', $start, PDO::PARAM_INT);
+        $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
+        $stmt->execute();
+        $registros = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $registros;
+      } catch (PDOException $e) {
+        echo "Error al listar incidencias finalizadas: " . $e->getMessage();
+        return null;
+      }
+    } else {
+      echo "Error de conexión a la base de datos.";
+      return null;
+    }
+  }
 }
