@@ -21,7 +21,7 @@ $recepcionModel = new RecepcionModel();
 $asignacionModel = new AsignacionModel();
 
 // Paginacion para la tabla de incidencias recepcionadas
-$limite = 3; // Numero de filas para la tabla de recepciones
+$limite = 2; // Numero de filas para la tabla de recepciones
 $pageRecepciones =  isset($_GET['pageRecepciones']) ? (int)$_GET['pageRecepciones'] : 1; // pagina de la tabla actual
 $inicio = ($pageRecepciones - 1) * $limite;
 // Obtener el total de registros

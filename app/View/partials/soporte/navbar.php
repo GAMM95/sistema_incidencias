@@ -1,8 +1,11 @@
-<!doctype html>
-<html lang="es">
 <?php
-if (session_status() == PHP_SESSION_NONE) {
-  session_start();
+require_once 'app/Model/UsuarioModel.php';
+
+if (isset($_SESSION['codigoUsuario'])) {
+  $user_id = $_SESSION['codigoUsuario'];
+  $usuario = new UsuarioModel();
+} else {
+  $perfil = null;
 }
 ?>
 <!-- [ navigation menu ] start -->
@@ -46,6 +49,11 @@ if (session_status() == PHP_SESSION_NONE) {
           <label>Registros</label>
         </li>
         <!-- Registros -->
+        <?php
+        require_once './app/Model/MantenimientoModel.php';
+        $mantenimientoModel = new MantenimientoModel();
+        $totalIncidencias = $mantenimientoModel->notificarIncidenciasMantenimiento($user_id);
+        ?>
         <li class="nav-item pcoded-hasmenu">
           <a href="#!" class="nav-link">
             <span class="pcoded-micon">
@@ -63,8 +71,15 @@ if (session_status() == PHP_SESSION_NONE) {
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-asignacion.php">Asignaci&oacute;n</a>
             </li>
-            <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="registro-mantenimiento.php">Mantenimiento</a>
+            <li class=" transition-transform duration-300 hover:translate-x-1">
+              <a href="registro-mantenimiento.php" class="flex items-center">
+                <?php if ($totalIncidencias > 0): ?>
+                  <span class="absolute right-[50px] top-[40%] transform -translate-y-1/2 w-3 h-3 bg-green-200 rounded-full animate-ping">
+                    <span class="absolute inset-0 w-3 h-3 bg-green-500 rounded-full"></span>
+                  </span>
+                <?php endif; ?>
+                Mantenimiento
+              </a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-cierre.php">Cierre</a>

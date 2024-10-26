@@ -114,4 +114,50 @@ class MantenimientoModel extends Conexion
       return null;
     }
   }
+
+  // Metodo para listar asignaciones segun el usuario 
+  public function notificarIncidenciasMantenimiento($usuario)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS total FROM ASIGNACION ASI
+                    INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+                    LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+                    WHERE U.USU_codigo = :usuarioAsignado
+                    AND ASI.EST_codigo = 5";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC); // Cambié fetchAll a fetch para obtener solo un registro
+        return (int)$result['total']; // Asegúrate de retornar un número entero
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al listar asignaciones por usuario: " . $e->getMessage());
+    }
+  }
+
+
+  // public function notificarIncidenciasMantenimiento($usuario)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+  //       $sql = "SELECT COUNT(*) AS total FROM ASIGNACION ASI
+  //                   INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+  //                   LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+  //                   WHERE U.USU_codigo = :usuarioAsignado";
+  //       $stmt = $conector->prepare($sql);
+  //       $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);
+  //       $stmt->execute();
+  //       return $stmt->fetchColumn(); // Cambiado para retornar solo el total
+  //     } else {
+  //       throw new Exception("Error de conexion a la base de datos.");
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al listar asignaciones por usuario: " . $e->getMessage());
+  //   }
+  // }
 }
