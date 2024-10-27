@@ -93,8 +93,9 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_asignaciones
-            ORDER BY ASI_codigo
+        $sql = "SELECT * FROM vista_mantenimiento
+            WHERE EST_descripcion IN ('EN ESPERA')
+            ORDER BY ASI_codigo DESC
             OFFSET :start ROWS
             FETCH NEXT :limit ROWS ONLY";
         $stmt = $conector->prepare($sql);
@@ -119,8 +120,9 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_asignaciones
+        $sql = "SELECT * FROM vista_mantenimiento
         WHERE USU_codigo = :usuarioAsignado
+        AND EST_descripcion IN ('EN ESPERA', 'RESUELTO')
         ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);

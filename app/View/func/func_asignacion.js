@@ -38,7 +38,6 @@ $(document).ready(function () {
     var codigoUsuario = selectedOption.val();
     var areaNombre = selectedOption.text();
     $('#codigoUsuario').val(codigoUsuario);
-    // $('#usuarioAsignado').val(areaNombre);
   });
 
   // Buscador para el combo prioridad e impacto con ancho fijo
@@ -251,7 +250,7 @@ $(document).on('click', '#tablaIncidenciasAsignadas tbody tr', function () {
   var incidenciaSeleccionada = $(this).find('td').eq(0).html();
   $('#incidenciaSeleccionada').val(incidenciaSeleccionada);
 
-  // Bloquear la tabla de incidencias sin recepcionar
+  // Bloquear la tabla de incidencias recepcionadas
   $('#tablaIncidenciasRecepcionadas tbody tr').addClass('pointer-events-none opacity-50');
 
   // Reactivar el botón "Nuevo"
@@ -259,11 +258,11 @@ $(document).on('click', '#tablaIncidenciasAsignadas tbody tr', function () {
 });
 
 
-// Manejo de la paginacion de la tabla de incidencias sin recepcionar
+// Manejo de la paginacion de la tabla de incidencias recepcionadas
 $(document).on('click', '.pagination-link', function (e) {
   e.preventDefault();
   var page = $(this).attr('href').split('page=')[1];
-  changePageTablaSinRecepcionar(page);
+  changePageTablaAsignadas(page);
 });
 
 // Ocultar tabla y buscador superior si no hay registros
@@ -279,33 +278,6 @@ document.addEventListener("DOMContentLoaded", function () {
     noIncidencias.classList.remove("hidden");
   }
 });
-
-// Función para cambiar de página en la tabla de incidencias sin recepcionar
-function changePageTablaSinRecepcionar(page) {
-  fetch(`?page=${page}`)
-    .then(response => response.text())
-    .then(data => {
-      const parser = new DOMParser();
-      const newDocument = parser.parseFromString(data, 'text/html');
-      const newTable = newDocument.querySelector('#tablaIncidenciasSinRecepcionar');
-      const newPagination = newDocument.querySelector('#paginadorNuevasIncidencias');
-
-      // Reemplazar la tabla actual con la nueva tabla obtenida
-      const currentTable = document.querySelector('#tablaIncidenciasSinRecepcionar');
-      if (currentTable && newTable) {
-        currentTable.parentNode.replaceChild(newTable, currentTable);
-      }
-
-      // Reemplazar la paginación actual con la nueva paginación obtenida
-      const currentPagination = document.querySelector('#paginadorNuevasIncidencias');
-      if (currentPagination && newPagination) {
-        currentPagination.parentNode.replaceChild(newPagination, currentPagination);
-      }
-    })
-    .catch(error => {
-      console.error('Error al cambiar de página:', error);
-    });
-}
 
 // FUNCION PARA CAMBIAR PAGINAS DE LA TABLA DE RECEPCIONES 
 function changePageTablaRecepciones(page) {
@@ -325,6 +297,34 @@ function changePageTablaRecepciones(page) {
 
       // Reemplazar la paginación actual con la nueva paginación obtenida
       const currentPagination = document.querySelector('#paginadorRecepciones');
+      if (currentPagination && newPagination) {
+        currentPagination.parentNode.replaceChild(newPagination, currentPagination);
+      }
+    })
+    .catch(error => {
+      console.error('Error al cambiar de página:', error);
+    });
+}
+
+
+// Función para cambiar de página en la tabla de incidencias asignadas
+function changePageTablaAsignadas(page) {
+  fetch(`?pageAsignaciones=${page}`)
+    .then(response => response.text())
+    .then(data => {
+      const parser = new DOMParser();
+      const newDocument = parser.parseFromString(data, 'text/html');
+      const newTable = newDocument.querySelector('#tablaIncidenciasAsignadas');
+      const newPagination = newDocument.querySelector('#paginadorAsignaciones');
+
+      // Reemplazar la tabla actual con la nueva tabla obtenida
+      const currentTable = document.querySelector('#tablaIncidenciasAsignadas');
+      if (currentTable && newTable) {
+        currentTable.parentNode.replaceChild(newTable, currentTable);
+      }
+
+      // Reemplazar la paginación actual con la nueva paginación obtenida
+      const currentPagination = document.querySelector('#paginadorAsignaciones');
       if (currentPagination && newPagination) {
         currentPagination.parentNode.replaceChild(newPagination, currentPagination);
       }

@@ -4,7 +4,7 @@
     global $cierreRegistrado;
     ?>
 
-    <!-- Miga de pan -->
+    <!-- Inicio de breadcrumb -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -21,7 +21,7 @@
         </div>
       </div>
     </div>
-    <!-- Fin de miga de pan -->
+    <!-- Fin de breadcrumb -->
 
     <!-- Titulo de recepciones y paginador -->
     <div id="noRecepcion" class="flex justify-between items-center mb-2">
@@ -58,7 +58,6 @@
               <th scope="col" class="px-6 py-2 text-center">NOMBRE BIEN</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Documento</th>
-              <!-- <th scope="col" class="px-6 py-2">Impacto</th> -->
               <th scope="col" class="px-6 py-2 text-center">Usuario Soporte</th>
             </tr>
           </thead>
@@ -77,8 +76,7 @@
                 <td class='px-6 py-2 text-center'><?= $recepcion['BIE_nombre']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['INC_asunto']; ?></th>
                 <td class='px-6 py-2 text-center'><?= $recepcion['INC_documento']; ?></th>
-                  <!-- <td class='px-6 py-2 text-center'><?= $recepcion['IMP_descripcion']; ?></th> -->
-                <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioSoporte']; ?></th>
+                <td class='px-6 py-2 text-center'><?= $recepcion['usuarioSoporte']; ?></th>
               </tr>
             <?php endforeach; ?>
 
@@ -100,7 +98,7 @@
 
       <!-- NUMERO DE RECEPCION -->
       <div class="flex justify-center mx-2 mb-4">
-        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center hidden">
+        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center ">
           <label for="num_incidencia" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero de Incidencia:</label>
           <input type="text" id="num_incidencia" name="num_incidencia" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
         </div>
@@ -113,14 +111,14 @@
           </div>
         </div>
 
-        <!-- Numero de recepcion -->
-        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center hidden">
-          <label for="recepcion" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero de Recepci&oacute;n:</label>
-          <input type="text" id="recepcion" name="recepcion" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
+        <!-- Numero de mantenimiento -->
+        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center ">
+          <label for="mantenimiento" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero de Mantenimiento:</label>
+          <input type="text" id="mantenimiento" name="mantenimiento" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
         </div>
 
         <!-- INPUT ESCONDIDO PARA EL NUMERO DE CIERRE -->
-        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center hidden">
+        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center ">
           <label for="num_cierre" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero Cierre:</label>
           <input type="text" id="num_cierre" name="num_cierre" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
         </div>
@@ -128,13 +126,15 @@
 
       <!-- PRIMERA FILA DEL FORMULARIO -->
       <div class="flex flex-wrap -mx-2">
-        <!-- FECHA DE CIERRE -->
+
+        <!-- Fecha de cierre -->
         <div class="w-full md:w-1/4 px-2 mb-2 hidden">
           <label for="fecha_cierre" class="block font-bold mb-1">Fecha de Cierre:</label>
           <input type="date" id="fecha_cierre" name="fecha_cierre" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo date('Y-m-d'); ?>" readonly>
         </div>
+        <!-- Fin de fecha de cierre -->
 
-        <!-- HORA DE CIERRE -->
+        <!-- Hora de cierre -->
         <div class="w-full md:w-1/4 px-2 mb-2 hidden">
           <label for="hora" class="block font-bold mb-1">Hora:</label>
           <?php
@@ -146,8 +146,9 @@
           ?>
           <input type="text" id="hora" name="hora" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $hora_actual; ?>" readonly>
         </div>
+        <!-- fin de hora de cierre -->
 
-        <!-- USUARIO QUE HARA EL CIERRE -->
+        <!-- Usuario que realiza el cierre -->
         <div class="w-full md:w-1/4 px-2 mb-2 hidden">
           <label for="usuarioDisplay" class="block font-bold mb-1">Usuario:</label>
           <input type="text" id="usuarioDisplay" name="usuarioDisplay" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['usuario']; ?>" readonly>
@@ -156,14 +157,9 @@
           <label for="usuario" class="block font-bold mb-1">Usuario:</label>
           <input type="text" id="usuario" name="usuario" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>" readonly>
         </div>
+        <!-- Fin de usuario que realiza el cierre -->
 
-        <!-- ASUNTO DEL CIERRE -->
-        <!-- <div class="w-full md:w-2/5 px-2 mb-2">
-          <label for="asunto" class="block mb-1 font-bold text-xs">Asunto de cierre: *</label>
-          <input type="text" id="asunto" name="asunto" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese asunto de cierre">
-        </div> -->
-
-        <!-- DOCUMENTO DE CIERRE -->
+        <!-- Documento de cierre -->
         <div class="w-full md:w-2/5 px-2 mb-2">
           <label for="documento" class="block mb-1 font-bold text-xs">Documento de cierre: *</label>
           <input type="text" id="documento" name="documento" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese documento de cierre" oninput="uppercaseInput(this)">
@@ -173,40 +169,55 @@
             }
           </script>
         </div>
+        <!-- Fin de documento de cierre -->
 
-        <!-- OPERATIVIDAD -->
+        <!-- Operatividad del cierre -->
         <div class="w-full md:w-1/5 px-2 mb-2">
           <label for="operatividad" class="block font-bold mb-1 text-xs">Condici&oacute;n: *</label>
           <select id="operatividad" name="operatividad" class="border p-2 w-full text-xs cursor-pointer rounded-md">
           </select>
         </div>
+        <!-- Fin de operatividad de cierre -->
 
+        <!-- Solucion del cierre -->
+        <div class="w-full md:w-2/5 px-2 mb-2">
+          <label for="solucion" class="block font-bold mb-1 text-xs">Soluci&oacute;n:</label>
+          <select id="solucion" name="solucion" class="border p-2 w-full text-xs cursor-pointer rounded-md">
+          </select>
+        </div>
+        <!-- Fin de solucion de cierre -->
       </div>
+      <!-- Fin de primera fila del formulario -->
 
+      <!-- Segundo fila de formulario -->
       <div class="flex flex-wrap -mx-2">
-        <!-- DIAGNOSTICO DEL CIERRE -->
+        <!-- Diagnostico y observaciones del cierre -->
         <div class="w-1/2 px-2 mb-2">
           <label for="diagnostico" class="block mb-1 font-bold text-xs">Diagn&oacute;stico / observaciones:</label>
           <textarea id="diagnostico" name="diagnostico" rows="3" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese diagnóstico (opcional)" style="resize: none;" maxlength="1000" oninput="updateCharCount('diagnostico', 'charCount1')"></textarea>
           <p id="charCount1" class="text-xs text-gray-500">0/1000 caracteres</p>
         </div>
+        <!-- Fin del diagnostico y observaciones -->
 
-        <!-- RECOMENDACIONES -->
+        <!-- Recomendaciones del cierre -->
         <div class="w-1/2 md:w-1/1 px-2 mb-2">
           <label for="recomendaciones" class="block mb-1 font-bold text-xs">Recomendaciones:</label>
           <textarea id="recomendaciones" name="recomendaciones" rows="3" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese recomendaciones (opcional)" style="resize: none;" maxlength="1000" oninput="updateCharCount('recomendaciones', 'charCount2')"></textarea>
           <p id="charCount2" class="text-xs text-gray-500">0/1000 caracteres</p>
         </div>
+        <!-- Fin de recomendaciones del cierre -->
+
+        <!-- Contador de caracteres -->
+        <script>
+          function updateCharCount(textareaId, charCountId) {
+            const textarea = document.getElementById(textareaId);
+            const charCount = document.getElementById(charCountId);
+            charCount.textContent = `${textarea.value.length}/1000 caracteres`;
+          }
+        </script>
+
       </div>
-
-      <script>
-        function updateCharCount(textareaId, charCountId) {
-          const textarea = document.getElementById(textareaId);
-          const charCount = document.getElementById(charCountId);
-          charCount.textContent = `${textarea.value.length}/1000 caracteres`;
-        }
-      </script>
-
+      <!-- Fin de segunda fila de formulario -->
 
       <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
       <script>
@@ -224,10 +235,9 @@
 
       <!-- Botones del formulario -->
       <div class="flex justify-center space-x-4">
-        <button type="submit" id="guardar-cierre" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Registrar</button>
+        <button type="submit" id="guardar-cierre" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Cerrar</button>
         <button type="button" id="editar-cierre" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Actualizar</button>
         <button type="button" id="nuevo-registro" class="bn btn-secondary text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-plus-square"></i>Limpiar</button>
-        <!-- <button type="button" id="imprimir-cierre" class="bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-printer"></i>Imprimir</button> -->
       </div>
       <!-- Fin de botones -->
     </form>
@@ -265,12 +275,12 @@
             <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
             <th scope="col" class="px-6 py-2 text-center hidden">C&oacute;digo patrimonial</th>
             <th scope="col" class="px-6 py-2 text-center">Fecha Cierre</th>
-            <th scope="col" class="px-6 py-2 text-center">Asunto Cierre</th>
             <th scope="col" class="px-6 py-2 text-center">Documento Cierre</th>
             <th scope="col" class="px-6 py-2 text-center">Condici&oacute;n</th>
             <th scope="col" class="px-6 py-2 text-center hidden">Diagn&oacute;stico</th>
             <th scope="col" class="px-6 py-2 text-center hidden">Recomendaciones</th>
             <th scope="col" class="px-6 py-2 text-center">Usuario cierre</th>
+            <th scope="col" class="px-6 py-2 text-center">Soluci&oacute;n</th>
             <th scope="col" class="px-6 py-2 text-center">Acci&oacute;n</th>
           </tr>
         </thead>
@@ -286,12 +296,12 @@
               <td class='px-6 py-2 text-center'><?= $incidencia['ARE_nombre']; ?></td>
               <td class='px-6 py-2 text-center hidden'><?= $incidencia['INC_codigoPatrimonial']; ?></td>
               <td class='px-6 py-2 text-center'><?= $incidencia['fechaCierreFormateada']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['CIE_asunto']; ?></td>
               <td class='px-6 py-2 text-center'><?= $incidencia['CIE_documento']; ?></td>
               <td class='px-6 py-2 text-center'><?= $incidencia['CON_descripcion']; ?></td>
               <td class='px-6 py-2 text-center hidden'><?= $incidencia['CIE_diagnostico']; ?></td>
               <td class='px-6 py-2 text-center hidden'><?= $incidencia['CIE_recomendaciones']; ?></td>
               <td class='px-6 py-2 text-center'><?= $incidencia['Usuario']; ?></td>
+              <td class='px-6 py-2 text-center'><?= $incidencia['SOL_descripcion']; ?></td>
               <td class="px-6 py-2 text-center justify-middle flex space-x-2"> <!-- Columna de Acción con botones -->
                 <!-- Botón de Imprimir detalla de incidencia -->
                 <button type="button" id="imprimir-cierre" class="bn btn-warning text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center" title="Imprimir detalle de cierre">

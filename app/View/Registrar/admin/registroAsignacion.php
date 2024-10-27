@@ -4,7 +4,7 @@
     global $asignacionRegistrada;
     ?>
 
-    <!-- Miga de pan -->
+    <!-- Iinicio de breadcrumb -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -21,11 +21,11 @@
         </div>
       </div>
     </div>
-    <!-- Fin de miga de pan -->
+    <!-- Fin de breadcrumb -->
 
     <!-- Titulo y paginacion de tabla de recepciones -->
     <div id="noRecepciones" class="flex justify-between items-center mb-2">
-      <h1 class="text-xl text-gray-400">Incidencias recepcionadas</h1>
+      <h1 class="text-xl text-gray-400">Incidencias recepcionadas</h1> 
       <div id="paginadorRecepciones" class="flex justify-end items-center mt-1">
         <?php if ($totalPagesRecepciones > 1) : ?>
           <?php if ($pageRecepciones > 1) : ?>
@@ -54,7 +54,8 @@
               <th scope="col" class="px-6 py-2 text-center">Fecha recepci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 text-center">C&oacute;d. Patrimonial</th>
-              <th scope="col" class="px-6 py-2 text-center">Categor&iacute;a</th>
+              <th scope="col" class="px-6 py-2 text-center">Nombre del bien</th>
+              <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Prioridad</th>
               <th scope="col" class="px-6 py-2 text-center">Impacto</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario receptor</th>
@@ -73,7 +74,8 @@
                   <td class='px-6 py-2 text-center'><?= $recepcion['fechaRecepcionFormateada']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['ARE_nombre']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['INC_codigoPatrimonial']; ?></td>
-                  <td class='px-6 py-2 text-center'><?= $recepcion['CAT_nombre']; ?></td>
+                  <td class='px-6 py-2 text-center'><?= $recepcion['BIE_nombre']; ?></td>
+                  <td class='px-6 py-2 text-center'><?= $recepcion['INC_asunto']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['PRI_nombre']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['IMP_descripcion']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioRecepcion']; ?></td>
@@ -190,14 +192,14 @@
       <!-- Titulo y paginacion de tabla de asignaciones -->
       <div class="flex justify-between items-center mb-2">
         <h1 class="text-xl text-gray-400">Incidencias asignadas</h1>
-        <div id="paginadorRecepciones" class="flex justify-end items-center mt-1">
+        <div id="paginadorAsignaciones" class="flex justify-end items-center mt-1">
           <?php if ($totalPagesAsignaciones > 1) : ?>
             <?php if ($pageAsignaciones > 1) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageTablaRecepciones(<?php echo $pageAsignaciones - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
+              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageTablaAsignadas(<?php echo $pageAsignaciones - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
             <?php endif; ?>
             <span class="px-2 py-1 bg-gray-400 text-gray-200"><?php echo $pageAsignaciones; ?> de <?php echo $totalPagesAsignaciones; ?></span>
             <?php if ($pageAsignaciones < $totalPagesAsignaciones) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageTablaRecepciones(<?php echo $pageAsignaciones + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
+              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageTablaAsignadas(<?php echo $pageAsignaciones + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
             <?php endif; ?>
           <?php endif; ?>
         </div>
@@ -217,9 +219,8 @@
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea solicitante</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Equipo</th>
-
+              <th scope="col" class="px-6 py-2 text-center">Nombre del bien</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario Asignado</th>
-              <th scope="col" class="px-6 py-2 text-center">Estado</th>
             </tr>
           </thead>
           <!-- Fin de encabezado -->
@@ -229,8 +230,6 @@
             <?php if (!empty($resultadoAsignaciones)) : ?>
               <?php foreach ($resultadoAsignaciones as $asignaciones) : ?>
                 <?php
-                $estado = htmlspecialchars($asignaciones['EST_descripcion']);
-                $isFinalizado = ($estado === 'Resuelto');
                 ?>
                 <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $asignaciones['ASI_codigo']; ?>">
                   <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $asignaciones['ASI_codigo']; ?></th>
@@ -240,16 +239,8 @@
                   <td class='px-6 py-2 text-center'><?= $asignaciones['ARE_nombre']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_asunto']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_codigoPatrimonial']; ?></td>
-                  <td class='px-6 py-2 text-center'><?= $asignaciones['usuarioAsignado']; ?></td>
-
-                  <td class="px-6 py-2 text-center">
-                    <div class="custom-control custom-switch cursor-pointer">
-                      <!-- Activamos el switch si el estado es 'Resuelto' -->
-                      <input type="checkbox" class="custom-control-input switch-asignacion" id="customswitch<?= $asignaciones['ASI_codigo']; ?>" data-id="<?= $asignaciones['ASI_codigo']; ?>" <?= $isFinalizado ? 'checked' : ''; ?>>
-                      <!-- Mostramos el estado correspondiente -->
-                      <label class="custom-control-label" for="customswitch<?= $asignaciones['ASI_codigo']; ?>"><?= $isFinalizado ? 'Resuelto' : 'En espera'; ?></label>
-                    </div>
-                  </td>
+                  <td class='px-6 py-2 text-center'><?= $asignaciones['BIE_nombre']; ?></td>
+                  <td class='px-6 py-2 text-center'><?= $asignaciones['usuarioSoporte']; ?></td>                
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>

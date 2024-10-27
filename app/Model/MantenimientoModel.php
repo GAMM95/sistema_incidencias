@@ -93,7 +93,8 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     if ($conector != null) {
       try {
-        $sql = "SELECT * FROM vista_matenimiento
+        $sql = "SELECT * FROM vista_mantenimiento
+            WHERE EST_descripcion LIKE 'RESUELTO'
             ORDER BY 
               SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
               INC_numero_formato DESC

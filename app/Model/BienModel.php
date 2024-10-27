@@ -30,7 +30,7 @@ class BienModel extends Conexion
       return null;
     }
   }
-
+ 
   // Metodo para validar existencia de codigo de bien
   public function validarBienExistente($codigoIdentificador)
   {

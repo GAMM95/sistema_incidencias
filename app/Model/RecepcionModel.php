@@ -142,7 +142,7 @@ class RecepcionModel extends Conexion
     if ($conector != null) {
       try {
         $sql = "SELECT * FROM vista_recepciones
-          ORDER BY 
+            ORDER BY 
             SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
             INC_numero_formato DESC
             OFFSET :start ROWS
@@ -169,8 +169,8 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as total FROM RECEPCION r
-      WHERE r.EST_codigo = 4";
+        $sql = "SELECT COUNT(*) as total FROM vista_recepciones";
+        //  r    WHERE r.EST_codigo = 4";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

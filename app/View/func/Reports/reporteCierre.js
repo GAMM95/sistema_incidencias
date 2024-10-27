@@ -92,7 +92,6 @@ $('#imprimir-cierre').click(function () {
               [{ content: 'Cierre:', styles: { fontStyle: 'bold' } }, cierre.CIE_numero],
               [{ content: 'Fecha de cierre:', styles: { fontStyle: 'bold' } }, cierre.fechaCierreFormateada],
               [{ content: 'Prioridad:', styles: { fontStyle: 'bold' } }, cierre.PRI_nombre],
-              [{ content: 'Asunto:', styles: { fontStyle: 'bold' } }, cierre.CIE_asunto],
               [{ content: 'Documento:', styles: { fontStyle: 'bold' } }, cierre.CIE_documento],
               [{ content: 'Condición:', styles: { fontStyle: 'bold' } }, cierre.CON_descripcion],
               [{ content: 'Diagnóstico:', styles: { fontStyle: 'bold' } }, cierre.CIE_diagnostico],

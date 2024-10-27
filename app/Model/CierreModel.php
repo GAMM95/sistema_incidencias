@@ -26,22 +26,22 @@ class CierreModel extends Conexion
   }
 
   // Metodo para insertar Cierre
-  public function insertarCierre($fecha, $hora, $diagnostico, $documento, $asunto, $recomendaciones, $operatividad, $recepcion, $usuario)
+  public function insertarCierre($fecha, $hora, $diagnostico, $documento, $recomendaciones, $operatividad, $mantenimiento, $usuario, $solucion)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_InsertarCierreActualizarRecepcion :fecha, :hora, :diagnostico, :documento, :asunto, :recomendaciones, :operatividad, :recepcion, :usuario";
+        $sql = "EXEC sp_registrar_cierre :fecha, :hora, :diagnostico, :documento, :recomendaciones, :operatividad, :mantenimiento, :usuario, :solucion";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':fecha', $fecha);
         $stmt->bindParam(':hora', $hora);
         $stmt->bindParam(':diagnostico', $diagnostico);
         $stmt->bindParam(':documento', $documento);
-        $stmt->bindParam(':asunto', $asunto);
         $stmt->bindParam(':recomendaciones', $recomendaciones);
         $stmt->bindParam(':operatividad', $operatividad);
-        $stmt->bindParam(':recepcion', $recepcion);
+        $stmt->bindParam(':mantenimiento', $mantenimiento);
         $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':solucion', $solucion);
         $stmt->execute();
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -49,7 +49,7 @@ class CierreModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      throw new PDOException("Error al insertar el cierre: " . $e->getMessage());
+      throw new PDOException("Error al insertar el cierre xD: " . $e->getMessage());
       return null;
     }
   }

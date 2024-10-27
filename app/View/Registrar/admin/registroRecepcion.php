@@ -56,7 +56,7 @@
               <th scope="col" class="px-6 py-2 text-center">Fecha incidencia</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 text-center">C&oacute;digo Patrimonial</th>
-              <th scope="col" class="px-6 py-2 text-center">Categor&iacute;a</th>
+              <th scope="col" class="px-6 py-2 text-center">Nombre del bien</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Documento</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario</th>
@@ -73,7 +73,7 @@
                 <td class='px-6 py-2 text-center'><?= $incidencia['fechaIncidenciaFormateada']; ?></td>
                 <td class='px-6 py-2 text-center'><?= $incidencia['ARE_nombre']; ?></td>
                 <td class='px-6 py-2 text-center'><?= $incidencia['INC_codigoPatrimonial']; ?></td>
-                <td class='px-6 py-2 text-center'><?= $incidencia['CAT_nombre']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['BIE_nombre']; ?></td>
                 <td class='px-6 py-2 text-center'><?= $incidencia['INC_asunto']; ?></td>
                 <td class='px-6 py-2 text-center'><?= $incidencia['INC_documento']; ?></td>
                 <td class='px-6 py-2 text-center'><?= $incidencia['Usuario']; ?></td>

@@ -92,17 +92,20 @@ $(document).ready(function () {
                 [{ content: 'Cierre:', styles: { fontStyle: 'bold' } }, cierre.CIE_numero],
                 [{ content: 'Fecha de cierre:', styles: { fontStyle: 'bold' } }, cierre.fechaCierreFormateada],
                 [{ content: 'Prioridad:', styles: { fontStyle: 'bold' } }, cierre.PRI_nombre],
-                [{ content: 'Asunto:', styles: { fontStyle: 'bold' } }, cierre.CIE_asunto],
                 [{ content: 'Documento:', styles: { fontStyle: 'bold' } }, cierre.CIE_documento],
+                [{ content: 'Cód. Patrimonial:', styles: { fontStyle: 'bold' } }, cierre.INC_codigoPatrimonial],
+                [{ content: 'Nombre del Bien:', styles: { fontStyle: 'bold' } }, cierre.BIE_nombre],
                 [{ content: 'Condición:', styles: { fontStyle: 'bold' } }, cierre.CON_descripcion],
                 [{ content: 'Diagnóstico:', styles: { fontStyle: 'bold' } }, cierre.CIE_diagnostico],
+                [{ content: 'Solución:', styles: { fontStyle: 'bold' } }, cierre.SOL_descripcion],
                 [{ content: 'Recomendaciones:', styles: { fontStyle: 'bold' } }, cierre.CIE_recomendaciones],
-                [{ content: 'Estado:', styles: { fontStyle: 'bold' } }, cierre.ESTADO]
+                [{ content: 'Estado:', styles: { fontStyle: 'bold' } }, cierre.Estado]
 
               ],
               styles: {
                 fontSize: 10,
                 cellPadding: 2,
+                valign: "middle",
               },
               headStyles: {
                 fillColor: [44, 62, 80],

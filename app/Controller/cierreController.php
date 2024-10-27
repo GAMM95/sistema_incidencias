@@ -17,14 +17,14 @@ class cierreController
       $hora = $_POST['hora'] ?? null;
       $diagnostico = $_POST['diagnostico'] ?? null;
       $documento = $_POST['documento'] ?? null;
-      $asunto = $_POST['asunto'] ?? null;
       $recomendaciones = $_POST['recomendaciones'] ?? null;
       $operatividad = $_POST['operatividad'] ?? null;
-      $recepcion = $_POST['recepcion'] ?? null;
+      $mantenimiento = $_POST['mantenimiento'] ?? null;
       $usuario = $_POST['usuario'] ?? null;
+      $solucion = $_POST['solucion'] ?? null;
 
       // Validar que todos los campos requeridos estén completos
-      if (empty($documento) || empty($asunto) || empty($operatividad)) {
+      if (empty($documento) || empty($operatividad)) {
         echo json_encode([
           'success' => false,
           'message' => 'Complete los campos requeridos (*).'
@@ -34,7 +34,7 @@ class cierreController
 
       try {
         // Llamar al método del modelo para insertar el cierre en la base de datos
-        $insertSuccess = $this->cierreModel->insertarCierre($fecha, $hora, $diagnostico, $documento, $asunto, $recomendaciones, $operatividad, $recepcion, $usuario);
+        $insertSuccess = $this->cierreModel->insertarCierre($fecha, $hora, $diagnostico, $documento, $recomendaciones, $operatividad, $mantenimiento, $usuario, $solucion);
 
         if ($insertSuccess) {
           echo json_encode([

@@ -32,8 +32,26 @@ $(document).ready(function () {
     }
   });
 
+  // Seteo del combo solucion
+  $.ajax({
+    url: 'ajax/getSolucion.php',
+    type: 'GET',
+    dataType: 'json',
+    success: function (data) {
+      var select = $('#solucion');
+      select.empty();
+      select.append('<option value="" selected disabled>Seleccione una soluci&oacute;n</option>');
+      $.each(data, function (index, value) {
+        select.append('<option value="' + value.SOL_codigo + '">' + value.SOL_descripcion + '</option>');
+      });
+    },
+    error: function (error) {
+      console.error('Error en la carga de condiciones:', error);
+    }
+  });
+
   // Buscador para el combo Condicion
-  $('#operatividad').select2({
+  $('#operatividad', '#solucion').select2({
     allowClear: true,
     width: '100%',
     dropdownCssClass: 'text-xs',
@@ -117,7 +135,7 @@ function validarCamposRegistroCierre() {
   var mensajeError = '';
 
   // validar campo de numero de recepcion
-  if ($('#recepcion').val() === '') {
+  if ($('#mantenimiento').val() === '') {
     mensajeError += 'Debe seleccionar una incidencia pendiente de cierre.';
     valido = false;
   }
@@ -126,17 +144,13 @@ function validarCamposRegistroCierre() {
   if (valido) {
     // Validacion de campos
     var faltaOperatividad = ($('#operatividad').val() === null || $('#operatividad').val() === '');
-    var faltaAsunto = ($('#asunto').val() === null || $('#asunto').val() === '');
     var faltaDocumento = ($('#documento').val() === null || $('#documento').val() === '');
 
-    if (faltaOperatividad && faltaAsunto && faltaDocumento) {
+    if (faltaOperatividad && faltaDocumento) {
       mensajeError += 'Ingrese campos requeridos.';
       valido = false;
     } else if (faltaOperatividad) {
       mensajeError += 'Debe seleccionar condici&oacute;n. ';
-      valido = false;
-    } else if (faltaAsunto) {
-      mensajeError += 'Debe ingresar asunto de cierre. ';
       valido = false;
     } else if (faltaDocumento) {
       mensajeError += 'Debe ingresar documento de cierre. ';
@@ -166,17 +180,13 @@ function validarCamposActualizacionCierre() {
   if (valido) {
     // Validacion de campos
     var faltaOperatividad = ($('#operatividad').val() === null || $('#operatividad').val() === '');
-    var faltaAsunto = ($('#asunto').val() === null || $('#asunto').val() === '');
     var faltaDocumento = ($('#documento').val() === null || $('#documento').val() === '');
 
-    if (faltaOperatividad && faltaAsunto && faltaDocumento) {
+    if (faltaOperatividad && faltaDocumento) {
       mensajeError += 'Ingrese campos requeridos.';
       valido = false;
     } else if (faltaOperatividad) {
       mensajeError += 'Debe seleccionar condici&oacute;n. ';
-      valido = false;
-    } else if (faltaAsunto) {
-      mensajeError += 'Debe ingresar asunto de cierre. ';
       valido = false;
     } else if (faltaDocumento) {
       mensajeError += 'Debe ingresar documento de cierre. ';
@@ -238,11 +248,11 @@ $(document).ready(function () {
 
 //Evento de clic en las filas de la tabla de recepciones sin cerrar
 $(document).on('click', '#tablaRecepcionesSinCerrar tbody tr', function () {
-  // seteo del numero de recepcion
+  // seteo del numero de mantenimiento
   var id = $(this).find('th').html();
   $('#tablaRecepcionesSinCerrar tbody tr').removeClass('bg-blue-200 font-semibold');
   $(this).addClass('bg-blue-200 font-semibold');
-  $('#recepcion').val(id);
+  $('#mantenimiento').val(id);
 
   // Seteo del codigo de incidencia
   var numIncidencia = $(this).find('th').eq(1).html().trim();
@@ -363,21 +373,21 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
       // Mapeo de los valores de las celdas a los inputs del formulario
       const codCierre = fila.querySelector('th').innerText.trim();
-      const asuntoValue = celdas[5].innerText.trim();
-      const documentoValue = celdas[6].innerText.trim();
-      const operatividadValue = celdas[7].innerText.trim();
-      const diagnosticoValue = celdas[8].innerText.trim();
-      const recomendacionesValue = celdas[9].innerText.trim();
+      const documentoValue = celdas[5].innerText.trim();
+      const operatividadValue = celdas[6].innerText.trim();
+      const solucionValue = celdas[10].innerText.trim();
+      const diagnosticoValue = celdas[7].innerText.trim();
+      const recomendacionesValue = celdas[8].innerText.trim();
 
       // Seteo de valores en los inputs
       document.getElementById('num_cierre').value = codCierre;
-      document.getElementById('asunto').value = asuntoValue;
       document.getElementById('documento').value = documentoValue;
       document.getElementById('diagnostico').value = diagnosticoValue;
       document.getElementById('recomendaciones').value = recomendacionesValue;
 
       // Seteo de los valores en los combos
       setComboValue('operatividad', operatividadValue);
+      setComboValue('solucion', solucionValue);
 
       // Cambiar estado de los botones
       document.getElementById('guardar-cierre').disabled = true;
@@ -415,7 +425,6 @@ function nuevoRegistro() {
   document.getElementById('formCierre').reset();
 
   // Limpiar los valores de los inputs y combo
-  $('#asunto').val('');
   $('#documento').val('');
   $('#diagnostico').val('');
   $('#recomendaciones').val('');
@@ -426,6 +435,7 @@ function nuevoRegistro() {
 
   // Limpiar los combos y forzar la actualización con Select2
   $('#operatividad').val('').trigger('change');
+  $('#mantenimiento').val('').trigger('change');
 
   // Remover clases de selección y estilos de todas las filas de ambas tablas
   $('tr').removeClass('bg-blue-200 font-semibold');

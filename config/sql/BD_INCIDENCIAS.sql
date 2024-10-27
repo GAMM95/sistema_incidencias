@@ -216,7 +216,7 @@ GO
 
 --CREACION DE LA TABLA SOLUCION
 CREATE TABLE SOLUCION(
-	SOL_codigo SMALLINT NOT NULL,
+	SOL_codigo SMALLINT IDENTITY(1,1) NOT NULL,
 	SOL_descripcion VARCHAR(100) NOT NULL,
 	EST_codigo SMALLINT NOT NULL,
 	CONSTRAINT pk_solucion PRIMARY KEY (SOL_codigo)
@@ -230,7 +230,6 @@ CREATE TABLE CIERRE(
 	CIE_hora TIME NOT NULL,
 	CIE_diagnostico VARCHAR(1000) NULL,
 	CIE_documento VARCHAR(500) NOT NULL,
-	CIE_asunto VARCHAR(500) NOT NULL,
 	CIE_recomendaciones VARCHAR(1000) NULL,
 	CON_codigo SMALLINT NOT NULL,
 	EST_codigo SMALLINT NOT NULL,
@@ -352,6 +351,17 @@ INSERT INTO CONDICION (CON_descripcion) VALUES ('SOLUCIONADO');
 INSERT INTO CONDICION (CON_descripcion) VALUES ('NO SOLUCIONADO');
 GO
 
+--VOLCADO DE DATOS PARA LA TABLA SOLUCION
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Formateo de disco duro e instalación de programas',1);
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Mantenimiento correctivo de hardware',1);
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Restauración de sistema operativo',1);
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Restablecimiento de contraseñas de usuario',1);
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Recuperación de archivos',1);
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Actualizaciones de software',1);
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Restablecimiento de configuración de fábrica',1);
+INSERT INTO SOLUCION (SOL_descripcion, EST_codigo) VALUES ('Mantenimiento de infraestructura de red',1);
+GO
+
 -------------------------------------------------------------------------------------------------------
   -- VISTAS
 -------------------------------------------------------------------------------------------------------
@@ -385,6 +395,7 @@ SELECT
   I.INC_numero_formato,
   (CONVERT(VARCHAR(10), I.INC_fecha, 103)) AS fechaIncidenciaFormateada,
   I.INC_codigoPatrimonial,
+  B.BIE_nombre,
   I.INC_asunto,
   I.INC_documento,
   I.INC_descripcion,
@@ -397,6 +408,7 @@ SELECT
   p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario
 FROM 
   INCIDENCIA I
+  LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
   INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
   INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
   INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
@@ -421,11 +433,12 @@ SELECT
     I.INC_numero_formato,
     (CONVERT(VARCHAR(10), I.INC_fecha, 103)) AS fechaIncidenciaFormateada,
     I.INC_codigoPatrimonial,
+	B.BIE_nombre,
     I.INC_asunto,
     I.INC_documento,
     I.INC_descripcion,
 	R.REC_numero,
-    (CONVERT(VARCHAR(10), R.REC_fecha, 103)) AS fechaRecepcionFormateada,
+    (CONVERT(VARCHAR(10), R.REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
     PRI.PRI_nombre,
 	IMP.IMP_descripcion,
     O.CON_descripcion,
@@ -438,6 +451,7 @@ SELECT
     p.PER_nombres + ' ' + p.PER_apellidoPaterno AS UsuarioIncidente,
     pR.PER_nombres + ' ' + pR.PER_apellidoPaterno AS UsuarioRecepcion
 FROM INCIDENCIA I
+LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
 INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
@@ -457,30 +471,6 @@ WHERE
     (EC.EST_codigo = 4 OR 
     (I.EST_codigo = 4 AND ASI.ASI_codigo IS NULL))
     AND (I.EST_codigo IN (3, 4, 5, 6) OR EC.EST_codigo IN (3, 4, 5, 6));
-GO
-
---Vista para listar incidencias finalizadas
-CREATE OR ALTER VIEW vista_matenimiento AS
-SELECT 
-	MAN_codigo,
-	I.INC_numero,
-    I.INC_numero_formato,
-	AR.ARE_nombre,
-    I.INC_codigoPatrimonial,
-	B.BIE_nombre,
-    I.INC_asunto,
-    I.INC_documento,
-	R.REC_numero,
-    (CONVERT(VARCHAR(10), R.REC_fecha, 103)) AS fechaRecepcionFormateada,
-	 pR.PER_nombres + ' ' + pR.PER_apellidoPaterno AS UsuarioSoporte
-	FROM MANTENIMIENTO M
-INNER JOIN ASIGNACION A ON A.ASI_codigo = M.ASI_codigo
-LEFT JOIN USUARIO uR ON uR.USU_codigo = A.USU_codigo 
-LEFT JOIN PERSONA pR ON pR.PER_codigo = uR.PER_codigo 
-LEFT JOIN RECEPCION R ON R.REC_numero = A.REC_numero
-LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
-LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
-INNER JOIN AREA AR ON I.ARE_codigo = AR.ARE_codigo
 GO
 
 --Vista para listar las incidencias totales para el administrador
@@ -755,6 +745,44 @@ FROM
     INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo;
 GO
 
+--Vista para listar incidencias finalizadas
+CREATE OR ALTER VIEW vista_mantenimiento AS
+SELECT 
+	I.INC_numero,
+    ASI.ASI_codigo,
+	R.REC_numero,
+    I.INC_numero_formato,
+	M.MAN_codigo,
+    (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
+    A.ARE_nombre,
+    I.INC_asunto,
+	I.INC_documento,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    U.USU_codigo,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioSoporte,
+    pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
+	CASE
+        WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+        ELSE E.EST_descripcion
+    END AS EST_descripcion
+FROM 
+    ASIGNACION ASI
+    INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+    LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+    LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+    LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+    LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+    INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+	LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+	LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
+	LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+GO
+
 -- Vista para listar cierres
 CREATE OR ALTER VIEW vista_cierres AS
 SELECT
@@ -766,15 +794,16 @@ SELECT
     I.INC_asunto,
     I.INC_documento,
     I.INC_codigoPatrimonial,
+	B.BIE_nombre,
 	PRI_nombre,
     (CONVERT(VARCHAR(10),CIE_fecha,103)) AS fechaCierreFormateada,
-    CIE_asunto,
-    CIE_numero,
+	CIE_numero,
     C.CIE_diagnostico, 
     C.CIE_recomendaciones,
     C.CIE_documento,
 	O.CON_descripcion,
 	u.USU_nombre,
+	S.SOL_descripcion,
     CASE
 		WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
         ELSE E.EST_descripcion
@@ -783,6 +812,7 @@ SELECT
 FROM RECEPCION R
 INNER JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
 RIGHT JOIN INCIDENCIA I ON R.INC_numero = I.INC_numero
+LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
 INNER JOIN  AREA A ON I.ARE_codigo = A.ARE_codigo
 INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
@@ -793,7 +823,8 @@ LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
 INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
 INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-WHERE  I.EST_codigo = 5 OR C.EST_codigo = 5;
+LEFT JOIN SOLUCION S ON S.SOL_codigo = C.SOL_codigo
+WHERE  MAN.EST_codigo = 7 OR C.EST_codigo = 7;
 GO
 
 --VISTA PARA MOSTRAR NOTIFICACIONES PARA LOS USUARIOS
@@ -807,7 +838,6 @@ A.ARE_nombre AS NombreAreaIncidencia,
 I.INC_asunto,
 C.USU_codigo,
 U.USU_nombre,
-C.CIE_asunto,
 p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario,
 A2.ARE_nombre AS NombreAreaCierre, 
 (CONVERT(VARCHAR(10), C.CIE_fecha, 103) + ' - ' + CONVERT(VARCHAR(5), C.CIE_hora, 108)) AS fechaCierreFormateada,
@@ -882,7 +912,7 @@ GO
   -- FUNCIONES Y TRIGGERS
 -------------------------------------------------------------------------------------------------------
 -- FUNCION PARA GENERAR EL NUMERO DE INCIDENCIA 000-AÑO-MDE
-CREATE FUNCTION dbo.GenerarNumeroIncidencia()
+CREATE OR ALTER FUNCTION dbo.GenerarNumeroIncidencia()
 RETURNS VARCHAR(20)
 AS
 BEGIN
@@ -959,7 +989,7 @@ END;
 GO
 
 -- Crear el trigger para insertar el area inicial con código 0
-CREATE TRIGGER trg_incrementar_codigoArea
+CREATE OR ALTER TRIGGER trg_incrementar_codigoArea
 ON AREA
 INSTEAD OF INSERT
 AS
@@ -990,7 +1020,7 @@ GO
 
 
 -- Trigger para incrementar el numero de incidencia en 1
-CREATE TRIGGER trg_incrementar_numeroIncidencia
+CREATE OR ALTER TRIGGER trg_incrementar_numeroIncidencia
 ON INCIDENCIA
 INSTEAD OF INSERT
 AS
@@ -1008,7 +1038,7 @@ END;
 GO
 
 -- Trigger para aumentar el numero del formato de la incidencia
-CREATE TRIGGER trg_UpdateNumeroFormato
+CREATE OR ALTER TRIGGER trg_UpdateNumeroFormato
 ON INCIDENCIA
 AFTER INSERT
 AS
@@ -1023,7 +1053,7 @@ END;
 GO
 
 -- Trigger para aumentar el numero de recepcion en 1 
-CREATE TRIGGER trg_incrementar_numeroRecepcion
+CREATE OR ALTER TRIGGER trg_incrementar_numeroRecepcion
 ON RECEPCION
 INSTEAD OF INSERT
 AS
@@ -1041,7 +1071,7 @@ END;
 GO
 
 -- Trigger para aumentar el numero de asignacion en 1
-CREATE TRIGGER trg_incrementar_numeroAsignacion
+CREATE OR ALTER TRIGGER trg_incrementar_numeroAsignacion
 ON ASIGNACION
 INSTEAD OF INSERT
 AS
@@ -1059,7 +1089,7 @@ END;
 GO
 
 -- Trigger para generar el numero de mantenimiento aumentado en 1
-CREATE TRIGGER trg_incrementar_numeroMantenimiento
+CREATE OR ALTER TRIGGER trg_incrementar_numeroMantenimiento
 ON MANTENIMIENTO
 INSTEAD OF INSERT
 AS
@@ -1076,9 +1106,8 @@ BEGIN
 END;
 GO
 
-
 -- Trigger para generar el numero de cierre aumentado en 1
-CREATE TRIGGER trg_incrementar_numeroCierre
+CREATE OR ALTER TRIGGER trg_incrementar_numeroCierre
 ON CIERRE
 INSTEAD OF INSERT
 AS
@@ -1088,8 +1117,8 @@ BEGIN
     -- Obtener el ultimo numero de cierre
     SELECT @ultimo_numero = ISNULL(MAX(CIE_numero), 0) FROM CIERRE;
     -- Insertar el nuevo registro con CIE_numero incrementado en 1
-    INSERT INTO CIERRE (CIE_numero, CIE_fecha, CIE_hora, CIE_diagnostico, CIE_documento, CIE_asunto, CIE_recomendaciones, CON_codigo, EST_codigo, MAN_codigo, USU_codigo)
-    SELECT @ultimo_numero + 1, CIE_fecha, CIE_hora, CIE_diagnostico, CIE_documento, CIE_asunto, CIE_recomendaciones, CON_codigo, EST_codigo, MAN_codigo, USU_codigo
+    INSERT INTO CIERRE (CIE_numero, CIE_fecha, CIE_hora, CIE_diagnostico, CIE_documento, CIE_recomendaciones, CON_codigo, EST_codigo, MAN_codigo, USU_codigo, SOL_codigo)
+    SELECT @ultimo_numero + 1, CIE_fecha, CIE_hora, CIE_diagnostico, CIE_documento, CIE_recomendaciones, CON_codigo, EST_codigo, MAN_codigo, USU_codigo, SOL_codigo
     FROM inserted;
 END;
 GO
@@ -1261,7 +1290,7 @@ EXEC sp_registrar_area 'Secretaría Técnica de Procesos Administrativos Discipl
 GO
 
 -- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR AREA
-CREATE PROCEDURE sp_deshabilitar_area
+CREATE OR ALTER PROCEDURE sp_deshabilitar_area
 	@codigoArea SMALLINT
 AS
 BEGIN
@@ -1272,7 +1301,7 @@ END;
 GO
 
 -- PROCEDIMIENTO ALMACENADO PARA HABILITAR AREA
-CREATE PROCEDURE sp_habilitar_area
+CREATE OR ALTER PROCEDURE sp_habilitar_area
 	@codigoArea SMALLINT
 AS
 BEGIN
@@ -2034,62 +2063,60 @@ END;
 GO
 
 
-
 -- PROCEDIMIENTO ALMAENADO PARA INSERTAR CIERRES Y ACTUALIZAR ESTADO DE ASIGNACION
---CREATE PROCEDURE sp_registrar_cierre
---  @CIE_fecha DATE,
---  @CIE_hora TIME,
---  @CIE_diagnostico VARCHAR(1000),
---  @CIE_documento VARCHAR(500),
---  @CIE_asunto VARCHAR(500),
---  @CIE_recomendaciones VARCHAR(1000),
---  @CON_codigo SMALLINT,
---  @REC_numero SMALLINT,
---  @USU_codigo SMALLINT
---AS BEGIN
---SET 
---	NOCOUNT ON;
---  BEGIN TRY 
---    BEGIN TRANSACTION;
+CREATE OR ALTER PROCEDURE sp_registrar_cierre
+  @CIE_fecha DATE,
+  @CIE_hora TIME,
+  @CIE_diagnostico VARCHAR(1000),
+  @CIE_documento VARCHAR(500),
+  @CIE_recomendaciones VARCHAR(1000),
+  @CON_codigo SMALLINT,
+  @MAN_codigo SMALLINT,
+  @USU_codigo SMALLINT,
+  @SOL_codigo SMALLINT
+AS BEGIN
+SET 
+	NOCOUNT ON;
+  BEGIN TRY 
+    BEGIN TRANSACTION;
 
---	  -- VERIFICAR SI YA EXISTE UN CIERRE CON LOS MISMOS VALORES
---        IF NOT EXISTS (
---            SELECT 1 
---            FROM CIERRE 
---            WHERE 
---                CIE_fecha = @CIE_fecha 
---                AND CIE_hora = @CIE_hora 
---                AND CIE_diagnostico = @CIE_diagnostico 
---                AND CIE_documento = @CIE_documento 
---                AND CIE_asunto = @CIE_asunto 
---                AND CIE_recomendaciones = @CIE_recomendaciones
---                AND CON_codigo = @CON_codigo
---                AND REC_numero = @REC_numero
---                AND USU_codigo = @USU_codigo
---        )
---		BEGIN
---			-- Insertar el nuevo cierre
---			INSERT INTO CIERRE (CIE_fecha, CIE_hora, CIE_diagnostico, CIE_documento, CIE_asunto, CIE_recomendaciones, CON_codigo, REC_numero, USU_codigo, EST_codigo)
---			VALUES (@CIE_fecha, @CIE_hora , @CIE_diagnostico, @CIE_documento, @CIE_asunto, @CIE_recomendaciones, @CON_codigo, @REC_numero, @USU_codigo, 5);
+	  -- VERIFICAR SI YA EXISTE UN CIERRE CON LOS MISMOS VALORES
+        IF NOT EXISTS (
+            SELECT 1 
+            FROM CIERRE 
+            WHERE 
+                CIE_fecha = @CIE_fecha 
+                AND CIE_hora = @CIE_hora 
+                AND CIE_diagnostico = @CIE_diagnostico 
+                AND CIE_documento = @CIE_documento 
+                AND CIE_recomendaciones = @CIE_recomendaciones
+                AND CON_codigo = @CON_codigo
+                AND MAN_codigo = @MAN_codigo
+                AND USU_codigo = @USU_codigo
+				AND SOL_codigo = @SOL_codigo
+        )
+		BEGIN
+			-- Insertar el nuevo cierre
+			INSERT INTO CIERRE (CIE_fecha, CIE_hora, CIE_diagnostico, CIE_documento, CIE_recomendaciones, CON_codigo, MAN_codigo, USU_codigo, SOL_codigo, EST_codigo)
+			VALUES (@CIE_fecha, @CIE_hora , @CIE_diagnostico, @CIE_documento, @CIE_recomendaciones, @CON_codigo, @MAN_codigo, @USU_codigo, @SOL_codigo, 7);
     
---			-- Actualizar el estado de la recepcion
---			UPDATE RECEPCION SET EST_codigo = 5
---			WHERE REC_numero = @REC_numero;
---		END
---        ELSE
---        BEGIN
---		     -- MENSAJE QUE EL CIERRE YA EXISTE
---            PRINT 'El cierre ya existe y no se puede registrar nuevamente.';
---        END
---		COMMIT TRANSACTION;
---  END TRY 
---  BEGIN CATCH 
---    ROLLBACK TRANSACTION;
---    THROW;
---  END CATCH
---END;
---GO
-
+			-- Actualizar el estado de la recepcion
+			UPDATE MANTENIMIENTO SET EST_codigo = 7
+			WHERE MAN_codigo = @MAN_codigo;
+		END
+        ELSE
+        BEGIN
+		     -- MENSAJE QUE EL CIERRE YA EXISTE
+            PRINT 'El cierre ya existe y no se puede registrar nuevamente.';
+        END
+		COMMIT TRANSACTION;
+  END TRY 
+  BEGIN CATCH 
+    ROLLBACK TRANSACTION;
+    THROW;
+  END CATCH
+END;
+GO
 
 --select ASI_codigo, ASI_fecha, ASI_hora, A.EST_codigo, E.EST_descripcion, USU_codigo, REC_numero
 --from ASIGNACION A
