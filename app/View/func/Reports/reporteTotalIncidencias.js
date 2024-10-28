@@ -88,15 +88,16 @@ $('#reporte-incidencias-totales').click(function () {
         doc.autoTable({
           startY: 35,
           margin: { left: 4, right: 10 },
-          head: [['N°', 'INCIDENCIA', 'FECHA INC', 'CATEGORÍA', 'ASUNTO', 'DOCUMENTO', 'CÓD. PATRIMONIAL', 'ÁREA SOLICITANTE', 'PRIORIDAD', 'CONDICIÓN', 'ESTADO']],
+          head: [['N°', 'INCIDENCIA', 'FECHA INC', 'ASUNTO', 'DOCUMENTO', 'CÓD. PATRIMONIAL', 'NOMBRE DEL BIEN', 'ÁREA SOLICITANTE', 'PRIORIDAD', 'CONDICIÓN', 'ESTADO']],
           body: data.map(reporte => [
             item++,
             reporte.INC_numero_formato,
             reporte.fechaIncidenciaFormateada,
-            reporte.CAT_nombre,
+            // reporte.CAT_nombre,
             reporte.INC_asunto,
             reporte.INC_documento,
             reporte.INC_codigoPatrimonial,
+            reporte.BIE_nombre,
             reporte.ARE_nombre,
             reporte.PRI_nombre,
             reporte.CON_descripcion,

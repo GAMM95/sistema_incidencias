@@ -907,7 +907,109 @@ WHERE I.EST_codigo NOT IN (4, 5)
 AND A.ARE_codigo <> 1;
 GO
 
+--VISTA PARA REPORTE DE INCIDENCIAS TOTALES
+CREATE OR ALTER VIEW vw_reporte_incidencias_totales AS
+SELECT
+    I.INC_numero,
+    I.INC_numero_formato,
+    (CONVERT(VARCHAR(10), INC_fecha, 103)) AS fechaIncidenciaFormateada,
+    A.ARE_nombre,
+    CAT.CAT_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_codigoPatrimonial,
+	B.BIE_nombre,
+    (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+    PRI.PRI_nombre,
+    IMP.IMP_descripcion,
+    (CONVERT(VARCHAR(10), CIE_fecha, 103)) AS fechaCierreFormateada,
+    O.CON_descripcion,
+    U.USU_nombre,
+    p.PER_nombres + ' ' + PER_apellidoPaterno AS Usuario,
+    CASE
+        WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+        ELSE E.EST_descripcion
+    END AS ESTADO
+    FROM INCIDENCIA I
+    INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+    INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+	LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+	LEFT JOIN ASIGNACION ASI ON ASI.REC_numero =R.REC_numero
+	LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+	LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
+    LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+    LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+    LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+    LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+    INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+    WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5));
+GO
 
+--Vista para reporte de incidencias pendientes de cierre
+CREATE OR ALTER VIEW vw_reporte_pendientes_cierre AS
+SELECT 
+    I.INC_numero,
+    INC_numero_formato,
+    (CONVERT(VARCHAR(10), INC_fecha, 103)) AS fechaIncidenciaFormateada,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_descripcion,
+    CAT.CAT_nombre,
+    A.ARE_nombre,
+    CASE
+        WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+        ELSE E.EST_descripcion
+    END AS ESTADO,
+    p.PER_nombres + ' ' + PER_apellidoPaterno AS Usuario,
+    -- Última modificación (fecha y hora más reciente)
+    MAX(COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha)) AS ultimaFecha,
+    MAX(COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora)) AS ultimaHora
+FROM INCIDENCIA I
+INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
+LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+WHERE 
+    I.EST_codigo IN (3, 4) -- Solo incluir incidencias con estado 3 o 4
+    AND NOT EXISTS (  -- Excluir incidencias que hayan pasado al estado 7 en la tabla CIERRE
+        SELECT 1 
+        FROM CIERRE C2
+        WHERE C2.MAN_codigo = M.MAN_codigo
+        AND C2.EST_codigo = 7
+    )
+GROUP BY 
+    I.INC_numero,
+    INC_numero_formato,
+    I.INC_fecha,
+    I.INC_hora,
+    I.INC_codigoPatrimonial,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_descripcion,
+    CAT.CAT_nombre,
+    A.ARE_nombre,
+    B.BIE_nombre, -- Agregada al GROUP BY
+    C.CIE_numero,
+    EC.EST_descripcion,
+    E.EST_descripcion,
+    p.PER_nombres,
+    p.PER_apellidoPaterno;
+GO
 -------------------------------------------------------------------------------------------------------
   -- FUNCIONES Y TRIGGERS
 -------------------------------------------------------------------------------------------------------
@@ -2115,6 +2217,61 @@ SET
     ROLLBACK TRANSACTION;
     THROW;
   END CATCH
+END;
+GO
+
+---- PROCEDIMIENTO ALMACENADO PARA ELIMINAR CIERRE
+CREATE OR ALTER PROCEDURE sp_eliminar_cierre
+    @IdCierre INT
+AS
+BEGIN
+    BEGIN TRANSACTION;
+    BEGIN TRY
+        DECLARE @NumeroMantenimiento INT;
+
+        -- Obtener el número de asignación basado en el ID de cierre
+        SELECT @NumeroMantenimiento = MAN_codigo
+        FROM CIERRE
+        WHERE CIE_numero = @IdCierre;
+
+        -- Actualizar el estado de la asignación a 5 (o el estado que desees)
+        UPDATE MANTENIMIENTO
+        SET EST_codigo = 6
+        WHERE MAN_codigo = @NumeroMantenimiento;
+
+        -- Eliminar el registro en la tabla CIERRE basado en el ID de cierre
+        DELETE FROM CIERRE
+        WHERE CIE_numero = @IdCierre;
+
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        THROW;
+    END CATCH;
+END;
+GO
+
+
+-- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR CIERRES
+CREATE PROCEDURE sp_actualizar_cierre
+	@CIE_numero SMALLINT,
+	@CIE_documento VARCHAR(500),
+	@CON_codigo SMALLINT,
+	@SOL_codigo SMALLINT,
+	@CIE_diagnostico VARCHAR(1000),
+	@CIE_recomendaciones VARCHAR(1000)
+AS
+BEGIN
+	-- Actualizar el registro de la tala CIERRE
+	UPDATE CIERRE
+	SET
+		CIE_documento  = @CIE_documento,
+		CON_codigo =  @CON_codigo,
+		SOL_codigo = @SOL_codigo,
+		CIE_diagnostico = @CIE_diagnostico,
+		CIE_recomendaciones = @CIE_recomendaciones
+	WHERE CIE_numero = @CIE_numero;
 END;
 GO
 

@@ -82,7 +82,6 @@ $(document).ready(function () {
 
             doc.setFontSize(10);
             doc.text(`Número de incidencia: ${cierre.INC_numero_formato}`, 120, titleY);
-            // [{ content: 'Número de incidencia:', styles: { fontStyle: 'bold' } }, cierre.INC_numero_formato],
 
             doc.autoTable({
               startY: 48,

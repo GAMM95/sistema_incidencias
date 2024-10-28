@@ -60,7 +60,7 @@ class CierreModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_eliminarCierre :codigoCierre";
+        $sql = "EXEC sp_eliminar_cierre :codigoCierre";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoCierre', $codigoCierre);
         $stmt->execute();
@@ -76,16 +76,16 @@ class CierreModel extends Conexion
   }
 
   // Metodo para editar cierres
-  public function editarCierre($cierre, $asunto, $documento, $condicion, $diagnostico, $recomendaciones)
+  public function editarCierre($cierre, $documento, $condicion, $solucion, $diagnostico, $recomendaciones)
   {
     $conector = parent::getConexion();
     if ($conector != null) {
-      $sql = "EXEC sp_ActualizarCierre :num_cierre, :asunto, :documento, :condicion, :diagnostico, :recomendaciones";
+      $sql = "EXEC sp_actualizar_cierre :num_cierre, :documento, :condicion, :solucion, :diagnostico, :recomendaciones";
       $stmt = $conector->prepare($sql);
       $stmt->bindParam(':num_cierre', $cierre);
-      $stmt->bindParam(':asunto', $asunto);
       $stmt->bindParam(':documento', $documento);
       $stmt->bindParam(':condicion', $condicion);
+      $stmt->bindParam(':solucion', $solucion);
       $stmt->bindParam(':diagnostico', $diagnostico);
       $stmt->bindParam(':recomendaciones', $recomendaciones);
       $stmt->execute(); // Ejecutar el procedimiento almacenado
@@ -223,7 +223,7 @@ class CierreModel extends Conexion
         INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
         INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
         INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-        WHERE  I.EST_codigo = 5 OR C.EST_codigo = 5
+        WHERE  I.EST_codigo = 7 OR C.EST_codigo = 7
         AND INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
         AND INC_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1) 
         AND CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)

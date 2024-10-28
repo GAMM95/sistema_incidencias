@@ -122,7 +122,7 @@
         <div id="grafico" class="">
           <div class="card support-bar overflow-hidden">
             <div class="card-body pb-0">
-              <span class="text-c-blue font-bold">INCIDENCIAS RECEPCIONADAS</span>
+              <span class="text-c-blue font-bold">INCIDENCIAS EN MANTENIMIENTO</span>
 
               <?php
               // Establecer la configuración regional para el idioma español
@@ -150,7 +150,7 @@
 
               <!-- Integrar el selector de mes en la línea de texto sin bordes -->
               <p class="mb-2 mt-3 text-center">
-                Incidencias recepcionadas en el mes de <?php echo $nombreMes; ?>
+                Incidencias en mantenimiento para <?php echo $nombreMes; ?>
                 <!-- <select id="mes-selector" class="bg-transparent text-md font-bold outline-none cursor-pointer">
                 <?php
                 // Crear opciones de mes
@@ -237,8 +237,16 @@
 
             <!-- Input de la fecha seleccionada -->
             <div class="flex-grow flex justify-center">
-              <input type="date" name="fecha" id="fechaInput" class="form-input mr-4 cursor-pointer" aria-label="Seleccionar fecha" value="<?= isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d'); ?>">
+              <input
+                type="date"
+                name="fecha"
+                id="fechaInput"
+                class="form-input mr-4 cursor-pointer"
+                aria-label="Seleccionar fecha"
+                value="<?= isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d'); ?>"
+                max="<?= date('Y-m-d'); ?>">
             </div>
+
             <!-- Fin de la fecha seleccionada -->
 
             <!-- Botones alineados a la derecha -->

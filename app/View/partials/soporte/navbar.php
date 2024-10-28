@@ -68,9 +68,9 @@ if (isset($_SESSION['codigoUsuario'])) {
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-recepcion.php">Recepci&oacute;n</a>
             </li>
-            <li class="transition-transform duration-300 hover:translate-x-1">
+            <!-- <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-asignacion.php">Asignaci&oacute;n</a>
-            </li>
+            </li> -->
             <li class=" transition-transform duration-300 hover:translate-x-1">
               <a href="registro-mantenimiento.php" class="flex items-center">
                 <?php if ($totalIncidencias > 0): ?>

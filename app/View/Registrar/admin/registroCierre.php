@@ -98,7 +98,7 @@
 
       <!-- NUMERO DE RECEPCION -->
       <div class="flex justify-center mx-2 mb-4">
-        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center ">
+        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center hidden ">
           <label for="num_incidencia" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero de Incidencia:</label>
           <input type="text" id="num_incidencia" name="num_incidencia" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
         </div>
@@ -112,13 +112,13 @@
         </div>
 
         <!-- Numero de mantenimiento -->
-        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center ">
+        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center hidden">
           <label for="mantenimiento" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero de Mantenimiento:</label>
           <input type="text" id="mantenimiento" name="mantenimiento" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
         </div>
 
         <!-- INPUT ESCONDIDO PARA EL NUMERO DE CIERRE -->
-        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center ">
+        <div class="flex-1 max-w-[500px] px-2 mb-2 flex items-center hidden">
           <label for="num_cierre" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero Cierre:</label>
           <input type="text" id="num_cierre" name="num_cierre" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
         </div>
@@ -245,22 +245,7 @@
 
     <!-- Titulo y paginacion de tabla de recepciones -->
     <div class="flex justify-between items-center mb-2">
-      <h1 class="text-xl text-gray-400">Lista de incidencias cerradas</h1>
-      <!-- Busqueda de termino -->
-      <div class="flex justify-between items-center">
-        <input type="text" id="termino" class="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 text-xs" placeholder="Buscar incidencia ..." oninput="filtrarTablaCierres()" />
-      </div>
-      <!-- <div id="paginadorCierres" class="flex justify-end items-center mt-1">
-        <?php if ($totalPagesCierres > 1) : ?>
-          <?php if ($pageCierres > 1) : ?>
-            <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageCierres(<?php echo $pageCierres - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
-          <?php endif; ?>
-          <span class="px-2 py-1 bg-gray-400 text-gray-200"><?php echo $pageCierres; ?> de <?php echo $totalPagesCierres; ?></span>
-          <?php if ($pageCierres < $totalPagesCierres) : ?>
-            <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageCierres(<?php echo $pageCierres + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
-          <?php endif; ?>
-        <?php endif; ?>
-      </div> -->
+      <h1 class="text-xl text-gray-400">Lista de incidencias cerradas</h1>    
     </div>
 
     <!-- Tabla de incidencias cerradas -->

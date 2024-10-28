@@ -94,7 +94,7 @@ class AsignacionModel extends Conexion
     try {
       if ($conector != null) {
         $sql = "SELECT * FROM vista_mantenimiento
-            WHERE EST_descripcion IN ('EN ESPERA')
+            WHERE EST_descripcion IN ('EN ESPERA','RESUELTO')
             ORDER BY ASI_codigo DESC
             OFFSET :start ROWS
             FETCH NEXT :limit ROWS ONLY";
@@ -214,9 +214,10 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as recepciones_finalizadas_mes_actual FROM ASIGNACION 
+        $sql = "SELECT COUNT(*) as recepciones_finalizadas_mes_actual FROM ASIGNACION A
+          LEFT JOIN MANTENIMIENTO	M ON M.ASI_codigo = A.ASI_codigo
           WHERE ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-          AND EST_codigo = 6";
+          AND M.EST_codigo = 6";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

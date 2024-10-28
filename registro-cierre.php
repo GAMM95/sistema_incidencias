@@ -117,7 +117,6 @@ switch ($action) {
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
 
   <script src="./app/View/func/func_cierre_admin.js"></script>
-  <!-- <script src="./app/View/func/Reports/reporteCierre.js"></script> -->
   <script src="./app/View/func/Reports/reporteDetalleCierre.js"></script>
 
   <!-- Framework CSS -->

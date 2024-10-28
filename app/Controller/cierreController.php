@@ -69,13 +69,13 @@ class cierreController
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
       // Obtener y validar los parámetros
       $numeroCierre = $_POST['num_cierre'] ?? null;
-      $asunto = $_POST['asunto'] ?? null;
       $documento = $_POST['documento'] ?? null;
       $condicion = $_POST['operatividad'] ?? null;
+      $solucion = $_POST['solucion'] ?? null;
       $diagnostico = $_POST['diagnostico'] ?? null;
       $recomendaciones = $_POST['recomendaciones'] ?? null;
 
-      if (empty($asunto) || empty($documento) || empty($condicion)) {
+      if (empty($documento) || empty($condicion)) {
         echo json_encode([
           'success' => false,
           'message' => 'Campo obligatorio.'
@@ -86,7 +86,7 @@ class cierreController
       try {
 
         // Llamar al modelo para editar el cierre de la incidencia
-        $updateSuccess = $this->cierreModel->editarCierre($numeroCierre, $asunto, $documento, $condicion, $diagnostico, $recomendaciones);
+        $updateSuccess = $this->cierreModel->editarCierre($numeroCierre, $documento, $condicion, $solucion, $diagnostico, $recomendaciones);
 
         if ($updateSuccess) {
           echo json_encode([
