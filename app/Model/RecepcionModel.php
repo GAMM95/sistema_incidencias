@@ -163,6 +163,28 @@ class RecepcionModel extends Conexion
     }
   }
 
+  // Metodo para listar incidencias pendientes de cierre para reporte
+  public function listarIncidenciasPendientesCierre()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_reporte_pendientes_cierre
+        ORDER BY 
+            ultimaFecha DESC, --Ordenar por la última fecha
+            ultimaHora DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias pendientes de cierre: " . $e->getMessage());
+    }
+  }
+
   // Metodo para contar el total de recepciones
   public function contarRecepciones()
   {

@@ -11,6 +11,14 @@ $state = $_GET['state'] ?? '';
 $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
 
+require_once './app/Controller/incidenciaController.php';
+require_once './app/Controller/recepcionController.php';
+$incidenciaController = new IncidenciaController();
+$recepcionController = new RecepcionController();
+
+$resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales(); // Obtener los datos de las incidencias totales
+$resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre(); // Obtener los datos de las incidencias pendientes de cierre
+
 ?>
 
 <!DOCTYPE html>
@@ -75,6 +83,8 @@ $area = $_SESSION['codigoArea'];
   <script src="./app/View/func/Reports/reporteDetalleCierreNumIncidencia.js"></script>
   <script src="./app/View/func/Reports/reporteAreasPorFecha.js"></script>
   <script src="./app/View/func/Reports/reporteBienesPorFecha.js"></script>
+  <script src="./app/View/func/Reports/reporteDetalleCierreReporte.js"></script>
+  <script src="./app/View/func/Reports/reporteDetalleIncidenciaReporte.js"></script>
 
   <script src="./app/View/func/tipoBien.js"></script>
 

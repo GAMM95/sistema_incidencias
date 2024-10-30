@@ -51,3 +51,40 @@ $(document).ready(function () {
     }
   });
 });
+
+$(document).ready(function () {
+  // Seteo de los valores de los inputs y combos cuando se hace clic en una fila de la tabla
+  $(document).on('click', '#tablaIncidenciasDetalle tbody tr', function () {
+    $('#tablaIncidenciasDetalle tbody tr').removeClass('bg-blue-200 font-semibold');
+    $(this).addClass('bg-blue-200 font-semibold');
+
+    const celdas = $(this).find('td');
+    const numIncidencia = $(this).find('th').text().trim();
+    const numCierre = celdas.eq(1).text().trim();
+    // Seteamos los valores en los inputs correspondientes
+    $('#num_incidencia').val(numIncidencia);
+    $('#num_cierre').val(numCierre);
+  });
+});
+
+
+// función para filtrar la tabla de incidencias
+function filtrarTablaIncidenciasDetalle() {
+  var input, filtro, tabla, filas, celdas, i, j, match;
+  input = document.getElementById('termino');
+  filtro = input.value.toUpperCase();
+  tabla = document.getElementById('tablaIncidenciasDetalle');
+  filas = tabla.getElementsByTagName('tr');
+
+  for (i = 1; i < filas.length; i++) {
+    celdas = filas[i].getElementsByTagName('td');
+    match = false;
+    for (j = 0; j < celdas.length; j++) {
+      if (celdas[j].innerText.toUpperCase().indexOf(filtro) > -1) {
+        match = true;
+        break;
+      }
+    }
+    filas[i].style.display = match ? '' : 'none';
+  }
+}

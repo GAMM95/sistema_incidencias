@@ -167,4 +167,11 @@ class RecepcionController
       ]);
     }
   }
+
+  // Metodo para listar incidencias pendientes de cierre para reporte
+  public function listarIncidenciasPendientesCierre()
+  {
+    $resultado = $this->recepcionModel->listarIncidenciasPendientesCierre();
+    return $resultado;
+  }
 }

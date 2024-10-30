@@ -19,6 +19,7 @@ class ReportePorArea extends Conexion
       I.INC_asunto,
       I.INC_documento,
       I.INC_codigoPatrimonial,
+      B.BIE_nombre,
       PRI.PRI_nombre,
       U.USU_nombre,
       O.CON_descripcion,
@@ -31,8 +32,11 @@ class ReportePorArea extends Conexion
       INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
       INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
       INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
       LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-      LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+    LEFT JOIN ASIGNACION ASI ON ASI.REC_numero =R.REC_numero
+    LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+    LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
       LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
       LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
       LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
@@ -42,6 +46,7 @@ class ReportePorArea extends Conexion
       WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5))
       AND A.ARE_codigo = :are_codigo   
       ORDER BY I.INC_numero_formato ASC";
+
     $stmt = $conector->prepare($sql);
     $stmt->bindParam(':are_codigo', $area);
 

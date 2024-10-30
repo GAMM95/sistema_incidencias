@@ -7,9 +7,25 @@ $(document).ready(function () {
   };
 
   function nuevaConsulta() {
-    const form = document.getElementById('formAuditoriaIncidencias');
-    form.reset();
-    window.location.reload();
+    // Limpiar los campos de fecha
+    $('#fechaInicio_registro_incidencias').val('');
+    $('#fechaFin_registro_incidencias').val('');
+
+    // Realiza una llamada AJAX para obtener todos los registros
+    $.ajax({
+      url: 'auditoria.php?action=listarRegistrosIncidencias', // Asegúrate de que esta URL apunte al método correcto
+      type: 'GET',
+      success: function (response) {
+        console.log("Resultados completos:", response); // Para depuración
+        // Limpia el contenido actual de la tabla antes de agregar nuevos datos
+        $('#tablaIncidenciasRegistradas tbody').empty();
+        // Actualiza el contenido de la tabla con la respuesta
+        $('#tablaIncidenciasRegistradas tbody').html(response);
+      },
+      error: function (xhr, status, error) {
+        console.error('Error al obtener registros:', error);
+      }
+    });
   }
 
   // Evento para nueva consulta
@@ -86,7 +102,7 @@ $(document).ready(function () {
     let valido = true;
     let mensajeError = '';
 
-    // Bloquear fechas posteriores a la fecha actual
+    // Bloquear fechas posteriores a la fecha actuals
     if (fechaInicio > fechaHoy) {
       mensajeError = 'La fecha de inicio no puede ser posterior a la fecha actual.';
       valido = false;

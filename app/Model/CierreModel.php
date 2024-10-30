@@ -256,7 +256,9 @@ class CierreModel extends Conexion
         INNER JOIN  AREA A ON I.ARE_codigo = A.ARE_codigo
         INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
         INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-        LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+	      LEFT JOIN ASIGNACION ASI ON ASI.REC_numero =R.REC_numero
+	      LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+         LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
         LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
         INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
         INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
@@ -277,7 +279,7 @@ class CierreModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar cierres del ultimo mes para el administrador: " . $e->getMessage();
+      echo "Error al contar cierres del ultimo mes para el usuario: " . $e->getMessage();
       return null;
     }
   }

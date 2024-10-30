@@ -186,6 +186,27 @@ class IncidenciaModel extends Conexion
    * @return int|false Retorna el ID de la incidencia recién insertada si la operación es exitosa. 
    *                   En caso de error, retorna false.
    */
+
+  // Metodo para listar incidencias totales para reporte
+  public function listarIncidenciasTotales()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_reporte_incidencias_totales
+        ORDER BY INC_numero DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias totales: " . $e->getMessage());
+    }
+  }
+
   // Metodo listar las incidencias totales - ADMINISTRADOR 
   public function listarIncidenciasTotalesAdministrador()
   {
@@ -481,7 +502,7 @@ class IncidenciaModel extends Conexion
     }
   }
 
-  // Contar incidencias del ultimo mes para el administrador
+  // Contar incidencias del ultimo mes para el usuario
   public function contarIncidenciasUltimoMesUsuario($area)
   {
     $conector = parent::getConexion();
@@ -501,7 +522,7 @@ class IncidenciaModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar incidencias del ultimo mes para el administrador: " . $e->getMessage();
+      echo "Error al contar incidencias del ultimo mes para el usuario: " . $e->getMessage();
       return null;
     }
   }
@@ -515,7 +536,7 @@ class IncidenciaModel extends Conexion
         $sql = "SELECT COUNT(*) as pendientes_mes_actual FROM INCIDENCIA i
                 INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
                 WHERE INC_FECHA >= DATEADD(MONTH, -1, GETDATE())
-                AND EST_codigo = 3 AND
+                AND I.EST_codigo = 3 AND
                 a.ARE_codigo = :are_codigo";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
@@ -527,7 +548,7 @@ class IncidenciaModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar incidencias del ultimo mes para el administrador: " . $e->getMessage();
+      echo "Error al contar pendientes del ultimo mes para el usuario: " . $e->getMessage();
       return null;
     }
   }

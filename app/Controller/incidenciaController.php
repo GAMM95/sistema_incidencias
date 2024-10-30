@@ -376,4 +376,11 @@ class IncidenciaController
       return $consultaIncidencia;
     }
   }
+
+  // Metodo para listar incidencias totales para reporte
+  public function listarIncidenciasTotales()
+  {
+    $resultado = $this->incidenciaModel->listarIncidenciasTotales();
+    return $resultado;
+  }
 }

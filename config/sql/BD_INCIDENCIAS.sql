@@ -911,6 +911,7 @@ GO
 CREATE OR ALTER VIEW vw_reporte_incidencias_totales AS
 SELECT
     I.INC_numero,
+	C.CIE_numero,
     I.INC_numero_formato,
     (CONVERT(VARCHAR(10), INC_fecha, 103)) AS fechaIncidenciaFormateada,
     A.ARE_nombre,
@@ -961,6 +962,7 @@ SELECT
     I.INC_descripcion,
     CAT.CAT_nombre,
     A.ARE_nombre,
+	PRI.PRI_nombre,
     CASE
         WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
         ELSE E.EST_descripcion
@@ -1003,6 +1005,7 @@ GROUP BY
     I.INC_descripcion,
     CAT.CAT_nombre,
     A.ARE_nombre,
+	PRI.PRI_nombre,
     B.BIE_nombre, -- Agregada al GROUP BY
     C.CIE_numero,
     EC.EST_descripcion,

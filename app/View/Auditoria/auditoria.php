@@ -78,7 +78,7 @@
 
                 <!-- Inicio de tabla de inicios de sesion -->
                 <div class="relative sm:rounded-lg mt-2">
-                  <div class="max-w-full overflow-hidden">
+                  <div class="max-w-full overflow-hidden sm:rounded-lg">
                     <table id="tablaLogeos" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                       <!-- Encabezado de la tabla -->
                       <thead class="text-xs text-gray-700 uppercase bg-orange-300">
@@ -178,13 +178,18 @@
                                 <button type="button" id="limpiarCampos_registro_incidencias" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                                   <i class="feather icon-refresh-cw"></i>
                                 </button>
+
+                                <!-- Botón de reporte -->
+                                <button type="button" id="limpiarCampos_registro_incidencias" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-orange-500 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-file"></i>
+                                </button>
                               </div>
                               <!-- Fin de botones alineados horizontalmente -->
                             </div>
 
                             <!-- Inicio de tabla de inicios de sesion -->
                             <div class="relative sm:rounded-lg mt-2">
-                              <div class="max-w-full overflow-hidden">
+                              <div class="max-w-full overflow-hidden sm:rounded-lg">
                                 <table id="tablaIncidenciasRegistradas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                   <!-- Encabezado de la tabla -->
                                   <thead class="text-xs text-gray-700 uppercase bg-red-300">
@@ -270,7 +275,7 @@
 
                             <!-- Inicio de tabla de registros de recepciones -->
                             <div class="relative sm:rounded-lg mt-2">
-                              <div class="max-w-full overflow-hidden">
+                              <div class="max-w-full overflow-hidden sm:rounded-lg">
                                 <table id="tablaRecepciones" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                   <!-- Encabezado de la tabla -->
                                   <thead class="text-xs text-gray-700 uppercase bg-red-300">
