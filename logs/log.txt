@@ -586,3 +586,75 @@ IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-29 01:15:19
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-29 01:19:11
+Nombre de Persona: Jose Castro
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 1
+Usuario: JCASTRO
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-29 16:11:50
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-29 16:12:11
+Nombre de Persona: Jose Castro
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 1
+Usuario: JCASTRO
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-30 00:29:17
+Nombre de Persona: Jhonatan Mantilla
+Rol: Soporte
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-10-30 01:11:20
+Nombre de Persona: Jose Castro
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 1
+Usuario: JCASTRO
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+

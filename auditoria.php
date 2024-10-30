@@ -5,12 +5,66 @@ if (!isset($_SESSION['usuario'])) {
   header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
   exit();
 }
-$action = $_GET['action'] ?? '';
-$state = $_GET['state'] ?? '';
+
+require_once 'app/Controller/auditoriaController.php';
+
+$auditoriaController = new AuditoriaController();
 
 $rol = $_SESSION['rol'];
-$area = $_SESSION['codigoArea'];
+$action = $_GET['action'] ?? '';
+$fechaInicio = $_GET['fechaInicio'] ?? '';
+$fechaFin = $_GET['fechaFin'] ?? '';
 
+function generarTabla($resultado, $itemCount)
+{
+  $html = '';
+  if (!empty($resultado)) {
+    foreach ($resultado as $item) {
+      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['fechaFormateada']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['ROL_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['USU_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['NombreCompleto']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['ARE_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_ip']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_nombreEquipo']) . '</td>';
+      $html .= '</tr>';
+    }
+  } else {
+    $html = '<tr><td colspan="8" class="text-center py-3">No se encontraron registros.</td></tr>';
+  }
+  return $html;
+}
+
+switch ($action) {
+  case 'listarRegistrosInicioSesion':
+    error_log("Fecha Inicio: " . $fechaInicio);
+    error_log("Fecha Fin: " . $fechaFin);
+    $resultadoAuditoriaLogin = $auditoriaController->consultarRegistrosInicioSesion($fechaInicio, $fechaFin);
+    echo generarTabla($resultadoAuditoriaLogin, 1);
+    exit;
+
+  case 'listarRegistrosIncidencias':
+    error_log("Fecha Inicio: " . $fechaInicio);
+    error_log("Fecha Fin: " . $fechaFin);
+    $resultadoAuditoriaRegistroIncidencias = $auditoriaController->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
+    echo generarTabla($resultadoAuditoriaRegistroIncidencias, 1);
+    exit;
+
+  case 'listarRegistrosRecepciones':
+    error_log("Fecha Inicio: " . $fechaInicio);
+    error_log("Fecha Fin: " . $fechaFin);
+    $resultadoAuditoriaRegistroRecepciones = $auditoriaController->consultarRegistrosRecepciones($fechaInicio, $fechaFin);
+    echo generarTabla($resultadoAuditoriaRegistroRecepciones, 1);
+    exit;
+
+  default:
+    // Si no hay acción, obtener la lista de registros por defecto
+    $resultadoAuditoriaLogin = $auditoriaController->listarRegistrosInicioSesion();
+    $resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarRegistrosIncidencias();
+    $resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
+}
 ?>
 
 <!DOCTYPE html>
@@ -59,20 +113,9 @@ $area = $_SESSION['codigoArea'];
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_reportes.js"></script>
-
-  <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script>
-  <script src="./app/View/func/Reports/reportePendientesCierre.js"></script>
-  <script src="./app/View/func/Reports/reportesPorArea.js"></script>
-  <script src="./app/View/func/Reports/reportePorCodigoPatrimonial.js"></script>
-  <script src="./app/View/func/Reports/reporteIncidenciasPorFecha.js"></script>
-  <script src="./app/View/func/Reports/reporteCierresPorFecha.js"></script>
-  <script src="./app/View/func/Reports/reporteNumeroIncidencia.js"></script>
-  <script src="./app/View/func/Reports/reporteDetalleCierreNumIncidencia.js"></script>
-  <script src="./app/View/func/Reports/reporteAreasPorFecha.js"></script>
-  <script src="./app/View/func/Reports/reporteBienesPorFecha.js"></script>
-
-  <script src="./app/View/func/tipoBien.js"></script>
+  <!-- Funcionalidades -->
+  <script src="./app/View/func/Auditoria/func_auditoria_login.js"></script>
+  <script src="./app/View/func/Auditoria/func_auditoria_registro_incidencia.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
