@@ -196,9 +196,8 @@
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
                                       <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de registro</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Rol</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Usuario</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Nombre Completo</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario Registro</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
                                       <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
@@ -215,9 +214,8 @@
                                         <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
                                           <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['fechaFormateada']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['ROL_nombre']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['USU_nombre']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['NombreCompleto']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['INC_numero_formato']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['ARE_nombre']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['AUD_ip']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['AUD_nombreEquipo']) ?></td>
@@ -225,7 +223,7 @@
                                       <?php endforeach; ?>
                                     <?php else: ?>
                                       <tr>
-                                        <td colspan="8" class="text-center py-3">No se encontraron registros de incidencias.</td>
+                                        <td colspan="7" class="text-center py-3">No se encontraron registros de incidencias.</td>
                                       </tr>
                                     <?php endif; ?>
                                   </tbody>
@@ -242,19 +240,19 @@
                         <!-- Contenido de la segunda pestaña -->
                         <div class="tab-pane fade" id="v-pills-profile" role="tabpanel" aria-labelledby="v-pills-profile-tab">
                           <!-- Inicio de formulario de registros de recepciones de auditoría -->
-                          <form id="formaAuditoriaRecepciones" action="auditoria.php?action=listarRegistrosRecepciones" method="GET" class="bg-white w-full text-xs ">
+                          <form id="formAuditoriaRecepciones" action="auditoria.php?action=listarRegistrosRecepciones" method="GET" class="bg-white w-full text-xs ">
                             <div class="flex justify-center items-center">
                               <!-- Fecha de inicio -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                                <input type="date" id="fechaInicio" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaInicio_auditoria_recepciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicio_auditoria_recepciones" name="fechaInicio_auditoria_recepciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de inicio -->
 
                               <!-- Fecha de fin -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                                <input type="date" id="fechaFin" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaFin_auditoria_recepciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                                <input type="date" id="fechaFin_auditoria_recepciones" name="fechaFin_auditoria_recepciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de fin -->
 
@@ -266,7 +264,7 @@
                                 </button>
 
                                 <!-- Botón de nueva consulta -->
-                                <button type="button" id="limpiarCampos" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                                <button type="button" id="limpiarCampos_auditoria_recepciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                                   <i class="feather icon-refresh-cw"></i>
                                 </button>
                               </div>
@@ -278,13 +276,12 @@
                               <div class="max-w-full overflow-hidden sm:rounded-lg">
                                 <table id="tablaRecepciones" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                   <!-- Encabezado de la tabla -->
-                                  <thead class="text-xs text-gray-700 uppercase bg-red-300">
+                                  <thead class="text-xs text-gray-700 uppercase bg-yellow-300">
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
                                       <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de registro</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Rol</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Usuario</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Nombre Completo</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario receptor</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
                                       <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
@@ -301,9 +298,8 @@
                                         <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
                                           <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['fechaFormateada']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['ROL_nombre']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['USU_nombre']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['NombreCompleto']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['INC_numero_formato']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['ARE_nombre']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['AUD_ip']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepcion['AUD_nombreEquipo']) ?></td>
@@ -311,7 +307,7 @@
                                       <?php endforeach; ?>
                                     <?php else: ?>
                                       <tr>
-                                        <td colspan="10" class="text-center py-3">No se encontraron incidencias recepcionadas.</td>
+                                        <td colspan="7" class="text-center py-3">No se encontraron incidencias recepcionadas.</td>
                                       </tr>
                                     <?php endif; ?>
                                   </tbody>
@@ -327,11 +323,167 @@
 
                         <!-- Contenido de la tercera pestaña -->
                         <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                          <p class="mb-0">Fugiat id quis dolor culpa eiusmod anim velit excepteur proident dolor aute qui magna. Ad proident laboris ullamco esse anim Lorem Lorem veniam quis Lorem irure occaecat velit
-                            nostrud magna
-                            nulla. Velit et et proident Lorem do ea tempor officia dolor. Reprehenderit Lorem aliquip labore est magna commodo est ea veniam consectetur.</p>
+                          <form id="formAuditoriaAsignaciones" action="auditoria.php?action=listarRegistrosAsignaciones" method="GET" class="bg-white w-full text-xs ">
+                            <div class="flex justify-center items-center">
+                              <!-- Fecha de inicio -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaInicio_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicio_auditoria_asignaciones" name="fechaInicio_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+                              <!-- Fin de fecha de inicio -->
+
+                              <!-- Fecha de fin -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaFin_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                                <input type="date" id="fechaFin_auditoria_asignaciones" name="fechaFin_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+                              <!-- Fin de fecha de fin -->
+
+                              <!-- Botones alineados horizontalmente -->
+                              <div class="ml-5 flex space-x-2">
+                                <!-- Botón de buscar -->
+                                <button type="submit" id="filtrarListaAuditoriaAsignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-red-400 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-search"></i>
+                                </button>
+
+                                <!-- Botón de nueva consulta -->
+                                <button type="button" id="limpiarCampos_auditoria_asignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-refresh-cw"></i>
+                                </button>
+                              </div>
+                              <!-- Fin de botones alineados horizontalmente -->
+                            </div>
+
+                            <!-- Inicio de tabla de registros de asignaciones -->
+                            <div class="relative sm:rounded-lg mt-2">
+                              <div class="max-w-full overflow-hidden sm:rounded-lg">
+                                <table id="tablaAsignaciones" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                  <!-- Encabezado de la tabla -->
+                                  <thead class="text-xs text-gray-700 uppercase bg-purple-300">
+                                    <tr>
+                                      <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de registro</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario asignador</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
+                                      <th scope="col" class="px-3 py-2 text-center">IP</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
+                                    </tr>
+                                  </thead>
+                                  <!-- Fin de encabezado de la tabla -->
+
+                                  <!-- Cuerpo de la tabla -->
+                                  <tbody>
+                                    <?php if (!empty($resultadoAuditoriaRegistroAsignaciones)): ?>
+                                      <?php $item = 1; // Iniciar contador para el ítem 
+                                      ?>
+                                      <?php foreach ($resultadoAuditoriaRegistroAsignaciones as $asignacion): ?>
+                                        <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                          <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['fechaFormateada']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['NombreCompleto']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['INC_numero_formato']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['ARE_nombre']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_ip']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_nombreEquipo']) ?></td>
+                                        </tr>
+                                      <?php endforeach; ?>
+                                    <?php else: ?>
+                                      <tr>
+                                        <td colspan="7" class="text-center py-3">No se encontraron incidencias asignadas.</td>
+                                      </tr>
+                                    <?php endif; ?>
+                                  </tbody>
+                                  <!-- Fin de cuerpo de tabla -->
+                                </table>
+                              </div>
+                            </div>
+                            <!-- Fin de tabla de registros de recepciones -->
+                          </form>
                         </div>
                         <!-- Fin de contenido de la tercera pestaña -->
+
+                        <!-- TODO: Contenido de la cuarta pestaña -->
+                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
+                          <form id="formAuditoriaMantenimiento" action="auditoria.php?action=listarRegistrosAsignaciones" method="GET" class="bg-white w-full text-xs ">
+                            <div class="flex justify-center items-center">
+                              <!-- Fecha de inicio -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaInicio_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicio_auditoria_asignaciones" name="fechaInicio_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+                              <!-- Fin de fecha de inicio -->
+
+                              <!-- Fecha de fin -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaFin_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                                <input type="date" id="fechaFin_auditoria_asignaciones" name="fechaFin_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+                              <!-- Fin de fecha de fin -->
+
+                              <!-- Botones alineados horizontalmente -->
+                              <div class="ml-5 flex space-x-2">
+                                <!-- Botón de buscar -->
+                                <button type="submit" id="filtrarListaAuditoriaAsignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-red-400 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-search"></i>
+                                </button>
+
+                                <!-- Botón de nueva consulta -->
+                                <button type="button" id="limpiarCampos_auditoria_asignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-refresh-cw"></i>
+                                </button>
+                              </div>
+                              <!-- Fin de botones alineados horizontalmente -->
+                            </div>
+
+                            <!-- Inicio de tabla de registros de asignaciones -->
+                            <div class="relative sm:rounded-lg mt-2">
+                              <div class="max-w-full overflow-hidden sm:rounded-lg">
+                                <table id="tablaAsignaciones" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                  <!-- Encabezado de la tabla -->
+                                  <thead class="text-xs text-gray-700 uppercase bg-purple-300">
+                                    <tr>
+                                      <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de registro</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario asignador</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
+                                      <th scope="col" class="px-3 py-2 text-center">IP</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
+                                    </tr>
+                                  </thead>
+                                  <!-- Fin de encabezado de la tabla -->
+
+                                  <!-- Cuerpo de la tabla -->
+                                  <tbody>
+                                    <?php if (!empty($resultadoAuditoriaRegistroAsignaciones)): ?>
+                                      <?php $item = 1; // Iniciar contador para el ítem 
+                                      ?>
+                                      <?php foreach ($resultadoAuditoriaRegistroAsignaciones as $asignacion): ?>
+                                        <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                          <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['fechaFormateada']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['NombreCompleto']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['INC_numero_formato']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['ARE_nombre']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_ip']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_nombreEquipo']) ?></td>
+                                        </tr>
+                                      <?php endforeach; ?>
+                                    <?php else: ?>
+                                      <tr>
+                                        <td colspan="7" class="text-center py-3">No se encontraron incidencias asignadas.</td>
+                                      </tr>
+                                    <?php endif; ?>
+                                  </tbody>
+                                  <!-- Fin de cuerpo de tabla -->
+                                </table>
+                              </div>
+                            </div>
+                            <!-- Fin de tabla de registros de recepciones -->
+                          </form>
+                        </div>
+                        <!-- Fin de contenido de la cuarta pestaña -->
                       </div>
                     </div>
                     <!-- Fin de contenido de las pestañas -->

@@ -1075,50 +1075,66 @@ WHERE AUD_operacion IN ('Iniciar sesión');
 GO
 
 CREATE OR ALTER VIEW vw_auditoria_registrar_incidencia AS
-SELECT 
-    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
-     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    A.AUD_fecha,  -- Campo de fecha original
-    A.AUD_hora,   -- Campo de hora original
-    A.AUD_tabla,
-    A.AUD_usuario,
-	R.ROL_nombre,
-	U.USU_nombre,
-    PER_nombres + ' ' + PER_apellidoPaterno AS NombreCompleto,
-    A.AUD_operacion,
-	AR.ARE_nombre,
-    A.AUD_ip,
-    A.AUD_nombreEquipo
-FROM AUDITORIA A
-INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
-INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+SELECT  
+(CONVERT(VARCHAR(10), i.INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), i.INC_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
+A.AUD_fecha,
+I.INC_fecha,
+R.ROL_nombre,
+U.USU_nombre,
+p.PER_nombres + ' ' + PER_apellidoPaterno AS NombreCompleto,
+AR.ARE_nombre,
+I.INC_numero,
+i.INC_numero_formato,
+a.AUD_usuario, 
+a.AUD_tabla, 
+a.AUD_ip, 
+a.AUD_nombreEquipo
+FROM INCIDENCIA i
+JOIN (
+    SELECT AUD_codigo, AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo, 
+           ROW_NUMBER() OVER (PARTITION BY AUD_usuario ORDER BY AUD_fecha DESC, AUD_hora DESC) AS row_num
+    FROM AUDITORIA
+    WHERE AUD_operacion = 'Registrar incidencia'
+) a ON i.USU_codigo = a.AUD_usuario
+INNER JOIN USUARIO u ON U.USU_codigo = i.USU_codigo
+INNER JOIN PERSONA p ON P.PER_codigo = U.PER_codigo
 INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
-WHERE AUD_operacion IN ('Registrar Incidencia');
+INNER JOIN AREA AR ON AR.ARE_codigo = I.ARE_codigo
+WHERE a.row_num = 1;
 GO
 
 CREATE OR ALTER VIEW vw_auditoria_registrar_recepcion AS
-SELECT 
-    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
-     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    A.AUD_fecha,  -- Campo de fecha original
-    A.AUD_hora,   -- Campo de hora original
-    A.AUD_tabla,
-    A.AUD_usuario,
-	R.ROL_nombre,
-	U.USU_nombre,
-    PER_nombres + ' ' + PER_apellidoPaterno AS NombreCompleto,
-    A.AUD_operacion,
-	AR.ARE_nombre,
-    A.AUD_ip,
-    A.AUD_nombreEquipo
-FROM AUDITORIA A
-INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
-INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+SELECT  
+(CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
+A.AUD_fecha,
+REC_fecha,
+R.ROL_nombre,
+U.USU_nombre,
+pR.PER_nombres + ' ' + pR.PER_apellidoPaterno AS NombreCompleto,
+AR.ARE_nombre,
+I.INC_numero,
+i.INC_numero_formato,
+a.AUD_usuario, 
+a.AUD_tabla, 
+a.AUD_ip, 
+a.AUD_nombreEquipo
+FROM RECEPCION REC
+JOIN (
+    SELECT AUD_codigo, AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo, 
+           ROW_NUMBER() OVER (PARTITION BY AUD_usuario ORDER BY AUD_fecha DESC, AUD_hora DESC) AS row_num
+    FROM AUDITORIA
+    WHERE AUD_operacion = 'Recepcionar incidencia'
+) a ON REC.USU_codigo = a.AUD_usuario
+INNER JOIN INCIDENCIA I ON I.INC_numero = REC.INC_numero
+INNER JOIN USUARIO u ON U.USU_codigo = i.USU_codigo
+INNER JOIN PERSONA p ON P.PER_codigo = U.PER_codigo
 INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
-WHERE AUD_operacion IN ('Recepcionar Incidencia');
+INNER JOIN AREA AR ON AR.ARE_codigo = I.ARE_codigo
+LEFT JOIN USUARIO uR ON uR.USU_codigo = REC.USU_codigo 
+LEFT JOIN PERSONA pR ON pR.PER_codigo = uR.PER_codigo 
+WHERE a.row_num = 1;
 GO
+
 -------------------------------------------------------------------------------------------------------
   -- FUNCIONES Y TRIGGERS
 -------------------------------------------------------------------------------------------------------
@@ -2396,15 +2412,29 @@ BEGIN
 END;
 GO
 
---PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LOS INICIOS DE SESION
+--PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LOS REGISTROS DE INCIDENCIAS
 CREATE OR ALTER PROCEDURE sp_consultar_auditoria_registro_incidencia
     @fechaInicio DATE = NULL,
     @fechaFin DATE = NULL
 AS
 BEGIN 
-    SELECT * FROM vw_auditoria_registrar_incidencia
-    WHERE (@fechaInicio IS NULL OR AUD_fecha >= @fechaInicio)
-      AND (@fechaFin IS NULL OR AUD_fecha <= @fechaFin);
+    SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo
+	FROM vw_auditoria_registrar_incidencia
+    WHERE (@fechaInicio IS NULL OR INC_fecha >= @fechaInicio)
+      AND (@fechaFin IS NULL OR INC_fecha <= @fechaFin);
+END;
+GO
+
+--PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LAS RECEPCIONES DE INCIDENCIAS
+CREATE OR ALTER PROCEDURE sp_consultar_auditoria_recepcion_incidencia
+    @fechaInicio DATE = NULL,
+    @fechaFin DATE = NULL
+AS
+BEGIN 
+    SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo
+	FROM vw_auditoria_registrar_recepcion
+    WHERE (@fechaInicio IS NULL OR REC_fecha >= @fechaInicio)
+      AND (@fechaFin IS NULL OR REC_fecha <= @fechaFin);
 END;
 GO
 

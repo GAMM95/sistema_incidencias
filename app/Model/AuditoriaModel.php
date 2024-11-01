@@ -120,7 +120,7 @@ class AuditoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_auditoria_registrar_incidencia
+        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo FROM vw_auditoria_registrar_incidencia
        ORDER BY fechaFormateada DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -166,7 +166,7 @@ class AuditoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_auditoria_registrar_recepcion
+        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo FROM vw_auditoria_registrar_recepcion
        ORDER BY fechaFormateada DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -188,9 +188,7 @@ class AuditoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_auditoria_registrar_recepcion
-        WHERE fechaFormateada BETWEEN :fechaInicio AND :fechaFin
-        ORDER BY fechaFormateada DESC";
+        $sql = "EXEC sp_consultar_auditoria_recepcion_incidencia :fechaInicio, :fechaFin";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':fechaInicio', $fechaInicio);
         $stmt->bindParam(':fechaFin', $fechaFin);

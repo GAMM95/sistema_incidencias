@@ -88,7 +88,7 @@
 
                       <!-- Boton generar reporte -->
                       <div class="flex justify-center space-x-2">
-                        <button type="button" id="reporte-incidencias-filtrado" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte filtrado</button>
+                        <button type="button" id="reporte-incidencias-fechas" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte filtrado</button>
                       </div>
                       <!-- Fin de boton de generar reporte -->
 

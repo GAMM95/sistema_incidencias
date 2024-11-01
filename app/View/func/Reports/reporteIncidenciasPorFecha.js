@@ -7,8 +7,8 @@ $(document).ready(function () {
 });
 
 $('#reporte-incidencias-fechas').click(function () {
-  const fechaInicio = $('#fechaInicio').val();
-  const fechaFin = $('#fechaFin').val();
+  const fechaInicio = $('#fechaInicio_registro_incidencias').val();
+  const fechaFin = $('#fechaFin_registro_incidencias').val();
 
   if (!validarCampos() || !validarFechas()) {
     return;
@@ -94,8 +94,8 @@ $('#reporte-incidencias-fechas').click(function () {
           const fechaFinText = 'Fecha de Fin:';
 
           // Obtener las fechas en formato original
-          const fechaInicioOriginal = $('#fechaInicio').val();
-          const fechaFinOriginal = $('#fechaFin').val();
+          const fechaInicioOriginal = $('#fechaInicio_registro_incidencias').val();
+          const fechaFinOriginal = $('#fechaFin_registro_incidencias').val();
 
           // Función para formatear la fecha a dd/mm/aaaa
           function formatearFecha(fecha) {
@@ -213,8 +213,8 @@ $('#reporte-incidencias-fechas').click(function () {
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
             window.open(doc.output('bloburl'));
-            $('#fechaInicio').val('');
-            $('#fechaFin').val('');
+            $('#fechaInicio_registro_incidencias').val('');
+            $('#fechaFin_registro_incidencias').val('');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado incidencia para las fechas seleccionadas.', 'Advertencia');
@@ -235,8 +235,8 @@ $('#reporte-incidencias-fechas').click(function () {
     var valido = false;
     var mensajeError = '';
 
-    var fechaInicioSeleccionada = ($('#fechaInicio').val() !== null && $('#fechaInicio').val().trim() !== '');
-    var fechaFinSeleccionada = ($('#fechaFin').val() !== null && $('#fechaFin').val().trim() !== '');
+    var fechaInicioSeleccionada = ($('#fechaInicio_registro_incidencias').val() !== null && $('#fechaInicio_registro_incidencias').val().trim() !== '');
+    var fechaFinSeleccionada = ($('#fechaFin_registro_incidencias').val() !== null && $('#fechaFin_registro_incidencias').val().trim() !== '');
 
     // Verificar si al menos un campo está lleno
     if (fechaInicioSeleccionada || fechaFinSeleccionada) {
@@ -255,8 +255,8 @@ $('#reporte-incidencias-fechas').click(function () {
 
   function validarFechas() {
     // Obtener valores de los campos de fecha
-    const fechaInicio = new Date($('#fechaInicio').val());
-    const fechaFin = new Date($('#fechaFin').val());
+    const fechaInicio = new Date($('#fechaInicio_registro_incidencias').val());
+    const fechaFin = new Date($('#fechaFin_registro_incidencias').val());
 
     // Obtener la fecha actual
     const fechaHoy = new Date();
@@ -291,7 +291,7 @@ $('#reporte-incidencias-fechas').click(function () {
   }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicio, #fechaFin').on('change', function () {
+  $('#fechaInicio_registro_incidencias, #fechaFin_registro_incidencias').on('change', function () {
     validarFechas();
   });
 });

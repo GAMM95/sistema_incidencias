@@ -63,8 +63,8 @@ class AuditoriaController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $fechaInicio = isset($_GET['fechaInicio_registro_incidencias']) ? $_GET['fechaInicio_registro_incidencias'] : null;
-      $fechaFin = isset($_GET['fechaFin_registro_incidencias']) ? $_GET['fechaFin_registro_incidencias'] : null;
+      $fechaInicio = isset($_GET['fechaInicio_auditoria_recepciones']) ? $_GET['fechaInicio_auditoria_recepciones'] : null;
+      $fechaFin = isset($_GET['fechaFin_auditoria_recepciones']) ? $_GET['fechaFin_auditoria_recepciones'] : null;
 
       $resultadoAuditoriaRegistroRecepciones = $this->auditoriaModel->consultarRegistrosRecepciones($fechaInicio, $fechaFin);
       return $resultadoAuditoriaRegistroRecepciones;

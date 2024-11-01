@@ -37,6 +37,27 @@ function generarTabla($resultado, $itemCount)
   return $html;
 }
 
+function generarTablaRegistros($resultado, $itemCount)
+{
+  $html = '';
+  if (!empty($resultado)) {
+    foreach ($resultado as $item) {
+      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['fechaFormateada']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['NombreCompleto']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['INC_numero_formato']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['ARE_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_ip']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_nombreEquipo']) . '</td>';
+      $html .= '</tr>';
+    }
+  } else {
+    $html = '<tr><td colspan="7" class="text-center py-3">No se encontraron registros.</td></tr>';
+  }
+  return $html;
+}
+
 switch ($action) {
   case 'listarRegistrosInicioSesion':
     error_log("Fecha Inicio: " . $fechaInicio);
@@ -49,14 +70,14 @@ switch ($action) {
     error_log("Fecha Inicio: " . $fechaInicio);
     error_log("Fecha Fin: " . $fechaFin);
     $resultadoAuditoriaRegistroIncidencias = $auditoriaController->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
-    echo generarTabla($resultadoAuditoriaRegistroIncidencias, 1);
+    echo generarTablaRegistros($resultadoAuditoriaRegistroIncidencias, 1);
     exit;
 
   case 'listarRegistrosRecepciones':
     error_log("Fecha Inicio: " . $fechaInicio);
     error_log("Fecha Fin: " . $fechaFin);
     $resultadoAuditoriaRegistroRecepciones = $auditoriaController->consultarRegistrosRecepciones($fechaInicio, $fechaFin);
-    echo generarTabla($resultadoAuditoriaRegistroRecepciones, 1);
+    echo generarTablaRegistros($resultadoAuditoriaRegistroRecepciones, 1);
     exit;
 
   default:
@@ -116,6 +137,7 @@ switch ($action) {
   <!-- Funcionalidades -->
   <script src="./app/View/func/Auditoria/func_auditoria_login.js"></script>
   <script src="./app/View/func/Auditoria/func_auditoria_registro_incidencia.js"></script>
+  <script src="./app/View/func/Auditoria/func_auditoria_registro_recepcion.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
