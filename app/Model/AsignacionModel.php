@@ -54,7 +54,7 @@ class AsignacionModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('ASIGNACION', 'Incidencia asignada');
+        $this->auditoria->registrarEvento('ASIGNACION', 'Asignar incidencia');
 
         return $stmt->rowCount() > 0 ? true : false;
       } else {

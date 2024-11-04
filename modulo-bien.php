@@ -20,7 +20,7 @@ if ($BIE_codigo != '') {
   $bienRegistrado = null;
 }
 
-$resultado = $bienModel->listarBienes();
+$resultado = $bienController->listarBienes();
 
 switch ($action) {
   case 'registrar':
@@ -28,9 +28,6 @@ switch ($action) {
     break;
   case 'editar':
     $bienController->actualizarTipoBien();
-    break;
-  case 'eliminar':
-    $bienController->eliminarBien();
     break;
   case 'habilitar':
     $bienController->habilitarBien();
@@ -74,7 +71,8 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_tipoBien.js"></script>
+  <script src="./app/View/func/Mantenedores/func_tipoBien.js"></script>
+
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>

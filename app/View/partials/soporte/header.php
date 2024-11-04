@@ -6,7 +6,7 @@ if (isset($_SESSION['codigoUsuario'])) {
   $usuario = new UsuarioModel();
   $perfil = $usuario->setearDatosUsuario($user_id);
 } else {
-  $perfil = null; 
+  $perfil = null;
 }
 ?>
 <header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark fixed top-0 left-0 right-0 z-50">
@@ -46,7 +46,7 @@ if (isset($_SESSION['codigoUsuario'])) {
       <li>
         <div class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="icon feather icon-bell"></i>
+            <i class="icon feather icon-bell mr-2"></i>
             <?php if (count($incidencias) > 0) : ?>
               <span class="badge badge-pill badge-danger"><?= count($incidencias); ?></span>
             <?php endif; ?>
@@ -92,7 +92,17 @@ if (isset($_SESSION['codigoUsuario'])) {
       <li>
         <div class="dropdown drp-user">
           <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="feather icon-user"></i>
+            <i class="feather icon-user mr-2"></i>
+            <span>
+              <?php
+              if (isset($_SESSION['usuario'])) {
+                echo '<span class="text-base">' . htmlspecialchars($_SESSION['usuario'], ENT_QUOTES, 'UTF-8') . '</span>';
+              } else {
+                echo "Usuario no logueado";
+              }
+              ?>
+            </span>
+            <i class="feather icon-more-vertical ml-4"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right profile-notification">
             <div class="pro-head fixed flex items-center">

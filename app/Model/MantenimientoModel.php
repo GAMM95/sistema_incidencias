@@ -140,6 +140,28 @@ class MantenimientoModel extends Conexion
     }
   }
 
+  // Metodo para contar la cantidad de recepciones (asignaciones + mantenimiento) al mes
+  public function totalRecepcionesAlMes()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT 
+            SUM(CASE WHEN A.EST_codigo = 5 THEN 1 ELSE 0 END + CASE WHEN M.EST_codigo = 6 THEN 1 ELSE 0 END) AS total_recepciones_mes_actual
+        FROM ASIGNACION A
+        LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = A.ASI_codigo
+        WHERE A.ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['total_recepciones_mes_actual'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al contar recepciones al mes: " . $e->getMessage());
+    }
+  }
 
   // public function notificarIncidenciasMantenimiento($usuario)
   // {

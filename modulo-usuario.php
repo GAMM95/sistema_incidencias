@@ -1,10 +1,11 @@
 <?php
 session_start();
 // Verificar si no hay una sesión iniciada
-// if (!isset($_SESSION['usuario'])) {
-//   header("Location: inicio.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
-//   exit();
-// }
+if (!isset($_SESSION['usuario'])) {
+  header("Location: inicio.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
+  exit();
+}
+
 $action = $_GET['action'] ?? '';
 $state = $_GET['state'] ?? '';
 $USU_codigo = $_GET['USU_codigo'] ?? '';
@@ -79,7 +80,8 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
 
-  <script src="./app/View/func/func_usuario.js"></script>
+  <script src="./app/View/func/Mantenedores/func_usuario.js"></script>
+
 
   <!-- Framework CSS -->
   <script src="https://cdn.tailwindcss.com"></script>

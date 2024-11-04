@@ -85,6 +85,7 @@ switch ($action) {
     $resultadoAuditoriaLogin = $auditoriaController->listarRegistrosInicioSesion();
     $resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarRegistrosIncidencias();
     $resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
+    $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
 }
 ?>
 

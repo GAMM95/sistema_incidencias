@@ -166,9 +166,16 @@ class cierreController
       error_log("Área: $area, CodigoPatrimonial: $codigoPatrimonial, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
 
       // Llamar al método para consultar cierres 
-      $consultaIncidencia = $this->cierreModel->buscarCierres($area, $codigoPatrimonial, $fechaInicio, $fechaFin);
+      $resultado = $this->cierreModel->buscarCierres($area, $codigoPatrimonial, $fechaInicio, $fechaFin);
       // Retornar el resultado de la consulta
-      return $consultaIncidencia;
+      return $resultado;
     }
+  }
+
+  // Metodo para listar cierres para consulta de administrador y soporte
+  public function listarIncidenciasCerradas()
+  {
+    $resultado = $this->cierreModel->listarCierresConsulta();
+    return $resultado;
   }
 }

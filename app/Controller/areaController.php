@@ -197,4 +197,19 @@ class AreaController
       ]);
     }
   }
+
+  // Metodo para listar areas
+  public function listarAreas()
+  {
+    try {
+      $resultado = $this->areaModel->listarArea();
+
+      return $resultado;
+    } catch (Exception $e) {
+      echo  json_encode([
+        'success' => false,
+        'message' => 'Error: ' . $e->getMessage()
+      ]);
+    }
+  }
 }

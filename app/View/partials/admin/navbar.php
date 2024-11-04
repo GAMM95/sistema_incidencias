@@ -4,6 +4,18 @@
 if (session_status() == PHP_SESSION_NONE) {
   session_start();
 }
+require_once './app/Model/IncidenciaModel.php';
+require_once './app/Model/RecepcionModel.php';
+require_once './app/Model/MantenimientoModel.php';
+
+$incidenciasModel = new IncidenciaModel();
+$recepcionModel = new RecepcionModel();
+$mantenimientoModel = new MantenimientoModel();
+
+
+$incidenciasRecepcion = $incidenciasModel->contarIncidenciasAdministrador();
+$incidenciasAsignacion = $recepcionModel->contarRecepciones();
+$incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
 ?>
 <!-- [ navigation menu ] start -->
 <nav class="pcoded-navbar fixed top-0 left-0 right-0 z-50">
@@ -59,13 +71,34 @@ if (session_status() == PHP_SESSION_NONE) {
               <a href="registro-incidencia.php">Incidencia</a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="registro-recepcion.php">Recepci&oacute;n</a>
+              <a href="registro-recepcion.php" class="flex items-center">
+                <?php if ($incidenciasRecepcion > 0): ?>
+                  <span class="absolute right-[50px] top-[40%] transform -translate-y-1/2 w-3 h-3 bg-lime-200 rounded-full animate-ping">
+                    <span class="absolute inset-0 w-3 h-3 bg-lime-500 rounded-full"></span>
+                  </span>
+                <?php endif; ?>
+                Recepci&oacute;n
+              </a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="registro-asignacion.php">Asignaci&oacute;n</a>
+              <a href="registro-asignacion.php" class="flex items-center">
+                <?php if ($incidenciasAsignacion > 0): ?>
+                  <span class="absolute right-[50px] top-[40%] transform -translate-y-1/2 w-3 h-3 bg-green-200 rounded-full animate-ping">
+                    <span class="absolute inset-0 w-3 h-3 bg-green-500 rounded-full"></span>
+                  </span>
+                <?php endif; ?>
+                Asignaci&oacute;n
+              </a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="registro-cierre.php">Cierre</a>
+              <a href="registro-cierre.php" class="flex items-center">
+                <?php if ($incidenciasCerrar > 0): ?>
+                  <span class="absolute right-[50px] top-[40%] transform -translate-y-1/2 w-3 h-3 bg-blue-200 rounded-full animate-ping">
+                    <span class="absolute inset-0 w-3 h-3 bg-blue-500 rounded-full"></span>
+                  </span>
+                <?php endif; ?>
+                Cierre
+              </a>
             </li>
           </ul>
         </li>
@@ -83,13 +116,13 @@ if (session_status() == PHP_SESSION_NONE) {
           </a>
           <ul class="pcoded-submenu">
             <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="consultar-incidencia-general-admin.php">Incidencias totales</a>
+              <a href="consultar-totales.php">Incidencias totales</a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="consultar-incidencia-admin.php">Incidencias pendientes</a>
+              <a href="consultar-pendientes.php">Incidencias pendientes</a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
-              <a href="consultar-cierre-admin.php">Incidencias atendidas</a>
+              <a href="consultar-cierres.php">Incidencias cerradas</a>
             </li>
           </ul>
         </li>

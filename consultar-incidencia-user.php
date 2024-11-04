@@ -46,14 +46,14 @@ if ($action === 'consultar') {
       $html .= '<td class="px-3 py-2 text-center hidden">' . htmlspecialchars($incidencia['INC_numero']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_numero_formato']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['fechaIncidenciaFormateada']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['CAT_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_asunto']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_documento']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_codigoPatrimonial']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['BIE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center hidden">' . htmlspecialchars($incidencia['fechaRecepcionFormateada']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['PRI_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['fechaCierreFormateada']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center hidden">' . htmlspecialchars($incidencia['CON_descripcion']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['CON_descripcion']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center hidden">' . htmlspecialchars($incidencia['Usuario']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
 
@@ -131,7 +131,7 @@ if ($action === 'consultar') {
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
 
-  <script src="./app/View/func/func_consulta_incidencia_user.js"></script>
+  <script src="./app/View/func/Consultas/func_consulta_incidencia_user.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">

@@ -13,7 +13,7 @@ class Estado extends Conexion
     try {
       $conector = parent::getConexion();
       $query = "SELECT * FROM ESTADO 
-            WHERE EST_codigo IN (3,4,5)";
+            WHERE EST_codigo IN (3,4,7)";
       $stmt = $conector->prepare($query);
       $stmt->execute();
       $resultado = $stmt->fetchAll();

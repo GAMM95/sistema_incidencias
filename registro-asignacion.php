@@ -114,7 +114,7 @@ switch ($action) {
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_asignacion.js"></script>
+ <script src="./app/View/func/Asignaciones/func_asignacion.js"></script>
 
   <!-- Framework CSS -->
   <script src="https://cdn.tailwindcss.com"></script>

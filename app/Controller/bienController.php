@@ -111,49 +111,6 @@ class BienController
     }
   }
 
-  // Metodo para eliminar Categoria
-  public function eliminarBien()
-  {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      $codigoBien = $_POST['codBien'] ?? null;
-
-      if (empty($codigoBien)) {
-        echo json_encode([
-          'success' => false,
-          'message' => 'Debe seleccionar un bien.'
-        ]);
-        exit();
-      }
-
-      try {
-        // Llamar al modelo para actualizar la incidencia
-        $deleteSuccess = $this->bienModel->eliminarBien($codigoBien);
-        if ($deleteSuccess) {
-          echo json_encode([
-            'success' => true,
-            'message' => 'Bien eliminado.'
-          ]);
-        } else {
-          echo json_encode([
-            'success' => false,
-            'message' => 'No se realiz&oacute; ninguna eliminaci&oacute;n.'
-          ]);
-        }
-      } catch (Exception $e) {
-        echo json_encode([
-          'success' => false,
-          'message' => 'Error: ' . $e->getMessage()
-        ]);
-      }
-      exit();
-    } else {
-      echo json_encode([
-        'success' => false,
-        'message' => 'M&eacute;todo no permitido.'
-      ]);
-    }
-  }
-
   // Controlador para habilitar un bien
   public function habilitarBien()
   {
@@ -216,6 +173,21 @@ class BienController
       echo json_encode([
         'success' => false,
         'message' => 'Método no permitido.'
+      ]);
+    }
+  }
+
+  // Metodo para listar bienes
+  public function listarBienes()
+  {
+    try {
+      $resultado = $this->bienModel->listarBienes();
+
+      return $resultado;
+    } catch (Exception $e) {
+      echo  json_encode([
+        'success' => false,
+        'message' => 'Error: ' . $e->getMessage()
       ]);
     }
   }

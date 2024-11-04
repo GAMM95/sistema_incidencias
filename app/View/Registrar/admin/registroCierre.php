@@ -236,7 +236,9 @@
       <!-- Botones del formulario -->
       <div class="flex justify-center space-x-4">
         <button type="submit" id="guardar-cierre" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Cerrar</button>
-        <button type="button" id="editar-cierre" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Actualizar</button>
+        <?php if ($rol === 'Administrador') : ?> <!-- Botón "Actualizar" visible solo para Administradores -->
+          <button type="button" id="editar-cierre" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Actualizar</button>
+        <?php endif; ?>
         <button type="button" id="nuevo-registro" class="bn btn-secondary text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-plus-square"></i>Limpiar</button>
       </div>
       <!-- Fin de botones -->
@@ -245,7 +247,7 @@
 
     <!-- Titulo y paginacion de tabla de recepciones -->
     <div class="flex justify-between items-center mb-2">
-      <h1 class="text-xl text-gray-400">Lista de incidencias cerradas</h1>    
+      <h1 class="text-xl text-gray-400">Lista de incidencias cerradas</h1>
     </div>
 
     <!-- Tabla de incidencias cerradas -->

@@ -1,10 +1,10 @@
 <?php
 session_start();
 // Verificar si no hay una sesión iniciada
-// if (!isset($_SESSION['usuario'])) {
-//   header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
-//   exit();
-// }
+if (!isset($_SESSION['usuario'])) {
+  header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
+  exit();
+}
 $action = $_GET['action'] ?? '';
 $CodArea = $_GET['ARE_codigo'] ?? '';
 
@@ -22,7 +22,7 @@ if ($CodArea != '') {
 }
 
 // Metodo para listar areas
-$resultado = $areaModel->listarArea();
+$resultado = $areaController->listarAreas();
 
 switch ($action) {
   case 'registrar':
@@ -98,7 +98,8 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_area.js"></script>
+  <script src="./app/View/func/Mantenedores/func_area.js"></script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">

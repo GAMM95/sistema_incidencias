@@ -12,6 +12,7 @@ require_once 'app/Model/AsignacionModel.php';
 require_once 'app/Model/CierreModel.php';
 require_once 'app/Model/UsuarioModel.php';
 require_once 'app/Model/AreaModel.php';
+require_once 'app/Model/MantenimientoModel.php';
 require_once 'app/Model/CategoriaModel.php';
 require_once 'app/Controller/InicioController.php';
 
@@ -28,6 +29,7 @@ $cierresModel = new CierreModel();
 $usuarioModel = new UsuarioModel();
 $areaModel = new AreaModel();
 $categoriaModel = new CategoriaModel();
+$mantenimientoModel = new MantenimientoModel();
 $controller = new InicioController();
 
 

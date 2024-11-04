@@ -39,14 +39,29 @@ $(document).ready(function () {
     }
   });
 
+  // Evento para nueva consulta
   function nuevaConsulta() {
-    const form = document.getElementById('formConsultarCierre');
-    form.reset();
-
-    // Restablecer Select2 manualmente
+    // limpiar los inputs
+    $('fechaInicio').val('');
+    $('fechaFin').val('');
     $('#area').val(null).trigger('change');
+    $('#codigoPatrimonial').val(null).trigger('change');
 
-    window.location.reload();
+    // Realizar una consulta ajax para obtener todos los registros al presionar el boton nueva consulta
+    $.ajax({
+      url: 'consultar-cierres.php?action=consultar',
+      type: 'GET',
+      success: function (response) {
+        console.log("Resultados: ", response);
+        // Limpiar el contenido actual de la tabla
+        $('#tablaCierres tbody').empty();
+        // Actualizar el contenido de la tabla con la respuesta
+        $('#tablaCierres tbody').html(response);
+      },
+      error: function (error) {
+        console.error("Error al obtener registros: ", error);
+      }
+    })
   }
 
   // Evento para nueva consulta
@@ -59,7 +74,6 @@ $(document).ready(function () {
     if (!validarCampos() || !validarFechas()) {
       return; // Detiene el envío si los campos o las fechas no son válidos
     }
-
 
     var formData = $(this).serializeArray(); // Recopila los datos del formulario<
     var dataObject = {}; // Crea un objeto para los datos del formulario
@@ -74,7 +88,7 @@ $(document).ready(function () {
 
     // Realiza la solicitud AJAX
     $.ajax({
-      url: 'consultar-cierre-admin.php?action=consultar',
+      url: 'consultar-cierres.php?action=consultar',
       type: 'GET',
       data: dataObject,
       success: function (response) {

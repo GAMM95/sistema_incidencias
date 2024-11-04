@@ -36,14 +36,29 @@ $(document).ready(function () {
     }
   });
 
+  // Evento para nueva consulta
   function nuevaConsulta() {
-    const form = document.getElementById('formConsultarIncidenciaUser');
-    form.reset();
-
-    // Restablecer Select2 manualmente
+    // limpiar los inputs
+    $('fechaInicio').val('');
+    $('fechaFin').val('');
     $('#estado').val(null).trigger('change');
+    $('#codigoPatrimonial').val(null).trigger('change');
 
-    window.location.reload();
+    // Realizar una consulta ajax para obtener todos los registros al presionar el boton nueva consulta
+    $.ajax({
+      url: 'consultar-incidencia-user.php?action=consultar',
+      type: 'GET',
+      success: function (response) {
+        console.log("Resultados: ", response);
+        // Limpiar el contenido actual de la tabla
+        $('#tablaIncidencias tbody').empty();
+        // Actualizar el contenido de la tabla con la respuesta
+        $('#tablaIncidencias tbody').html(response);
+      },
+      error: function (error) {
+        console.error("Error al obtener registros: ", error);
+      }
+    })
   }
 
   // Evento para nueva consulta

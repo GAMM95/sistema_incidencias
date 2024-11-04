@@ -173,10 +173,11 @@ class CierreModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error obtener lista de incidencias cerradas: " . $e->getMessage();
+      throw new PDOException("Error al obtener las incidencias cerradas: " . $e->getMessage());
       return null;
     }
   }
+
   // public function listarCierres($start, $limit)
   // {
   //   $conector = parent::getConexion();
@@ -290,7 +291,7 @@ class CierreModel extends Conexion
 
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_ConsultarCierres :area, :codigoPatrimonial, :fechaInicio, :fechaFin";
+        $sql = "EXEC sp_consultar_incidencias_cerradas :area, :codigoPatrimonial, :fechaInicio, :fechaFin";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
         $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);

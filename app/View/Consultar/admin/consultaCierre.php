@@ -69,10 +69,10 @@
               <th scope="col" class="px-3 py-2 text-center">Fecha de Cierre</th>
               <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-3 py-2 text-center">C&oacute;digo Patrimonial</th>
+              <th scope="col" class="px-3 py-2 text-center">Nombre del bien</th>
               <th scope="col" class="px-3 py-2 text-center">Asunto de Cierre</th>
               <th scope="col" class="px-3 py-2 text-center">Documento de Cierre</th>
-              <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
-              <th scope="col" class="px-3 py-2 text-center">Estado</th>
+              <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
             </tr>
           </thead>
           <!-- Fin de encabezado -->
@@ -90,24 +90,10 @@
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['fechaCierreFormateada']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['ARE_nombre']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['INC_codigoPatrimonial']) ?></td>
+                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['BIE_nombre']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['INC_asunto']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['CIE_documento']) ?></td>
-                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['PRI_nombre']) ?></td>
-                  <td class="px-3 py-2 text-center text-xs align-middle">
-                    <?php
-                    $estadoDescripcion = htmlspecialchars($cierre['Estado']);
-                    $badgeClass = '';
-                    switch ($estadoDescripcion) {
-                      case 'CERRADO':
-                        $badgeClass = 'badge-light-primary';
-                        break;
-                      default:
-                        $badgeClass = 'badge-light-secondary';
-                        break;
-                    }
-                    ?>
-                    <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
-                  </td>
+                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['CON_descripcion']) ?></td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>

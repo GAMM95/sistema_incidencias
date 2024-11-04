@@ -7,13 +7,11 @@ if (!isset($_SESSION['usuario'])) {
 }
 $action = $_GET['action'] ?? '';
 require_once 'app/Controller/cierreController.php';
-require_once './app/Model/CierreModel.php';
 
 $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
-
 $cierreController = new cierreController();
-$cierreModel = new CierreModel();
+
 // Capturar los datos del fomrulario
 $area = $_GET['area'] ?? '';
 $codigoPatrimonial = $_GET['codigoPatrimonial'] ?? '';
@@ -43,23 +41,10 @@ if ($action === 'consultar') {
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['fechaCierreFormateada']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['ARE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['INC_codigoPatrimonial']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['BIE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['INC_asunto']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['CIE_documento']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['PRI_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
-
-      $estadoDescripcion = htmlspecialchars($cierre['Estado']);
-      $badgeClass = '';
-      switch ($estadoDescripcion) {
-        case 'CERRADO':
-          $badgeClass = 'badge-light-primary';
-          break;
-        default:
-          $badgeClass = 'badge-light-secondary';
-          break;
-      }
-
-      $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['CON_descripcion']) . '</td>';
       $html .= '</td></tr>';
     }
   } else {
@@ -70,7 +55,7 @@ if ($action === 'consultar') {
   exit;
 } else {
   // Si no hay acción, obtener la lista de incidencias
-  $resultadoBusqueda = $cierreModel->listarCierresConsulta();
+  $resultadoBusqueda = $cierreController->listarIncidenciasCerradas();
 }
 ?>
 
@@ -125,7 +110,8 @@ if ($action === 'consultar') {
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
 
-  <script src="./app/View/func/func_consulta_cierre_admin.js"></script>
+  <script src="./app/View/func/Consultas/func_consulta_cierres.js"></script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">

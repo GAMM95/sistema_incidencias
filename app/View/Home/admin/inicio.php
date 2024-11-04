@@ -122,7 +122,7 @@
         <div id="grafico" class="">
           <div class="card support-bar overflow-hidden">
             <div class="card-body pb-0">
-              <span class="text-c-blue font-bold">INCIDENCIAS EN MANTENIMIENTO</span>
+              <span class="text-c-blue font-bold">INCIDENCIAS EN MANTENIMIENTO - <?php echo $cantidades['total_recepciones_mes_actual']; ?></span>
 
               <?php
               // Establecer la configuración regional para el idioma español

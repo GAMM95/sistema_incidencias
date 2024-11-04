@@ -86,7 +86,7 @@ $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCi
   <script src="./app/View/func/Reports/reporteDetalleCierreReporte.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleIncidenciaReporte.js"></script>
 
-  <script src="./app/View/func/tipoBien.js"></script>
+  <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">

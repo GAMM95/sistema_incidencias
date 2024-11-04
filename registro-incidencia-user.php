@@ -88,7 +88,7 @@ switch ($action) {
   <script src="./app/View/func/func_incidencia_user.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleIncidencia.js"></script>
   <!-- <script src="./app/View/func/Reports/reporteNumeroIncidencia.js"></script> -->
-  <script src="./app/View/func/tipoBien.js"></script>
+  <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 
   <!-- <script src="https://cdn.tailwindcss.com"></script> -->

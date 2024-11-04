@@ -7,7 +7,7 @@ if (isset($_SESSION['codigoUsuario'])) {
   $usuario = new UsuarioModel();
   $perfil = $usuario->setearDatosUsuario($user_id);
 } else {
-  $perfil = null; // O maneja el caso en que el usuario no está logueado
+  $perfil = null;
 }
 ?>
 <header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark fixed top-0 left-0 right-0 z-50">
@@ -47,7 +47,7 @@ if (isset($_SESSION['codigoUsuario'])) {
       <li>
         <div class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
-            <i class="icon feather icon-bell"></i>
+            <i class="icon feather icon-bell mr-2"></i>
             <?php if (count($incidencias) > 0) : ?>
               <span class="badge badge-pill badge-danger"><?= count($incidencias); ?></span>
             <?php endif; ?>
@@ -72,13 +72,13 @@ if (isset($_SESSION['codigoUsuario'])) {
                       <img class="img-radius" src="dist/assets/images/user/avatar.png" alt="User-Profile-Image">
                       <div class="media-body">
                         <p>
-                          <strong><?= htmlspecialchars($incidencia['INC_numero_formato'] . '  cerrada'); ?></strong>
+                          <strong><?= 'Incidencia: ' . htmlspecialchars($incidencia['INC_numero_formato']); ?></strong>
                           <span class="n-time text-muted">
-                            <i class="icon feather icon-clock m-r-10"></i>
+                            <i class="icon feather icon-clock m-r-9"></i>
                             <?= htmlspecialchars($incidencia['tiempoDesdeCierre']); ?>
                           </span>
                         </p>
-                        <p><?= htmlspecialchars($incidencia['CIE_asunto']); ?></p>
+                        <p><?= 'Condici&oacute;n: ' . htmlspecialchars($incidencia['CON_descripcion']); ?></p>
                       </div>
                     </div>
                   </li>
@@ -92,8 +92,18 @@ if (isset($_SESSION['codigoUsuario'])) {
       <!-- Perfil de usuario -->
       <li>
         <div class="dropdown drp-user">
-          <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-            <i class="feather icon-user"></i>
+          <a href="#" class="dropdown-toggle " data-toggle="dropdown">
+            <i class="feather icon-user mr-2 "></i>
+            <span>
+              <?php
+              if (isset($_SESSION['usuario'])) {
+                echo '<span class="text-base">' . htmlspecialchars($_SESSION['usuario'], ENT_QUOTES, 'UTF-8') . '</span>';
+              } else {
+                echo "Usuario no logueado";
+              }
+              ?>
+            </span>
+            <i class="feather icon-more-vertical ml-4"></i>
           </a>
           <div class="dropdown-menu dropdown-menu-right profile-notification">
             <div class="pro-head fixed flex items-center">

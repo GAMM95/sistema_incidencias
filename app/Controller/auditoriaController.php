@@ -70,4 +70,25 @@ class AuditoriaController
       return $resultadoAuditoriaRegistroRecepciones;
     }
   }
+
+  // Metodo para listar los registros de asignaciones en la tabla auditoria
+  public function listarRegistrosAsignaciones()
+  {
+    $resultadoAuditoriaRegistroAsignaciones = $this->auditoriaModel->listarRegistrosAsignaciones();
+    return $resultadoAuditoriaRegistroAsignaciones;
+  }
+
+  // Metodo para consultar registros de asignaciones en la tabla de auditoria
+  public function consultarRegistrosAsignaciones($fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $fechaInicio = isset($_GET['fechaInicio_auditoria_asignaciones']) ? $_GET['fechaInicio_auditoria_asignaciones'] : null;
+      $fechaFin = isset($_GET['fechaFin_auditoria_asignaciones']) ? $_GET['fechaFin_auditoria_asignaciones'] : null;
+
+      $resultadoAuditoriaRegistroAsignaciones = $this->auditoriaModel->consultarRegistrosAsignaciones($fechaInicio, $fechaFin);
+      return $resultadoAuditoriaRegistroAsignaciones;
+    }
+  }
+  
 }

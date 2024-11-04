@@ -70,14 +70,27 @@ $(document).ready(function () {
   });
 
   function nuevaConsulta() {
-    const form = document.getElementById('formConsultarIncidencia');
-    form.reset();
-
-    // Restablecer Select2 manualmente
+    // limpiar los inputs
+    $('fechaInicio').val('');
+    $('fechaFin').val('');
     $('#area').val(null).trigger('change');
     $('#estado').val(null).trigger('change');
 
-    window.location.reload();
+    // Realizar una consulta ajax para obtener todos los registros al presionar el boton nueva consulta
+    $.ajax({
+      url: 'consultar-pendientes.php?action=consultar',
+      type: 'GET',
+      success: function (response) {
+        console.log("Resultados: ", response);
+        // Limpiar el contenido actual de la tabla
+        $('#tablaIncidencias tbody').empty();
+        // Actualizar el contenido de la tabla con la respuesta
+        $('#tablaIncidencias tbody').html(response);
+      },
+      error: function (error) {
+        console.error("Error al obtener registros: ", error);
+      }
+    })
   }
 
   // Evento para nueva consulta
@@ -105,7 +118,7 @@ $(document).ready(function () {
 
     // Realiza la solicitud AJAX
     $.ajax({
-      url: 'consultar-incidencia-admin.php?action=consultar',
+      url: 'consultar-pendientes.php?action=consultar',
       type: 'GET',
       data: dataObject,
       success: function (response) {

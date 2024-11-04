@@ -31,15 +31,18 @@ class ReportePorCodigoPatrimonial extends Conexion
       INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
       INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
       INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+	    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
       LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-      LEFT JOIN CIERRE C ON R.REC_numero = C.REC_numero
+      LEFT JOIN ASIGNACION ASI ON ASI.REC_numero =R.REC_numero
+      LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+      LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
       LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
       LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
       LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
       LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
       LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
       INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
-      WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5))
+      WHERE (I.EST_codigo IN (3, 4, 5, 6, 7) OR C.EST_codigo IN (3, 4, 5, 6 ,7))
       AND INC_codigoPatrimonial = :codigoPatrimonial   
       ORDER BY I.INC_numero_formato ASC";
     $stmt = $conector->prepare($sql);

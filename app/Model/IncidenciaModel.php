@@ -433,6 +433,7 @@ class IncidenciaModel extends Conexion
   //     throw new Exception("Error al listar incidencias registradas por el usuario: " . $e->getMessage());
   //   }
   // }
+  
   // Metodo para listar incidencias registradas por el usuario de un area especifica
   public function listarIncidenciasRegistroUsuario($ARE_codigo)
   {
@@ -560,7 +561,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_ConsultarIncidencias :area, :estado, :fechaInicio, :fechaFin";
+        $sql = "EXEC sp_consultar_incidencias_pendientes :area, :estado, :fechaInicio, :fechaFin";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
         $stmt->bindParam(':estado', $estado, PDO::PARAM_INT);
@@ -584,7 +585,7 @@ class IncidenciaModel extends Conexion
 
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_ConsultarIncidenciasTotales :area, :codigoPatrimonial, :fechaInicio, :fechaFin";
+        $sql = "EXEC sp_consultar_incidencias_totales :area, :codigoPatrimonial, :fechaInicio, :fechaFin";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
         $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);

@@ -383,4 +383,18 @@ class IncidenciaController
     $resultado = $this->incidenciaModel->listarIncidenciasTotales();
     return $resultado;
   }
+
+  // Metodo para listar el total de incidencias para consulta de administrador
+  public function listarIncidenciasTotalesAdministrador()
+  {
+    $resultado = $this->incidenciaModel->listarIncidenciasTotalesAdministrador();
+    return $resultado;
+  }
+
+  // Metodo para listar incidencias pendientes para consulta de administrador
+  public function listarIncidenciasPendientesAdministrador()
+  {
+    $resultado = $this->incidenciaModel->listarIncidenciasPendientesAdministrador();
+    return $resultado;
+  }
 }

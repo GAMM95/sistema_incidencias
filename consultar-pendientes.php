@@ -7,11 +7,8 @@ if (!isset($_SESSION['usuario'])) {
 }
 $action = $_GET['action'] ?? '';
 require_once './app/Controller/IncidenciaController.php';
-require_once './app/Model/IncidenciaModel.php';
 
 $incidenciaController = new IncidenciaController();
-$incidenciaModel = new IncidenciaModel();
-
 $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
 
@@ -46,7 +43,7 @@ if ($action === 'consultar') {
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['fechaIncidenciaFormateada']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['ARE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_codigoPatrimonial']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['CAT_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['BIE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_asunto']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_documento']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
@@ -80,7 +77,7 @@ if ($action === 'consultar') {
   exit;
 } else {
   // Si no hay acción, obtener la lista de incidencias
-  $resultadoBusqueda = $incidenciaModel->listarIncidenciasPendientesAdministrador();
+  $resultadoBusqueda = $incidenciaController->listarIncidenciasPendientesAdministrador();
 }
 ?>
 
@@ -113,18 +110,18 @@ if ($action === 'consultar') {
 
   <?php include_once('app/View/partials/admin/navbar.php'); ?>
   <?php include_once('app/View/partials/admin/header.php'); ?>
-  <?php include_once('app/View/Consultar/admin/consultaIncidencia.php');  ?>
+  <?php include_once('app/View/Consultar/admin/consultaPendientes.php');  ?>
 
   <!-- [ navigation menu ] start -->
   <?php
   if ($rol === 'Administrador') {
     include('app/View/partials/admin/navbar.php');
     include('app/View/partials/admin/header.php');
-    include_once('app/View/Consultar/admin/consultaIncidencia.php');
+    include_once('app/View/Consultar/admin/consultaPendientes.php');
   } else if ($rol === 'Soporte') {
     include('app/View/partials/soporte/navbar.php');
     include('app/View/partials/soporte/header.php');
-    include_once('app/View/Consultar/admin/consultaIncidencia.php');
+    include_once('app/View/Consultar/admin/consultaPendientes.php');
   }
   ?>
   <!-- [ Main Content ] end -->
@@ -137,7 +134,8 @@ if ($action === 'consultar') {
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_consulta_incidencia_admin.js"></script>
+  <script src="./app/View/func/Consultas/func_consulta_pendientes.js"></script>
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">

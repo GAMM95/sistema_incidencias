@@ -74,15 +74,15 @@
               <th scope="col" class="px-3 py-2 text-center hidden">N&deg;</th>
               <th scope="col" class="px-3 py-2 text-center">N&deg; INCIDENCIA</th>
               <th scope="col" class="px-3 py-3 text-center">Fecha incidencia</th>
-              <th scope="col" class="px-3 py-3 text-center">Categor&iacute;a</th>
               <th scope="col" class="px-3 py-3 text-center">Asunto</th>
               <th scope="col" class="px-3 py-3 text-center">Documento</th>
               <th scope="col" class="px-3 py-3 text-center">C&oacute;digo Patrimonial</th>
+              <th scope="col" class="px-3 py-3 text-center">Nombre del Bien</th>
               <th scope="col" class="px-3 py-3 text-center hidden">Fecha Recepcion</th>
               <th scope="col" class="px-3 py-3 text-center">Prioridad</th>
               <th scope="col" class="px-3 py-3 text-center hidden">Impacto</th>
               <th scope="col" class="px-3 py-3 text-center">Fecha Cierre</th>
-              <th scope="col" class="px-3 py-3 text-center hidden">Condic&oacute;n</th>
+              <th scope="col" class="px-3 py-3 text-center">Condici&oacute;n</th>
               <th scope="col" class="px-3 py-3 text-center hidden">Usuario</th>
               <th scope="col" class="px-3 py-3 text-center">Estado</th>
             </tr>
@@ -100,14 +100,14 @@
                   <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($incidencia['INC_numero']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_numero_formato']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['fechaIncidenciaFormateada']) ?></td>
-                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['CAT_nombre']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_asunto']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_documento']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_codigoPatrimonial']) ?></td>
+                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['BIE_nombre']) ?></td>
                   <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($incidencia['fechaRecepcionFormateada']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['PRI_nombre']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['fechaCierreFormateada']) ?></td>
-                  <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($incidencia['CON_descripcion']) ?></td>
+                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['CON_descripcion']) ?></td>
                   <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($incidencia['Usuario']) ?></td>
                   <td class="px-3 py-2 text-center text-center text-xs align-middle">
                     <?php
