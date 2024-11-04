@@ -42,8 +42,7 @@ $(document).ready(function () {
   // Evento para nueva consulta
   function nuevaConsulta() {
     // limpiar los inputs
-    $('fechaInicio').val('');
-    $('fechaFin').val('');
+    document.getElementById('formConsultarCierre').reset();
     $('#area').val(null).trigger('change');
     $('#codigoPatrimonial').val(null).trigger('change');
 

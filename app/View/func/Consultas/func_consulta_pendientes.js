@@ -71,8 +71,7 @@ $(document).ready(function () {
 
   function nuevaConsulta() {
     // limpiar los inputs
-    $('fechaInicio').val('');
-    $('fechaFin').val('');
+    document.getElementById('formConsultarIncidencia').reset();
     $('#area').val(null).trigger('change');
     $('#estado').val(null).trigger('change');
 
