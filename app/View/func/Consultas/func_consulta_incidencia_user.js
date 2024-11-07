@@ -37,31 +37,15 @@ $(document).ready(function () {
   });
 
   // Evento para nueva consulta
-  function nuevaConsulta() {
-    // limpiar los inputs
-    document.getElementById('formConsultarIncidenciaUser').reset();
-    $('#estado').val(null).trigger('change');
-    $('#codigoPatrimonial').val(null).trigger('change');
-
-    // Realizar una consulta ajax para obtener todos los registros al presionar el boton nueva consulta
-    $.ajax({
-      url: 'consultar-incidencia-user.php?action=consultar',
-      type: 'GET',
-      success: function (response) {
-        console.log("Resultados: ", response);
-        // Limpiar el contenido actual de la tabla
-        $('#tablaIncidencias tbody').empty();
-        // Actualizar el contenido de la tabla con la respuesta
-        $('#tablaIncidencias tbody').html(response);
-      },
-      error: function (error) {
-        console.error("Error al obtener registros: ", error);
-      }
-    })
+  function nuevaConsultaUsuario() {
+    const form = document.getElementById('formConsultarIncidenciaUser');
+    form.reset();
+    window.location.reload();
   }
 
+
   // Evento para nueva consulta
-  $('#limpiarCampos').on('click', nuevaConsulta);
+  $('#limpiarCamposUserArea').on('click', nuevaConsultaUsuario);
 
   $('#formConsultarIncidenciaUser').submit(function (event) {
     event.preventDefault(); // Evita el envío del formulario por defecto
@@ -84,15 +68,15 @@ $(document).ready(function () {
 
     // Realiza la solicitud AJAX
     $.ajax({
-      url: 'consultar-incidencia-user.php?action=consultar',
+      url: 'consultar-incidencia-user.php?action=consultar_usuario',
       type: 'GET',
       data: dataObject,
       success: function (response) {
         console.log("Resultados filtrados:", response); // Depuración
         // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaIncidencias tbody').empty();
+        $('#tablaIncidenciasUser tbody').empty();
         // Actualiza el contenido de la tabla con la respuesta
-        $('#tablaIncidencias tbody').html(response);
+        $('#tablaIncidenciasUser tbody').html(response);
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);

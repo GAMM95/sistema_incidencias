@@ -2,6 +2,7 @@
 // Importar el modelo IncidenciaModel.php
 require 'app/Model/IncidenciaModel.php';
 require 'app/Model/BienModel.php';
+$area = $_SESSION['codigoArea'];
 
 class IncidenciaController
 {
@@ -41,7 +42,16 @@ class IncidenciaController
         if (!$this->bienModel->validarBienExistente($codigoPatrimonial)) {
           echo json_encode([
             'success' => false,
-            'message' => 'Verificar c&oacute;digo patrimonial ingresado'
+            'message' => 'Verificar c&oacute;digo patrimonial ingresado.'
+          ]);
+          exit();
+        }
+
+        // Validar que el código patrimonial sea nulo o tenga 12 dígitos
+        if (!empty($codigoPatrimonial) && strlen($codigoPatrimonial) !== 12) {
+          echo json_encode([
+            'success' => false,
+            'message' => 'Debe ingresar los 12 d&iacute;gitos del c&oacute;digo patrimonial.'
           ]);
           exit();
         }
@@ -145,6 +155,15 @@ class IncidenciaController
           echo json_encode([
             'success' => false,
             'message' => 'Verificar c&oacute;digo patrimonial ingresado'
+          ]);
+          exit();
+        }
+
+        // Validar que el código patrimonial sea nulo o tenga 12 dígitos
+        if (!empty($codigoPatrimonial) && strlen($codigoPatrimonial) !== 12) {
+          echo json_encode([
+            'success' => false,
+            'message' => 'Debe ingresar los 12 d&iacute;gitos del c&oacute;digo patrimonial.'
           ]);
           exit();
         }
@@ -396,5 +415,18 @@ class IncidenciaController
   {
     $resultado = $this->incidenciaModel->listarIncidenciasPendientesAdministrador();
     return $resultado;
+  }
+
+  // Metodo para listar incidencias totales por cada area para los usuarios
+  public function listarIncidenciasTotalesPorArea($area)
+  {
+    try {
+      // Llamada al modelo para obtener las incidencias
+      $resultado = $this->incidenciaModel->listarIncidenciasUsuario($area);
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias: " . $e->getMessage();
+    }
   }
 }

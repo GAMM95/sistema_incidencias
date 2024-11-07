@@ -251,7 +251,7 @@ class IncidenciaModel extends Conexion
   }
 
   // Metodo listar incidencias totales - USUARIO
-  public function listarIncidenciasUsuario($ARE_codigo)
+  public function listarIncidenciasUsuario($area)
   {
     $conector = parent::getConexion();
     try {
@@ -260,7 +260,7 @@ class IncidenciaModel extends Conexion
         WHERE ARE_codigo = :are_codigo
         ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':are_codigo', $ARE_codigo, PDO::PARAM_INT); // Vinculamos el parámetro
+        $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT);
         $stmt->execute();
 
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

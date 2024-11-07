@@ -36,7 +36,7 @@
       <div class="w-full hidden md:block mb-4 relative">
         <video src="public/assets/video_login.mp4" autoplay muted loop class='videoLogin rounded-xl w-full max-w-md mx-auto h-48 object-cover'></video>
         <!-- Texto sobre el video -->
-        <h3 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-white font-poppins w-full text-center">Sistema de Gestión de Incidencias</h3>
+        <h3 class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 text-2xl font-bold text-white font-poppins w-full text-center">Sistema de Gesti&oacute;n de Incidencias</h3>
       </div>
 
       <!-- Panel del formulario -->
@@ -64,7 +64,7 @@
           <div class="inputDiv w-60 mb-3 mx-auto">
             <div class="input flex items-center border rounded-2xl p-2">
               <i class="bx bxs-lock icon-input icon text-2xl mr-2" style="color: #159A80;"></i>
-              <input type="password" id="password" placeholder="Ingrese su contraseña" name="password" class="w-full max-w-xs outline-none text-sm font-poppins ml-2 text-gray-600">
+              <input type="password" id="password" placeholder="Ingrese su contrase&ntilde;a" name="password" class="w-full max-w-xs outline-none text-sm font-poppins ml-2 text-gray-600">
               <!-- Icono para mostrar/ocultar contraseña -->
               <div id="togglePassword" class="show-hide-link icon cursor-pointer text-gray-400 text-lg"><i class='feather icon-eye text-gray-400 text-md'></i></div>
             </div>

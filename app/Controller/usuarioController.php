@@ -125,9 +125,6 @@ class UsuarioController
   {
     try {
       // Obtener los datos del formulario
-      $usu_nombre = $_POST['username'] ?? null;
-      $usu_password = $_POST['password'] ?? null;
-      $per_dni = $_POST['dni'] ?? null;
       $per_nombres = $_POST['nombres'] ?? null;
       $per_apellidoPaterno = $_POST['apellidoPaterno'] ?? null;
       $per_apellidoMaterno = $_POST['apellidoMaterno'] ?? null;
@@ -137,7 +134,7 @@ class UsuarioController
 
 
       // Actualizar usuario
-      $this->usuarioModel->editarPerfilUsuario($usu_codigo, $usu_nombre, $usu_password, $per_dni, $per_nombres, $per_apellidoPaterno, $per_apellidoMaterno, $per_celular, $per_email);
+      $this->usuarioModel->editarPerfilUsuario($usu_codigo, $per_nombres, $per_apellidoPaterno, $per_apellidoMaterno, $per_celular, $per_email);
 
       echo json_encode([
         'success' => true,
@@ -251,4 +248,126 @@ class UsuarioController
       ]);
     }
   }
+
+  // Método para cambiar la contraseña del usuario
+  public function cambiarContraseña()
+  {
+    try {
+      // Obtener los datos del formulario
+      $usu_codigo = $_POST['codigoUsuarioModal'] ?? null;
+      $passwordActual = $_POST['passwordActual'] ?? null;
+      $passwordNuevo = $_POST['passwordNuevo'] ?? null;
+      $passwordConfirm = $_POST['passwordConfirm'] ?? null;
+
+      // Validar que todos los campos estén completos
+      if (empty($usu_codigo) || empty($passwordActual) || empty($passwordNuevo) || empty($passwordConfirm)) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Debe completar todos los campos para cambiar la contraseña.'
+        ]);
+        exit();
+      }
+
+      // Validar que la nueva contraseña y la confirmación coincidan
+      if ($passwordNuevo !== $passwordConfirm) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'La nueva contraseña y la confirmación no coinciden.'
+        ]);
+        exit();
+      }
+
+      // Verificar que la contraseña actual sea correcta
+      $verificarContraseñaActual = $this->usuarioModel->verificarContraseñaActual($usu_codigo, $passwordActual);
+
+      if (!$verificarContraseñaActual) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'La contraseña actual es incorrecta.'
+        ]);
+        exit();
+      }
+
+      // Cambiar la contraseña del usuario
+      $cambiarContraseña = $this->usuarioModel->cambiarContraseña($usu_codigo, $passwordActual, $passwordNuevo, $passwordConfirm);
+
+      if ($cambiarContraseña) {
+        echo json_encode([
+          'success' => true,
+          'message' => 'Contraseña cambiada exitosamente.'
+        ]);
+      } else {
+        echo json_encode([
+          'success' => false,
+          'message' => 'No se pudo cambiar la contraseña.'
+        ]);
+      }
+    } catch (Exception $e) {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Error: ' . $e->getMessage()
+      ]);
+    }
+  }
+
+  // // Método para cambiar la contraseña del usuario
+  // public function cambiarContraseña()
+  // {
+  //   try {
+  //     // Obtener los datos del formulario
+  //     $usu_codigo = $_POST['codigoUsuario'] ?? null;
+  //     $passwordActual = $_POST['passwordActual'] ?? null;
+  //     $passwordNuevo = $_POST['passwordNuevo'] ?? null;
+  //     $passwordConfirm = $_POST['passwordConfirm'] ?? null;
+
+  //     // Validar que todos los campos estén completos
+  //     if (empty($usu_codigo) || empty($passwordActual) || empty($passwordNuevo) || empty($passwordConfirm)) {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'Debe completar todos los campos para cambiar la contraseña.'
+  //       ]);
+  //       return;  // En lugar de exit(), se retorna el flujo
+  //     }
+
+  //     // Validar que la nueva contraseña y la confirmación coincidan
+  //     if ($passwordNuevo !== $passwordConfirm) {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'La nueva contraseña y la confirmación no coinciden.'
+  //       ]);
+  //       return;  // En lugar de exit(), se retorna el flujo
+  //     }
+
+  //     // Verificar que la contraseña actual sea correcta
+  //     $verificarContraseñaActual = $this->usuarioModel->verificarContraseñaActual($usu_codigo, $passwordActual);
+
+  //     if (!$verificarContraseñaActual) {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'La contraseña actual es incorrecta.'
+  //       ]);
+  //       return;  // En lugar de exit(), se retorna el flujo
+  //     }
+
+  //     // Cambiar la contraseña del usuario
+  //     $cambiarContraseña = $this->usuarioModel->cambiarContraseña($usu_codigo, $passwordNuevo);
+
+  //     if ($cambiarContraseña) {
+  //       echo json_encode([
+  //         'success' => true,
+  //         'message' => 'Contraseña cambiada exitosamente.'
+  //       ]);
+  //     } else {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'No se pudo cambiar la contraseña.'
+  //       ]);
+  //     }
+  //   } catch (Exception $e) {
+  //     echo json_encode([
+  //       'success' => false,
+  //       'message' => 'Error: ' . $e->getMessage()
+  //     ]);
+  //   }
+  // }
 }

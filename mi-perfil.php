@@ -19,6 +19,11 @@ switch ($action) {
   case 'editar':
     $usuarioController->editarPerfil();
     break;
+  case 'cambiarContraseña':
+    $usuarioController->cambiarContraseña();
+    break;
+  default:
+    break;
 }
 
 ?>
@@ -75,7 +80,9 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_perfil.js"></script>
+  <script src="./app/View/func/Perfil/func_perfil.js"></script>
+  <script src="./app/View/func/Perfil/func_cambiarPassword.js"></script>
+
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
   <script src="https://cdn.tailwindcss.com"></script>

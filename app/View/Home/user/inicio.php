@@ -93,10 +93,16 @@
             <!-- Título alineado a la izquierda -->
             <h5 class="flex-shrink-0">Incidencias del d&iacute;a</h5>
 
+            <!-- Input de la fecha seleccionada -->
             <div class="flex-grow flex justify-center">
-              <form action="" method="get" id="fechaForm">
-                <input type="date" name="fecha" class="form-input mr-4 cursor-pointer" aria-label="Seleccionar fecha" value="<?= isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d'); ?>" onchange="document.getElementById('fechaForm').submit();">
-              </form>
+              <input
+                type="date"
+                name="fecha"
+                id="fechaInput"
+                class="form-input mr-4 cursor-pointer"
+                aria-label="Seleccionar fecha"
+                value="<?= isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d'); ?>"
+                max="<?= date('Y-m-d'); ?>">
             </div>
 
             <!-- Botones alineados a la derecha -->

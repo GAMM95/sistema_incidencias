@@ -6,13 +6,10 @@ if (!isset($_SESSION['usuario'])) {
   exit();
 }
 $action = $_GET['action'] ?? '';
-// $state = $_GET['state'] ?? '';
 
 require_once './app/Controller/IncidenciaController.php';
-require_once './app/Model/IncidenciaModel.php';
 
 $incidenciaController = new IncidenciaController();
-$incidenciaModel = new IncidenciaModel();
 
 // Capturar los datos del formulario
 $area = $_SESSION['codigoArea'];
@@ -22,7 +19,7 @@ $fechaInicio = $_GET['fechaInicio'] ?? '';
 $fechaFin = $_GET['fechaFin'] ?? '';
 $resultadoBusqueda = NULL;
 
-if ($action === 'consultar') {
+if ($action === 'consultar_usuario') {
   // Depuración: mostrar los parámetros recibidos
   error_log("Área: " . $area);
   error_log("Código patrimonial: " . $codigoPatrimonial);
@@ -45,6 +42,7 @@ if ($action === 'consultar') {
       $html .= '<td class="px-3 py-2 text-center">' . $item++ . '</td>'; // Columna de ítem
       $html .= '<td class="px-3 py-2 text-center hidden">' . htmlspecialchars($incidencia['INC_numero']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_numero_formato']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center hidden">' . htmlspecialchars($incidencia['ARE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['fechaIncidenciaFormateada']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_asunto']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($incidencia['INC_documento']) . '</td>';
@@ -86,7 +84,7 @@ if ($action === 'consultar') {
   exit;
 } else {
   // Si no hay acción, obtener la lista de incidencias
-  $resultadoBusqueda = $incidenciaModel->listarIncidenciasUsuario($area);
+  $resultadoBusqueda = $incidenciaController->listarIncidenciasTotalesPorArea($area);
 }
 ?>
 

@@ -1,7 +1,7 @@
-// Habilitar campos para edición
+// Habilitar campos para edición, excluyendo rol y área
 document.getElementById('habilitar').addEventListener('click', function () {
-  document.querySelectorAll('input').forEach(input => {
-    if (input.id !== 'codigoUsuario') {
+  document.querySelectorAll('#formPerfil input[type="text"]').forEach(input => {
+    if (input.id !== 'dni' && input.id !== 'username' && input.id !== 'rol' && input.id !== 'area') {
       input.disabled = false;
     }
   });
@@ -10,9 +10,9 @@ document.getElementById('habilitar').addEventListener('click', function () {
   document.getElementById('habilitar').disabled = true;
 });
 
-// Cancelar edición
+// Cancelar edición, deshabilitar todos los campos
 document.getElementById('nuevo-registro').addEventListener('click', function () {
-  document.querySelectorAll('input').forEach(input => {
+  document.querySelectorAll('#formPerfil input[type="text"]').forEach(input => {
     input.disabled = true;
   });
   document.getElementById('editar-datos').disabled = true;
@@ -20,7 +20,7 @@ document.getElementById('nuevo-registro').addEventListener('click', function () 
   document.getElementById('habilitar').disabled = false;
 });
 
-// Recopilacion de valores de cada input
+// Recopilación de valores y envío del formulario
 
 $(document).ready(function () {
   // Configurar la posición de Toastr
@@ -30,27 +30,29 @@ $(document).ready(function () {
     "timeOut": "2000"
   };
 
+  // Habilitar los campos, excluyendo rol y área
   document.getElementById('habilitar').addEventListener('click', function () {
-    // Habilitar los campos
-    document.querySelectorAll('#formPerfil input[type="text"]').forEach(input => input.disabled = false);
-    // Habilitar el botón de editar y deshabilitar el botón de habilitar
+    document.querySelectorAll('#formPerfil input[type="text"]').forEach(input => {
+      if (input.id !== 'dni' && input.id !== 'username' && input.id !== 'rol' && input.id !== 'area') {
+        input.disabled = false;
+      }
+    });
     document.getElementById('editar-datos').disabled = false;
     this.disabled = true;
     document.getElementById('nuevo-registro').disabled = false;
 
-    // Mostrar el mensaje de Toastr
-    toastr.info('Campos habilitados para edición', 'Mensaje');
+    toastr.info('Campos habilitados para edici&oacute;n', 'Mensaje');
   });
 
+  // Deshabilitar los campos
   document.getElementById('nuevo-registro').addEventListener('click', function () {
-    // Deshabilitar los campos
-    document.querySelectorAll('#formPerfil input[type="text"]').forEach(input => input.disabled = true);
-    // Habilitar el botón de habilitar y deshabilitar el botón de editar
+    document.querySelectorAll('#formPerfil input[type="text"]').forEach(input => {
+      input.disabled = true;
+    });
     document.getElementById('habilitar').disabled = false;
     document.getElementById('editar-datos').disabled = true;
     this.disabled = true;
 
-    // Mostrar el mensaje de Toastr
     toastr.info('Campos deshabilitados', 'Mensaje');
   });
 
@@ -84,3 +86,4 @@ $(document).ready(function () {
     enviarFormulario('editar');
   });
 });
+

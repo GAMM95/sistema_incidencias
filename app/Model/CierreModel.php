@@ -264,7 +264,7 @@ class CierreModel extends Conexion
         INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
         INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
         INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-        WHERE  I.EST_codigo = 5 OR C.EST_codigo = 5
+        WHERE  I.EST_codigo = 7 OR C.EST_codigo = 7
         AND INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
         AND INC_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1) 
         AND CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)

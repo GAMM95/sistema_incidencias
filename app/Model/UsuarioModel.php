@@ -394,17 +394,14 @@ class UsuarioModel extends Conexion
   }
 
   // Metodo para editar perfil del usuario
-  public function editarPerfilUsuario($codigoUsuario, $username, $password, $dni, $nombrePersona, $apellidoPaterno, $apellidoMaterno, $celular, $email)
+  public function editarPerfilUsuario($codigoUsuario, $nombrePersona, $apellidoPaterno, $apellidoMaterno, $celular, $email)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $query = "EXEC sp_editar_perfil :codigoUsuario, :username, :password, :dni, :nombrePersona, :apellidoPaterno, :apellidoMaterno, :celular, :email";
+        $query = "EXEC sp_editar_perfil :codigoUsuario, :nombrePersona, :apellidoPaterno, :apellidoMaterno, :celular, :email";
         $stmt = $conector->prepare($query);
         $stmt->bindParam(':codigoUsuario', $codigoUsuario);
-        $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
-        $stmt->bindParam(':dni', $dni);
         $stmt->bindParam(':nombrePersona', $nombrePersona);
         $stmt->bindParam(':apellidoPaterno', $apellidoPaterno);
         $stmt->bindParam(':apellidoMaterno', $apellidoMaterno);
@@ -413,7 +410,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('PERSONA - USUARIO', 'Actualizacion de perfil');
+        $this->auditoria->registrarEvento('PERSONA', 'Actualizar perfil');
 
         return true;
       } else {
@@ -511,4 +508,54 @@ class UsuarioModel extends Conexion
       throw new PDOException("Error al deshabilitar usuario: " . $e->getMessage());
     }
   }
+
+  // Metodo para verificar contraseña del usuario
+  public function verificarContraseñaActual($codigoUsuario, $passwordActual)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $query = "EXEC sp_verificar_contrasena_actual :codigoUsuario, :passwordActual";
+        $stmt = $conector->prepare($query);
+        $stmt->bindParam(':codigoUsuario', $codigoUsuario);
+        $stmt->bindParam(':passwordActual', $passwordActual);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado ? $resultado['Resultado'] : false;
+      } else {
+        throw new Exception("Error de conexion a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al verificar contraseña actual: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para cambiar contraseña del usuario
+  public function cambiarContraseña($codigoUsuario, $passwordActual, $passwordNuevo)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $query = "EXEC sp_cambiar_contrasena :codigoUsuario, :passwordActual, :passwordNuevo, :passwordConfirm";
+        $stmt = $conector->prepare($query);
+        $stmt->bindParam(':codigoUsuario', $codigoUsuario);
+        $stmt->bindParam(':passwordActual', $passwordActual);
+        $stmt->bindParam(':passwordNuevo', $passwordNuevo);
+        $stmt->bindParam(':passwordConfirm', $passwordNuevo);
+        $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $this->auditoria->registrarEvento('PERSONA', 'Cambiar contraseña');
+
+        return true;
+      } else {
+        throw new Exception("Error de conexion a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al cambiar contraseña: " . $e->getMessage());
+    }
+  }
+
 }

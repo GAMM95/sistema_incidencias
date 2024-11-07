@@ -20,7 +20,7 @@
     <!-- Fin de miga de pan -->
 
     <!-- Formulario Consulta de incidencias -->
-    <form id="formConsultarIncidenciaUser" action="consultar-incidencia-user.php?action=consultar" method="GET" class="card table-card bg-white shadow-md p-6 w-full text-xs mb-2">
+    <form id="formConsultarIncidenciaUser" action="consultar-incidencia-user.php?action=consultar_usuario" method="GET" class="card table-card bg-white shadow-md p-6 w-full text-xs mb-2">
       <div class="flex flex-wrap items-center -mx-2 justify-center space-x-2">
         <!-- AREA DEL USUARIO -->
         <div class="w-full sm:w-1/6 px-2 mb-2 hidden">
@@ -31,7 +31,7 @@
         <!-- BUSCAR POR CODIGO PATRIMONIAL -->
         <div class="w-full sm:w-1/3 md:w-1/5 px-2 mb-2">
           <label for="codigoPatrimonial" class="block mb-1 font-bold text-xs">C&oacute;digo Patrimonial:</label>
-          <input type="text" id="codigoPatrimonial" name="codigoPatrimonial" class="border p-2 w-full text-xs rounded-md" maxlength="12" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo patrimonial">
+          <input type="text" id="codigoPatrimonial" name="codigoPatrimonial" class="border p-2 w-full text-xs rounded-md" maxlength="12" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo d&iacute;gitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo patrimonial">
         </div>
 
         <!-- BUSCAR POR ESTADO -->
@@ -55,8 +55,8 @@
 
       <!-- BOTONES DEL FORMULARIO -->
       <div class="flex justify-center space-x-2 mt-2">
-        <button type="submit" id="buscar-incidencias" class="bg-blue-500 text-white font-bold py-2 px-3 rounded-md" value="consultar"> <i class="feather mr-2 icon-search"></i>Buscar </button>
-        <button type="button" id="limpiarCampos" class="bg-gray-500 text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-refresh-cw"></i>Nueva consulta</button>
+        <button type="submit" id="buscar-incidencias" class="bg-blue-500 text-white font-bold py-2 px-3 rounded-md" value="consultar"> <i class="feather mr-2 icon-filter"></i>Filtrar</button>
+        <button type="button" id="limpiarCamposUserArea" class="bg-gray-500 text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-refresh-cw"></i>Nueva consulta</button>
       </div>
       <!-- Fin de Botones -->
     </form>
@@ -66,13 +66,14 @@
     <!-- TABLA DE RESULTADOS DE LAS INCIDENCIAS -->
     <div class="relative shadow-md sm:rounded-lg">
       <div class="max-w-full overflow-hidden">
-        <table id="tablaIncidencias" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+        <table id="tablaIncidenciasUser" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
           <!-- Encabezado de la tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-lime-300">
             <tr>
               <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
               <th scope="col" class="px-3 py-2 text-center hidden">N&deg;</th>
               <th scope="col" class="px-3 py-2 text-center">N&deg; INCIDENCIA</th>
+              <th scope="col" class="px-3 py-2 text-center hidden">&Aacute;rea</th>
               <th scope="col" class="px-3 py-3 text-center">Fecha incidencia</th>
               <th scope="col" class="px-3 py-3 text-center">Asunto</th>
               <th scope="col" class="px-3 py-3 text-center">Documento</th>
@@ -99,6 +100,7 @@
                   <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                   <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($incidencia['INC_numero']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_numero_formato']) ?></td>
+                  <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($incidencia['ARE_nombre']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['fechaIncidenciaFormateada']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_asunto']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_documento']) ?></td>

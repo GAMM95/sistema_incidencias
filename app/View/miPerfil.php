@@ -44,7 +44,7 @@
             <div class="form-group row">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">DNI</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="dni" name="dni" maxlength="8" pattern="\d{1,8}" inputmode="numeric" placeholder="DNI" value="<?php echo htmlspecialchars($perfil['PER_dni']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-100 rounded-md p-2 text-md" id="dni" name="dni" maxlength="8" pattern="\d{1,8}" inputmode="numeric" placeholder="DNI" value="<?php echo htmlspecialchars($perfil['PER_dni']); ?>" disabled>
               </div>
             </div>
 
@@ -52,7 +52,7 @@
             <div class="form-group row">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Nombres</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="nombres" name="nombres" placeholder="Nombres" value="<?php echo htmlspecialchars($perfil['PER_nombres']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-50 rounded-md p-2 text-md" id="nombres" name="nombres" placeholder="Nombres" value="<?php echo htmlspecialchars($perfil['PER_nombres']); ?>" disabled>
               </div>
             </div>
 
@@ -60,7 +60,7 @@
             <div class="form-group row">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Apellido Paterno</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="apellidoPaterno" name="apellidoPaterno" placeholder="Apellido paterno" value="<?php echo htmlspecialchars($perfil['PER_apellidoPaterno']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-50 rounded-md p-2 text-md" id="apellidoPaterno" name="apellidoPaterno" placeholder="Apellido paterno" value="<?php echo htmlspecialchars($perfil['PER_apellidoPaterno']); ?>" disabled>
               </div>
             </div>
 
@@ -68,7 +68,7 @@
             <div class="form-group row">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Apellido Materno</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="apellidoMaterno" name="apellidoMaterno" placeholder="Apellido materno" value="<?php echo htmlspecialchars($perfil['PER_apellidoMaterno']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-50 rounded-md p-2 text-md" id="apellidoMaterno" name="apellidoMaterno" placeholder="Apellido materno" value="<?php echo htmlspecialchars($perfil['PER_apellidoMaterno']); ?>" disabled>
               </div>
             </div>
 
@@ -76,7 +76,7 @@
             <div class="form-group row">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Celular</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="celular" name="celular" maxlength="9" pattern="\d{1,9}" inputmode="numeric"  placeholder="Celular" value="<?php echo htmlspecialchars($perfil['PER_celular']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-50 rounded-md p-2 text-md" id="celular" name="celular" maxlength="9" pattern="\d{1,9}" inputmode="numeric" placeholder="Celular" value="<?php echo htmlspecialchars($perfil['PER_celular']); ?>" disabled>
               </div>
             </div>
 
@@ -84,9 +84,17 @@
             <div class="form-group row">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Email</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($perfil['PER_email']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-50 rounded-md p-2 text-md" id="email" name="email" placeholder="Email" value="<?php echo htmlspecialchars($perfil['PER_email']); ?>" disabled>
               </div>
             </div>
+
+            <!-- Botones del formulario -->
+            <div class="flex justify-center space-x-4 mt-5 mb-5">
+              <button type="button" id="habilitar" class="bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-circle"></i>Habilitar</button>
+              <button type="submit" id="editar-datos" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md" disabled><i class="feather mr-2 icon-edit"></i>Editar</button>
+              <button type="button" id="nuevo-registro" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md" disabled> <i class="feather mr-2 icon-slash"></i>Deshabilitar</button>
+            </div>
+
             <!-- Fin Formulario Datos personales -->
           </div>
 
@@ -94,12 +102,11 @@
             <h5 class="mb-1 text-lg text-bold">Informaci&oacute;n de Usuario</h5>
             <hr class="mb-2">
 
-            <!-- Inicio de formulario de datos de Usuario -->
             <!-- Codigo de usuario -->
             <div class="form-group row hidden">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Codigo de usuario</label>
               <div class="col-sm-9">
-                <input type="text" id="codigoUsuario" name="codigoUsuario" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>" readonly>
+                <input type="text" id="codigoUsuario" name="codigoUsuario" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>" readonly>
               </div>
             </div>
 
@@ -107,41 +114,143 @@
             <div class="form-group row">
               <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Usuario</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="username" name="username" placeholder="Nombre de usuario" value="<?php echo htmlspecialchars($perfil['USU_nombre']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-100 rounded-md p-2 text-md" id="username" name="username" placeholder="Nombre de usuario" value="<?php echo htmlspecialchars($perfil['USU_nombre']); ?>" disabled>
               </div>
             </div>
 
-            <!-- Contraseña del usuario -->
+            <!-- Rol del usuario -->
             <div class="form-group row">
-              <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Contrase&ntilde;a</label>
+              <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Rol asignado</label>
               <div class="col-sm-9">
-                <input type="text" class="form-control form-control-sm" id="password" name="password" placeholder="Contrase&ntilde;a" value="<?php echo htmlspecialchars($perfil['USU_password']); ?>" disabled>
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-100 rounded-md p-2 text-md" id="rol" name="rol" placeholder="Rol" value="<?php echo htmlspecialchars($perfil['ROL_nombre']); ?>" disabled readonly>
               </div>
             </div>
 
-            <!-- BOTONES DEL FORMULARIO -->
+            <!-- Area del usuario -->
+            <div class="form-group row">
+              <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">&Aacute;rea asignada</label>
+              <div class="col-sm-9">
+                <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-100 rounded-md p-2 text-md" id="area" name="area" placeholder="&Aacute;rea" value="<?php echo htmlspecialchars($perfil['ARE_nombre']); ?>" disabled readonly>
+              </div>
+            </div>
+
+
+            <!-- Boton cambiar contraseña -->
             <div class="flex justify-center space-x-4 mt-10">
-              <button type="button" id="habilitar" class="bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-circle"></i>Habilitar</button>
-              <button type="submit" id="editar-datos" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md" disabled><i class="feather mr-2 icon-edit"></i>Editar</button>
-              <button type="button" id="nuevo-registro" class="bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md" disabled> <i class="feather mr-2 icon-slash"></i>Deshabilitar</button>
+              <button type="button" data-toggle="modal" data-target="#modalCambiarPassword" id="cambiarPasswordModal" class="bn bg-orange-500 hover:bg-orange-600 text-xs text-white font-bold py-2 px-3 rounded-md">
+                <i class="feather mr-2 icon-lock"></i>Cambiar contrase&ntilde;a</button>
             </div>
             <!-- Fin Formulario datos de Usuario -->
+
+            <!-- TODO:Modal Cambio de contraseña -->
+            <div class="modal fade" id="modalCambiarPassword" tabindex="-1" role="dialog" aria-labelledby="modalBuscarIncidenciaLabel" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-xl font-bold" id="modalBuscarIncidenciaLabel">Cambio de clave de usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="formCambiarPassword" action="mi-perfil.php?action=cambiarContraseña" method="POST" class="card table-card bg-white shadow-md p-6 text-xs flex flex-col mb-2">
+                      <input type="hidden" id="form-action-cambiarContraseña" name="action" value="cambiarContraseña">
+                      <div>
+                        <p class="mb-0 text-gray-800 text-lg">Datos del usuario</p>
+                        <hr class="border-t-2 border-gray-100 mb-2"> <!-- Línea separadora -->
+
+                        <!-- Codigo de usuario -->
+                        <div class="form-group row hidden">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-xs">Codigo de usuario</label>
+                          <div class="col-sm-9">
+                            <input type="text" id="codigoUsuarioModal" name="codigoUsuarioModal" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>" readonly>
+                          </div>
+                        </div>
+
+                        <!-- Nombre de usuario -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Usuario</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-100 rounded-md p-2 text-md" id="usernameModal" name="usernameModal" placeholder="Nombre de usuario" value="<?php echo htmlspecialchars($perfil['USU_nombre']); ?>" disabled readonly>
+                          </div>
+                        </div>
+
+                        <!-- Nombre de usuario -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Nombre</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm border border-green-500 bg-gray-100 rounded-md p-2 text-md" id="usernameModel" name="usernameModel" placeholder="Nombre de usuario" value="<?php echo htmlspecialchars($perfil['Persona']); ?>" disabled readonly>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p class="mb-0 text-gray-800 text-lg">Datos de acceso</p>
+                        <hr class="border-t-2 border-gray-100 mb-3"> <!-- Línea separadora -->
+
+                        <!-- Contraseña actual -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Nueva contrase&ntilde;a</label>
+                          <div class="col-sm-7 position-relative">
+                            <input type="password" class="form-control form-control-sm border border-green-500 bg-white rounded-md p-2 text-md pr-10" id="passwordActual" name="passwordActual" placeholder="Ingrese contrase&ntilde;a actual">
+                            <!-- Icono para mostrar/ocultar contraseña -->
+                            <span id="togglePasswordActual" class="position-absolute cursor-pointer" style="right: 25px; top: 50%; transform: translateY(-50%);">
+                              <i class="feather icon-eye text-gray-400"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Contraseña nueva -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Nueva contrase&ntilde;a</label>
+                          <div class="col-sm-7 position-relative">
+                            <input type="password" class="form-control form-control-sm border border-green-500 bg-white rounded-md p-2 text-md pr-10" id="passwordNuevo" name="passwordNuevo" placeholder="Ingrese nueva contrase&ntilde;a">
+                            <!-- Icono para mostrar/ocultar contraseña -->
+                            <span id="togglePasswordNuevo" class="position-absolute cursor-pointer" style="right: 25px; top: 50%; transform: translateY(-50%);">
+                              <i class="feather icon-eye text-gray-400"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Confirmar contraseña -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Confirmar contrase&ntilde;a</label>
+                          <div class="col-sm-7 position-relative">
+                            <input type="password" class="form-control form-control-sm border border-green-500 bg-white rounded-md p-2 text-md pr-10" id="passwordConfirm" name="passwordConfirm" placeholder="Confirmar contrase&ntilde;a">
+                            <!-- Icono para mostrar/ocultar contraseña -->
+                            <span id="togglePasswordConfirm" class="position-absolute cursor-pointer" style="right: 25px; top: 50%; transform: translateY(-50%);">
+                              <i class="feather icon-eye text-gray-400"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-center">
+                    <button type="button" id="cambiarPassword" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-lock"></i>Cambiar contrase&ntilde;a</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Cambio de contraseña -->
           </div>
         </div>
 
         <!-- Recopilacion de valores de cada input -->
         <script>
-          document.getElementById('dni').value = '<?php echo htmlspecialchars($perfil['PER_dni']); ?>';
-          document.getElementById('nombres').value = '<?php echo htmlspecialchars($perfil['PER_nombres']); ?>';
-          document.getElementById('apellidoPaterno').value = '<?php echo htmlspecialchars($perfil['PER_apellidoPaterno']); ?>';
-          document.getElementById('apellidoMaterno').value = '<?php echo htmlspecialchars($perfil['PER_apellidoMaterno']); ?>';
-          document.getElementById('celular').value = '<?php echo htmlspecialchars($perfil['PER_celular']); ?>';
-          document.getElementById('email').value = '<?php echo htmlspecialchars($perfil['PER_email']); ?>';
-          document.getElementById('username').value = '<?php echo htmlspecialchars($perfil['USU_nombre']); ?>';
-          document.getElementById('password').value = '<?php echo htmlspecialchars($perfil['USU_password']); ?>';
+          // document.getElementById('dni').value = '<?php echo htmlspecialchars($perfil['PER_dni']); ?>';
+          // document.getElementById('nombres').value = '<?php echo htmlspecialchars($perfil['PER_nombres']); ?>';
+          // document.getElementById('apellidoPaterno').value = '<?php echo htmlspecialchars($perfil['PER_apellidoPaterno']); ?>';
+          // document.getElementById('apellidoMaterno').value = '<?php echo htmlspecialchars($perfil['PER_apellidoMaterno']); ?>';
+          // document.getElementById('celular').value = '<?php echo htmlspecialchars($perfil['PER_celular']); ?>';
+          // document.getElementById('email').value = '<?php echo htmlspecialchars($perfil['PER_email']); ?>';
+          // document.getElementById('username').value = '<?php echo htmlspecialchars($perfil['USU_nombre']); ?>';
+          // document.getElementById('password').value = '<?php echo htmlspecialchars($perfil['USU_password']); ?>';
         </script>
       </div>
     </form>
   </div>
 </div>
+
 <script src="https://cdn.tailwindcss.com"></script>

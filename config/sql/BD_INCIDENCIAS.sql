@@ -1747,6 +1747,49 @@ BEGIN
 END;
 GO
 
+-- PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR DATOS PERSONALES DEL USUARIO
+CREATE OR ALTER PROCEDURE sp_editar_perfil
+  @USU_codigo SMALLINT,
+  @PER_nombres VARCHAR(20),
+  @PER_apellidoPaterno VARCHAR(15),
+  @PER_apellidoMaterno VARCHAR(15),
+  @PER_celular CHAR(9),
+  @PER_email VARCHAR(45)
+AS
+BEGIN
+  BEGIN TRY
+    BEGIN TRANSACTION; -- Inicia una transacción para asegurar la consistencia de los datos
+      -- Actualiza los datos de la persona vinculada al usuario
+      UPDATE PERSONA
+      SET 
+          PER_nombres = @PER_nombres,
+          PER_apellidoPaterno = @PER_apellidoPaterno,
+          PER_apellidoMaterno = @PER_apellidoMaterno,
+          PER_celular = @PER_celular,
+          PER_email = @PER_email
+      WHERE PER_codigo = (
+          SELECT PER_codigo 
+          FROM USUARIO 
+          WHERE USU_codigo = @USU_codigo
+      );
+    COMMIT TRANSACTION; 
+  END TRY
+  BEGIN CATCH   
+    ROLLBACK TRANSACTION; 
+    DECLARE @ErrorMessage NVARCHAR(4000);
+    DECLARE @ErrorSeverity INT;
+    DECLARE @ErrorState INT;
+
+    SELECT 
+        @ErrorMessage = ERROR_MESSAGE(),
+        @ErrorSeverity = ERROR_SEVERITY(),
+        @ErrorState = ERROR_STATE();
+
+    RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+  END CATCH
+END;
+GO
+
 --PROCEDIMIENTO ALMANCENADO PARA VERIFICAR USUARIO
 CREATE OR ALTER PROCEDURE sp_verificar_usuario
     @USU_nombre NVARCHAR(50),
@@ -1793,6 +1836,132 @@ BEGIN
         SELECT @USU_codigo AS codigo, 
                @USU_nombre AS usuario, 
                'Autenticación exitosa' AS Resultado;
+    END
+    ELSE
+    BEGIN
+        SELECT 'Contraseña incorrecta' AS Resultado;
+    END
+END;
+GO
+
+--PROCEDIMIENTO ALMACENADO PARA CAMBIAR CONTRASEÑA
+CREATE OR ALTER PROCEDURE sp_cambiar_contrasena
+    @USU_codigo INT,                       -- Código del usuario
+    @USU_password_actual NVARCHAR(100),    -- Contraseña actual
+    @USU_password_nueva NVARCHAR(100),     -- Nueva contraseña
+    @USU_password_confirmacion NVARCHAR(100) -- Confirmación de la nueva contraseña
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @stored_password VARBINARY(64);  -- Contraseña almacenada (hash)
+    DECLARE @salt UNIQUEIDENTIFIER;          -- Salt almacenado
+
+    -- 1. Obtener la contraseña hasheada y el salt del usuario
+    SELECT @stored_password = USU_password, 
+           @salt = USU_salt
+    FROM USUARIO
+    WHERE USU_codigo = @USU_codigo;
+
+    -- Si no se encuentra el usuario, terminar
+    IF @stored_password IS NULL
+    BEGIN
+        SELECT 'Usuario no encontrado' AS Resultado;
+        RETURN;
+    END
+
+    -- 2. Hashear la contraseña actual proporcionada por el usuario para verificar si es correcta
+    DECLARE @hashed_password_actual VARBINARY(64);
+    DECLARE @password_bytes VARBINARY(100) = CONVERT(VARBINARY(100), @USU_password_actual);
+    DECLARE @salt_bytes VARBINARY(16) = CAST(@salt AS VARBINARY(16));
+    DECLARE @to_hash VARBINARY(116) = @password_bytes + @salt_bytes;
+
+    DECLARE @iterations INT = 10000;
+    WHILE @iterations > 0
+    BEGIN
+        SET @hashed_password_actual = HASHBYTES('SHA2_512', @to_hash);
+        SET @to_hash = @hashed_password_actual + @salt_bytes;
+        SET @iterations = @iterations - 1;
+    END
+
+    -- Si la contraseña actual no coincide con la almacenada, mostrar error
+    IF @hashed_password_actual != @stored_password
+    BEGIN
+        SELECT 'Contraseña actual incorrecta' AS Resultado;
+        RETURN;
+    END
+
+    -- 3. Verificar que la nueva contraseña y la confirmación coincidan
+    IF @USU_password_nueva != @USU_password_confirmacion
+    BEGIN
+        SELECT 'La nueva contraseña y la confirmación no coinciden' AS Resultado;
+        RETURN;
+    END
+
+    -- 4. Hashear la nueva contraseña antes de guardarla
+    DECLARE @hashed_password_nueva VARBINARY(64);
+    DECLARE @nueva_password_bytes VARBINARY(100) = CONVERT(VARBINARY(100), @USU_password_nueva);
+    DECLARE @to_hash_nueva VARBINARY(116) = @nueva_password_bytes + @salt_bytes;
+
+    SET @iterations = 10000;
+    WHILE @iterations > 0
+    BEGIN
+        SET @hashed_password_nueva = HASHBYTES('SHA2_512', @to_hash_nueva);
+        SET @to_hash_nueva = @hashed_password_nueva + @salt_bytes;
+        SET @iterations = @iterations - 1;
+    END
+
+    -- 5. Actualizar la contraseña en la base de datos
+    UPDATE USUARIO
+    SET USU_password = @hashed_password_nueva
+    WHERE USU_codigo = @USU_codigo;
+
+    SELECT 'Contraseña cambiada exitosamente' AS Resultado;
+END;
+GO
+
+--PROCEDIMIENTO ALMACENADO PARA VERIFICAR SI LA CONTRASEÑA ACTUAL ES CORRECTA
+CREATE OR ALTER PROCEDURE sp_verificar_contrasena_actual
+    @USU_codigo INT, 
+    @USU_password_actual NVARCHAR(100)
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    DECLARE @stored_password VARBINARY(64); 
+    DECLARE @salt UNIQUEIDENTIFIER;        
+
+    -- Obtener la contraseña hasheada y el salt del usuario
+    SELECT @stored_password = USU_password, 
+           @salt = USU_salt
+    FROM USUARIO
+    WHERE USU_codigo = @USU_codigo;
+
+    -- Si no se encuentra el usuario, terminar
+    IF @stored_password IS NULL
+    BEGIN
+        SELECT 'Usuario no encontrado' AS Resultado;
+        RETURN;
+    END
+
+    -- Hashear la contraseña actual proporcionada por el usuario
+    DECLARE @hashed_password VARBINARY(64);
+    DECLARE @password_bytes VARBINARY(100) = CONVERT(VARBINARY(100), @USU_password_actual);
+    DECLARE @salt_bytes VARBINARY(16) = CAST(@salt AS VARBINARY(16));
+    DECLARE @to_hash VARBINARY(116) = @password_bytes + @salt_bytes;
+
+    DECLARE @iterations INT = 10000;  -- Iteraciones del algoritmo de hash
+    WHILE @iterations > 0
+    BEGIN
+        SET @hashed_password = HASHBYTES('SHA2_512', @to_hash);
+        SET @to_hash = @hashed_password + @salt_bytes;
+        SET @iterations = @iterations - 1;
+    END
+
+    -- Comparar las contraseñas hasheadas
+    IF @hashed_password = @stored_password
+    BEGIN
+        SELECT 'Contraseña correcta' AS Resultado;
     END
     ELSE
     BEGIN
