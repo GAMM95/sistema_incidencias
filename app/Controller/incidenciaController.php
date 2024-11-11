@@ -219,6 +219,15 @@ class IncidenciaController
           exit();
         }
 
+        // Validar que el código patrimonial sea nulo o tenga 12 dígitos
+        if (!empty($codigoPatrimonial) && strlen($codigoPatrimonial) !== 12) {
+          echo json_encode([
+            'success' => false,
+            'message' => 'Debe ingresar los 12 d&iacute;gitos del c&oacute;digo patrimonial.'
+          ]);
+          exit();
+        }
+
         // Verificar el estado de la incidencia
         $estado = $this->incidenciaModel->obtenerEstadoIncidencia($numeroIncidencia);
 
@@ -275,7 +284,16 @@ class IncidenciaController
           // Respuesta en caso de parámetros faltantes
           echo json_encode([
             'success' => true,
-            'message' => 'Faltan parámetros requeridos.'
+            'message' => 'Faltan par&aacute;metros requeridos.'
+          ]);
+          exit();
+        }
+
+        // Validar que el código patrimonial sea nulo o tenga 12 dígitos
+        if (!empty($codigoPatrimonial) && strlen($codigoPatrimonial) !== 12) {
+          echo json_encode([
+            'success' => false,
+            'message' => 'Debe ingresar los 12 d&iacute;gitos del c&oacute;digo patrimonial.'
           ]);
           exit();
         }
