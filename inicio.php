@@ -30,13 +30,13 @@ $usuarioModel = new UsuarioModel();
 $areaModel = new AreaModel();
 $categoriaModel = new CategoriaModel();
 $mantenimientoModel = new MantenimientoModel();
-$controller = new InicioController();
+$inicioController = new InicioController();
 
 
 if ($rol === 'Administrador' || $rol === 'Soporte') {
-  $cantidades = $controller->mostrarCantidadesAdministrador();
+  $cantidades = $inicioController->mostrarCantidadesAdministrador();
 } else {
-  $cantidades = $controller->mostrarCantidadesUsuario($area);
+  $cantidades = $inicioController->mostrarCantidadesUsuario($area);
 }
 ?>
 

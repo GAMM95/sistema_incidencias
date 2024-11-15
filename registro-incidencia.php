@@ -13,29 +13,18 @@ $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
 
 require_once 'app/Controller/incidenciaController.php';
-require_once 'app/Model/incidenciaModel.php';
 
 $incidenciaController = new IncidenciaController();
-$incidenciaModel = new IncidenciaModel();
 
-// Paginacion de la tabla
-$limit = 10; // Número de filas por página
-$page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Página actual
-$start = ($page - 1) * $limit; // Calcula el índice de inicio
-
-// Obtiene el total de registros de incidencias
-$totalIncidencias = $incidenciaModel->contarIncidenciasAdministrador();
-$totalPages = ceil($totalIncidencias / $limit);
 // Obtiene las incidencias para la página actual
-// $resultado = $incidenciaModel->listarIncidenciasRegistroAdmin($start, $limit);
-$resultado = $incidenciaModel->listarIncidenciasRegistroAdmin();
+$resultado = $incidenciaController->listarIncidenciasRegistradas();
 
-if ($INC_numero != '') {
-  global $incidenciaRegistrada;
-  $incidenciaRegistrada = $incidenciaModel->obtenerIncidenciaPorId($INC_numero);
-} else {
-  $incidenciaRegistrada = null;
-}
+// if ($INC_numero != '') {
+//   global $incidenciaRegistrada;
+//   $incidenciaRegistrada = $incidenciaModel->obtenerIncidenciaPorId($INC_numero);
+// } else {
+//   $incidenciaRegistrada = null;
+// }
 
 switch ($action) {
   case 'registrar':

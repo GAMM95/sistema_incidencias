@@ -447,4 +447,42 @@ class IncidenciaController
       echo "Error al listar incidencias: " . $e->getMessage();
     }
   }
+
+  // Metodo para contar incidencias registradas en el formulario de administrador / soporte
+  public function contarIncidenciasRegistradas()
+  {
+    try {
+      // Llamada al modelo para obtener las incidencias
+      $resultado = $this->incidenciaModel->contarIncidenciasAdministrador();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al contar incidencias registradas: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar incidencias registradas en el formulario de administrador / soporte
+  public function listarIncidenciasRegistradas()
+  {
+    try {
+      // Llamada al modelo para obtener las incidencias
+      $resultado = $this->incidenciaModel->listarIncidenciasRegistroAdmin();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias registradas: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar las incidencias registradas
+  public function listarIncidenciasRegistradasPaginas($start = null, $limit = null)
+  {
+    try {
+      $resultado = $this->incidenciaModel->listarIncidenciasRecepcion($start, $limit);
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias registradas para paginacion: " . $e->getMessage();
+    }
+  }
 }

@@ -12,22 +12,20 @@ $ASI_codigo = $_GET['ASI_codigo'] ?? '';
 $rol = $_SESSION['rol'];
 $usuario = $_SESSION['codigoUsuario'] ?? '';
 
-require_once 'app/Controller/MantenimientoController.php';
-require_once 'app/Model/MantenimientoModel.php';
-require_once 'app/Model/asignacionModel.php';
+require_once 'app/Controller/mantenimientoController.php';
+require_once 'app/Controller/asignacionController.php';
 
 $mantenimientoController = new MantenimientoController();
-$mantenimientoModel = new MantenimientoModel();
-$asignacionModel = new AsignacionModel();
+$asignacionController = new AsignacionController();
 
-$resultadoAsignaciones = $asignacionModel->listarAsignacionesSoporte($usuario);
+$resultadoAsignaciones = $asignacionController->listarAsignacionesSoporte($usuario);
 
-if ($ASI_codigo != '') {
-  global $asignacionRegistrada;
-  $asignacionRegistrada = $asignacionModel->obtenerAsignacionesPorId($ASI_codigo);
-} else {
-  $asignacionRegistrada = null;
-}
+// if ($ASI_codigo != '') {
+//   global $asignacionRegistrada;
+//   $asignacionRegistrada = $asignacionModel->obtenerAsignacionesPorId($ASI_codigo);
+// } else {
+//   $asignacionRegistrada = null;
+// }
 
 switch ($action) {
   case 'habilitar':

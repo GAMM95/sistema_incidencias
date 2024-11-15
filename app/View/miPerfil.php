@@ -190,7 +190,7 @@
 
                         <!-- Contraseña actual -->
                         <div class="form-group row">
-                          <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Nueva contrase&ntilde;a</label>
+                          <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Contrase&ntilde;a actual</label>
                           <div class="col-sm-7 position-relative">
                             <input type="password" class="form-control form-control-sm border border-green-500 bg-white rounded-md p-2 text-md pr-10" id="passwordActual" name="passwordActual" placeholder="Ingrese contrase&ntilde;a actual">
                             <!-- Icono para mostrar/ocultar contraseña -->
@@ -236,19 +236,6 @@
             <!-- Fin Modal Cambio de contraseña -->
           </div>
         </div>
-
-        <!-- Recopilacion de valores de cada input -->
-        <script>
-          // document.getElementById('dni').value = '<?php echo htmlspecialchars($perfil['PER_dni']); ?>';
-          // document.getElementById('nombres').value = '<?php echo htmlspecialchars($perfil['PER_nombres']); ?>';
-          // document.getElementById('apellidoPaterno').value = '<?php echo htmlspecialchars($perfil['PER_apellidoPaterno']); ?>';
-          // document.getElementById('apellidoMaterno').value = '<?php echo htmlspecialchars($perfil['PER_apellidoMaterno']); ?>';
-          // document.getElementById('celular').value = '<?php echo htmlspecialchars($perfil['PER_celular']); ?>';
-          // document.getElementById('email').value = '<?php echo htmlspecialchars($perfil['PER_email']); ?>';
-          // document.getElementById('username').value = '<?php echo htmlspecialchars($perfil['USU_nombre']); ?>';
-          // document.getElementById('password').value = '<?php echo htmlspecialchars($perfil['USU_password']); ?>';
-        </script>
-      </div>
     </form>
   </div>
 </div>

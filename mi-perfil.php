@@ -10,10 +10,8 @@ $action = $_GET['action'] ?? '';
 $rol = $_SESSION['rol'];
 
 require_once 'app/Controller/usuarioController.php';
-require_once 'app/Model/UsuarioModel.php';
 
 $usuarioController = new UsuarioController();
-$usuarioModel = new UsuarioModel();
 
 switch ($action) {
   case 'editar':

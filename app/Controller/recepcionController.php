@@ -174,4 +174,28 @@ class RecepcionController
     $resultado = $this->recepcionModel->listarIncidenciasPendientesCierre();
     return $resultado;
   }
+
+  // Metodo para contar incidencias recepcionadas para paginacion 
+  public function contarRecepcionesRegistradas()
+  {
+    try {
+      $resultado = $this->recepcionModel->contarRecepciones();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al contar incidencias registradas: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar incidencias recepcionadas para paginacion
+  public function listarRecepcionesPaginacion($start = null, $limit = null)
+  {
+    try {
+      $resultado = $this->recepcionModel->listarRecepciones($start, $limit);
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias registradas para paginacion: " . $e->getMessage();
+    }
+  }
 }

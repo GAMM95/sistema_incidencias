@@ -1,5 +1,5 @@
 <?php
-require 'app/Model/RecepcionModel.php';
+require 'app/Model/AsignacionModel.php';
 
 class AsignacionController
 {
@@ -119,6 +119,43 @@ class AsignacionController
       ]);
     }
   }
+
+  // Metodo para contar asignaciones registradas
+  public function contarAsignacionesRegistradas()
+  {
+    try {
+      $resultado = $this->asignacionModel->contarAsignaciones();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al contar incidencias registradas: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar asignaciones registradas
+  public function listarAsignacionesPaginacion($start = null, $limit = null)
+  {
+    try {
+      $resultado = $this->asignacionModel->listarAsignaciones($start, $limit);
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar asignaciones registradas para paginacion: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar asignaciones por usuario
+  public function listarAsignacionesSoporte($usuario = null)
+  {
+    try {
+      $resultado = $this->asignacionModel->listarAsignacionesSoporte($usuario);
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias asignacadas al usuario: " . $e->getMessage();
+    }
+  }
+
 
   // Metodo para eliinar la recepcion 
   // public function eliminarRecepcion()

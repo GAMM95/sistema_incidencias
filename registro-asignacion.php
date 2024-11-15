@@ -13,11 +13,11 @@ $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
 
 require_once 'app/Controller/asignacionController.php';
-require_once 'app/Model/asignacionModel.php';
-require_once 'app/Model/recepcionModel.php';
+require_once 'app/Controller/recepcionController.php';
 
 $asignacionController = new AsignacionController();
-$recepcionModel = new RecepcionModel();
+$recepcionController = new RecepcionController();
+
 $asignacionModel = new AsignacionModel();
 
 // Paginacion para la tabla de incidencias recepcionadas
@@ -25,10 +25,11 @@ $limite = 2; // Numero de filas para la tabla de recepciones
 $pageRecepciones =  isset($_GET['pageRecepciones']) ? (int)$_GET['pageRecepciones'] : 1; // pagina de la tabla actual
 $inicio = ($pageRecepciones - 1) * $limite;
 // Obtener el total de registros
-$totalRecepciones = $recepcionModel->contarRecepciones();
+$totalRecepciones = $recepcionController->contarRecepcionesRegistradas
+();
 $totalPagesRecepciones = ceil($totalRecepciones / $limite);
 // Listar incidencias recepcionadas
-$resultadoRecepciones = $recepcionModel->listarRecepciones($inicio, $limite);
+$resultadoRecepciones = $recepcionController->listarRecepcionesPaginacion($inicio, $limite);
 
 
 // Paginaciona para la tabla de incidencias asignadas
