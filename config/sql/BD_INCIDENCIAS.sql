@@ -761,7 +761,8 @@ SELECT
     I.INC_numero_formato,
 	M.MAN_codigo,
     (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
-    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
+    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,    
+    (CONVERT(VARCHAR(10), M.MAN_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), M.MAN_hora, 0), 7), 6, 0, ' ')) AS fechaMantenimientoFormateada,
     A.ARE_nombre,
     I.INC_asunto,
 	I.INC_documento,
@@ -789,6 +790,120 @@ FROM
 	LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
 	LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
 GO
+
+-- Vista para listar mantenimientos con tiempo de mantenimiento
+CREATE OR ALTER VIEW vista_incidencias_matenimiento AS
+SELECT 
+    I.INC_numero,
+    ASI.ASI_codigo,
+    I.INC_numero_formato,
+    M.MAN_codigo,
+    (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,    
+    (CONVERT(VARCHAR(10), M.MAN_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), M.MAN_hora, 0), 7), 6, 0, ' ')) AS fechaMantenimientoFormateada,
+    
+    -- Cálculo del tiempo de mantenimiento en segundos
+    DATEDIFF(SECOND, 
+        CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+        CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+    ) AS tiempoMantenimientoSegundos,
+
+    -- Mostrar solo días, horas, minutos y segundos según sea necesario
+    CASE
+        -- Si tiene días, mostrar días, horas, minutos
+        WHEN DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) >= 86400 
+        THEN
+            CAST(DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) / 86400 AS VARCHAR) + ' días ' +
+            CAST((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) / 3600 AS VARCHAR) + 
+            CASE 
+                WHEN (DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) / 3600 = 1 THEN ' hora '
+                ELSE ' horas ' 
+            END +
+            CAST(((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) % 3600) / 60 AS VARCHAR) + 
+            CASE 
+                WHEN ((DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) % 3600) / 60 = 1 THEN ' minuto '
+                ELSE ' minutos '
+            END
+
+        -- Si tiene horas pero no días, mostrar horas y minutos
+        WHEN DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) >= 3600 
+        THEN
+            CAST((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) / 3600 AS VARCHAR) + 
+            CASE 
+                WHEN (DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) / 3600 = 1 THEN ' hora '
+                ELSE ' horas '
+            END +
+            CAST(((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) % 3600) / 60 AS VARCHAR) + 
+            CASE 
+                WHEN ((DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) % 3600) / 60 = 1 THEN ' minuto '
+                ELSE ' minutos '
+            END
+
+       -- Si tiene menos de una hora, mostrar solo minutos
+			ELSE
+				CAST(DATEDIFF(MINUTE, 
+					CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+					CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+				) AS VARCHAR) + 
+                CASE 
+                    WHEN DATEDIFF(MINUTE, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                                  CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)) = 1 
+                    THEN ' minuto '
+                    ELSE ' minutos '
+                END
+    END AS tiempoMantenimientoFormateado, 
+    M.MAN_fecha,
+    A.ARE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    U.USU_codigo,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioSoporte,
+    pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador
+FROM 
+    ASIGNACION ASI
+    INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+    LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+    LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+    LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+    LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+    INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+    LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+GO
+
 
 -- Vista para listar cierres
 CREATE OR ALTER VIEW vista_cierres AS
@@ -2709,6 +2824,132 @@ BEGIN
     SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
     I.INC_numero_formato DESC;
 END
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR INCIDENCIAS ASIGNADAS
+CREATE OR ALTER PROCEDURE sp_consultar_incidencias_asignadas
+  @usuario INT = NULL,
+  @codigoPatrimonial CHAR(12) = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+SELECT 
+    I.INC_numero,
+    ASI.ASI_codigo,
+    I.INC_numero_formato,
+    M.MAN_codigo,
+    (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,    
+    (CONVERT(VARCHAR(10), M.MAN_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), M.MAN_hora, 0), 7), 6, 0, ' ')) AS fechaMantenimientoFormateada,
+    
+    -- Cálculo del tiempo de mantenimiento en segundos
+    DATEDIFF(SECOND, 
+        CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+        CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+    ) AS tiempoMantenimientoSegundos,
+
+    -- Mostrar solo días, horas, minutos y segundos según sea necesario
+    CASE
+        -- Si tiene días, mostrar días, horas, minutos
+        WHEN DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) >= 86400 
+        THEN
+            CAST(DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) / 86400 AS VARCHAR) + ' días ' +
+            CAST((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) / 3600 AS VARCHAR) + 
+            CASE 
+                WHEN (DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) / 3600 = 1 THEN ' hora '
+                ELSE ' horas ' 
+            END +
+            CAST(((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) % 3600) / 60 AS VARCHAR) + 
+            CASE 
+                WHEN ((DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) % 3600) / 60 = 1 THEN ' minuto '
+                ELSE ' minutos '
+            END
+
+        -- Si tiene horas pero no días, mostrar horas y minutos
+        WHEN DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) >= 3600 
+        THEN
+            CAST((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) / 3600 AS VARCHAR) + 
+            CASE 
+                WHEN (DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) / 3600 = 1 THEN ' hora '
+                ELSE ' horas '
+            END +
+            CAST(((DATEDIFF(SECOND, 
+                CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+            ) % 86400) % 3600) / 60 AS VARCHAR) + 
+            CASE 
+                WHEN ((DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                            CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+                    ) % 86400) % 3600) / 60 = 1 THEN ' minuto '
+                ELSE ' minutos '
+            END
+
+       -- Si tiene menos de una hora, mostrar solo minutos
+			ELSE
+				CAST(DATEDIFF(MINUTE, 
+					CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+					CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+				) AS VARCHAR) + 
+                CASE 
+                    WHEN DATEDIFF(MINUTE, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+                                  CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)) = 1 
+                    THEN ' minuto '
+                    ELSE ' minutos '
+                END
+    END AS tiempoMantenimientoFormateado, 
+    M.MAN_fecha,
+	ASI.ASI_fecha,
+    A.ARE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    U.USU_codigo,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioSoporte,
+    pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador
+	FROM 
+    ASIGNACION ASI
+    INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+    LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+    LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+    LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+    LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+    INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+    LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+  WHERE 
+    (@usuario IS NULL OR U.USU_codigo = @usuario) 
+    AND (@codigoPatrimonial IS NULL OR I.INC_codigoPatrimonial = @codigoPatrimonial)
+    AND (@fechaInicio IS NULL OR ASI.ASI_fecha >= @fechaInicio)
+    AND (@fechaFin IS NULL OR ASI.ASI_fecha <= @fechaFin)
+END;
 GO
 
 --PROCEDIMIENTO ALMACENADO PARA CONSULTAR CIERRES

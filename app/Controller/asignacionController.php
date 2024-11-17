@@ -156,6 +156,24 @@ class AsignacionController
     }
   }
 
+  // Metodo para consultar cierres - Administrador
+  public function consultarAsignaciones($usuario = NULL, $codigoPatrimonial = null, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioAsignado']) ? (int) $_GET['usuarioAsignado'] : null;
+      $codigoPatrimonial = isset($_GET['codigoPatrimonial']) ? $_GET['codigoPatrimonial'] : null;
+      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
+      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
+      error_log("Usuario asignado: $usuario, CodigoPatrimonial: $codigoPatrimonial, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+
+      // Llamar al método para consultar cierres 
+      $resultado = $this->asignacionModel->buscarAsignaciones($usuario, $codigoPatrimonial, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $resultado;
+    }
+  }
+
 
   // Metodo para eliinar la recepcion 
   // public function eliminarRecepcion()

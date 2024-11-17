@@ -18,14 +18,12 @@ require_once 'app/Controller/asignacionController.php';
 $mantenimientoController = new MantenimientoController();
 $asignacionController = new AsignacionController();
 
-$resultadoAsignaciones = $asignacionController->listarAsignacionesSoporte($usuario);
+if($rol === 'Soporte') {
+  $resultadoAsignaciones = $asignacionController->listarAsignacionesSoporte($usuario);
+}else if($rol === 'Administrador') {
+  $resultadoMantenimiento = $mantenimientoController->listarAsignacionesAdministrador();
+}
 
-// if ($ASI_codigo != '') {
-//   global $asignacionRegistrada;
-//   $asignacionRegistrada = $asignacionModel->obtenerAsignacionesPorId($ASI_codigo);
-// } else {
-//   $asignacionRegistrada = null;
-// }
 
 switch ($action) {
   case 'habilitar':
@@ -73,6 +71,10 @@ switch ($action) {
     include('app/View/partials/soporte/navbar.php');
     include('app/View/partials/soporte/header.php');
     include('app/View/Registrar/soporte/registroMantenimiento.php');
+  }else if ($rol === 'Administrador') {
+    include('app/View/partials/admin/navbar.php');
+    include('app/View/partials/admin/header.php');
+    include('app/View/Registrar/admin/registroMantenimiento.php');
   }
   ?>
   <!-- [ Main Content ] end -->

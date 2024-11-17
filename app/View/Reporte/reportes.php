@@ -78,7 +78,7 @@
                     <div class="ml-5 flex space-x-2">
                       <!-- Botón de buscar -->
                       <button type="submit" id="filtrarListaAuditoriaIncidencias" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-red-400 rounded-md flex justify-center items-center">
-                        <i class="feather icon-search"></i>
+                        <i class="feather icon-filter"></i>
                       </button>
 
                       <!-- Botón de nueva consulta -->
@@ -452,7 +452,31 @@
                               </button>
                             </div>
                           </div>
-
+                          <!-- Tabla de resultados de incidencias totales -->
+                          <div class="relative sm:rounded-lg mt-2">
+                            <div class="max-w-full overflow-hidden sm:rounded-lg">
+                              <table id="tablaIncidenciasTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                <!-- Encabezado de la tabla -->
+                                <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                                  <tr>
+                                    <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Asunto</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Documento</th>
+                                    <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
+                                    <th scope="col" class="px-3 py-2 text-center">Estado</th>
+                                  </tr>
+                                </thead>
+                                <!-- Fin de encabezado de la tabla -->
+                              
+                              </table>
+                            </div>
+                          </div>
+                          <!-- Fin de tabla de resultados de incidencias totales -->
                         </div>
                         <!-- Fin de contenido de la primera pestaña -->
 

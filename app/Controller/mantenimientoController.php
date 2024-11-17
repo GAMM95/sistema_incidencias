@@ -77,38 +77,58 @@ class MantenimientoController
     }
   }
 
-  
-  // // Metodo para filtrar areas por un termino
-  // public function filtrarAreas()
-  // {
-  //   if ($_SERVER["REQUEST_METHOD"] == "GET") {
-  //     $terminoBusqueda = $_GET['termino'] ?? '';
 
-  //     try {
-  //       $resultados = $this->areaModel->filtrarAreas($terminoBusqueda);
-  //       if ($resultados) {
-  //         echo json_encode([
-  //           'success' =>  true,
-  //           'message' => 'B&uacute;squeda exitosa.'
-  //         ]);
-  //       } else {
-  //         echo json_encode([
-  //           'success' =>  false,
-  //           'message' => 'No se realiz&oacute; b&uacute;squeda.'
-  //         ]);
-  //       }
-  //     } catch (Exception $e) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'Error: ' . $e->getMessage()
-  //       ]);
-  //     }
-  //   } else {
-  //     echo json_encode([
-  //       'success' => false,
-  //       'message' => 'M&eacute;todo no permitido.'
-  //     ]);
-  //   }
-  // }
+  // Metodo para listar asignaciones para el administrador
+  public function listarAsignacionesAdministrador()
+  {
+    try {
+      $resultado = $this->mantenimientoModel->listarAsignacionesAdministrador();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias asignadas al administrador: " . $e->getMessage();
+    }
+  }
 
+  // Metodo para listar incidencias con tiempo de mantenimiento
+  public function listarIncidenciasMantenimiento()
+  {
+    try {
+      $resultado = $this->mantenimientoModel->listarIncidenciasMantenimiento();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias con el tiempo de mantenimiento: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar incidencias con tiempo de mantenimiento para el usuario de soporte
+  public function listarIncidenciasMantenimientoSoporte($usuario = null)
+  {
+    try {
+      $resultado = $this->mantenimientoModel->listarAsignacionesSoporte($usuario);
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias con el tiempo de mantenimiento: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para consultar incidencias asignadas en mantenimiento para el usuario de soporte
+  public function consultarIncidenciasMantenimientoSoporte($usuario = NULL, $codigoPatrimonial = null, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['codigoUsuario']) ? (int) $_GET['codigoUsuario'] : null;
+      $codigoPatrimonial = isset($_GET['codigoPatrimonial']) ? $_GET['codigoPatrimonial'] : null;
+      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
+      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
+      error_log("Usuario asignado: $usuario, CodigoPatrimonial: $codigoPatrimonial, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+
+      // Llamar al método para consultar cierres 
+      $resultado = $this->mantenimientoModel->buscarAsignacionesSoporte($usuario, $codigoPatrimonial, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $resultado;
+    }
+  }
 }

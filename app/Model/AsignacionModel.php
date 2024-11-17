@@ -231,4 +231,27 @@ class AsignacionModel extends Conexion
       return null;
     }
   }
+
+  // Metodo para consultar incidencias asignadas
+  public function buscarAsignaciones($usuario, $codigoPatrimonial, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_incidencias_asignadas :usuario, :codigoPatrimonial, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario, PDO::PARAM_INT);
+        $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el query
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener los asignaciones: " . $e->getMessage());
+    }
+  }
 }

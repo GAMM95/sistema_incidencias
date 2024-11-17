@@ -163,24 +163,88 @@ class MantenimientoModel extends Conexion
     }
   }
 
-  // public function notificarIncidenciasMantenimiento($usuario)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       $sql = "SELECT COUNT(*) AS total FROM ASIGNACION ASI
-  //                   INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
-  //                   LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
-  //                   WHERE U.USU_codigo = :usuarioAsignado";
-  //       $stmt = $conector->prepare($sql);
-  //       $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);
-  //       $stmt->execute();
-  //       return $stmt->fetchColumn(); // Cambiado para retornar solo el total
-  //     } else {
-  //       throw new Exception("Error de conexion a la base de datos.");
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new PDOException("Error al listar asignaciones por usuario: " . $e->getMessage());
-  //   }
-  // }
+  // Metodo para listar asignaciones para el administrador
+  public function listarAsignacionesAdministrador()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vista_mantenimiento
+        WHERE EST_descripcion IN ('EN ESPERA', 'RESUELTO')
+        ORDER BY INC_numero_formato DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al listar incidencias en mantenimiento para el administrador: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para listar incidencias con tiempo de mantenimiento
+  public function listarIncidenciasMantenimiento()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vista_incidencias_matenimiento";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al listar incidencias con el tiempo de mantenimiento: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para listar asignaciones segun el usuario 
+  public function listarAsignacionesSoporte($usuario)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vista_incidencias_matenimiento
+          WHERE USU_codigo = :usuarioAsignado
+          ORDER BY INC_numero_formato DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexion a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al listar asignaciones por usuario: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para consultar incidencias asignadas
+  public function buscarAsignacionesSoporte($usuario, $codigoPatrimonial, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_incidencias_asignadas :usuario, :codigoPatrimonial, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario, PDO::PARAM_INT);
+        $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el query
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener los asignaciones: " . $e->getMessage());
+    }
+  }
 }

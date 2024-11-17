@@ -13,9 +13,11 @@ $area = $_SESSION['codigoArea'];
 
 require_once './app/Controller/incidenciaController.php';
 require_once './app/Controller/recepcionController.php';
+require_once './ajax/getReportePorArea.php';
+
+$reportePorArea = new ReportePorArea();
 $incidenciaController = new IncidenciaController();
 $recepcionController = new RecepcionController();
-
 $resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales(); // Obtener los datos de las incidencias totales
 $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre(); // Obtener los datos de las incidencias pendientes de cierre
 

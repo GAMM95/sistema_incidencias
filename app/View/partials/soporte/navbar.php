@@ -11,7 +11,7 @@ if (isset($_SESSION['codigoUsuario'])) {
 
   $usuario = new UsuarioModel();  // Se crea una instancia del modelo Usuario para obtener o manipular datos del usuario
 } else {
-  $perfil = null;   
+  $perfil = null;
 }
 // Se crea una instancia del modelo 
 $mantenimientoModel = new MantenimientoModel();
@@ -128,6 +128,9 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="consultar-cierres.php">Incidencias cerradas</a>
+            </li>
+            <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="consultar-asignaciones.php">Incidencias asignadas</a>
             </li>
           </ul>
         </li>

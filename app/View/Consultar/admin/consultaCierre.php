@@ -6,7 +6,7 @@
         <div class="row align-items-center">
           <div class="col-md-12">
             <div class="page-header-title">
-              <h1 class="text-2xl font-bold mb-2">Consulta de Incidencias atendidas</h1>
+              <h1 class="text-2xl font-bold mb-2">Consulta de Incidencias Cerradas</h1>
             </div>
             <ul class="breadcrumb">
               <li class="breadcrumb-item"><a href=""><i class="feather icon-clipboard"></i></a></li>
@@ -82,8 +82,7 @@
             <?php
             if (!empty($resultadoBusqueda)): ?>
               <?php $item = 1; // Iniciar contador para el ítem 
-              ?>
-              <?php foreach ($resultadoBusqueda as $cierre): ?>
+              foreach ($resultadoBusqueda as $cierre): ?>
                 <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
                   <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['INC_numero_formato']) ?></td>

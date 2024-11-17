@@ -6,15 +6,17 @@ if (session_status() == PHP_SESSION_NONE) {
 }
 require_once './app/Model/IncidenciaModel.php';
 require_once './app/Model/RecepcionModel.php';
+require_once './app/Model/AsignacionModel.php';
 require_once './app/Model/MantenimientoModel.php';
 
 $incidenciasModel = new IncidenciaModel();
 $recepcionModel = new RecepcionModel();
+$asignacionModel = new AsignacionModel();
 $mantenimientoModel = new MantenimientoModel();
-
 
 $incidenciasRecepcion = $incidenciasModel->contarIncidenciasAdministrador();
 $incidenciasAsignacion = $recepcionModel->contarRecepciones();
+$incidenciasEnEspera = $asignacionModel->contarRecepcionesEnEsperaUltimoMesAdministrador();
 $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
 ?>
 <!-- [ navigation menu ] start -->
@@ -91,6 +93,16 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
               </a>
             </li>
             <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="registro-mantenimiento.php" class="flex items-center">
+                <?php if ($incidenciasEnEspera > 0): ?>
+                  <span class="absolute right-[50px] top-[40%] transform -translate-y-1/2 w-3 h-3 bg-green-200 rounded-full animate-ping">
+                    <span class="absolute inset-0 w-3 h-3 bg-darkgreen-700 rounded-full"></span>
+                  </span>
+                <?php endif; ?>
+                Mantenimiento
+              </a>
+            </li>
+            <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="registro-cierre.php" class="flex items-center">
                 <?php if ($incidenciasCerrar > 0): ?>
                   <span class="absolute right-[50px] top-[40%] transform -translate-y-1/2 w-3 h-3 bg-blue-200 rounded-full animate-ping">
@@ -124,6 +136,9 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="consultar-cierres.php">Incidencias cerradas</a>
             </li>
+            <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="consultar-asignaciones.php">Incidencias asignadas</a>
+            </li>
           </ul>
         </li>
         <!-- Fin de opcion de consultas -->
@@ -139,6 +154,18 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
           </a>
         </li>
         <!-- fin de opcion Reportes -->
+
+        <!-- Auditoría -->
+        <li class="nav-item pcoded-menu-caption">
+          <label>Auditor&iacute;a</label>
+        </li>
+        <li class="nav-item">
+          <a href="auditoria.php" class="nav-link ">
+            <span class="pcoded-micon"> <i class="feather icon-list"></i> </span>
+            <span class="pcoded-mtext">Auditor&iacute;a</span>
+          </a>
+        </li>
+        <!-- Fin de opcion auditoría -->
 
         <!-- Mantenedor -->
         <li class="nav-item pcoded-menu-caption">
@@ -170,18 +197,6 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
           </ul>
         </li>
         <!-- Fin de opcion mantenedor -->
-
-        <!-- Auditoría -->
-        <li class="nav-item pcoded-menu-caption">
-          <label>Auditor&iacute;a</label>
-        </li>
-        <li class="nav-item">
-          <a href="auditoria.php" class="nav-link ">
-            <span class="pcoded-micon"> <i class="feather icon-list"></i> </span>
-            <span class="pcoded-mtext">Auditor&iacute;a</span>
-          </a>
-        </li>
-        <!-- Fin de opcion auditoría -->
       </ul>
     </div>
   </div>
