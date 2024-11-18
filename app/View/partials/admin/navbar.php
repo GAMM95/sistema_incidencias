@@ -147,25 +147,21 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
         <li class="nav-item pcoded-menu-caption">
           <label>Reportes</label>
         </li>
+        <!-- Reportes de incidencias -->
         <li class="nav-item">
           <a href="reportes.php" class="nav-link ">
             <span class="pcoded-micon"> <i class="feather icon-file"></i> </span>
             <span class="pcoded-mtext">Reportes de incidencias</span>
           </a>
         </li>
-        <!-- fin de opcion Reportes -->
-
-        <!-- Auditoría -->
-        <li class="nav-item pcoded-menu-caption">
-          <label>Auditor&iacute;a</label>
-        </li>
+        <!-- Reportes de auditoria -->
         <li class="nav-item">
           <a href="auditoria.php" class="nav-link ">
             <span class="pcoded-micon"> <i class="feather icon-list"></i> </span>
-            <span class="pcoded-mtext">Auditor&iacute;a</span>
+            <span class="pcoded-mtext">Reportes de auditor&iacute;a</span>
           </a>
         </li>
-        <!-- Fin de opcion auditoría -->
+        <!-- fin de opcion Reportes -->
 
         <!-- Mantenedor -->
         <li class="nav-item pcoded-menu-caption">

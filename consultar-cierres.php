@@ -44,11 +44,33 @@ if ($action === 'consultar') {
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['BIE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['INC_asunto']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['CIE_documento']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['CON_descripcion']) . '</td>';
+      // $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['CON_descripcion']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
+      // Manejar el estado de la incidencia
+      $estadoDescripcion = htmlspecialchars($cierre['CON_descripcion']);
+      $badgeClass = '';
+      switch ($estadoDescripcion) {
+        case 'OPERATIVO':
+          $badgeClass = 'badge-light-info';
+          break;
+        case 'INOPERATIVO':
+          $badgeClass = 'badge-light-danger';
+          break;
+        case 'SOLUCIONADO':
+          $badgeClass = 'badge-light-info';
+          break;
+        case 'NO SOLUCIONADO':
+          $badgeClass = 'badge-light-danger';
+          break;
+        default:
+          $badgeClass = 'badge-light-secondary';
+          break;
+      }
+      $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
       $html .= '</td></tr>';
     }
   } else {
-    $html = '<tr><td colspan="8" class="text-center py-3">No se encontraron incidencias atentidas.</td></tr>';
+    $html = '<tr><td colspan="9" class="text-center py-3">No se encontraron incidencias atentidas.</td></tr>';
   }
 
   echo $html;

@@ -72,10 +72,11 @@
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Equipo</th>
               <th scope="col" class="px-6 py-2 text-center">Nombre del bien</th>
-              <th scope="col" class="px-6 py-2 text-center">Fecha asignaci&oacute;n</th>
+              <th scope="col" class="px-6 py-2 text-center">Fecha de asignaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Fecha de finalizaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario asignado</th>
               <th scope="col" class="px-6 py-2 text-center">Tiempo de mantenimiento</th>
+              <th scope="col" class="px-6 py-2 text-center">Estado</th>
             </tr>
           </thead>
           <!-- Fin de encabezado -->
@@ -101,12 +102,32 @@
                   <td class='px-6 py-2 text-center'><?= $asignaciones['fechaMantenimientoFormateada']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['usuarioSoporte']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['tiempoMantenimientoFormateado']; ?></td>
-
+                  <td class="px-3 py-2 text-center text-xs align-middle">
+                    <?php
+                    $estadoDescripcion = htmlspecialchars($asignaciones['Estado']);
+                    $badgeClass = '';
+                    switch ($estadoDescripcion) {
+                      case 'EN ESPERA':
+                        $badgeClass = 'badge-light-danger';
+                        break;
+                      case 'RESUELTO':
+                        $badgeClass = 'badge-light-primary';
+                        break;
+                      case 'CERRADO':
+                        $badgeClass = 'badge-light-secondary';
+                        break;
+                      default:
+                        $badgeClass = 'badge-light-info';
+                        break;
+                    }
+                    ?>
+                    <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                  </td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
               <tr>
-                <td colspan="10" class="text-center py-3">A&uacute;n no se ha realizado mantenimiento a las incidencias asignadas.</td>
+                <td colspan="11" class="text-center py-3">A&uacute;n no se ha realizado mantenimiento a las incidencias asignadas.</td>
               </tr>
             <?php endif; ?>
           </tbody>

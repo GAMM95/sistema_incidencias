@@ -213,8 +213,9 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_totales_administrador
-          ORDER BY INC_numero DESC";
+        $sql = "SELECT * 
+                FROM vista_incidencias_totales_administrador
+                ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
 
@@ -433,7 +434,7 @@ class IncidenciaModel extends Conexion
   //     throw new Exception("Error al listar incidencias registradas por el usuario: " . $e->getMessage());
   //   }
   // }
-  
+
   // Metodo para listar incidencias registradas por el usuario de un area especifica
   public function listarIncidenciasRegistroUsuario($ARE_codigo)
   {

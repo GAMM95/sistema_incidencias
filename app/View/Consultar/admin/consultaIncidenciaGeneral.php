@@ -58,7 +58,8 @@
 
     <!-- TABLA DE RESULTADOS DE LAS INCIDENCIAS -->
     <div class="relative shadow-md sm:rounded-lg">
-      <div class="max-w-full overflow-hidden">
+      <div class="relative overflow-x-hidden shadow-md sm:rounded-lg">
+        <!-- <div class="max-w-full overflow-hidden"> -->
         <table id="tablaIncidencias" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
           <!-- Encabezado de la tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-lime-300">

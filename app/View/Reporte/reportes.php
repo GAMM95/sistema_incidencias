@@ -441,12 +441,14 @@
                             <div class="text-center w-full md:w-3/4">
                               <select id="area" name="area" class="border p-2 w-full text-xs cursor-pointer">
                               </select>
-                              <input type="hidden" id="codigoArea" name="codigoArea" readonly>
-                              <input type="hidden" id="nombreArea" name="nombreArea" readonly>
+                              <input type="" id="codigoArea" name="codigoArea" readonly>
+                              <input type="" id="nombreArea" name="nombreArea" readonly>
                             </div>
 
                             <!-- Botones -->
                             <div class="text-center w-full md:w-1/4">
+                              <button type="button" id="filtrar-areas" class="bn btn-primary text-xs text-white font-bold p-2 rounded-md">
+                                <i class="feather mr-2 icon-filter"></i> </button>
                               <button type="button" id="reportes-areas" class="bn btn-primary text-xs text-white font-bold p-2 rounded-md">
                                 <i class="feather mr-2 icon-printer"></i>Generar reporte
                               </button>
@@ -455,7 +457,7 @@
                           <!-- Tabla de resultados de incidencias totales -->
                           <div class="relative sm:rounded-lg mt-2">
                             <div class="max-w-full overflow-hidden sm:rounded-lg">
-                              <table id="tablaIncidenciasTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                              <table id="tablaReporteAreas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                 <!-- Encabezado de la tabla -->
                                 <thead class="text-xs text-gray-700 uppercase bg-gray-300">
                                   <tr>
@@ -472,11 +474,24 @@
                                   </tr>
                                 </thead>
                                 <!-- Fin de encabezado de la tabla -->
-                              
+                                <tbody>
+                                  <!-- Las filas se agregarán aquí dinámicamente -->
+                                </tbody>
                               </table>
+
                             </div>
                           </div>
                           <!-- Fin de tabla de resultados de incidencias totales -->
+
+
+
+
+
+
+
+
+
+
                         </div>
                         <!-- Fin de contenido de la primera pestaña -->
 
@@ -523,5 +538,54 @@
 
 <script src="https://cdn.tailwindcss.com"></script>
 <script>
+  document.addEventListener("DOMContentLoaded", function() {
+    const codigoArea = $('#area').val();
+    // Cuando se selecciona un área
 
+
+    // Función para cargar los datos de la tabla por área seleccionada
+    function cargarTablaPorArea(codigoArea) {
+      console.log(`Cargando datos para el área: ${codigoArea}`); // Mensaje en consola para depurar
+      $.ajax({
+        url: 'ajax/getReportePorArea.php', // Cambia esta ruta según el archivo que maneja la consulta
+        method: 'GET',
+        data: {
+          area: codigoArea
+        },
+        dataType: 'json',
+        success: function(response) {
+          console.log('Datos obtenidos:', response); // Mostrar los datos en consola
+          if (response && response.length > 0) {
+            // Limpiar la tabla antes de agregar nuevos datos
+            $('#tablaReporteAreas tbody').empty();
+
+            // Recorrer los resultados y agregar las filas a la tabla
+            response.forEach(function(incidencia) {
+              $('#tablaReporteAreas tbody').append(`
+                  <tr>
+                    <td class="px-3 py-2 text-center">${incidencia.INC_numero_formato}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.INC_asunto}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.fechaIncidenciaFormateada}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.INC_asunto}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.INC_documento}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.INC_codigoPatrimonial}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.BIE_nombre}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.PRI_nombre}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.CON_descripcion}</td>
+                    <td class="px-3 py-2 text-center">${incidencia.ESTADO}</td>
+                  </tr>
+                `);
+            });
+          } else {
+            // Si no hay resultados, mostrar un mensaje
+            $('#tablaReporteAreas tbody').html('<tr><td colspan="10" class="text-center p-2">No se encontraron resultados.</td></tr>');
+            console.log('No se encontraron datos para el área seleccionada.');
+          }
+        },
+        error: function(xhr, status, error) {
+          console.error("Error en la solicitud AJAX: " + error); // Mostrar error en consola
+        }
+      });
+    }
+  });
 </script>

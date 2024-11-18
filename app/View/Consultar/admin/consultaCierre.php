@@ -59,7 +59,8 @@
 
     <!-- Tabla de resultados para cierres -->
     <div class="relative shadow-md sm:rounded-lg">
-      <div class="max-w-full overflow-hidden">
+    <div class="relative overflow-x-hidden shadow-md sm:rounded-lg">
+      <!-- <div class="max-w-full overflow-hidden"> -->
         <table id="tablaCierres" class="w-full text-xs text-left rtl:text-right text-gray-500 bg-white">
           <!-- Encabezado de la tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-lime-300">
@@ -92,12 +93,35 @@
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['BIE_nombre']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['INC_asunto']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['CIE_documento']) ?></td>
-                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['CON_descripcion']) ?></td>
+                  <td class="px-3 py-2 text-center text-xs align-middle">
+                    <?php
+                    $estadoDescripcion = htmlspecialchars($cierre['CON_descripcion']);
+                    $badgeClass = '';
+                    switch ($estadoDescripcion) {
+                      case 'OPERATIVO':
+                        $badgeClass = 'badge-light-info';
+                        break;
+                      case 'INOPERATIVO':
+                        $badgeClass = 'badge-light-danger';
+                        break;
+                      case 'SOLUCIONADO':
+                        $badgeClass = 'badge-light-info';
+                        break;
+                      case 'NO SOLUCIONADO':
+                        $badgeClass = 'badge-light-danger';
+                        break;
+                      default:
+                        $badgeClass = 'badge-light-secondary';
+                        break;
+                    }
+                    ?>
+                    <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                  </td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>
               <tr>
-                <td colspan="8" class="text-center py-3">No se encontraron cierres.</td>
+                <td colspan="9" class="text-center py-3">No se encontraron cierres.</td>
               </tr>
             <?php endif; ?>
           </tbody>

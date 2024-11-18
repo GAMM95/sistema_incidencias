@@ -210,7 +210,8 @@ class AuditoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_consultar_auditoria_asignacion_incidencia";
+        // $sql = "EXEC sp_consultar_auditoria_asignacion_incidencia";
+        $sql = "SELECT * FROM vista_incidencias_totales_administrador";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

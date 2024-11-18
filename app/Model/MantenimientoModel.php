@@ -190,7 +190,8 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_matenimiento";
+        $sql = "SELECT * FROM vista_incidencias_matenimiento 
+                ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -209,7 +210,7 @@ class MantenimientoModel extends Conexion
       if ($conector != null) {
         $sql = "SELECT * FROM vista_incidencias_matenimiento
           WHERE USU_codigo = :usuarioAsignado
-          ORDER BY INC_numero_formato DESC";
+          ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);
         $stmt->execute();

@@ -52,10 +52,29 @@ if ($rol === 'Administrador') {
         $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($asignaciones['fechaMantenimientoFormateada']) . '</td>';
         $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($asignaciones['usuarioSoporte']) . '</td>';
         $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($asignaciones['tiempoMantenimientoFormateado']) . '</td>';
+        $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
+        // Manejar el estado de la incidencia
+        $estadoDescripcion = htmlspecialchars($asignaciones['Estado']);
+        $badgeClass = '';
+        switch ($estadoDescripcion) {
+          case 'EN ESPERA':
+            $badgeClass = 'badge-light-danger';
+            break;
+          case 'RESUELTO':
+            $badgeClass = 'badge-light-primary';
+            break;
+          case 'CERRADO':
+            $badgeClass = 'badge-light-secondary';
+            break;
+          default:
+            break;
+        }
+
+        $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
         $html .= '</td></tr>';
       }
     } else {
-      $html = '<tr><td colspan="10" class="text-center py-3">A&uacute;n no se ha realizado mantenimiento a las incidencias asignadas.</td></tr>';
+      $html = '<tr><td colspan="11" class="text-center py-3">A&uacute;n no se ha realizado mantenimiento a las incidencias asignadas.</td></tr>';
     }
     echo $html;
     exit;
@@ -91,10 +110,29 @@ if ($rol === 'Administrador') {
         $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($asignaciones['fechaAsignacionFormateada']) . '</td>';
         $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($asignaciones['fechaMantenimientoFormateada']) . '</td>';
         $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($asignaciones['tiempoMantenimientoFormateado']) . '</td>';
+        $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
+        // Manejar el estado de la incidencia
+        $estadoDescripcion = htmlspecialchars($asignaciones['Estado']);
+        $badgeClass = '';
+        switch ($estadoDescripcion) {
+          case 'EN ESPERA':
+            $badgeClass = 'badge-light-danger';
+            break;
+          case 'RESUELTO':
+            $badgeClass = 'badge-light-primary';
+            break;
+          case 'CERRADO':
+            $badgeClass = 'badge-light-secondary';
+            break;
+          default:
+            break;
+        }
+
+        $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
         $html .= '</td></tr>';
       }
     } else {
-      $html = '<tr><td colspan="9" class="text-center py-3">A&uacute;n no se ha realizado mantenimiento a las incidencias asignadas.</td></tr>';
+      $html = '<tr><td colspan="10" class="text-center py-3">A&uacute;n no se ha realizado mantenimiento a las incidencias asignadas.</td></tr>';
     }
     echo $html;
     exit;

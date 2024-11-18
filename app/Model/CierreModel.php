@@ -112,7 +112,7 @@ class CierreModel extends Conexion
     try {
       if ($conector != null) {
         $sql = "SELECT * FROM vista_cierres
-        ORDER BY CIE_numero DESC";
+        ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

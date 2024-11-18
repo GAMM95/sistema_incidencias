@@ -14,7 +14,6 @@ $area = $_SESSION['codigoArea'];
 
 require_once 'app/Controller/cierreController.php';
 require_once 'app/Model/cierreModel.php';
-// require_once './app/Model/RecepcionModel.php';
 require_once 'app/Model/MantenimientoModel.php';
 
 $cierreController = new CierreController();
@@ -40,14 +39,13 @@ $recepciones = $mantenmientoModel->listarIncidenciasFinalizadas($start, $limit);
 // $totalPagesCierres  = ceil($totalCierres / $limite);
 
 $cierres = $cierreModel->listarCierres();
-// $cierres = $cierreModel->listarCierres($inicio, $limite);
 
-if ($CIE_numero != '') {
-  global $cierreRegistrado;
-  $cierreRegistrado = $cierreModel->obtenerCierrePorID($CIE_numero);
-} else {
-  $cierreRegistrado = null;
-}
+// if ($CIE_numero != '') {
+//   global $cierreRegistrado;
+//   $cierreRegistrado = $cierreModel->obtenerCierrePorID($CIE_numero);
+// } else {
+//   $cierreRegistrado = null;
+// }
 
 switch ($action) {
   case 'registrar':

@@ -74,7 +74,7 @@ if ($action === 'consultar') {
       $html .= '</td></tr>';
     }
   } else {
-    $html = '<tr><td colspan="10" class="text-center py-3">No se encontraron incidencias pendientes de cierre.</td></tr>';
+    $html = '<tr><td colspan="10" class="text-center py-3">No se han registrado incidencias.</td></tr>';
   }
 
   // Devolver el HTML de las filas
