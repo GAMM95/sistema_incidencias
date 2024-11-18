@@ -18,6 +18,21 @@
     </div>
     <!-- Fin de miga de pan -->
 
+    <!-- Boton agregar persona -->
+    <!-- Botón agregar persona -->
+    <a href="#" id="btn-agregar-persona" class="bn btn-warning text-xs text-white font-bold py-2 px-3 mt-1 mb-1 rounded-md">
+      <i class="feather icon-user-plus"></i>
+    </a>
+
+    <script>
+      // Captura el botón y asigna un evento click
+      document.getElementById("btn-agregar-persona").addEventListener("click", function(event) {
+        event.preventDefault(); // Evita que el enlace navegue a otra página
+
+        // Activa la tercera pestaña (Incidencias cerradas)
+        document.getElementById("pills-cerradas-tab").click();
+      });
+    </script>
     <!-- Inicio del tab pane -->
     <div class="h-full flex flex-col grow mb-0">
       <div class="card grow">
@@ -43,6 +58,18 @@
             <!-- Contenido de la primera pestaña -->
             <div class="tab-pane fade show active" id="generales" role="tabpanel" aria-labelledby="generales-tab">
               <!-- Pestañas del primer tab -->
+              <!-- <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                <li class="nav-item">
+                  <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Incidencias totales</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Pendientes de cierre</a>
+                </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-cerradas-tab" data-toggle="pill" href="#pills-cerradas" role="tab" aria-controls="pills-cerradas" aria-selected="false">Incidencias cerradas</a>
+                </li>
+              </ul> -->
+
               <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Incidencias totales</a>
@@ -54,6 +81,7 @@
                   <a class="nav-link" id="pills-cerradas-tab" data-toggle="pill" href="#pills-cerradas" role="tab" aria-controls="pills-cerradas" aria-selected="false">Incidencias cerradas</a>
                 </li>
               </ul>
+
               <!-- Fin de pestañas del primer tab -->
               <div class="tab-content" id="pills-tabContent">
                 <!-- Primer tab-->
@@ -141,7 +169,28 @@
                                 <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']) ?></td>
                                 <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']) ?></td>
                                 <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['CON_descripcion']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ESTADO']) ?></td>
+                                <!-- <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['Estado']) ?></td> -->
+                                <td class="px-3 py-2 text-center text-xs align-middle">
+                                  <?php
+                                  $estadoDescripcion = htmlspecialchars($totales['Estado']);
+                                  $badgeClass = '';
+                                  switch ($estadoDescripcion) {
+                                    case 'ABIERTO':
+                                      $badgeClass = 'badge-light-danger';
+                                      break;
+                                    case 'RECEPCIONADO':
+                                      $badgeClass = 'badge-light-success';
+                                      break;
+                                    case 'CERRADO':
+                                      $badgeClass = 'badge-light-primary';
+                                      break;
+                                    default:
+                                      $badgeClass = 'badge-light-secondary';
+                                      break;
+                                  }
+                                  ?>
+                                  <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                                </td>
                               </tr>
                             <?php endforeach; ?>
                           <?php else: ?>
@@ -282,17 +331,16 @@
                             <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
                             <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
                             <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
-                            <th scope="col" class="px-3 py-2 text-center">Estado</th>
                           </tr>
                         </thead>
                         <!-- Fin de encabezado de la tabla -->
 
                         <!-- Cuerpo de la tabla -->
                         <tbody>
-                          <?php if (!empty($resultadoIncidenciasTotales)): ?>
+                          <?php if (!empty($resultadoIncidenciasCerradas)): ?>
                             <?php $item = 1; // Iniciar contador para el ítem 
                             ?>
-                            <?php foreach ($resultadoIncidenciasTotales as $totales): ?>
+                            <?php foreach ($resultadoIncidenciasCerradas as $totales): ?>
                               <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
                                 <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                                 <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_numero_formato']) ?></td>
@@ -304,7 +352,6 @@
                                 <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']) ?></td>
                                 <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']) ?></td>
                                 <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['CON_descripcion']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ESTADO']) ?></td>
                               </tr>
                             <?php endforeach; ?>
                           <?php else: ?>
@@ -386,8 +433,8 @@
                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['BIE_nombre']); ?></td>
                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']); ?></td>
                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']); ?></td>
-                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ESTADO']); ?></td>
-                          <td class="px-6 py-3 text-center align-middle flex space-x-2"> <!-- Columna de Acción con botones -->
+                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['Estado']); ?></td>
+                          <td class="px-6 py-2 text-center align-middle flex space-x-2"> <!-- Columna de Acción con botones -->
                             <!-- Botón de Imprimir detalle de incidencia -->
                             <button type="button" id="imprimir-incidencia" class="bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Detalle de incidencia">
                               <i class="feather icon-file"></i>

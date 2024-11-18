@@ -13,49 +13,17 @@ $area = $_SESSION['codigoArea'];
 
 require_once './app/Controller/incidenciaController.php';
 require_once './app/Controller/recepcionController.php';
+require_once './app/Controller/cierreController.php';
 
 $incidenciaController = new IncidenciaController();
 $recepcionController = new RecepcionController();
-$resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales(); // Obtener los datos de las incidencias totales
+$cierreController = new CierreController(); 
+
+
+// $resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales(); // Obtener los datos de las incidencias totales
+$resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotalesAdministrador(); // Obtener los datos de las incidencias totales
 $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre(); // Obtener los datos de las incidencias pendientes de cierre
-
-
-// // Capturar los datos del fomrulario
-// $area = $_GET['area'] ?? '';
-// $resultadoBusqueda = NULL;
-
-// if ($action === 'consultar') {
-//   // Depuración: mostrar los parámetros recibidos
-//   error_log("Área: " . $area);
-//   // Obtener los resultados de la búsqueda
-//   $resultadoBusqueda = $reportePorArea->getReportePorArea($area);
-
-//   error_log("Resultado de la consulta: " . print_r($resultadoBusqueda, true));
-
-//   // Dibujar tabla de consultas
-//   $html = '';
-//   if (!empty($resultadoBusqueda)) {
-//     $item = 1; // Iniciar contador para el ítem
-//     foreach ($resultadoBusqueda as $reporteArea) {
-//       $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
-//       $html .= '<td class="px-3 py-2 text-center">' . $item++ . '</td>'; // Columna de ítem
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['INC_numero_formato']) . '</td>';
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['fechaCierreFormateada']) . '</td>';
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['ARE_nombre']) . '</td>';
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['INC_codigoPatrimonial']) . '</td>';
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['BIE_nombre']) . '</td>';
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['INC_asunto']) . '</td>';
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['CIE_documento']) . '</td>';
-//       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($reporteArea['CON_descripcion']) . '</td>';
-//       $html .= '</td></tr>';
-//     }
-//   } else {
-//     $html = '<tr><td colspan="8" class="text-center py-3">No se encontraron para el &aacute;rea seleccionada.</td></tr>';
-//   }
-
-//   echo $html;
-//   exit;
-// }
+$resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas(); // Obtener los datos de las incidencias cerradas
 ?>
 
 <!DOCTYPE html>
