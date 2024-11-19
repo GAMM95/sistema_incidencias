@@ -34,7 +34,7 @@
         <!-- CAMPO ESCONDIDO -->
         <div class="flex justify-center -mx-2 ">
           <!-- CODIGO DE USUARIO -->
-          <div class="w-full sm:w-1/4 px-2 mb-2 hidden">
+          <div class="w-full sm:w-1/4 px-2 mb-2 ">
             <div class="flex items-center">
               <label for="CodUsuario" class="block font-bold mb-1 mr-3 text-lime-500">C&oacute;digo de Usuario:</label>
               <input type="text" id="CodUsuario" name="CodUsuario" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center">
@@ -48,7 +48,7 @@
           <div class="flex-grow w-1/4">
             <label for="persona" class="block text-gray-700 font-bold mb-2">Trabajador:</label>
             <select id="persona" name="persona" class="border p-2 w-full text-xs cursor-pointer rounded-md"></select>
-            <input type="hidden" id="codigoPersona" name="codigoPersona">
+            <input type="" id="codigoPersona" name="codigoPersona">
           </div>
 
           <!-- Boton agregar persona -->
@@ -89,9 +89,94 @@
 
           <!-- Botones del formulario -->
           <div class="flex justify-center items-center space-x-4 mt-3 ml-20">
-            <button type="submit" id="guardar-usuario" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Guardar</button>
-            <button type="button" id="editar-usuario" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Editar</button>
+            <button type="submit" id="guardar-usuario" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Registrar</button>
+            <button type="button" id="editar-usuario" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Actualizar</button>
             <button type="button" id="nuevo-registro" class="bn btn-secondary text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-plus-square"></i>Limpiar</button>
+            <!-- Boton cambiar contraseña -->
+            <button type="button" data-toggle="modal" data-target="#modalCambiarPasswordUser" id="modalCambiarPasswordUser" class="bn bg-orange-500 hover:bg-orange-600 text-xs text-white font-bold py-2 px-3 rounded-md disabled:cursor-not-allowed" disabled>
+              <i class="feather mr-2 icon-lock"></i>Cambiar contrase&ntilde;a</button>
+            <!-- Fin Formulario datos de Usuario -->
+
+            <!-- TODO:Modal Cambio de contraseña -->
+            <div class="modal fade" id="modalCambiarPasswordUser" tabindex="-1" role="dialog" aria-labelledby="modalCambiarPasswordUser" aria-hidden="true">
+              <div class="modal-dialog modal-dialog-centered" role="document">
+                <div class="modal-content">
+                  <div class="modal-header">
+                    <h5 class="modal-title text-xl font-bold" id="modalBuscarIncidenciaLabel">Cambio de clave de usuario</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                      <span aria-hidden="true">&times;</span>
+                    </button>
+                  </div>
+                  <div class="modal-body">
+                    <form id="formCambiarPassword" action="mi-perfil.php?action=cambiarContraseña" method="POST" class="card table-card bg-white shadow-md p-6 text-xs flex flex-col mb-2">
+                      <input type="hidden" id="form-action-cambiarContraseña" name="action" value="cambiarContraseña">
+                      <div>
+                        <p class="mb-0 text-gray-800 text-lg">Datos del usuario</p>
+                        <hr class="border-t-2 border-gray-100 mb-2"> <!-- Línea separadora -->
+
+                        <!-- Codigo de usuario -->
+                        <div class="form-group row hidden">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-xs">Codigo de usuario</label>
+                          <div class="col-sm-9">
+                            <input type="text" id="codigoUsuarioModal" name="codigoUsuarioModal" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>" readonly>
+                          </div>
+                        </div>
+
+                        <!-- Nombre de usuario -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Usuario</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm border border-gray-200 bg-gray-100 rounded-md p-2 text-md" id="usernameModal" name="usernameModal" placeholder="Nombre de usuario" value="<?php echo htmlspecialchars($perfil['USU_nombre']); ?>" disabled readonly>
+                          </div>
+                        </div>
+
+                        <!-- Nombre de usuario -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Nombre</label>
+                          <div class="col-sm-9">
+                            <input type="text" class="form-control form-control-sm border border-green-500 bg-gray-100 rounded-md p-2 text-md" id="usernameModel" name="usernameModel" placeholder="Nombre de usuario" value="<?php echo htmlspecialchars($perfil['Persona']); ?>" disabled readonly>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div>
+                        <p class="mb-0 text-gray-800 text-lg">Datos de acceso</p>
+                        <hr class="border-t-2 border-gray-100 mb-3"> <!-- Línea separadora -->
+
+                        <!-- Contraseña nueva -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Nueva contrase&ntilde;a</label>
+                          <div class="col-sm-7 position-relative">
+                            <input type="password" class="form-control form-control-sm border border-green-500 bg-white rounded-md p-2 text-md pr-10" id="passwordNuevo" name="passwordNuevo" placeholder="Ingrese nueva contrase&ntilde;a">
+                            <!-- Icono para mostrar/ocultar contraseña -->
+                            <span id="togglePasswordNuevo" class="position-absolute cursor-pointer" style="right: 25px; top: 50%; transform: translateY(-50%);">
+                              <i class="feather icon-eye text-gray-400"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                        <!-- Confirmar contraseña -->
+                        <div class="form-group row">
+                          <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Confirmar contrase&ntilde;a</label>
+                          <div class="col-sm-7 position-relative">
+                            <input type="password" class="form-control form-control-sm border border-green-500 bg-white rounded-md p-2 text-md pr-10" id="passwordConfirm" name="passwordConfirm" placeholder="Confirmar contrase&ntilde;a">
+                            <!-- Icono para mostrar/ocultar contraseña -->
+                            <span id="togglePasswordConfirm" class="position-absolute cursor-pointer" style="right: 25px; top: 50%; transform: translateY(-50%);">
+                              <i class="feather icon-eye text-gray-400"></i>
+                            </span>
+                          </div>
+                        </div>
+
+                      </div>
+                    </form>
+                  </div>
+                  <div class="modal-footer justify-center">
+                    <button type="button" id="cambiarPasswordUser" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-lock"></i>Cambiar contrase&ntilde;a</button>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- Fin Modal Cambio de contraseña -->
           </div>
           <!-- Fin botones -->
         </div>
@@ -125,6 +210,7 @@
           <thead class="sticky top-0 text-xs text-gray-70 uppercase bg-lime-300">
             <tr>
               <th scope="col" class="px-6 py-2 text-center hidden">N&deg;</th>
+              <th scope="col" class="px-6 py-2 text-center">DNI</th>
               <th scope="col" class="px-6 py-2 text-center">Trabajador</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario</th>
@@ -144,24 +230,17 @@
                 $isActive = ($estado === 'ACTIVO');
                 $areaEstado = htmlspecialchars($usuario['EST_codigo']);
                 $codigoUsuario = htmlspecialchars($usuario['USU_codigo']);
-
-                // $areaEstado = htmlspecialchars($usuario['ARE_estado']);
                 // Aplicar clase de texto rojo si el ARE_estado es 2
                 $areaInactiva = ($areaEstado == 2) ? 'text-red-600' : 'text-gray-900';
                 ?>
                 <tr class="hover:bg-green-100 hover:scale-[101%] transition-all hover:cursor-pointer border-b" data-id="<?= $usuario['USU_codigo']; ?>">
                   <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap hidden"><?= htmlspecialchars($usuario['USU_codigo']); ?></th>
+                  <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['PER_dni']); ?></td>
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['persona']); ?></td>
                   <td class="px-6 py-2 text-center <?= $areaInactiva; ?>"><?= htmlspecialchars($usuario['ARE_nombre']); ?></td>
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['USU_nombre']); ?></td>
                   <td class="px-6 py-2 text-center hidden"><?= htmlspecialchars($usuario['USU_password']); ?></td>
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['ROL_nombre']); ?></td>
-                  <!-- <td class="px-6 py-2 text-center">
-                    <div class="custom-control custom-switch cursor-pointer">
-                      <input type="checkbox" class="custom-control-input" id="customswitch<?= $usuario['USU_codigo']; ?>" <?= $isActive ? 'checked' : ''; ?>>
-                      <label class="custom-control-label" for="customswitch<?= $usuario['USU_codigo']; ?>"><?= $isActive ? 'Activo' : 'Inactivo'; ?></label>
-                    </div>
-                  </td> -->
                   <td class="px-6 py-2 text-center">
                     <div class="custom-control custom-switch cursor-pointer">
                       <input type="checkbox" class="custom-control-input switch-usuario" id="customswitch<?= $codigoUsuario; ?>" data-id="<?= $codigoUsuario; ?>" <?= $isActive ? 'checked' : ''; ?>>

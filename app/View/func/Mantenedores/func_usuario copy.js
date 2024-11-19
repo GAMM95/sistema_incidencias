@@ -199,14 +199,14 @@ $(document).on('click', '#tablaListarUsuarios tbody tr', function () {
   const celdas = $(this).find('td');
   const codUsuario = $(this).find('th').text().trim();
   const personaValue = celdas.eq(0).text().trim();
-  const areaValue = celdas.eq(1).text().trim();
-  const usernameValue = celdas.eq(2).text().trim();
-  const passwordValue = celdas.eq(3).text().trim();
-  const rolValue = celdas.eq(4).text().trim();
+  const areaValue = celdas.eq(2).text().trim();
+  const usernameValue = celdas.eq(3).text().trim();
+  // const passwordValue = celdas.eq(4).text().trim();
+  const rolValue = celdas.eq(5).text().trim();
 
   $('#CodUsuario').val(codUsuario);
   $('#username').val(usernameValue);
-  $('#password').val(passwordValue);
+  // $('#password').val(passwordValue);
 
   setComboValue('persona', personaValue);
   setComboValue('area', areaValue);
@@ -218,6 +218,7 @@ $(document).on('click', '#tablaListarUsuarios tbody tr', function () {
   // Cambiar estado de los botones
   $('#guardar-usuario').prop('disabled', true);
   $('#editar-usuario').prop('disabled', false);
+  $("modalCambiarPasswordUser").prop("disabled", false);
   $('#nuevo-registro').prop('disabled', false);
 
   // Cambiar la acción a editar
@@ -269,6 +270,7 @@ function nuevoRegistro() {
   $('#form-action').val('registrar');  // Cambiar la acción a registrar
   $('#guardar-usuario').prop('disabled', false);  // Activar el botón de guardar
   $('#editar-usuario').prop('disabled', true);    // Desactivar el botón de editar
+  $("modalCambiarPasswordUser").prop("disabled", true);    // Desactivar el botón de cambiar contraseña
   $('#nuevo-registro').prop('disabled', false);     // Asegurarse que el botón de nuevo registro está activo
 }
 
