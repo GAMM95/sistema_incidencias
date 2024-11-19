@@ -603,6 +603,27 @@ class IncidenciaModel extends Conexion
     }
   }
 
+  // Metodo para consultar incidencias totales para la visualción de reportes
+  public function buscarIncidenciaTotalesFecha($fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_filtrar_incidencias_totales_fecha  :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias totales: " . $e->getMessage());
+    }
+  }
+
   // Metodo para consultar incidencias por area - USUARIO
   public function buscarIncidenciaUsuario($area, $codigoPatrimonial, $estado, $fechaInicio, $fechaFin)
   {

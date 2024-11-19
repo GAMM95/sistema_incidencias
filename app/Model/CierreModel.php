@@ -307,4 +307,25 @@ class CierreModel extends Conexion
       throw new Exception("Error al obtener los cierres XD: " . $e->getMessage());
     }
   }
+
+  // Metodo para consultar incidencias cerradas para la visualción de reportes
+  public function buscarIncidenciaCerradasFecha($fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_filtrar_incidencias_cerradas_fecha  :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias cerradas por fecha: " . $e->getMessage());
+    }
+  }
 }

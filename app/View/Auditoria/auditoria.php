@@ -496,7 +496,7 @@
             </div>
 
             <div class="tab-pane fade" id="mantenedor" role="tabpanel" aria-labelledby="mantenedor-tab">
-              <p class="mb-0">Etsy mixtape wayfarers...</p>
+              <p class="mb-0">Que miras sapo...</p>
             </div>
           </div>
         </div>

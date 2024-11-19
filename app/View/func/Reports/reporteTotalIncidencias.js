@@ -101,7 +101,7 @@ $('#reporte-incidencias-totales').click(function () {
             reporte.ARE_nombre,
             reporte.PRI_nombre,
             reporte.CON_descripcion,
-            reporte.ESTADO
+            reporte.Estado
           ]),
           styles: {
             fontSize: 7,

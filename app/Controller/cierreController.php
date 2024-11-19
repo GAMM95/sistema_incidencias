@@ -172,6 +172,21 @@ class cierreController
     }
   }
 
+  // Metodo para filtrar incidencias cerradas por fecha ingresada
+  public function filtrarIncidenciasCerradasFecha($fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
+      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
+      error_log("Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+      // Llamar al método para consultar incidencias por fecha
+      $consultaIncidencia = $this->cierreModel->buscarIncidenciaCerradasFecha($fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaIncidencia;
+    }
+  }
+
   // Metodo para listar cierres para consulta de administrador y soporte
   public function listarIncidenciasCerradas()
   {

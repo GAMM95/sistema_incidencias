@@ -1144,7 +1144,7 @@ SELECT
     CASE
         WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
         ELSE E.EST_descripcion
-    END AS ESTADO
+    END AS Estado
     FROM INCIDENCIA I
     INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
     INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
@@ -2859,6 +2859,79 @@ BEGIN
 END
 GO
 
+-- PROCEDIMIENTO ALMANCENADO APRA FILTRAR INCIDENCIAS TOTALES POR FECHA - MODULO REPORTE
+CREATE OR ALTER PROCEDURE sp_filtrar_incidencias_totales_fecha
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT
+    I.INC_numero,
+    I.INC_numero_formato,
+    (CONVERT(VARCHAR(10), I.INC_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT(VARCHAR(7), I.INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
+    A.ARE_nombre,
+    CAT.CAT_nombre,
+    I.INC_asunto,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_documento,
+    (CONVERT(VARCHAR(10), R.REC_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT(VARCHAR(7), R.REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+    PRI.PRI_nombre,
+    IMP.IMP_descripcion,
+    CONVERT(VARCHAR(10), C.CIE_fecha, 103) AS fechaCierreFormateada,
+    O.CON_descripcion,
+    U.USU_nombre,
+    CASE
+      WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+      ELSE E.EST_descripcion
+    END AS Estado,
+    -- Última modificación (fecha y hora más reciente)
+    MAX(COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha)) AS ultimaFecha,
+    MAX(COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora)) AS ultimaHora
+  FROM CIERRE C
+  LEFT JOIN MANTENIMIENTO MAN ON MAN.MAN_codigo = C.MAN_codigo
+  LEFT JOIN ASIGNACION ASI ON ASI.ASI_codigo = MAN.ASI_codigo
+  RIGHT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+  RIGHT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+  RIGHT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+  RIGHT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+  INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+  INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+  LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+  LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+  LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+  LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+  WHERE (I.EST_codigo IN (3, 4, 7) OR C.EST_codigo IN (3, 4, 7))
+    AND (@fechaInicio IS NULL OR I.INC_fecha >= @fechaInicio)
+    AND (@fechaFin IS NULL OR I.INC_fecha <= @fechaFin)
+  GROUP BY
+    I.INC_numero,
+    I.INC_numero_formato,
+    I.INC_fecha,
+    I.INC_hora,
+    A.ARE_nombre,
+    CAT.CAT_nombre,
+    I.INC_asunto,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_documento,
+    R.REC_fecha,
+    R.REC_hora,
+    PRI.PRI_nombre,
+    IMP.IMP_descripcion,
+    C.CIE_fecha,
+    O.CON_descripcion,
+    U.USU_nombre,
+    C.CIE_numero,
+    EC.EST_descripcion,
+    E.EST_descripcion
+  ORDER BY ultimaFecha DESC, ultimaHora DESC;
+END
+GO
+
 -- PROCEDIMIENTO ALMANCENADO PARA CONSULTAR INCIDENCIAS - ADMINISTRADOR
 CREATE OR ALTER PROCEDURE sp_consultar_incidencias_pendientes
   @area INT,
@@ -3154,6 +3227,91 @@ BEGIN
 		AND (@fechaInicio IS NULL OR C.CIE_fecha >= @fechaInicio)
 		AND (@fechaFin IS NULL OR C.CIE_fecha <= @fechaFin)
 		AND (@area IS NULL OR A.ARE_codigo = @area)
+	GROUP BY
+		I.INC_numero,
+		I.INC_numero_formato,
+		INC_fecha,
+		INC_hora,
+		A.ARE_nombre,
+		CAT.CAT_nombre,
+		I.INC_asunto,
+		I.INC_documento,
+		I.INC_codigoPatrimonial,
+		B.BIE_nombre,
+		PRI.PRI_nombre,
+		C.CIE_fecha,
+		C.CIE_hora,
+		C.CIE_numero,
+		C.CIE_diagnostico,
+		C.CIE_recomendaciones,
+		C.CIE_documento,
+		O.CON_descripcion,
+		U.USU_nombre,
+		S.SOL_descripcion,
+		P.PER_nombres,
+		P.PER_apellidoPaterno,
+		CASE
+			WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+			ELSE E.EST_descripcion
+		END
+	ORDER BY ultimaFecha DESC, ultimaHora DESC;
+END
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA FILTRAR INCIDENCIAS CERRADAS POR FECHA
+CREATE OR ALTER PROCEDURE sp_filtrar_incidencias_cerradas_fecha
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+	SELECT
+		I.INC_numero,
+		I.INC_numero_formato,
+		(CONVERT(VARCHAR(10), INC_fecha, 103) + ' - ' + 
+		STUFF(RIGHT('0' + CONVERT(VARCHAR(7), INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
+		A.ARE_nombre,
+		CAT.CAT_nombre,
+		I.INC_asunto,
+		I.INC_documento,
+		I.INC_codigoPatrimonial,
+		B.BIE_nombre,
+		PRI.PRI_nombre,
+		(CONVERT(VARCHAR(10), C.CIE_fecha, 103) + ' - ' + 
+		STUFF(RIGHT('0' + CONVERT(VARCHAR(7), C.CIE_hora, 0), 7), 6, 0, ' ')) AS fechaCierreFormateada,
+		C.CIE_numero,
+		C.CIE_diagnostico, 
+		C.CIE_recomendaciones,
+		C.CIE_documento,
+		O.CON_descripcion,
+		U.USU_nombre,
+		S.SOL_descripcion,
+		CASE
+			WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+			ELSE E.EST_descripcion
+		END AS Estado,
+		(P.PER_nombres + ' ' + P.PER_apellidoPaterno) AS Usuario,
+		-- Última modificación (fecha y hora más reciente)
+		MAX(COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha)) AS ultimaFecha,
+		MAX(COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora)) AS ultimaHora
+	FROM CIERRE C
+	LEFT JOIN MANTENIMIENTO MAN ON MAN.MAN_codigo = C.MAN_codigo
+	LEFT JOIN ASIGNACION ASI ON ASI.ASI_codigo = MAN.ASI_codigo
+	LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+	INNER JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+	RIGHT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+	LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+	INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+	INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+	INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+	LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+	INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+	INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
+	INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+	LEFT JOIN SOLUCION S ON S.SOL_codigo = C.SOL_codigo
+	WHERE 
+		C.EST_codigo = 7 -- Solo incidencias con estado 7 (cerradas)
+		AND (@fechaInicio IS NULL OR C.CIE_fecha >= @fechaInicio)
+		AND (@fechaFin IS NULL OR C.CIE_fecha <= @fechaFin)
 	GROUP BY
 		I.INC_numero,
 		I.INC_numero_formato,

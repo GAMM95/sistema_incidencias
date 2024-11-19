@@ -17,13 +17,138 @@ require_once './app/Controller/cierreController.php';
 
 $incidenciaController = new IncidenciaController();
 $recepcionController = new RecepcionController();
-$cierreController = new CierreController(); 
+$cierreController = new CierreController();
 
 
-// $resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales(); // Obtener los datos de las incidencias totales
-$resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotalesAdministrador(); // Obtener los datos de las incidencias totales
+$fechaInicio = $_GET['fechaInicio'] ?? '';
+$fechaFin = $_GET['fechaFin'] ?? '';
+
+if ($action === 'consultarTotales') {
+  // Depuración: mostrar los parámetros recibidos
+  error_log("Fecha Inicio: " . $fechaInicio);
+  error_log("Fecha Fin: " . $fechaFin);
+
+  // Obtener los resultados de la búsqueda
+  $resultadoIncidenciasTotales = $incidenciaController->filtrarIncidenciasTotalesFecha($fechaInicio, $fechaFin);
+
+  // Imprimir el resultado de la depuración
+  error_log("Resultado de la consulta: " . print_r($resultadoIncidenciasTotales, true));
+
+  // Dibujar tabla de consultas
+  $html = '';
+  if (!empty($resultadoIncidenciasTotales)) {
+    $item = 1; // Iniciar contador para el ítem
+    foreach ($resultadoIncidenciasTotales as $totales) {
+      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+      $html .= '<td class="px-3 py-2 text-center">' . $item++ . '</td>'; // Columna de ítem
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_numero_formato']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['fechaIncidenciaFormateada']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_asunto']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_documento']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_codigoPatrimonial']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['BIE_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['ARE_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['PRI_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['CON_descripcion']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
+
+      // Manejar el estado de la incidencia
+      $estadoDescripcion = htmlspecialchars($totales['Estado']);
+      $badgeClass = '';
+      switch ($estadoDescripcion) {
+        case 'ABIERTO':
+          $badgeClass = 'badge-light-danger';
+          break;
+        case 'RECEPCIONADO':
+          $badgeClass = 'badge-light-success';
+          break;
+        case 'CERRADO':
+          $badgeClass = 'badge-light-primary';
+          break;
+        default:
+          $badgeClass = 'badge-light-secondary';
+          break;
+      }
+
+      $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
+      $html .= '</td></tr>';
+    }
+  } else {
+    $html = '<tr><td colspan="11" class="text-center py-3">No se han registrado incidencias.</td></tr>';
+  }
+
+  // Devolver el HTML de las filas
+  echo $html;
+  exit;
+} else {
+  // Si no hay acción, obtener la lista de las incidencias
+  $resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales();
+}
+
 $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre(); // Obtener los datos de las incidencias pendientes de cierre
-$resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas(); // Obtener los datos de las incidencias cerradas
+
+if ($action === 'consultarCerradas') {
+  // Depuración: mostrar los parámetros recibidos
+  error_log("Fecha Inicio: " . $fechaInicio);
+  error_log("Fecha Fin: " . $fechaFin);
+
+  // Obtener los resultados de la búsqueda
+  $resultadoIncidenciasCerradas = $cierreController->filtrarIncidenciasCerradasFecha($fechaInicio, $fechaFin);
+
+  // Imprimir el resultado de la depuración
+  error_log("Resultado de la consulta: " . print_r($resultadoIncidenciasCerradas, true));
+
+  // Dibujar tabla de consultas
+  $html = '';
+  if (!empty($resultadoIncidenciasCerradas)) {
+    $item = 1; // Iniciar contador para el ítem
+    foreach ($resultadoIncidenciasCerradas as $cerradas) {
+      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+      $html .= '<td class="px-3 py-2 text-center">' . $item++ . '</td>'; // Columna de ítem
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_numero_formato']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['fechaCierreFormateada']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_asunto']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_documento']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_codigoPatrimonial']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['BIE_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['ARE_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['PRI_nombre']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
+      // Manejar el estado de la incidencia
+      $estadoDescripcion = htmlspecialchars($cerradas['CON_descripcion']);
+      $badgeClass = '';
+      switch ($estadoDescripcion) {
+        case 'OPERATIVO':
+          $badgeClass = 'badge-light-info';
+          break;
+        case 'INOPERATIVO':
+          $badgeClass = 'badge-light-danger';
+          break;
+        case 'SOLUCIONADO':
+          $badgeClass = 'badge-light-info';
+          break;
+        case 'NO SOLUCIONADO':
+          $badgeClass = 'badge-light-danger';
+          break;
+        default:
+          $badgeClass = 'badge-light-secondary';
+          break;
+      }
+      $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
+      $html .= '</td></tr>';
+    }
+  } else {
+    $html = '<tr><td colspan="10" class="text-center py-3">No se encontraron incidencias cerradas.</td></tr>';
+  }
+
+  // Devolver el HTML de las filas
+  echo $html;
+  exit;
+} else {
+  // Si no hay acción, obtener la lista de incidencias
+  $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
+}
+
 ?>
 
 <!DOCTYPE html>
@@ -90,6 +215,13 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas(); 
   <script src="./app/View/func/Reports/reporteBienesPorFecha.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleCierreReporte.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleIncidenciaReporte.js"></script>
+
+
+
+  <!-- Filtros o consultas por fecha para generar reportes -->
+  <script src="./app/View/func/Consultas/func_consulta_totales_fecha.js"></script>
+  <script src="./app/View/func/Consultas/func_consulta_cierres_fecha.js"></script>
+
 
   <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
 

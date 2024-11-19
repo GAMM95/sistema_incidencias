@@ -386,6 +386,21 @@ class IncidenciaController
     }
   }
 
+  // Metodo para filtrar incidencias totales por fecha ingresada
+  public function filtrarIncidenciasTotalesFecha($fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
+      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
+      error_log("Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+      // Llamar al método para consultar incidencias por fecha
+      $consultaIncidencia = $this->incidenciaModel->buscarIncidenciaTotalesFecha($fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaIncidencia;
+    }
+  }
+
 
   /**
    * Método de controlador para consultar incidencias filtradas - USUARIO

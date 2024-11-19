@@ -18,21 +18,6 @@
     </div>
     <!-- Fin de miga de pan -->
 
-    <!-- Boton agregar persona -->
-    <!-- Botón agregar persona -->
-    <a href="#" id="btn-agregar-persona" class="bn btn-warning text-xs text-white font-bold py-2 px-3 mt-1 mb-1 rounded-md">
-      <i class="feather icon-user-plus"></i>
-    </a>
-
-    <script>
-      // Captura el botón y asigna un evento click
-      document.getElementById("btn-agregar-persona").addEventListener("click", function(event) {
-        event.preventDefault(); // Evita que el enlace navegue a otra página
-
-        // Activa la tercera pestaña (Incidencias cerradas)
-        document.getElementById("pills-cerradas-tab").click();
-      });
-    </script>
     <!-- Inicio del tab pane -->
     <div class="h-full flex flex-col grow mb-0">
       <div class="card grow">
@@ -72,299 +57,352 @@
 
               <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
-                  <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Incidencias totales</a>
+                  <a class="nav-link active" id="pills-incidenciasTotales-tab" data-toggle="pill" href="#pills-incidenciasTotales" role="tab" aria-controls="pills-incidenciasTotales" aria-selected="true">Incidencias totales</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Pendientes de cierre</a>
+                  <a class="nav-link" id="pills-pendientesCierre-tab" data-toggle="pill" href="#pills-pendientesCierre" role="tab" aria-controls="pills-pendientesCierre" aria-selected="false">Pendientes de cierre</a>
                 </li>
                 <li class="nav-item">
-                  <a class="nav-link" id="pills-cerradas-tab" data-toggle="pill" href="#pills-cerradas" role="tab" aria-controls="pills-cerradas" aria-selected="false">Incidencias cerradas</a>
+                  <a class="nav-link" id="pills-incidenciasCerradas-tab" data-toggle="pill" href="#pills-incidenciasCerradas" role="tab" aria-controls="pills-incidenciasCerradas" aria-selected="false">Incidencias cerradas</a>
                 </li>
               </ul>
 
               <!-- Fin de pestañas del primer tab -->
               <div class="tab-content" id="pills-tabContent">
-                <!-- Primer tab-->
-                <div class="tab-pane fade show active" id="pills-home" role="tabpanel" aria-labelledby="pills-home-tab">
-                  <!-- Inputs y botones para filtrar incidencias -->
-                  <div class="flex justify-center items-center mt-2">
-                    <!-- Fecha de inicio -->
-                    <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                      <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                      <input type="date" id="fechaInicio_registro_incidencias" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                    <!-- Fin de fecha de inicio -->
+                <!-- Tab incidencias totales -->
+                <div class="tab-pane fade show active" id="pills-incidenciasTotales" role="tabpanel" aria-labelledby="pills-incidenciasTotales-tab">
 
-                    <!-- Fecha de fin -->
-                    <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                      <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                      <input type="date" id="fechaFin_registro_incidencias" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                    <!-- Fin de fecha de fin -->
-
-                    <!-- Botones alineados horizontalmente -->
-                    <div class="ml-5 flex space-x-2">
-                      <!-- Botón de buscar -->
-                      <button type="submit" id="filtrarListaAuditoriaIncidencias" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-red-400 rounded-md flex justify-center items-center">
-                        <i class="feather icon-filter"></i>
-                      </button>
-
-                      <!-- Botón de nueva consulta -->
-                      <button type="button" id="limpiarCampos_registro_incidencias" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
-                        <i class="feather icon-refresh-cw"></i>
-                      </button>
-
-                      <!-- Boton generar reporte -->
-                      <div class="flex justify-center space-x-2">
-                        <button type="button" id="reporte-incidencias-fechas" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte filtrado</button>
+                  <!-- Inicio de formulario de consulta de incidencias totales -->
+                  <form id="formConsultarIncidenciasTotales" action="reportes.php?action=consultarTotales" method="GET" class="bg-white w-full text-xs ">
+                    <!-- Inputs y botones para filtrar incidencias -->
+                    <div class="flex justify-center items-center mt-2">
+                      <!-- Fecha de inicio -->
+                      <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                        <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                        <input type="date" id="fechaInicio_incidencias_totales" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de boton de generar reporte -->
+                      <!-- Fin de fecha de inicio -->
 
-                      <!-- Boton generar reporte -->
-                      <div class="flex justify-center space-x-2">
-                        <button type="button" id="reporte-incidencias-totales" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                      <!-- Fecha de fin -->
+                      <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                        <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                        <input type="date" id="fechaFin_incidencias_totales" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de boton de generar reporte -->
+                      <!-- Fin de fecha de fin -->
+
+                      <!-- Botones alineados horizontalmente -->
+                      <div class="ml-5 flex space-x-2">
+                        <!-- Botón de buscar -->
+                        <button type="submit" id="filtrarIncidenciasTotalesFecha" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                          <i class="feather icon-filter"></i>
+                        </button>
+
+                        <!-- Botón de nueva consulta -->
+                        <button type="button" id="limpiarCampos_incidencias_totales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-secondary rounded-md flex justify-center items-center">
+                          <i class="feather icon-refresh-cw"></i>
+                        </button>
+
+                        <!-- Boton generar reporte filtrado-->
+                        <button type="button" id="reporte-incidencias-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-400 cursor-not-allowed" disabled>
+                          <i class="feather mr-2 icon-file"></i>Reporte filtrado
+                        </button>
+                        <!-- Fin de boton de generar reporte filtrado-->
+
+                        <!-- Boton generar reporte -->
+                        <div class="flex justify-center space-x-2">
+                          <button type="button" id="reporte-incidencias-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                        </div>
+                        <!-- Fin de boton de generar reporte -->
+                      </div>
+                      <!-- Fin de botones alineados horizontalmente -->
                     </div>
-                    <!-- Fin de botones alineados horizontalmente -->
-                  </div>
-                  <!-- Fin de inputs y botones para filtrar incidencias -->
+                    <!-- Fin de inputs y botones para filtrar incidencias -->
 
-                  <!-- Tabla de resultados de incidencias totales -->
-                  <div class="relative sm:rounded-lg mt-2">
-                    <div class="max-w-full overflow-hidden sm:rounded-lg">
-                      <table id="tablaIncidenciasTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
-                        <!-- Encabezado de la tabla -->
-                        <thead class="text-xs text-gray-700 uppercase bg-gray-300">
-                          <tr>
-                            <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
-                            <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                            <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
-                            <th scope="col" class="px-3 py-2 text-center">Asunto</th>
-                            <th scope="col" class="px-3 py-2 text-center">Documento</th>
-                            <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
-                            <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
-                            <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
-                            <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
-                            <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
-                            <th scope="col" class="px-3 py-2 text-center">Estado</th>
-                          </tr>
-                        </thead>
-                        <!-- Fin de encabezado de la tabla -->
-
-                        <!-- Cuerpo de la tabla -->
-                        <tbody>
-                          <?php if (!empty($resultadoIncidenciasTotales)): ?>
-                            <?php $item = 1; // Iniciar contador para el ítem 
-                            ?>
-                            <?php foreach ($resultadoIncidenciasTotales as $totales): ?>
-                              <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
-                                <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_numero_formato']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['fechaIncidenciaFormateada']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_asunto']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_documento']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_codigoPatrimonial']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['BIE_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['CON_descripcion']) ?></td>
-                                <!-- <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['Estado']) ?></td> -->
-                                <td class="px-3 py-2 text-center text-xs align-middle">
-                                  <?php
-                                  $estadoDescripcion = htmlspecialchars($totales['Estado']);
-                                  $badgeClass = '';
-                                  switch ($estadoDescripcion) {
-                                    case 'ABIERTO':
-                                      $badgeClass = 'badge-light-danger';
-                                      break;
-                                    case 'RECEPCIONADO':
-                                      $badgeClass = 'badge-light-success';
-                                      break;
-                                    case 'CERRADO':
-                                      $badgeClass = 'badge-light-primary';
-                                      break;
-                                    default:
-                                      $badgeClass = 'badge-light-secondary';
-                                      break;
-                                  }
-                                  ?>
-                                  <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
-                                </td>
-                              </tr>
-                            <?php endforeach; ?>
-                          <?php else: ?>
+                    <!-- Tabla de resultados de incidencias totales -->
+                    <div class="relative sm:rounded-lg mt-2">
+                      <div class="max-w-full overflow-hidden sm:rounded-lg">
+                        <table id="tablaIncidenciasTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                          <!-- Encabezado de la tabla -->
+                          <thead class="text-xs text-gray-700 uppercase bg-gray-300">
                             <tr>
-                              <td colspan="11" class="text-center py-3">No se encontraron registros de incidencias.</td>
+                              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
+                              <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                              <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
+                              <th scope="col" class="px-3 py-2 text-center">Asunto</th>
+                              <th scope="col" class="px-3 py-2 text-center">Documento</th>
+                              <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
+                              <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
+                              <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
+                              <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                              <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
+                              <th scope="col" class="px-3 py-2 text-center">Estado</th>
                             </tr>
-                          <?php endif; ?>
-                        </tbody>
-                        <!-- Fin de cuerpo de tabla -->
-                      </table>
+                          </thead>
+                          <!-- Fin de encabezado de la tabla -->
+
+                          <!-- Cuerpo de la tabla -->
+                          <tbody>
+                            <?php if (!empty($resultadoIncidenciasTotales)): ?>
+                              <?php $item = 1; // Iniciar contador para el ítem 
+                              ?>
+                              <?php foreach ($resultadoIncidenciasTotales as $totales): ?>
+                                <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                  <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_numero_formato']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['fechaIncidenciaFormateada']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_asunto']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_documento']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_codigoPatrimonial']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['BIE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['CON_descripcion']) ?></td>
+                                  <td class="px-3 py-2 text-center text-xs align-middle">
+                                    <?php
+                                    $estadoDescripcion = htmlspecialchars($totales['Estado']);
+                                    $badgeClass = '';
+                                    switch ($estadoDescripcion) {
+                                      case 'ABIERTO':
+                                        $badgeClass = 'badge-light-danger';
+                                        break;
+                                      case 'RECEPCIONADO':
+                                        $badgeClass = 'badge-light-success';
+                                        break;
+                                      case 'CERRADO':
+                                        $badgeClass = 'badge-light-primary';
+                                        break;
+                                      default:
+                                        $badgeClass = 'badge-light-secondary';
+                                        break;
+                                    }
+                                    ?>
+                                    <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                                  </td>
+                                </tr>
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="11" class="text-center py-3">No se encontraron registros de incidencias.</td>
+                              </tr>
+                            <?php endif; ?>
+                          </tbody>
+                          <!-- Fin de cuerpo de tabla -->
+                        </table>
+                      </div>
                     </div>
-                  </div>
-                  <!-- Fin de tabla de resultados de incidencias totales -->
+                    <!-- Fin de tabla de resultados de incidencias totales -->
+                  </form>
+                  <!-- Fin de formulario de consulta de incidencias totales -->
                 </div>
                 <!-- Fin de primer tab -->
 
-                <!-- Segundo tab -->
-                <div class="tab-pane fade" id="pills-profile" role="tabpanel" aria-labelledby="pills-profile-tab">
-                  <div class="flex justify-center space-x-2">
-                    <button type="button" id="reporte-pendientes-cierre" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
-                  </div>
-
-                  <!-- Tabla de resultados de incidencias pendientes de cierre -->
-                  <div class="relative sm:rounded-lg mt-2">
-                    <div class="max-w-full overflow-hidden sm:rounded-lg">
-                      <table id="tablaIncidenciasTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
-                        <!-- Encabezado de la tabla -->
-                        <thead class="text-xs text-gray-700 uppercase bg-red-300">
-                          <tr>
-                            <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
-                            <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                            <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
-                            <th scope="col" class="px-3 py-2 text-center">Asunto</th>
-                            <th scope="col" class="px-3 py-2 text-center">Documento</th>
-                            <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
-                            <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
-                            <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
-                            <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
-                            <th scope="col" class="px-3 py-2 text-center">Estado</th>
-                          </tr>
-                        </thead>
-                        <!-- Fin de encabezado de la tabla -->
-
-                        <!-- Cuerpo de la tabla -->
-                        <tbody>
-                          <?php if (!empty($resultadoPendientesCierre)): ?>
-                            <?php $item = 1; // Iniciar contador para el ítem 
-                            ?>
-                            <?php foreach ($resultadoPendientesCierre as $pendientes): ?>
-                              <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
-                                <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_numero_formato']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['fechaIncidenciaFormateada']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_asunto']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_documento']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_codigoPatrimonial']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['BIE_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['ARE_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['PRI_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['ESTADO']) ?></td>
-                              </tr>
-                            <?php endforeach; ?>
-                          <?php else: ?>
-                            <tr>
-                              <td colspan="10" class="text-center py-3">No se encontraron registros de incidencias pendientes de cierre.</td>
-                            </tr>
-                          <?php endif; ?>
-                        </tbody>
-                        <!-- Fin de cuerpo de tabla -->
-                      </table>
+                <!-- Tab Incidencias Pendientes de Cierre -->
+                <div class="tab-pane fade" id="pills-pendientesCierre" role="tabpanel" aria-labelledby="pills-pendientesCierre-tab">
+                  <!-- Inicio formulario de consulta de incidencias pendientes de cierre -->
+                  <form id="formConsultarPendientesCierre" action="reportes.php?action=consultarPendientesCierre" method="GET" class="bg-white w-full text-xs ">
+                    <!-- Boton para generar reporte -->
+                    <div class="flex justify-center space-x-2">
+                      <button type="button" id="reporte-pendientes-cierre" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
                     </div>
-                  </div>
-                  <!-- Fin de tabla de resultados de incidencias pendientes de cierre -->
 
+                    <!-- Tabla de resultados de incidencias pendientes de cierre -->
+                    <div class="relative sm:rounded-lg mt-2">
+                      <div class="max-w-full overflow-hidden sm:rounded-lg">
+                        <table id="tablaPendientesCierre" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                          <!-- Encabezado de la tabla -->
+                          <thead class="text-xs text-gray-700 uppercase bg-red-300">
+                            <tr>
+                              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
+                              <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                              <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
+                              <th scope="col" class="px-3 py-2 text-center">Asunto</th>
+                              <th scope="col" class="px-3 py-2 text-center">Documento</th>
+                              <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
+                              <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
+                              <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
+                              <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                              <th scope="col" class="px-3 py-2 text-center">Estado</th>
+                            </tr>
+                          </thead>
+                          <!-- Fin de encabezado de la tabla -->
+
+                          <!-- Cuerpo de la tabla -->
+                          <tbody>
+                            <?php if (!empty($resultadoPendientesCierre)): ?>
+                              <?php $item = 1; // Iniciar contador para el ítem 
+                              ?>
+                              <?php foreach ($resultadoPendientesCierre as $pendientes): ?>
+                                <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                  <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_numero_formato']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['fechaIncidenciaFormateada']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_asunto']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_documento']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['INC_codigoPatrimonial']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['BIE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['ARE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['PRI_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center text-xs align-middle">
+                                    <?php
+                                    $estadoDescripcion = htmlspecialchars($pendientes['ESTADO']);
+                                    $badgeClass = '';
+                                    switch ($estadoDescripcion) {
+                                      case 'ABIERTO':
+                                        $badgeClass = 'badge-light-danger';
+                                        break;
+                                      case 'RECEPCIONADO':
+                                        $badgeClass = 'badge-light-success';
+                                        break;
+                                      case 'CERRADO':
+                                        $badgeClass = 'badge-light-primary';
+                                        break;
+                                      default:
+                                        $badgeClass = 'badge-light-secondary';
+                                        break;
+                                    }
+                                    ?>
+                                    <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                                  </td>
+                                </tr>
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="10" class="text-center py-3">No se encontraron registros de incidencias pendientes de cierre.</td>
+                              </tr>
+                            <?php endif; ?>
+                          </tbody>
+                          <!-- Fin de cuerpo de tabla -->
+                        </table>
+                      </div>
+                    </div>
+                    <!-- Fin de tabla de resultados de incidencias pendientes de cierre -->
+                  </form>
                 </div>
                 <!--Fin de segundo tab -->
 
-                <!-- Tercer tab-->
-                <div class="tab-pane fade" id="pills-cerradas" role="tabpanel" aria-labelledby="pills-cerradas-tab">
-                  <!-- Inputs y botones para filtrar incidencias -->
-                  <div class="flex justify-center items-center mt-2">
-                    <!-- Fecha de inicio -->
-                    <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                      <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                      <input type="date" id="fechaInicio_registro_incidencias" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                    <!-- Fin de fecha de inicio -->
-
-                    <!-- Fecha de fin -->
-                    <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                      <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                      <input type="date" id="fechaFin_registro_incidencias" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
-                    </div>
-                    <!-- Fin de fecha de fin -->
-
-                    <!-- Botones alineados horizontalmente -->
-                    <div class="ml-5 flex space-x-2">
-                      <!-- Botón de buscar -->
-                      <button type="submit" id="filtrarListaAuditoriaIncidencias" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-red-400 rounded-md flex justify-center items-center">
-                        <i class="feather icon-search"></i>
-                      </button>
-
-                      <!-- Botón de nueva consulta -->
-                      <button type="button" id="limpiarCampos_registro_incidencias" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
-                        <i class="feather icon-refresh-cw"></i>
-                      </button>
-
-                      <!-- Boton generar reporte -->
-                      <div class="flex justify-center space-x-2">
-                        <button type="button" id="reporte-incidencias-filtrado" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte filtrado</button>
+                <!-- TODO: Tab Incidencias Cerradas -->
+                <div class="tab-pane fade" id="pills-incidenciasCerradas" role="tabpanel" aria-labelledby="pills-incidenciasCerradas-tab">
+                  <!-- Inicio formulario de consulta de incidencias cerradas -->
+                  <form id="formConsultarIncidenciasCerradas" action="reportes.php?action=consultarCerradas" method="GET" class="bg-white w-full text-xs ">
+                    <!-- Inputs y botones para filtrar incidencias -->
+                    <div class="flex justify-center items-center mt-2">
+                      <!-- Fecha de inicio -->
+                      <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                        <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                        <input type="date" id="fechaInicio_incidencias_cerradas" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de boton de generar reporte -->
+                      <!-- Fin de fecha de inicio -->
 
-                      <!-- Boton generar reporte -->
-                      <div class="flex justify-center space-x-2">
-                        <button type="button" id="reporte-incidencias-totales" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                      <!-- Fecha de fin -->
+                      <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                        <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                        <input type="date" id="fechaFin_incidencias_cerradas" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de boton de generar reporte -->
+                      <!-- Fin de fecha de fin -->
+
+                      <!-- Botones alineados horizontalmente -->
+                      <div class="ml-5 flex space-x-2">
+                        <!-- Botón de buscar -->
+                        <button type="button" id="filtrarIncidenciasCerradasFecha" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                          <i class="feather icon-filter"></i>
+                        </button>
+
+                        <!-- Botón de nueva consulta -->
+                        <button type="button" id="limpiarCampos_incidencias_cerradas" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                          <i class="feather icon-refresh-cw"></i>
+                        </button>
+
+                        <!-- Boton generar reporte filtrado-->
+                        <button type="button" id="reportes-cierres-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-400 cursor-not-allowed" disabled>
+                          <i class="feather mr-2 icon-file"></i>Reporte filtrado
+                        </button>
+                        <!-- Fin de boton de generar reporte filtrado-->
+
+                        <!-- Boton generar reporte -->
+                        <div class="flex justify-center space-x-2">
+                          <button type="button" id="reporte-incidencias-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                        </div>
+                        <!-- Fin de boton de generar reporte -->
+                      </div>
+                      <!-- Fin de botones alineados horizontalmente -->
                     </div>
-                    <!-- Fin de botones alineados horizontalmente -->
-                  </div>
-                  <!-- Fin de inputs y botones para filtrar incidencias -->
+                    <!-- Fin de inputs y botones para filtrar incidencias -->
 
-                  <!-- Tabla de resultados de incidencias totales -->
-                  <div class="relative sm:rounded-lg mt-2">
-                    <div class="max-w-full overflow-hidden sm:rounded-lg">
-                      <table id="tablaIncidenciasTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
-                        <!-- Encabezado de la tabla -->
-                        <thead class="text-xs text-gray-700 uppercase bg-green-300">
-                          <tr>
-                            <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
-                            <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                            <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
-                            <th scope="col" class="px-3 py-2 text-center">Asunto</th>
-                            <th scope="col" class="px-3 py-2 text-center">Documento</th>
-                            <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
-                            <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
-                            <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
-                            <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
-                            <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
-                          </tr>
-                        </thead>
-                        <!-- Fin de encabezado de la tabla -->
-
-                        <!-- Cuerpo de la tabla -->
-                        <tbody>
-                          <?php if (!empty($resultadoIncidenciasCerradas)): ?>
-                            <?php $item = 1; // Iniciar contador para el ítem 
-                            ?>
-                            <?php foreach ($resultadoIncidenciasCerradas as $totales): ?>
-                              <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
-                                <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_numero_formato']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['fechaIncidenciaFormateada']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_asunto']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_documento']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_codigoPatrimonial']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['BIE_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']) ?></td>
-                                <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['CON_descripcion']) ?></td>
-                              </tr>
-                            <?php endforeach; ?>
-                          <?php else: ?>
+                    <!-- Tabla de resultados de incidencias cerradas -->
+                    <div class="relative sm:rounded-lg mt-2">
+                      <div class="max-w-full overflow-hidden sm:rounded-lg">
+                        <table id="tablaIncidenciasCerradas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                          <!-- Encabezado de la tabla -->
+                          <thead class="text-xs text-gray-700 uppercase bg-green-300">
                             <tr>
-                              <td colspan="11" class="text-center py-3">No se encontraron registros de incidencias.</td>
+                              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
+                              <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                              <th scope="col" class="px-3 py-2 text-center">Fecha de cierre</th>
+                              <th scope="col" class="px-3 py-2 text-center">Asunto</th>
+                              <th scope="col" class="px-3 py-2 text-center">Documento</th>
+                              <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
+                              <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
+                              <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
+                              <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                              <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
                             </tr>
-                          <?php endif; ?>
-                        </tbody>
-                        <!-- Fin de cuerpo de tabla -->
-                      </table>
+                          </thead>
+                          <!-- Fin de encabezado de la tabla -->
+
+                          <!-- Cuerpo de la tabla -->
+                          <tbody>
+                            <?php if (!empty($resultadoIncidenciasCerradas)): ?>
+                              <?php $item = 1; // Iniciar contador para el ítem 
+                              ?>
+                              <?php foreach ($resultadoIncidenciasCerradas as $cerradas): ?>
+                                <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                  <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['INC_numero_formato']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['fechaCierreFormateada']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['INC_asunto']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['INC_documento']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['INC_codigoPatrimonial']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['BIE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['ARE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['PRI_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center text-xs align-middle">
+                                    <?php
+                                    $condicionDescripcion = htmlspecialchars($cerradas['CON_descripcion']);
+                                    $badgeClass = '';
+                                    switch ($condicionDescripcion) {
+                                      case 'OPERATIVO':
+                                        $badgeClass = 'badge-light-info';
+                                        break;
+                                      case 'INOPERATIVO':
+                                        $badgeClass = 'badge-light-danger';
+                                        break;
+                                      case 'SOLUCIONADO':
+                                        $badgeClass = 'badge-light-info';
+                                        break;
+                                      case 'NO SOLUCIONADO':
+                                        $badgeClass = 'badge-light-danger';
+                                        break;
+                                      default:
+                                        $badgeClass = 'badge-light-secondary';
+                                        break;
+                                    }
+                                    ?>
+                                    <label class="badge <?= $badgeClass ?>"><?= $condicionDescripcion ?></label>
+                                  </td>
+                                </tr>
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="10" class="text-center py-3">No se encontraron registros de incidencias cerradas.</td>
+                              </tr>
+                            <?php endif; ?>
+                          </tbody>
+                          <!-- Fin de cuerpo de tabla -->
+                        </table>
+                      </div>
                     </div>
-                  </div>
-                  <!-- Fin de tabla de resultados de incidencias totales -->
+                    <!-- Fin de tabla de resultados de incidencias totales -->
+                  </form>
                 </div>
                 <!-- Fin de tercer tab -->
               </div>
@@ -433,7 +471,27 @@
                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['BIE_nombre']); ?></td>
                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']); ?></td>
                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']); ?></td>
-                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['Estado']); ?></td>
+                          <td class="px-3 py-2 text-center text-xs align-middle">
+                            <?php
+                            $estadoDescripcion = htmlspecialchars($totales['Estado']);
+                            $badgeClass = '';
+                            switch ($estadoDescripcion) {
+                              case 'ABIERTO':
+                                $badgeClass = 'badge-light-danger';
+                                break;
+                              case 'RECEPCIONADO':
+                                $badgeClass = 'badge-light-success';
+                                break;
+                              case 'CERRADO':
+                                $badgeClass = 'badge-light-primary';
+                                break;
+                              default:
+                                $badgeClass = 'badge-light-secondary';
+                                break;
+                            }
+                            ?>
+                            <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                          </td>
                           <td class="px-6 py-2 text-center align-middle flex space-x-2"> <!-- Columna de Acción con botones -->
                             <!-- Botón de Imprimir detalle de incidencia -->
                             <button type="button" id="imprimir-incidencia" class="bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Detalle de incidencia">
