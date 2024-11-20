@@ -2124,6 +2124,49 @@ BEGIN
 END;
 GO
 
+-- PROCEDIMIENTO ALMACENADO PARA RESTABLECER CONTRASEÑA
+CREATE OR ALTER PROCEDURE sp_restablecer_contrasena
+    @USU_codigo INT,                       -- Código del usuario
+    @USU_password_nueva NVARCHAR(100),     -- Nueva contraseña
+    @USU_password_confirmacion NVARCHAR(100) -- Confirmación de la nueva contraseña
+AS
+BEGIN
+    SET NOCOUNT ON;
+
+    -- Verificar que la nueva contraseña y la confirmación coincidan
+    IF @USU_password_nueva != @USU_password_confirmacion
+    BEGIN
+        SELECT 'La nueva contraseña y la confirmación no coinciden' AS Resultado;
+        RETURN;
+    END
+
+    -- Generar un nuevo salt para hashear la contraseña
+    DECLARE @salt UNIQUEIDENTIFIER = NEWID();
+
+    -- Convertir la nueva contraseña y el salt a varbinary
+    DECLARE @hashed_password_nueva VARBINARY(64);
+    DECLARE @password_bytes VARBINARY(100) = CONVERT(VARBINARY(100), @USU_password_nueva);
+    DECLARE @salt_bytes VARBINARY(16) = CAST(@salt AS VARBINARY(16));
+    DECLARE @to_hash VARBINARY(116) = @password_bytes + @salt_bytes;
+
+    -- Hashear la nueva contraseña usando un bucle de iteraciones (ej. 10000 iteraciones de SHA2_512)
+    DECLARE @iterations INT = 10000;
+    WHILE @iterations > 0
+    BEGIN
+        SET @hashed_password_nueva = HASHBYTES('SHA2_512', @to_hash);
+        SET @to_hash = @hashed_password_nueva + @salt_bytes;
+        SET @iterations = @iterations - 1;
+    END
+
+    -- Actualizar la nueva contraseña hasheada y el salt en la base de datos
+    UPDATE USUARIO
+    SET USU_password = @hashed_password_nueva, USU_salt = @salt
+    WHERE USU_codigo = @USU_codigo;
+
+    SELECT 'Contraseña cambiada exitosamente' AS Resultado;
+END;
+GO
+
 --PROCEDIMIENTO ALMACENADO PARA VERIFICAR SI LA CONTRASEÑA ACTUAL ES CORRECTA
 CREATE OR ALTER PROCEDURE sp_verificar_contrasena_actual
     @USU_codigo INT, 

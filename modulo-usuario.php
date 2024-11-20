@@ -19,12 +19,12 @@ $usuarioModel = new UsuarioModel();
 // Listar las incidencias para la pagina actual
 $resultado = $usuarioModel->listarUsuarios();
 
-if ($USU_codigo != '') {
-  global $usuarioRegistrado;
-  $usuarioRegistrado = $usuarioModel->obtenerUsuarioPorID($USU_codigo);
-} else {
-  $usuarioRegistrado = null;
-}
+// if ($USU_codigo != '') {
+//   global $usuarioRegistrado;
+//   $usuarioRegistrado = $usuarioModel->obtenerUsuarioPorID($USU_codigo);
+// } else {
+//   $usuarioRegistrado = null;
+// }
 
 switch ($action) {
   case 'registrar':
@@ -41,6 +41,9 @@ switch ($action) {
     break;
   case 'deshabilitar':
     $usuarioController->deshabilitarUsuario();
+    break;
+  case 'restablecerContraseña':
+    $usuarioController->restablecerContraseña();
     break;
   default:
     break;
@@ -81,6 +84,7 @@ switch ($action) {
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
 
   <script src="./app/View/func/Mantenedores/func_usuario.js"></script>
+  <script src="./app/View/func/Mantenedores/func_usuario_restablecerPassword.js"></script>
 
 
   <!-- Framework CSS -->

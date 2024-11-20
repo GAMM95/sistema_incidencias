@@ -558,4 +558,25 @@ class UsuarioModel extends Conexion
     }
   }
 
+  // Metodo para restablecer contraseña de los usuarios en el mantenedor usuarios
+  public function restablecerContraseña($codigoUsuario, $passwordNuevo, $passwordConfirm)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $query = "EXEC sp_restablecer_contrasena :codigoUsuario, :passwordNuevo, :passwordConfirm";
+        $stmt = $conector->prepare($query);
+        $stmt->bindParam(':codigoUsuario', $codigoUsuario);
+        $stmt->bindParam(':passwordNuevo', $passwordNuevo);
+        $stmt->bindParam(':passwordConfirm', $passwordConfirm);
+        $stmt->execute();
+        return true;
+      } else {
+        throw new Exception("Error de conexion a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al restablecer contraseña: " . $e->getMessage());
+    }
+  }
 }

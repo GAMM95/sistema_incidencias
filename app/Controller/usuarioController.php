@@ -249,7 +249,7 @@ class UsuarioController
     }
   }
 
-  // Método para cambiar la contraseña del usuario
+  // Método para cambiar la contraseña del usuario en el formulario perfil
   public function cambiarContraseña()
   {
     try {
@@ -309,6 +309,55 @@ class UsuarioController
       ]);
     }
   }
+
+  // Metodo para restablecer la contraseña del usuario en el mantenedor
+  public function restablecerContraseña()
+  {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      // Obtener los datos del formulario
+      $usu_codigo = $_POST['codigoUsuarioModal'] ?? null;
+      $passwordNuevo = $_POST['passwordNuevo'] ?? null;
+      $passwordConfirm = $_POST['passwordConfirm'] ?? null;
+
+      // Validar que todos los campos estén completos
+      if (empty($usu_codigo) || empty($passwordNuevo) || empty($passwordConfirm)) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Debe completar todos los campos para restablecer la contrase&ntilde;a.'
+        ]);
+        exit();
+      }
+
+      // Validar que la nueva contraseña y la confirmación coincidan
+      if ($passwordNuevo !== $passwordConfirm) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'La nueva contrase&ntilde;a y la confirmación no coinciden.'
+        ]);
+        exit();
+      }
+
+      // Cambiar la contraseña del usuario
+      $restablecerContraseña = $this->usuarioModel->restablecerContraseña($usu_codigo, $passwordNuevo, $passwordConfirm);
+
+      if ($restablecerContraseña) {
+        echo json_encode([
+          'success' => true,
+          'message' => 'Contrase&ntilde;a restablecida exitosamente.'
+        ]);
+      } else {
+        echo json_encode([
+          'success' => false,
+          'message' => 'No se pudo restablecer la contrase&ntilde;a.'
+        ]);
+      }
+    } else {
+      echo json_encode([
+        'success' => false,
+        'message' => 'Método no permitido.'
+      ]);
+    }
+  } 
 
   // // Método para cambiar la contraseña del usuario
   // public function cambiarContraseña()

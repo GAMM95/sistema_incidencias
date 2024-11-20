@@ -201,12 +201,18 @@ $(document).on('click', '#tablaListarUsuarios tbody tr', function () {
   const personaValue = celdas.eq(0).text().trim();
   const areaValue = celdas.eq(1).text().trim();
   const usernameValue = celdas.eq(2).text().trim();
-  const passwordValue = celdas.eq(3).text().trim();
+  const passwordValue = celdas.eq(9).text().trim();
   const rolValue = celdas.eq(4).text().trim();
 
+  // Seteo del codigo de usuario en el formulario principal
   $('#CodUsuario').val(codUsuario);
   $('#username').val(usernameValue);
   $('#password').val(passwordValue);
+
+  // Setear código de usuario en el modal
+  $('#codigoUsuarioModal').val(codUsuario); // Asumiendo que el modal tiene un input con id modalCodUsuario
+  $('#usernameModal').val(usernameValue);
+  $('#nombreModal').val(personaValue);
 
   setComboValue('persona', personaValue);
   setComboValue('area', areaValue);
@@ -215,10 +221,15 @@ $(document).on('click', '#tablaListarUsuarios tbody tr', function () {
   // Bloquear el combo de persona
   $('#persona').prop('disabled', true);
 
+  // Bloquear el campo de contraseña
+  $('#password').prop('disabled', true);  // Desactivar el campo de contraseña
+
   // Cambiar estado de los botones
   $('#guardar-usuario').prop('disabled', true);
   $('#editar-usuario').prop('disabled', false);
   $('#nuevo-registro').prop('disabled', false);
+  // Activar el botón del modal al seleccionar una fila
+  $('#botonModalCambiarPassword').prop('disabled', false);  // Activar el botón modal
 
   // Cambiar la acción a editar
   $('#form-action').val('editar');
@@ -265,11 +276,16 @@ function nuevoRegistro() {
   // Desbloquear el combo de persona
   $('#persona').prop('disabled', false);
 
+  // Activar el campo de contraseña
+  $('#password').prop('disabled', false);  // Activar el campo de contraseña
+
   // Configurar los botones en su estado inicial
   $('#form-action').val('registrar');  // Cambiar la acción a registrar
   $('#guardar-usuario').prop('disabled', false);  // Activar el botón de guardar
   $('#editar-usuario').prop('disabled', true);    // Desactivar el botón de editar
   $('#nuevo-registro').prop('disabled', false);     // Asegurarse que el botón de nuevo registro está activo
+  // Desactivar el botón del modal al crear un nuevo registro
+  $('#botonModalCambiarPassword').prop('disabled', true);  // Desactivar el botón modal
 }
 
 // función para filtrar la tabla de trabajadores
@@ -332,5 +348,55 @@ $(document).ready(function () {
 });
 
 
+// $(document).ready(function () {
+//   // Configuración de Toastr
+//   toastr.options = {
+//     "positionClass": "toast-bottom-right",
+//     "progressBar": true,
+//     "timeOut": "2000"
+//   };
 
+//   $('#restablecerContraseña').on('click', function () {
+//     // Obtén los valores de los campos de contraseña
+//     var codigoUsuario = $('#codigoUsuarioModal').val();
+//     var passwordNuevo = $('#passwordNuevo').val();
+//     var passwordConfirm = $('#passwordConfirm').val();
+
+//     // Validación del lado del cliente
+//     if (passwordNuevo === '' || passwordConfirm === '') {
+//       toastr.success(jsonResponse.message, 'Mensaje');
+//       alert('Debe completar ambos campos de contraseña.');
+//       return;
+//     }
+//     if (passwordNuevo !== passwordConfirm) {
+//       alert('La nueva contraseña y la confirmación no coinciden.');
+//       return;
+//     }
+
+//     // Envío de datos mediante AJAX
+//     $.ajax({
+//       url: 'modulo-usuario.php?action=restablecerContraseña',
+//       type: 'POST',
+//       data: {
+//         codigoUsuarioModal: codigoUsuario,
+//         passwordNuevo: passwordNuevo,
+//         passwordConfirm: passwordConfirm
+//       },
+//       success: function (response) {
+//         // Analiza la respuesta y muestra mensajes adecuados
+//         var result = JSON.parse(response);
+//         if (result.success) {
+//           alert(result.message);  // Aquí podrías usar Toastr para mejor feedback
+//           // Opcional: cerrar el modal o limpiar el formulario
+//           $('#modalCambiarPasswordUser').modal('hide');
+//         } else {
+//           alert(result.message);
+//         }
+//       },
+//       error: function (xhr, status, error) {
+//         alert('Ocurrió un error al procesar la solicitud. Inténtelo nuevamente.');
+//       }
+//     });
+//   });
+// });
 
