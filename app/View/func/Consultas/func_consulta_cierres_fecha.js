@@ -143,13 +143,13 @@ $(document).ready(function () {
     if (fechaInicio.value !== "" && fechaFin.value !== "") {
       // Si ambos campos tienen valor, habilitar el botón de reporte
       reporteButton.disabled = false;
-      reporteButton.classList.remove("bg-gray-400", "cursor-not-allowed");
+      reporteButton.classList.remove("bg-gray-300", "cursor-not-allowed");
       reporteButton.classList.add("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
     } else {
       // Si falta una o ambas fechas, deshabilitar el botón de reporte
       reporteButton.disabled = true;
       reporteButton.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
-      reporteButton.classList.add("bg-gray-400", "cursor-not-allowed");
+      reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
     }
   }
 
@@ -160,7 +160,7 @@ $(document).ready(function () {
   // Deshabilitar el botón de reporte al cargar la página
   window.onload = function () {
     reporteButton.disabled = true;
-    reporteButton.classList.add("bg-gray-400", "cursor-not-allowed");
+    reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
   };
 
   // Función que se ejecuta cuando se hace clic en el botón "Nueva Consulta"
@@ -168,7 +168,7 @@ $(document).ready(function () {
     // Deshabilitar el botón de reporte y aplicar clases de deshabilitado
     reporteButton.disabled = true;
     reporteButton.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
-    reporteButton.classList.add("bg-gray-400", "cursor-not-allowed");
+    reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
 
     // Limpiar los campos de fecha (opcional)
     fechaInicio.value = "";

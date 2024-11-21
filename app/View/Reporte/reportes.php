@@ -43,18 +43,6 @@
             <!-- Contenido de la primera pestaña -->
             <div class="tab-pane fade show active" id="generales" role="tabpanel" aria-labelledby="generales-tab">
               <!-- Pestañas del primer tab -->
-              <!-- <ul class="nav nav-pills" id="pills-tab" role="tablist">
-                <li class="nav-item">
-                  <a class="nav-link active" id="pills-home-tab" data-toggle="pill" href="#pills-home" role="tab" aria-controls="pills-home" aria-selected="true">Incidencias totales</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="pills-profile-tab" data-toggle="pill" href="#pills-profile" role="tab" aria-controls="pills-profile" aria-selected="false">Pendientes de cierre</a>
-                </li>
-                <li class="nav-item">
-                  <a class="nav-link" id="pills-cerradas-tab" data-toggle="pill" href="#pills-cerradas" role="tab" aria-controls="pills-cerradas" aria-selected="false">Incidencias cerradas</a>
-                </li>
-              </ul> -->
-
               <ul class="nav nav-pills" id="pills-tab" role="tablist">
                 <li class="nav-item">
                   <a class="nav-link active" id="pills-incidenciasTotales-tab" data-toggle="pill" href="#pills-incidenciasTotales" role="tab" aria-controls="pills-incidenciasTotales" aria-selected="true">Incidencias totales</a>
@@ -103,7 +91,7 @@
                         </button>
 
                         <!-- Boton generar reporte filtrado-->
-                        <button type="button" id="reporte-incidencias-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-400 cursor-not-allowed" disabled>
+                        <button type="button" id="reporte-incidencias-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
                           <i class="feather mr-2 icon-file"></i>Reporte filtrado
                         </button>
                         <!-- Fin de boton de generar reporte filtrado-->
@@ -306,23 +294,18 @@
                         <button type="button" id="filtrarIncidenciasCerradasFecha" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
                           <i class="feather icon-filter"></i>
                         </button>
-
                         <!-- Botón de nueva consulta -->
                         <button type="button" id="limpiarCampos_incidencias_cerradas" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                           <i class="feather icon-refresh-cw"></i>
                         </button>
-
                         <!-- Boton generar reporte filtrado-->
-                        <button type="button" id="reportes-cierres-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-400 cursor-not-allowed" disabled>
+                        <button type="button" id="reportes-cierres-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
                           <i class="feather mr-2 icon-file"></i>Reporte filtrado
                         </button>
-                        <!-- Fin de boton de generar reporte filtrado-->
-
                         <!-- Boton generar reporte -->
                         <div class="flex justify-center space-x-2">
                           <button type="button" id="reporte-incidencias-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
                         </div>
-                        <!-- Fin de boton de generar reporte -->
                       </div>
                       <!-- Fin de botones alineados horizontalmente -->
                     </div>
@@ -409,7 +392,7 @@
             </div>
             <!-- Fin de contenido de la primera pestaña -->
 
-            <!-- Contenido de la segunda pestaña -->
+            <!-- Contenido de la segunda pestaña  - DETALLE DE REPORTE -->
             <div class="tab-pane fade" id="detalle" role="tabpanel" aria-labelledby="detalle-tab">
               <div class="flex items-center mb-4 hidden">
                 <!-- Número de incidencia -->
@@ -497,9 +480,9 @@
                             <button type="button" id="imprimir-incidencia" class="bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Detalle de incidencia">
                               <i class="feather icon-file"></i>
                             </button>
-
                             <!-- Botón de imprimir detalle de cierre -->
-                            <button type="button" id="imprimir-cierre" class="bn bg-blue-400 text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Detalle de cierre">
+                            <button type="button" id="imprimir-cierre" class="bn bg-blue-400 text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center disabled:bg-gray-300 disabled:cursor-not-allowed " title="Detalle de cierre"
+                              <?= $estadoDescripcion !== 'CERRADO' ? 'disabled' : '' ?>>
                               <i class="feather icon-file"></i>
                             </button>
                           </td>

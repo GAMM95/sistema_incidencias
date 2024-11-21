@@ -1,4 +1,5 @@
 // Habilitar campos para edición, excluyendo rol y área
+// Habilitar campos para edición, excluyendo rol y área
 document.getElementById('habilitar').addEventListener('click', function () {
   document.querySelectorAll('#formPerfil input[type="text"]').forEach(input => {
     if (input.id !== 'dni' && input.id !== 'username' && input.id !== 'rol' && input.id !== 'area') {
@@ -21,7 +22,6 @@ document.getElementById('nuevo-registro').addEventListener('click', function () 
 });
 
 // Recopilación de valores y envío del formulario
-
 $(document).ready(function () {
   // Configurar la posición de Toastr
   toastr.options = {
@@ -29,6 +29,11 @@ $(document).ready(function () {
     "progressBar": true,
     "timeOut": "2000"
   };
+
+  $('#editar-datos').on('click', function (e) {
+    e.preventDefault();
+    enviarFormulario('editar');
+  });
 
   // Habilitar los campos, excluyendo rol y área
   document.getElementById('habilitar').addEventListener('click', function () {
@@ -65,25 +70,18 @@ $(document).ready(function () {
       method: 'POST',
       data: data,
       success: function () {
-        if (action === 'editar') {
-          toastr.success('Datos actualizados', 'Mensaje');
-        }
+        toastr.success('Datos actualizados', 'Mensaje');
         setTimeout(function () {
           location.reload();
         }, 1500);
       },
       error: function () {
-        toastr.success('Datos actualizados.', 'Mensaje');
+        toastr.error('Error al actualizar los datos.', 'Mensaje');
         setTimeout(function () {
           location.reload();
         }, 1500);
       }
     });
   }
-
-  $('#editar-datos').on('click', function (e) {
-    e.preventDefault();
-    enviarFormulario('editar');
-  });
 });
 

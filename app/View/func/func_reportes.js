@@ -88,3 +88,16 @@ function filtrarTablaIncidenciasDetalle() {
     filas[i].style.display = match ? '' : 'none';
   }
 }
+
+// Habilitar y deshabilitar botones de impresión de cierre en el detalle de reporte
+document.querySelectorAll('#tablaIncidenciasDetalle tbody tr').forEach(row => {
+  const estadoCell = row.querySelector('td:nth-child(13) label'); // Asumiendo que la columna 13 es la de Estado
+  const estado = estadoCell.textContent.trim(); // Obtenemos el texto del estado
+
+  const botonImprimirCierre = row.querySelector('#imprimir-cierre');
+  if (estado !== 'CERRADO') {
+    botonImprimirCierre.disabled = true;
+  } else {
+    botonImprimirCierre.disabled = false;
+  }
+});

@@ -6,14 +6,6 @@ $(document).ready(function () {
     "timeOut": "2000"
   };
 
-  // Manejador de eventos para la tecla Escape
-  $(document).keydown(function (event) {
-    // Verificar si la tecla presionada es ESC
-    if (event.key === 'Escape') {
-      nuevoRegistro();
-    }
-  });
-
   // Evento para manejar la tecla Enter cuando una fila está seleccionada
   $(document).on('keydown', function (e) {
     // Verificar si la tecla presionada es Enter (keyCode 13)
@@ -25,6 +17,15 @@ $(document).ready(function () {
       }
     }
   });
+
+  // Manejador de eventos para la tecla Escape
+  $(document).keydown(function (event) {
+    // Verificar si la tecla presionada es ESC
+    if (event.key === 'Escape') {
+      nuevoRegistro();
+    }
+  });
+
 
   $('#guardar-categoria').on('click', function (e) {
     e.preventDefault();
@@ -81,6 +82,7 @@ function nuevoRegistro() {
   $('#form-action').val('registrar');
 
   // Deshabilitar el botón de editar
+  $('#guardar-categoria').prop('disabled', false);
   $('#editar-categoria').prop('disabled', true);
   $('#nuevo-registro').prop('disabled', true);
 

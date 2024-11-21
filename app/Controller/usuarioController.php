@@ -310,10 +310,60 @@ class UsuarioController
     }
   }
 
-  // Metodo para restablecer la contraseña del usuario en el mantenedor
+  // // Metodo para restablecer la contraseña del usuario en el mantenedor
+  // public function restablecerContraseña()
+  // {
+  //   if ($_SERVER["REQUEST_METHOD"] == "POST") {
+  //     // Obtener los datos del formulario
+  //     $usu_codigo = $_POST['codigoUsuarioModal'] ?? null;
+  //     $passwordNuevo = $_POST['passwordNuevo'] ?? null;
+  //     $passwordConfirm = $_POST['passwordConfirm'] ?? null;
+
+  //     // Validar que todos los campos estén completos
+  //     if (empty($passwordNuevo) || empty($passwordConfirm)) {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'Debe completar todos los campos para restablecer la contrase&ntilde;a.'
+  //       ]);
+  //       exit();
+  //     }
+
+  //     // Validar que la nueva contraseña y la confirmación coincidan
+  //     if ($passwordNuevo !== $passwordConfirm) {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'La nueva contrase&ntilde;a y la confirmación no coinciden.'
+  //       ]);
+  //       exit();
+  //     }
+
+  //     // Cambiar la contraseña del usuario
+  //     $restablecerContraseña = $this->usuarioModel->restablecerContraseña($usu_codigo, $passwordNuevo, $passwordConfirm);
+
+  //     if ($restablecerContraseña) {
+  //       echo json_encode([
+  //         'success' => true,
+  //         'message' => 'Contrase&ntilde;a restablecida exitosamente.'
+  //       ]);
+  //     } else {
+  //       echo json_encode([
+  //         'success' => false,
+  //         'message' => 'No se pudo restablecer la contrase&ntilde;a.'
+  //       ]);
+  //     }
+  //   } else {
+  //     echo json_encode([
+  //       'success' => false,
+  //       'message' => 'Método no permitido.'
+  //     ]);
+  //   }
+  // }
+
+
+  // Método para restablecer la contraseña del usuario en el mantenedor
   public function restablecerContraseña()
   {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+    if ($_SERVER["REQUEST_METHOD"] === "POST") {
       // Obtener los datos del formulario
       $usu_codigo = $_POST['codigoUsuarioModal'] ?? null;
       $passwordNuevo = $_POST['passwordNuevo'] ?? null;
@@ -337,10 +387,11 @@ class UsuarioController
         exit();
       }
 
-      // Cambiar la contraseña del usuario
-      $restablecerContraseña = $this->usuarioModel->restablecerContraseña($usu_codigo, $passwordNuevo, $passwordConfirm);
+      // Lógica para cambiar la contraseña del usuario en el modelo
+      $restablecido = $this->usuarioModel->restablecerContraseña($usu_codigo, $passwordNuevo, $passwordConfirm);
 
-      if ($restablecerContraseña) {
+      // Evaluar resultado del modelo y retornar la respuesta
+      if ($restablecido) {
         echo json_encode([
           'success' => true,
           'message' => 'Contrase&ntilde;a restablecida exitosamente.'
@@ -348,75 +399,15 @@ class UsuarioController
       } else {
         echo json_encode([
           'success' => false,
-          'message' => 'No se pudo restablecer la contrase&ntilde;a.'
+          'message' => 'No se pudo restablecer la contrase&ntilde;a. Por favor, inténtelo nuevamente.'
         ]);
       }
     } else {
+      // Método no permitido
       echo json_encode([
         'success' => false,
         'message' => 'Método no permitido.'
       ]);
     }
-  } 
-
-  // // Método para cambiar la contraseña del usuario
-  // public function cambiarContraseña()
-  // {
-  //   try {
-  //     // Obtener los datos del formulario
-  //     $usu_codigo = $_POST['codigoUsuario'] ?? null;
-  //     $passwordActual = $_POST['passwordActual'] ?? null;
-  //     $passwordNuevo = $_POST['passwordNuevo'] ?? null;
-  //     $passwordConfirm = $_POST['passwordConfirm'] ?? null;
-
-  //     // Validar que todos los campos estén completos
-  //     if (empty($usu_codigo) || empty($passwordActual) || empty($passwordNuevo) || empty($passwordConfirm)) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'Debe completar todos los campos para cambiar la contraseña.'
-  //       ]);
-  //       return;  // En lugar de exit(), se retorna el flujo
-  //     }
-
-  //     // Validar que la nueva contraseña y la confirmación coincidan
-  //     if ($passwordNuevo !== $passwordConfirm) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'La nueva contraseña y la confirmación no coinciden.'
-  //       ]);
-  //       return;  // En lugar de exit(), se retorna el flujo
-  //     }
-
-  //     // Verificar que la contraseña actual sea correcta
-  //     $verificarContraseñaActual = $this->usuarioModel->verificarContraseñaActual($usu_codigo, $passwordActual);
-
-  //     if (!$verificarContraseñaActual) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'La contraseña actual es incorrecta.'
-  //       ]);
-  //       return;  // En lugar de exit(), se retorna el flujo
-  //     }
-
-  //     // Cambiar la contraseña del usuario
-  //     $cambiarContraseña = $this->usuarioModel->cambiarContraseña($usu_codigo, $passwordNuevo);
-
-  //     if ($cambiarContraseña) {
-  //       echo json_encode([
-  //         'success' => true,
-  //         'message' => 'Contraseña cambiada exitosamente.'
-  //       ]);
-  //     } else {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'No se pudo cambiar la contraseña.'
-  //       ]);
-  //     }
-  //   } catch (Exception $e) {
-  //     echo json_encode([
-  //       'success' => false,
-  //       'message' => 'Error: ' . $e->getMessage()
-  //     ]);
-  //   }
-  // }
+  }
 }
