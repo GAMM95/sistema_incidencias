@@ -558,24 +558,58 @@ class UsuarioModel extends Conexion
     }
   }
 
-  // Metodo para restablecer contraseña de los usuarios en el mantenedor usuarios
-  public function restablecerContraseña($codigoUsuario, $passwordNuevo, $passwordConfirm)
+  // // TODO: 1 Metodo para restablecer contraseña de los usuarios en el mantenedor usuarios
+  // public function cambiarContraseñaUsuario($codigoUsuario, $passwordNuevo, $passwordConfirm)
+  // {
+  //   $conector = parent::getConexion();
+  //   try {
+  //     if ($conector != null) {
+  //       $query = "EXEC sp_restablecer_contrasena :codigoUsuario, :passwordNuevo, :passwordConfirm";
+  //       $stmt = $conector->prepare($query);
+  //       $stmt->bindParam(':codigoUsuario', $codigoUsuario);
+  //       $stmt->bindParam(':passwordNuevo', $passwordNuevo);
+  //       $stmt->bindParam(':passwordConfirm', $passwordConfirm);
+  //       $stmt->execute();
+  //       $this->auditoria->registrarEvento('PERSONA', 'Cambiar contraseña');
+
+  //       // Obtener el resultado del procedimiento almacenado
+  //       return $stmt->fetch(PDO::FETCH_ASSOC);  // Captura el mensaje retornado
+  //       // return true;
+  //     } else {
+  //       throw new Exception("Error de conexión a la base de datos");
+  //       return null;
+  //     }
+  //   } catch (PDOException $e) {
+  //     throw new PDOException("Error al restablecer contraseña: " . $e->getMessage());
+  //     return null;
+  //   }
+  // }
+
+  // TODO: 2 Metodo para restablecer contraseña de los usuarios en el mantenedor usuarios
+  public function cambiarContraseñaUsuario($codigoUsuario, $passwordNuevo, $passwordConfirm)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
         $query = "EXEC sp_restablecer_contrasena :codigoUsuario, :passwordNuevo, :passwordConfirm";
         $stmt = $conector->prepare($query);
-        $stmt->bindParam(':codigoUsuario', $codigoUsuario);
+        // Verificar el tipo de los parámetros
+        $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':passwordNuevo', $passwordNuevo);
         $stmt->bindParam(':passwordConfirm', $passwordConfirm);
+
+        // Para depuración: Verificar el SQL generado
+        error_log("Consulta SQL: EXEC sp_restablecer_contrasena $codigoUsuario, $passwordNuevo, $passwordConfirm");
+
         $stmt->execute();
-        return true;
+
+        // Obtener el resultado del procedimiento almacenado
+        return $stmt->fetch(PDO::FETCH_ASSOC);  // Captura el mensaje retornado
       } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
+        throw new Exception("Error de conexión a la base de datos");
       }
     } catch (PDOException $e) {
+      error_log("Error en la consulta SQL: " . $e->getMessage());  // Registrar errores de SQL
       throw new PDOException("Error al restablecer contraseña: " . $e->getMessage());
     }
   }

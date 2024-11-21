@@ -118,7 +118,7 @@
                         <hr class="border-t-2 border-gray-100 mb-2"> <!-- Línea separadora -->
 
                         <!-- Codigo de usuario -->
-                        <div class="form-group row hidden">
+                        <div class="form-group row">
                           <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-xs">Codigo de usuario</label>
                           <div class="col-sm-9">
                             <input type="text" id="codigoUsuarioModal" name="codigoUsuarioModal" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" readonly>
@@ -173,9 +173,39 @@
                     </form>
                   </div>
                   <div class="modal-footer justify-center">
-                    <button type="button" id="restablecerContraseña" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-lock"></i>Restablecer contrase&ntilde;a</button>
+                    <button type="submit" id="restablecerContraseña" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-lock"></i>Restablecer contrase&ntilde;a</button>
                   </div>
 
+                  <script>
+                    document.addEventListener("DOMContentLoaded", function() {
+                      // Referencias a los campos e iconos
+                      const passwordNuevo = document.getElementById("passwordNuevo");
+                      const togglePasswordNuevo = document.getElementById("togglePasswordNuevo");
+
+                      const passwordConfirm = document.getElementById("passwordConfirm");
+                      const togglePasswordConfirm = document.getElementById("togglePasswordConfirm");
+
+                      // Función para alternar visibilidad de la contraseña
+                      function togglePasswordVisibility(inputField, toggleIcon) {
+                        if (inputField.type === "password") {
+                          inputField.type = "text";
+                          toggleIcon.innerHTML = "<i class='feather text-gray-400 icon-eye-off'></i>";
+                        } else {
+                          inputField.type = "password";
+                          toggleIcon.innerHTML = "<i class='feather text-gray-400 icon-eye'></i>";
+                        }
+                      }
+
+                      // Agregar event listeners para cada campo
+                      togglePasswordNuevo.addEventListener("click", () => {
+                        togglePasswordVisibility(passwordNuevo, togglePasswordNuevo);
+                      });
+
+                      togglePasswordConfirm.addEventListener("click", () => {
+                        togglePasswordVisibility(passwordConfirm, togglePasswordConfirm);
+                      });
+                    });
+                  </script>
                   <!-- <button type="button" id="restablecerContrasena" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md">
                     <i class="feather mr-2 icon-lock"></i>Restablecer contrase&ntilde;a
                   </button> -->

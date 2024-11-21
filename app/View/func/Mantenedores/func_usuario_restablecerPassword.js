@@ -5,7 +5,6 @@ $(document).ready(function () {
     "progressBar": true,
     "timeOut": "2000"
   };
-
   // Evento para restablecer contraseña
   $('#restablecerContraseña').on('click', function (e) {
     e.preventDefault();
@@ -15,31 +14,37 @@ $(document).ready(function () {
 
 // Función principal para enviar datos del formulario
 function enviarDatos(action) {
-  if (action === 'restablecerContraseña' && !validarCamposPassword()) {
-    return; // No continuar si no pasa la validación
+  if (action === 'restablecerContraseña') {
+    if (!validarCamposPassword()) {
+      return;
+    }
   }
-
   var url = 'modulo-usuario.php?action=' + action;
-  var data = $('#formCambiarPassword').serialize();
+  var data = $('#formCambiarPassword').serialize();  // Obtener los datos del formulario
+  console.log('Datos enviados:', data); // Mostrar los datos del formulario
 
-  // Mostrar los datos en consola antes de enviar
-  console.log('URL de envío:', url);
-  console.log('Datos enviados:', data);
-
-  // Realiza la petición AJAX
   $.ajax({
     url: url,
     type: 'POST',
     data: data,
-    dataType: "json", // Asegúrate de que el servidor responda con JSON
+    dataType: "text",
     success: function (response) {
-      console.log('Respuesta del servidor:', response); // Mostrar respuesta en consola
-      if (response.success) {
-        toastr.success(response.message, 'Éxito'); // Mensaje de éxito
-        $('#modalCambiarPasswordUser').modal('hide'); // Cierra el modal
-        $('#formCambiarPassword')[0].reset(); // Limpia el formulario
-      } else {
-        toastr.warning(response.message, 'Advertencia'); // Mensaje de advertencia
+      try {
+        var jsonResponse = JSON.parse(response);
+        console.log('Respuesta parseada:', jsonResponse); 
+        
+        if (jsonResponse.success) {
+          if (action === 'restablecerContraseña') {
+            toastr.success(jsonResponse.message, 'Mensaje');
+            $('#modalCambiarPasswordUser').modal('hide');
+
+          }
+        } else {
+          toastr.warning(jsonResponse.message, 'Advertencia');
+        }
+      } catch (e) {
+        console.error('Error al procesar la respuesta:', e);
+        toastr.error('Error al procesar la respuesta.', 'Mensaje de error');
       }
     },
     error: function (xhr, status, error) {
@@ -48,7 +53,7 @@ function enviarDatos(action) {
         error: error,
         responseText: xhr.responseText
       });
-      toastr.error('Error en la solicitud. Por favor, intenta nuevamente.', 'Error');
+      toastr.error('Error en la solicitud AJAX.', 'Mensaje de error');
     }
   });
 }
@@ -57,63 +62,57 @@ function enviarDatos(action) {
 function validarCamposPassword() {
   var valido = true;
   var mensajeError = '';
-
   // Validar campos
-  var codigoUsuario = $('#codigoUsuarioModal').val();
-  var contrasenaNueva = $('#passwordNuevo').val();
-  var confirmarContrasena = $('#passwordConfirm').val();
+  var faltaContrasenaNueva = ($('#passwordNuevo').val() === null || $('#passwordNuevo').val() === '');
+  var faltaConfirmarContrasena = ($('#passwordConfirm').val() === null || $('#passwordConfirm').val() === '');
 
-  if (!contrasenaNueva && !confirmarContrasena) {
-    mensajeError = 'Debe completar todos los campos.';
+  var contrasenaNueva = $('#passwordNuevo').val();
+  var contrasenaConfirmada = $('#passwordConfirm').val();
+
+  if (faltaContrasenaNueva || faltaConfirmarContrasena) { // Verificar si faltan alguno de los campos requeridos      
+    mensajeError += 'Debe completar todos los campos.';
     valido = false;
-  } else if (!contrasenaNueva) {
-    mensajeError = 'Debe ingresar una nueva contrase&ntilde;a.';
+  } else if (faltaContrasenaNueva) {
+    mensajeError += 'Debe ingresar una nueva contrase&ntilde;a.';
     valido = false;
-  } else if (!confirmarContrasena) {
-    mensajeError = 'Debe confirmar la contrase&ntilde;a.';
+  } else if (faltaConfirmarContrasena) {
+    mensajeError += 'Debe confirmar la contrase&ntilde;a.';
     valido = false;
-  } else if (contrasenaNueva !== confirmarContrasena) {
-    mensajeError = 'Las contraseñas no coinciden.';
-    valido = false;
-  } else if (!codigoUsuario) {
-    mensajeError = "Falta el código de usuario.";
+  } else if (contrasenaNueva !== contrasenaConfirmada) {
+    mensajeError += 'Las contraseñas no coinciden.';
     valido = false;
   }
-
   // Mostrar mensaje si no es válido
   if (!valido) {
-    toastr.warning(mensajeError, 'Advertencia');
+    toastr.warning(mensajeError.trim(), 'Advertencia');
   }
-
   return valido;
 }
 
+// // Función para validar campos antes de enviar
+// function validarCamposPassword() {
+//   var valido = true;
+//   var mensajeError = '';
+//   // Validar campos
+//   var contrasenaNueva = $('#passwordNuevo').val();
+//   var confirmarContrasena = $('#passwordConfirm').val();
 
-document.addEventListener("DOMContentLoaded", function () {
-  // Referencias a los campos e iconos
-  const passwordNuevo = document.getElementById("passwordNuevo");
-  const togglePasswordNuevo = document.getElementById("togglePasswordNuevo");
-
-  const passwordConfirm = document.getElementById("passwordConfirm");
-  const togglePasswordConfirm = document.getElementById("togglePasswordConfirm");
-
-  // Función para alternar visibilidad de la contraseña
-  function togglePasswordVisibility(inputField, toggleIcon) {
-    if (inputField.type === "password") {
-      inputField.type = "text";
-      toggleIcon.innerHTML = "<i class='feather text-gray-400 icon-eye-off'></i>";
-    } else {
-      inputField.type = "password";
-      toggleIcon.innerHTML = "<i class='feather text-gray-400 icon-eye'></i>";
-    }
-  }
-
-  // Agregar event listeners para cada campo
-  togglePasswordNuevo.addEventListener("click", () => {
-    togglePasswordVisibility(passwordNuevo, togglePasswordNuevo);
-  });
-
-  togglePasswordConfirm.addEventListener("click", () => {
-    togglePasswordVisibility(passwordConfirm, togglePasswordConfirm);
-  });
-});
+//   if (!contrasenaNueva && !confirmarContrasena) {
+//     mensajeError = 'Debe completar todos los campos.';
+//     valido = false;
+//   } else if (!contrasenaNueva) {
+//     mensajeError = 'Debe ingresar una nueva contrase&ntilde;a.';
+//     valido = false;
+//   } else if (!confirmarContrasena) {
+//     mensajeError = 'Debe confirmar la contrase&ntilde;a.';
+//     valido = false;
+//   } else if (contrasenaNueva !== confirmarContrasena) {
+//     mensajeError = 'Las contraseñas no coinciden.';
+//     valido = false;
+//   }
+//   // Mostrar mensaje si no es válido
+//   if (!valido) {
+//     toastr.warning(mensajeError, 'Advertencia');
+//   }
+//   return valido;
+// }
