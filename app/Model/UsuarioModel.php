@@ -107,40 +107,7 @@ class UsuarioModel extends Conexion
     file_put_contents('logs/log.txt', $logData, FILE_APPEND);
   }
 
-  // /// Método para obtener la información del usuario logueado
-  // private function obtenerInformacionUsuario($username, $password)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       $consulta = "SELECT USU_codigo as codigo, USU_nombre as usuario 
-  //       FROM USUARIO u 
-  //       WHERE USU_nombre = :username AND USU_password = :password";
-
-
-  //       $consulta = 'EXEC sp_verificar_usuario :username, :password';
-  //       $stmt = $conector->prepare($consulta);
-  //       $stmt->bindParam(':username', $username);
-  //       $stmt->bindParam(':password', $password);
-  //       $stmt->execute();
-
-  //       $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-
-
-  //       if ($resultado) {
-  //         return $resultado;
-  //       } else {
-  //         return null;
-  //       }
-  //     } else {
-  //       throw new Exception("Error de conexión a la base de datos.");
-  //       return null;
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new PDOException("Error al obtener información del usuario: " . $e->getMessage());
-  //     return null;
-  //   }
-  // }
+  /// Método para obtener la información del usuario logueado
   private function obtenerInformacionUsuario($username, $password)
   {
     $conector = parent::getConexion();
@@ -281,23 +248,22 @@ class UsuarioModel extends Conexion
 
 
   // Metodo para editar datos del usuario utilizando un procedimiento almacenado
-  public function editarUsuario($codigoUsuario, $username, $password, $persona, $rol, $area)
+  public function editarUsuario($codigoUsuario, $username, $persona, $rol, $area)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_editar_usuario :codigoUsuario, :username, :password, :persona, :rol, :area";
+        $sql = "EXEC sp_editar_usuario :codigoUsuario, :username, :persona, :rol, :area";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':username', $username);
-        $stmt->bindParam(':password', $password);
         $stmt->bindParam(':persona', $persona, PDO::PARAM_INT);
         $stmt->bindParam(':rol', $rol, PDO::PARAM_INT);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('USUARIO', 'Actualización de usuario');
+        $this->auditoria->registrarEvento('USUARIO', 'Editar datos de usuario');
 
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
@@ -520,72 +486,54 @@ class UsuarioModel extends Conexion
         $stmt->bindParam(':codigoUsuario', $codigoUsuario);
         $stmt->bindParam(':passwordActual', $passwordActual);
         $stmt->execute();
+
         $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $resultado ? $resultado['Resultado'] : false;
+        // Verificar el mensaje correcto devuelto desde el procedimiento
+        return isset($resultado['Resultado']) && $resultado['Resultado'] === 'Contraseña correcta';
       } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
+        throw new Exception("Error de conexión a la base de datos");
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al verificar contraseña actual: " . $e->getMessage());
     }
   }
 
+
   // Metodo para cambiar contraseña del usuario
-  public function cambiarContraseña($codigoUsuario, $passwordActual, $passwordNuevo)
+  public function cambiarContraseña($codigoUsuario, $passwordActual, $passwordNuevo, $passwordConfirm)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
+
+        // Verificar que la contraseña actual sea correcta
+        if (!$this->verificarContraseñaActual($codigoUsuario, $passwordActual)) {
+          throw new Exception("La contraseña actual es incorrecta.");
+        }
+
+        // Si la contraseña actual es correcta, proceder a cambiarla
         $query = "EXEC sp_cambiar_contrasena :codigoUsuario, :passwordActual, :passwordNuevo, :passwordConfirm";
         $stmt = $conector->prepare($query);
         $stmt->bindParam(':codigoUsuario', $codigoUsuario);
         $stmt->bindParam(':passwordActual', $passwordActual);
         $stmt->bindParam(':passwordNuevo', $passwordNuevo);
-        $stmt->bindParam(':passwordConfirm', $passwordNuevo);
+        $stmt->bindParam(':passwordConfirm', $passwordConfirm);
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('PERSONA', 'Cambiar contraseña');
+        $this->auditoria->registrarEvento('USUARIO', 'Restablecer contraseña');
 
-        return true;
+        // Obtener el resultado del procedimiento almacenado
+        return $stmt->fetch(PDO::FETCH_ASSOC);  // Captura el mensaje retornado
       } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
+        throw new Exception("Error de conexión a la base de datos");
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al cambiar contraseña: " . $e->getMessage());
     }
   }
 
-  // // TODO: 1 Metodo para restablecer contraseña de los usuarios en el mantenedor usuarios
-  // public function cambiarContraseñaUsuario($codigoUsuario, $passwordNuevo, $passwordConfirm)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       $query = "EXEC sp_restablecer_contrasena :codigoUsuario, :passwordNuevo, :passwordConfirm";
-  //       $stmt = $conector->prepare($query);
-  //       $stmt->bindParam(':codigoUsuario', $codigoUsuario);
-  //       $stmt->bindParam(':passwordNuevo', $passwordNuevo);
-  //       $stmt->bindParam(':passwordConfirm', $passwordConfirm);
-  //       $stmt->execute();
-  //       $this->auditoria->registrarEvento('PERSONA', 'Cambiar contraseña');
-
-  //       // Obtener el resultado del procedimiento almacenado
-  //       return $stmt->fetch(PDO::FETCH_ASSOC);  // Captura el mensaje retornado
-  //       // return true;
-  //     } else {
-  //       throw new Exception("Error de conexión a la base de datos");
-  //       return null;
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new PDOException("Error al restablecer contraseña: " . $e->getMessage());
-  //     return null;
-  //   }
-  // }
-
-  // TODO: 2 Metodo para restablecer contraseña de los usuarios en el mantenedor usuarios
+  // Metodo para restablecer contraseña de los usuarios en el mantenedor usuarios
   public function cambiarContraseñaUsuario($codigoUsuario, $passwordNuevo, $passwordConfirm)
   {
     $conector = parent::getConexion();
@@ -597,20 +545,25 @@ class UsuarioModel extends Conexion
         $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
         $stmt->bindParam(':passwordNuevo', $passwordNuevo);
         $stmt->bindParam(':passwordConfirm', $passwordConfirm);
-
-        // Para depuración: Verificar el SQL generado
-        error_log("Consulta SQL: EXEC sp_restablecer_contrasena $codigoUsuario, $passwordNuevo, $passwordConfirm");
-
         $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $this->auditoria->registrarEvento('USUARIO', 'Restablecer contraseña');
 
         // Obtener el resultado del procedimiento almacenado
         return $stmt->fetch(PDO::FETCH_ASSOC);  // Captura el mensaje retornado
+        if ($stmt->rowCount() > 0) {
+          return true;
+        } else {
+          return false;
+        }
       } else {
         throw new Exception("Error de conexión a la base de datos");
+        return null;
       }
     } catch (PDOException $e) {
-      error_log("Error en la consulta SQL: " . $e->getMessage());  // Registrar errores de SQL
       throw new PDOException("Error al restablecer contraseña: " . $e->getMessage());
+      return null;
     }
   }
 }

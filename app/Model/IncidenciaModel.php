@@ -52,16 +52,7 @@ class IncidenciaModel extends Conexion
     }
   }
 
-  /**
-   * Método para insertar una nueva incidencia en la base de datos - ADMINISTRADOR / USUARIO.
-   * 
-   * Este método permite registrar una nueva incidencia en el sistema. Es utilizado tanto por
-   * administradores como por usuarios. La incidencia se almacena en la base de datos a través
-   * de un procedimiento almacenado.
-   * 
-   * Retorno:
-   * - @return bool: Retorna `true` si la incidencia fue registrada exitosamente, `false` en caso contrario.
-   */
+  // Método para insertar una nueva incidencia en la base de datos - ADMINISTRADOR / USUARIO.
   public function insertarIncidencia($INC_fecha, $INC_hora, $INC_asunto, $INC_descripcion, $INC_documento, $INC_codigoPatrimonial, $CAT_codigo, $ARE_codigo, $USU_codigo)
   {
     $conector = parent::getConexion();
@@ -107,7 +98,7 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':asunto', $asunto);
         $stmt->bindParam(':documento', $documento);
         $stmt->bindParam(':descripcion', $descripcion);
-        $stmt->execute(); // Ejecutar el procedimiento almacenado
+        $stmt->execute();
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
         $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia');
@@ -174,18 +165,6 @@ class IncidenciaModel extends Conexion
       return null;
     }
   }
-
-  /**
-   * Método para consultar incidencias de la base de datos para el ADMINISTRADOR
-   * 
-   * Este método permite a un administrador y usuario consultar incidencias en el sistema. 
-   * La incidencia se consulta con los detalles proporcionados, incluyendo la fecha, 
-   * asunto, descripción, documento adjunto, código patrimonial, código de estado, código de categoría, 
-   * código de área, y el código de usuario que registra la incidencia.
-   * 
-   * @return int|false Retorna el ID de la incidencia recién insertada si la operación es exitosa. 
-   *                   En caso de error, retorna false.
-   */
 
   // Metodo para listar incidencias totales para reporte
   public function listarIncidenciasTotales()

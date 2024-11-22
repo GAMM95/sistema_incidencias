@@ -10,14 +10,13 @@ $action = $_GET['action'] ?? '';
 $rol = $_SESSION['rol'];
 
 require_once 'app/Controller/usuarioController.php';
-
 $usuarioController = new UsuarioController();
 
 switch ($action) {
   case 'editar':
     $usuarioController->editarPerfil();
     break;
-  case 'cambiarContraseña':
+  case 'cambiar':
     $usuarioController->cambiarContraseña();
     break;
   default:
@@ -78,6 +77,8 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
+
+  <!-- Funciones -->
   <script src="./app/View/func/Perfil/func_perfil.js"></script>
   <script src="./app/View/func/Perfil/func_cambiarPassword.js"></script>
 

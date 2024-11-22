@@ -154,8 +154,8 @@
                     </button>
                   </div>
                   <div class="modal-body">
-                    <form id="formCambiarPassword" action="mi-perfil.php?action=cambiarContraseña" method="POST" class="card table-card bg-white shadow-md p-6 text-xs flex flex-col mb-2">
-                      <input type="hidden" id="form-action-cambiarContraseña" name="action" value="cambiarContraseña">
+                    <form id="formCambiarPassword" action="mi-perfil.php?action=cambiar" method="POST" class="card table-card bg-white shadow-md p-6 text-xs flex flex-col mb-2">
+                      <input type="hidden" id="form-action-cambiar" name="action" value="cambiar">
                       <div>
                         <p class="mb-0 text-gray-800 text-lg">Datos del usuario</p>
                         <hr class="border-t-2 border-gray-100 mb-2"> <!-- Línea separadora -->
@@ -216,12 +216,18 @@
                         <!-- Confirmar contraseña -->
                         <div class="form-group row">
                           <label for="colFormLabelSm" class="col-sm-5 col-form-label col-form-label-sm">Confirmar contrase&ntilde;a</label>
+
                           <div class="col-sm-7 position-relative">
                             <input type="password" class="form-control form-control-sm border border-green-500 bg-white rounded-md p-2 text-md pr-10" id="passwordConfirm" name="passwordConfirm" placeholder="Confirmar contrase&ntilde;a">
+
                             <!-- Icono para mostrar/ocultar contraseña -->
                             <span id="togglePasswordConfirm" class="position-absolute cursor-pointer" style="right: 25px; top: 50%; transform: translateY(-50%);">
                               <i class="feather icon-eye text-gray-400"></i>
                             </span>
+
+                            <!-- Mensaje de confirmación debajo del input -->
+                            <div id="mensajeConfirmacion" class="position-absolute" style="display: none; color: green; font-size: 14px; top: 100%; left: 15px; transform: translateY(10px);">
+                            </div>
                           </div>
                         </div>
 
@@ -229,7 +235,7 @@
                     </form>
                   </div>
                   <div class="modal-footer justify-center">
-                    <button type="button" id="cambiarPassword" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-lock"></i>Cambiar contrase&ntilde;a</button>
+                    <button type="submit" id="cambiarPasswordPerfil" class="bn bg-gray-500 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-lock"></i>Cambiar contrase&ntilde;a</button>
                   </div>
                 </div>
               </div>

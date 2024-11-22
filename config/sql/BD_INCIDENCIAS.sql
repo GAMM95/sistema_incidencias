@@ -2058,10 +2058,17 @@ AS
 BEGIN
     SET NOCOUNT ON;
 
+    -- 1. Verificar que la nueva contraseña y la confirmación coincidan
+    IF @USU_password_nueva != @USU_password_confirmacion
+    BEGIN
+        SELECT 'La nueva contraseña y la confirmación no coinciden' AS Resultado;
+        RETURN;
+    END
+
+    -- 2. Obtener el salt y la contraseña hasheada del usuario
     DECLARE @stored_password VARBINARY(64);  -- Contraseña almacenada (hash)
     DECLARE @salt UNIQUEIDENTIFIER;          -- Salt almacenado
 
-    -- 1. Obtener la contraseña hasheada y el salt del usuario
     SELECT @stored_password = USU_password, 
            @salt = USU_salt
     FROM USUARIO
@@ -2074,40 +2081,13 @@ BEGIN
         RETURN;
     END
 
-    -- 2. Hashear la contraseña actual proporcionada por el usuario para verificar si es correcta
-    DECLARE @hashed_password_actual VARBINARY(64);
-    DECLARE @password_bytes VARBINARY(100) = CONVERT(VARBINARY(100), @USU_password_actual);
-    DECLARE @salt_bytes VARBINARY(16) = CAST(@salt AS VARBINARY(16));
-    DECLARE @to_hash VARBINARY(116) = @password_bytes + @salt_bytes;
-
-    DECLARE @iterations INT = 10000;
-    WHILE @iterations > 0
-    BEGIN
-        SET @hashed_password_actual = HASHBYTES('SHA2_512', @to_hash);
-        SET @to_hash = @hashed_password_actual + @salt_bytes;
-        SET @iterations = @iterations - 1;
-    END
-
-    -- Si la contraseña actual no coincide con la almacenada, mostrar error
-    IF @hashed_password_actual != @stored_password
-    BEGIN
-        SELECT 'Contraseña actual incorrecta' AS Resultado;
-        RETURN;
-    END
-
-    -- 3. Verificar que la nueva contraseña y la confirmación coincidan
-    IF @USU_password_nueva != @USU_password_confirmacion
-    BEGIN
-        SELECT 'La nueva contraseña y la confirmación no coinciden' AS Resultado;
-        RETURN;
-    END
-
-    -- 4. Hashear la nueva contraseña antes de guardarla
+    -- 3. Hashear la nueva contraseña antes de guardarla
     DECLARE @hashed_password_nueva VARBINARY(64);
     DECLARE @nueva_password_bytes VARBINARY(100) = CONVERT(VARBINARY(100), @USU_password_nueva);
+    DECLARE @salt_bytes VARBINARY(16) = CAST(@salt AS VARBINARY(16));
     DECLARE @to_hash_nueva VARBINARY(116) = @nueva_password_bytes + @salt_bytes;
 
-    SET @iterations = 10000;
+    DECLARE @iterations INT = 10000;
     WHILE @iterations > 0
     BEGIN
         SET @hashed_password_nueva = HASHBYTES('SHA2_512', @to_hash_nueva);
@@ -2115,7 +2095,7 @@ BEGIN
         SET @iterations = @iterations - 1;
     END
 
-    -- 5. Actualizar la contraseña en la base de datos
+    -- 4. Actualizar la contraseña en la base de datos
     UPDATE USUARIO
     SET USU_password = @hashed_password_nueva
     WHERE USU_codigo = @USU_codigo;
@@ -2123,6 +2103,7 @@ BEGIN
     SELECT 'Contraseña cambiada exitosamente' AS Resultado;
 END;
 GO
+
 
 -- PROCEDIMIENTO ALMACENADO PARA RESTABLECER CONTRASEÑA
 CREATE OR ALTER PROCEDURE sp_restablecer_contrasena
@@ -2214,6 +2195,49 @@ BEGIN
     BEGIN
         SELECT 'Contraseña incorrecta' AS Resultado;
     END
+END;
+GO
+
+--PROCEDIMIENTO ALMACENADO PARA ACTUALIZAR DATOS DE USUARIO
+CREATE OR ALTER PROCEDURE sp_editar_usuario
+    @USU_codigo SMALLINT,
+    @USU_nombre VARCHAR(20),
+    @PER_codigo SMALLINT,
+    @ROL_codigo SMALLINT,
+    @ARE_codigo SMALLINT
+AS
+BEGIN
+    BEGIN TRY
+        BEGIN TRANSACTION;
+
+        -- Verificar si el nombre de usuario ya existe excluyendo el usuario actual
+        IF EXISTS (
+            SELECT 1 FROM USUARIO 
+            WHERE USU_nombre = @USU_nombre AND USU_codigo != @USU_codigo
+        )
+        BEGIN
+            -- En caso de que el nombre ya exista, devolver un error
+            RAISERROR('El nombre de usuario ya está en uso.', 16, 1);
+            ROLLBACK TRANSACTION;
+            RETURN;
+        END
+        -- Actualizar los datos del usuario
+        UPDATE USUARIO
+        SET 
+            USU_nombre = @USU_nombre,
+            PER_codigo = @PER_codigo,
+            ROL_codigo = @ROL_codigo,
+            ARE_codigo = @ARE_codigo
+        WHERE 
+            USU_codigo = @USU_codigo;
+
+        COMMIT TRANSACTION;
+        PRINT 'Usuario actualizado correctamente.';
+    END TRY
+    BEGIN CATCH
+        ROLLBACK TRANSACTION;
+        PRINT 'Error al actualizar usuario: ' + ERROR_MESSAGE();
+    END CATCH
 END;
 GO
 

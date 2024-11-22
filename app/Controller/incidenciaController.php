@@ -15,14 +15,8 @@ class IncidenciaController
     $this->bienModel = new BienModel();
   }
 
-  /**
-   * Método de controlador para registrar una incidencia - ADMINISTRADOR 
-   * 
-   * Este método se ejecuta cuando el administrador envía un formulario para registrar una nueva
-   * incidencia. Recoge los datos del formulario, los valida, y luego llama al método del modelo
-   * correspondiente para insertar la incidencia en la base de datos. Si la inserción es exitosa,
-   * redirige al administrador a una página de confirmación con el número de incidencia registrado.
-   */
+  
+   // Método de controlador para registrar una incidencia - ADMINISTRADOR 
   public function registrarIncidenciaAdministrador()
   {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
