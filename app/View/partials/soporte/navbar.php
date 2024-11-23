@@ -148,6 +148,27 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
         </li>
         <!-- fin de opcion Reportes -->
 
+        <!-- Mantenedor -->
+        <li class="nav-item pcoded-menu-caption">
+          <label>Mantenedores</label>
+        </li>
+        <li class="nav-item pcoded-hasmenu">
+          <a href="#!" class="nav-link ">
+            <span class="pcoded-micon">
+              <i class="feather icon-server"></i>
+            </span>
+            <span class="pcoded-mtext">Mantenedor</span>
+          </a>
+          <ul class="pcoded-submenu">
+            <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="modulo-categoria.php">Categor&iacute;as</a>
+            </li>
+            <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="modulo-solucion.php">Soluciones</a>
+            </li>
+          </ul>
+        </li>
+        <!-- Fin de opcion mantenedor -->
       </ul>
     </div>
   </div>

@@ -5,6 +5,7 @@ if (!isset($_SESSION['usuario'])) {
   header("Location: inicio.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
   exit();
 }
+$rol = $_SESSION['rol'];
 $action = $_GET['action'] ?? '';
 $CodCategoria = $_GET['CAT_codigo'] ?? '';
 
@@ -63,9 +64,20 @@ switch ($action) {
     </div>
   </div>
 
-  <?php include('app/View/partials/admin/navbar.php'); ?>
-  <?php include('app/View/partials/admin/header.php'); ?>
-  <?php include('app/View/Mantenimiento/mantenedorCategoria.php'); ?>
+  <!-- [ navigation menu ] start -->
+  <?php
+  if ($rol === 'Administrador') {
+    include('app/View/partials/admin/navbar.php');
+    include('app/View/partials/admin/header.php');
+    include('app/View/Mantenimiento/mantenedorCategoria.php');
+  } else if ($rol === 'Soporte') {
+    include('app/View/partials/soporte/navbar.php');
+    include('app/View/partials/soporte/header.php');
+    include('app/View/Mantenimiento/mantenedorCategoria.php');
+  }
+  ?>
+  <!-- [ Main Content ] end -->
+
 
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>

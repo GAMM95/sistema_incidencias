@@ -1264,6 +1264,29 @@ GROUP BY
     p.PER_apellidoPaterno;
 GO
 
+-- Vista para listar todos los eventos de auditoria
+CREATE OR ALTER VIEW vw_eventos_totales AS
+SELECT 
+    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
+     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
+    A.AUD_fecha,  -- Campo de fecha original
+    A.AUD_hora,   -- Campo de hora original
+    A.AUD_tabla,
+    A.AUD_usuario,
+	R.ROL_nombre,
+	U.USU_nombre,
+    PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
+    A.AUD_operacion,
+	AR.ARE_nombre,
+    A.AUD_ip,
+    A.AUD_nombreEquipo
+FROM AUDITORIA A
+INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
+INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+GO
+
 --Vista para ver los incios de sesion
 CREATE OR ALTER VIEW vw_auditoria_login AS
 SELECT 
@@ -2370,6 +2393,64 @@ BEGIN
 	UPDATE CATEGORIA SET EST_codigo = 1
     WHERE (EST_codigo = 2 OR  EST_codigo = '')
 	AND  CAT_codigo = @codigoCategoria;
+END;
+GO
+
+
+--PROCEDIMIENTO ALMACENADO PARA REGISTRAR SOLUCIONES
+CREATE OR ALTER PROCEDURE sp_registrar_solucion
+    @descripcionSolucion VARCHAR(60)
+AS
+BEGIN
+    -- Manejo de errores y transacciones
+    BEGIN TRY
+        BEGIN TRANSACTION;
+	        -- Inserta el area con EST_codigo siempre en 1
+        INSERT INTO SOLUCION (SOL_descripcion, EST_codigo)
+        VALUES (@descripcionSolucion, 1);
+
+        -- Confirmar la transaccion si todo sale bien
+        COMMIT TRANSACTION;
+    END TRY
+    BEGIN CATCH
+        -- Revertir la transaccion en caso de error
+        ROLLBACK TRANSACTION;
+
+        -- Mostrar mensaje de error
+        DECLARE @ErrorMessage NVARCHAR(4000);
+        DECLARE @ErrorSeverity INT;
+        DECLARE @ErrorState INT;
+
+        SELECT 
+            @ErrorMessage = ERROR_MESSAGE(), 
+            @ErrorSeverity = ERROR_SEVERITY(), 
+            @ErrorState = ERROR_STATE();
+
+        -- Lanzar el error capturado
+        RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END CATCH
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA HABILITAR SOLUCION
+CREATE OR ALTER PROCEDURE sp_habilitar_solucion
+	@codigoSolucion SMALLINT
+AS
+BEGIN
+	UPDATE SOLUCION SET EST_codigo = 1
+    WHERE (EST_codigo = 2 OR  EST_codigo = '')
+	AND  SOL_codigo = @codigoSolucion;
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR SOLUCION
+CREATE OR ALTER PROCEDURE sp_deshabilitar_solucion
+	@codigoSolucion SMALLINT
+AS
+BEGIN
+	UPDATE SOLUCION SET EST_codigo = 2 
+   WHERE (EST_codigo = 1 OR  EST_codigo = '')
+	AND  SOL_codigo = @codigoSolucion;
 END;
 GO
 

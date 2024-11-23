@@ -10,6 +10,13 @@ class AuditoriaController
     $this->auditoriaModel = new AuditoriaModel();
   }
 
+  // Metodo para listar los eventos totales en la tabla de auditoria
+  public function listarEventosTotales()
+  {
+    $resultadoEventosTotales = $this->auditoriaModel->listarEventosTotales();
+    return $resultadoEventosTotales;
+  }
+
   // Metodo para listar los registros de inicio de sesion en la tabla auditoria
   public function listarRegistrosInicioSesion()
   {

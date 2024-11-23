@@ -69,14 +69,12 @@
                         <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
                         <input type="date" id="fechaInicio_incidencias_totales" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de fecha de inicio -->
 
                       <!-- Fecha de fin -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
                         <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
                         <input type="date" id="fechaFin_incidencias_totales" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de fecha de fin -->
 
                       <!-- Botones alineados horizontalmente -->
                       <div class="ml-5 flex space-x-2">

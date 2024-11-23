@@ -29,7 +29,10 @@
           <!-- Inicio de titulos de las pestañas -->
           <ul class="nav nav-tabs mb-3" id="myTab" role="tablist">
             <li class="nav-item">
-              <a class="nav-link active text-uppercase" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Inicio de Sesi&oacute;n</a>
+              <a class="nav-link active text-uppercase" id="totales-tab" data-toggle="tab" href="#totales" role="tab" aria-controls="totales" aria-selected="true">Todos los eventos</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-uppercase" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Eventos de inicio de sesi&oacute;n</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Registros</a>
@@ -42,7 +45,106 @@
 
           <!-- Contenido de las pestañas -->
           <div class="tab-content grow" id="myTabContent">
-            <div class="tab-pane fade show active" id="login" role="tabpanel" aria-labelledby="login-tab">
+            <div class="tab-pane fade show active" id="totales" role="tabpanel" aria-labelledby="totales-tab">
+
+              <!-- Inicio de formulario de inicio de sesion de auditoría -->
+              <form id="formEventosTotales" action="auditoria.php?action=lista" method="GET" class="bg-white w-full text-xs ">
+                <div class="flex justify-center items-center">
+                  <!-- Nombre de persona -->
+                  <!-- <div class="w-full md:w-1/2 md:w-1/6 px-2 mb-2">
+                    <label for="persona" class="block mb-1 font-bold text-xs">Usuario:</label>
+                    <select id="personaEventoTotal" name="personaEventoTotal" class="border p-2 w-full text-xs cursor-pointer">
+                    </select>
+                  </div> -->
+
+                  <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                    <label for="persona" class="block mb-1 font-bold text-xs">Usuario:</label>
+                    <select id="personaEventoTotal" name="personaEventoTotal" class="border p-2 w-full text-xs cursor-pointer">
+                    </select>
+                  </div>
+
+
+                  <!-- Fecha de inicio -->
+                  <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                    <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                    <input type="date" id="fechaInicio_eventos_totales" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                  </div>
+
+                  <!-- Fecha de fin -->
+                  <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                    <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                    <input type="date" id="fechaFin_eventos_totales" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                  </div>
+
+                  <!-- Botones alineados horizontalmente -->
+                  <div class="ml-5 flex space-x-2">
+                    <!-- Botón de buscar -->
+                    <button type="submit" id="filtrarListaEventosTotales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                      <i class="feather icon-filter"></i>
+                    </button>
+
+                    <!-- Botón de nueva consulta -->
+                    <button type="button" id="limpiarCamposEventosTotales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                      <i class="feather icon-refresh-cw"></i>
+                    </button>
+                  </div>
+                  <!-- Fin de botones alineados horizontalmente -->
+                </div>
+
+                <!-- Inicio de tabla de inicios de sesion -->
+                <div class="relative sm:rounded-lg mt-2">
+                  <div class="max-w-full overflow-hidden sm:rounded-lg">
+                    <table id="tablaLogeos" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                      <!-- Encabezado de la tabla -->
+                      <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                        <tr>
+                          <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+                          <th scope="col" class="px-3 py-2 text-center">Fecha y Hora del evento </th>
+                          <th scope="col" class="px-3 py-2 text-center">Evento</th>
+                          <th scope="col" class="px-3 py-2 text-center">Rol</th>
+                          <th scope="col" class="px-3 py-2 text-center">Usuario</th>
+                          <th scope="col" class="px-3 py-2 text-center">Nombre Completo</th>
+                          <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
+                          <th scope="col" class="px-3 py-2 text-center">IP</th>
+                          <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
+                        </tr>
+                      </thead>
+                      <!-- Fin de encabezado de la tabla -->
+
+                      <!-- Cuerpo de la tabla -->
+                      <tbody>
+                        <?php if (!empty($resultadoEventosTotales)): ?>
+                          <?php $item = 1; // Iniciar contador para el ítem 
+                          ?>
+                          <?php foreach ($resultadoEventosTotales as $totales): ?>
+                            <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                              <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['fechaFormateada']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['AUD_operacion']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ROL_nombre']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['USU_nombre']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['NombreCompleto']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['AUD_ip']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['AUD_nombreEquipo']) ?></td>
+                            </tr>
+                          <?php endforeach; ?>
+                        <?php else: ?>
+                          <tr>
+                            <td colspan="9" class="text-center py-3">No se ha registrado ning&uacute;n evento.</td>
+                          </tr>
+                        <?php endif; ?>
+                      </tbody>
+                      <!-- Fin de cuerpo de tabla -->
+                    </table>
+                  </div>
+                </div>
+                <!-- Fin de tabla de inicios de sesion -->
+              </form>
+              <!-- Fin de formulario de inicio de sesion de auditoría -->
+            </div>
+
+            <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
 
               <!-- Inicio de formulario de inicio de sesion de auditoría -->
               <form id="formaAuditoriaLogin" action="auditoria.php?action=listarRegistrosInicioSesion" method="GET" class="bg-white w-full text-xs ">

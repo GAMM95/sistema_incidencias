@@ -82,6 +82,7 @@ switch ($action) {
 
   default:
     // Si no hay acción, obtener la lista de registros por defecto
+    $resultadoEventosTotales = $auditoriaController->listarEventosTotales();
     $resultadoAuditoriaLogin = $auditoriaController->listarRegistrosInicioSesion();
     $resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarRegistrosIncidencias();
     $resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
@@ -136,6 +137,7 @@ switch ($action) {
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
   <!-- Funcionalidades -->
+  <script src="./app/View/func/Auditoria/func_auditoria_eventos_totales.js"></script>
   <script src="./app/View/func/Auditoria/func_auditoria_login.js"></script>
   <script src="./app/View/func/Auditoria/func_auditoria_registro_incidencia.js"></script>
   <script src="./app/View/func/Auditoria/func_auditoria_registro_recepcion.js"></script>

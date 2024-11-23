@@ -190,6 +190,9 @@ $incidenciasCerrar = $mantenimientoModel->contarIncidenciasFinalizadas();
             <li class="transition-transform duration-300 hover:translate-x-1">
               <a href="modulo-categoria.php">Categor&iacute;as</a>
             </li>
+            <li class="transition-transform duration-300 hover:translate-x-1">
+              <a href="modulo-solucion.php">Soluciones</a>
+            </li>
           </ul>
         </li>
         <!-- Fin de opcion mantenedor -->

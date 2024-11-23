@@ -13,7 +13,8 @@ class SolucionModel extends Conexion
   {
     $conector = parent::getConexion();
     $query = "SELECT * FROM SOLUCION 
-      ORDER BY SOL_codigo";
+      WHERE EST_codigo <> 2
+      ORDER BY SOL_descripcion";
     $stmt = $conector->prepare($query);
     $stmt->execute();
     $resultado = $stmt->fetchAll(); 

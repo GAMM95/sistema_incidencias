@@ -6,8 +6,38 @@ $(document).ready(function () {
     "timeOut": "2000"
   };
 
-  
-  $('#formaAuditoriaLogin').submit(function (event) {
+  // SETEO DE COMBO usuario
+  $.ajax({
+    url: 'ajax/getPersonaAuditoria.php',
+    type: 'GET',
+    dataType: 'json',
+    success: function (data) {
+      var select = $('#personaEventoTotal');
+      select.empty();
+      select.append('<option value="" selected disabled>Seleccione un usuario</option>');
+      $.each(data, function (index, value) {
+        select.append('<option value="' + value.USU_codigo + '">' + value.persona + '</option>');
+      });
+    },
+    error: function (error) {
+      console.error(error);
+    }
+  });
+
+  // BUSCADOR PARA EL COMBO AREA 
+  $('#personaEventoTotal').select2({
+    allowClear: true,
+    width: '100%',
+    dropdownCssClass: 'text-xs', // Use Tailwind CSS class
+    language: {
+      noResults: function () {
+        return "No se encontraron resultados";
+      }
+    }
+  });
+
+
+  $('#formEventosTotales').submit(function (event) {
     event.preventDefault(); // Evita el envío del formulario por defecto
 
     // Verifica si los campos y las fechas son válidos

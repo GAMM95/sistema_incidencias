@@ -99,7 +99,7 @@ class BienModel extends Conexion
 
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('BIEN', 'Actualización de bien');
+        $auditoria->registrarEvento('BIEN', 'Actualizar bien');
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");

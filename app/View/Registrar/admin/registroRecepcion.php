@@ -242,7 +242,7 @@
                   <td class='px-6 py-2 text-center'><?= $recepcion['IMP_descripcion']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioRecepcion']; ?></td>
                   <td class="px-6 py-2 text-center flex space-x-2">
-                    <button type="button" class="eliminar-recepcion bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center">
+                    <button type="button" class="eliminar-recepcion bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Eliminar recepci&oacute;n">
                       <i class="feather icon-trash-2"></i>
                     </button>
                   </td>

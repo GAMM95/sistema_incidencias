@@ -15,8 +15,8 @@ class IncidenciaController
     $this->bienModel = new BienModel();
   }
 
-  
-   // Método de controlador para registrar una incidencia - ADMINISTRADOR 
+
+  // Método de controlador para registrar una incidencia - ADMINISTRADOR 
   public function registrarIncidenciaAdministrador()
   {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -395,17 +395,7 @@ class IncidenciaController
     }
   }
 
-
-  /**
-   * Método de controlador para consultar incidencias filtradas - USUARIO
-   * 
-   * Este método permite a los usuarios consultar incidencias basadas en varios filtros opcionales,
-   * incluyendo área, código patrimonial, estado, fecha de inicio y fecha de fin. Los parámetros se obtienen
-   * de la solicitud GET, y luego se utiliza el modelo para realizar la consulta correspondiente en la base de datos.
-   * 
-   * Retorno:
-   * - Array con los resultados de la consulta o `false` si no se encontraron resultados.
-   */
+  // Método de controlador para consultar incidencias filtradas - USUARIO
   public function consultarIncidenciaUsuario($area = NULL, $estado = null, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {

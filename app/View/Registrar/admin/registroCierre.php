@@ -180,12 +180,22 @@
         <!-- Fin de operatividad de cierre -->
 
         <!-- Solucion del cierre -->
-        <div class="w-full md:w-2/5 px-2 mb-2">
-          <label for="solucion" class="block font-bold mb-1 text-xs">Soluci&oacute;n:</label>
-          <select id="solucion" name="solucion" class="border p-2 w-full text-xs cursor-pointer rounded-md">
-          </select>
+        <div class="w-full md:w-2/5 px-2 mb-2 flex items-end">
+          <div class="w-full">
+            <label for="solucion" class="block font-bold mb-1 text-xs">Soluci&oacute;n:</label>
+            <select id="solucion" name="solucion" class="border p-2 w-full text-xs cursor-pointer rounded-md">
+            </select>
+          </div>
+          <!-- Botón al costado del select -->
+          <a href="modulo-solucion.php"
+            class="ml-2 bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md flex items-center hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            title="Agregar nueva soluci&oacute;n"
+            aria-label="Agregar nueva solución">
+            <i class="feather icon-plus"></i>
+          </a>
+
         </div>
-        <!-- Fin de solucion de cierre -->
+        <!-- Fin de solucion de cierre con botón al costado -->
       </div>
       <!-- Fin de primera fila del formulario -->
 
@@ -296,7 +306,7 @@
                 </button>
 
                 <!-- Botón de Eliminar -->
-                <button type="button" class="eliminar-cierre bn btn-danger text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center">
+                <button type="button" class="eliminar-cierre bn btn-danger text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center" title="Eliminar cierre">
                   <i class="feather icon-trash-2"></i>
                 </button>
               </td>

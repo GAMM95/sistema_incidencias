@@ -71,6 +71,26 @@ class AuditoriaModel extends Conexion
     }
   }
 
+  // Metodo para listar los eventos totales en la tabla de auditoria
+  public function listarEventosTotales()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_eventos_totales
+        ORDER BY AUD_fecha DESC, AUD_hora DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al listar eventos totales en la tabla de auditoria: " . $e->getMessage());
+    }
+  }
+
   // Metodo para listar los registros de inicio de sesion en la tabla auditoria
   public function listarRegistrosInicioSesion()
   {
@@ -206,7 +226,8 @@ class AuditoriaModel extends Conexion
   }
 
   // Metodo para listar registros de asignaciones en la tabla de auditoria
-  public function listarRegistrosAsignaciones(){
+  public function listarRegistrosAsignaciones()
+  {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {

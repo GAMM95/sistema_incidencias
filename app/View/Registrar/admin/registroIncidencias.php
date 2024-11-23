@@ -197,21 +197,7 @@
       <div class="flex justify-between items-center">
         <input type="text" id="termino" class="px-4 py-2 border rounded-md focus:outline-none focus:ring-2 focus:ring-blue-300 text-xs" placeholder="Buscar incidencia..." oninput="filtrarTablaIncidencias()" />
       </div>
-      <!-- Fin de busqueda -->
-      <!-- <div id="paginadorIncidencias" class="flex justify-end items-center ">
-        <?php if ($totalPages > 1) : // Mostrar el contenedor solo si hay más de una página 
-        ?>
-          <div class="flex justify-end items-center mt-1">
-            <?php if ($page > 1) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageTablaListarIncidencias(<?php echo $page - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
-            <?php endif; ?>
-            <span class="px-2 py-1 bg-gray-400 text-gray-200"><?php echo $page; ?> de <?php echo $totalPages; ?></span>
-            <?php if ($page < $totalPages) : ?>
-              <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageTablaListarIncidencias(<?php echo $page + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
-            <?php endif; ?>
-          </div>
-        <?php endif; ?>
-      </div> -->
+
     </div>
     <!-- Fin de la paginacion -->
 
@@ -283,7 +269,7 @@
                     </button>
 
                     <!-- Botón de Eliminar -->
-                    <button type="button" class="eliminar-incidencia bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center">
+                    <button type="button" class="eliminar-incidencia bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Eliminar incidencia">
                       <i class="feather icon-trash-2"></i>
                     </button>
                   </td>
