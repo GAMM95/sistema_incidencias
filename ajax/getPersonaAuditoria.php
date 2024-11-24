@@ -29,3 +29,4 @@ $personas = $personaAuditoria->getPersonaAuditoria();
 
 header('Content-Type: application/json');
 echo json_encode($personas);
+exit();

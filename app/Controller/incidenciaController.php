@@ -327,16 +327,8 @@ class IncidenciaController
       exit();
     }
   }
-  /**
-   * Método de controlador para consultar incidencias filtradas - ADMINISTRADOR
-   * 
-   * Este método permite al administrador consultar incidencias basadas en varios filtros opcionales,
-   * incluyendo área, estado, fecha de inicio y fecha de fin. Los parámetros se obtienen de la solicitud
-   * GET, y luego se utiliza el modelo para realizar la consulta correspondiente en la base de datos.
-   * 
-   * Retorno:
-   * - Array con los resultados de la consulta o `false` si no se encontraron resultados.
-   */
+  
+  // Método de controlador para consultar incidencias filtradas - ADMINISTRADOR
   public function consultarIncidenciasPendientesAdministrador($area = NULL, $estado = null, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -353,17 +345,7 @@ class IncidenciaController
     }
   }
 
-  /**
-   * Método de controlador para consultar las incidencias totales - ADMINISTRADOR
-   * 
-   * Este método permite al administrador consultar todas las incidencias basadas en varios filtros
-   * opcionales, incluyendo área, código patrimonial, fecha de inicio y fecha de fin. Los parámetros
-   * se obtienen de la solicitud GET, y luego se utiliza el modelo para realizar la consulta
-   * correspondiente en la base de datos.
-   * 
-   * Retorno:
-   * - Array con los resultados de la consulta o `false` si no se encontraron resultados.
-   */
+  // Método de controlador para consultar las incidencias totales - ADMINISTRADOR
   public function consultarIncidenciasTotales($area = NULL, $codigoPatrimonial = null, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {

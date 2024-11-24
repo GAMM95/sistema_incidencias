@@ -71,6 +71,30 @@ class AuditoriaModel extends Conexion
     }
   }
 
+  // Metodo para consultar eventos totales - auditoria
+ public function buscarEventosTotales($usuario, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_eventos_totales :usuario, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al consultar eventos totales en la tabla de auditoria: " . $e->getMessage());
+      return null;
+    }
+  }
+
   // Metodo para listar los eventos totales en la tabla de auditoria
   public function listarEventosTotales()
   {

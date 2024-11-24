@@ -1,94 +1,96 @@
 <?php
 session_start();
-// Verificar si no hay una sesión iniciada
+
+// Verificar si hay una sesión activa, si no redirigir
 if (!isset($_SESSION['usuario'])) {
-  header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
-  exit();
+    header("Location: index.php");
+    exit();
 }
 
 require_once 'app/Controller/auditoriaController.php';
-
 $auditoriaController = new AuditoriaController();
 
 $rol = $_SESSION['rol'];
+$usuario = $_GET['codigoUsuario'] ?? '';  // Usuario para filtrar si es necesario
 $action = $_GET['action'] ?? '';
 $fechaInicio = $_GET['fechaInicio'] ?? '';
 $fechaFin = $_GET['fechaFin'] ?? '';
 
-function generarTabla($resultado, $itemCount)
+// Función genérica para generar tablas de auditoría
+function generarTabla($resultado, $itemCount, $columnas)
 {
-  $html = '';
-  if (!empty($resultado)) {
-    foreach ($resultado as $item) {
-      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
-      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['fechaFormateada']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['ROL_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['USU_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['NombreCompleto']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['ARE_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_ip']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_nombreEquipo']) . '</td>';
-      $html .= '</tr>';
+    $html = '';
+    if (!empty($resultado)) {
+        foreach ($resultado as $item) {
+            $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+            $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
+
+            foreach ($columnas as $columna) {
+                $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item[$columna]) . '</td>';
+            }
+
+            $html .= '</tr>';
+        }
+    } else {
+        $html = '<tr><td colspan="' . (count($columnas) + 1) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
     }
-  } else {
-    $html = '<tr><td colspan="8" class="text-center py-3">No se encontraron registros.</td></tr>';
-  }
-  return $html;
+    return $html;
 }
 
-function generarTablaRegistros($resultado, $itemCount)
+// Función para manejar los filtros de fecha, usuario y obtener resultados
+function obtenerRegistros($action, $controller, $usuario, $fechaInicio, $fechaFin)
 {
-  $html = '';
-  if (!empty($resultado)) {
-    foreach ($resultado as $item) {
-      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
-      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['fechaFormateada']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['NombreCompleto']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['INC_numero_formato']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['ARE_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_ip']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item['AUD_nombreEquipo']) . '</td>';
-      $html .= '</tr>';
+    switch ($action) {
+        case 'consultarEventosTotales':
+            return $controller->consultarEventosTotales($usuario, $fechaInicio, $fechaFin);
+        case 'consultarEventosLogin':
+            return $controller->consultarRegistrosInicioSesion($fechaInicio, $fechaFin);
+        case 'listarRegistrosIncidencias':
+            return $controller->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
+        case 'listarRegistrosRecepciones':
+            return $controller->consultarRegistrosRecepciones($fechaInicio, $fechaFin);
+        default:
+            return [];
     }
-  } else {
-    $html = '<tr><td colspan="7" class="text-center py-3">No se encontraron registros.</td></tr>';
-  }
-  return $html;
 }
 
-switch ($action) {
-  case 'listarRegistrosInicioSesion':
-    error_log("Fecha Inicio: " . $fechaInicio);
-    error_log("Fecha Fin: " . $fechaFin);
-    $resultadoAuditoriaLogin = $auditoriaController->consultarRegistrosInicioSesion($fechaInicio, $fechaFin);
-    echo generarTabla($resultadoAuditoriaLogin, 1);
-    exit;
-
-  case 'listarRegistrosIncidencias':
-    error_log("Fecha Inicio: " . $fechaInicio);
-    error_log("Fecha Fin: " . $fechaFin);
-    $resultadoAuditoriaRegistroIncidencias = $auditoriaController->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
-    echo generarTablaRegistros($resultadoAuditoriaRegistroIncidencias, 1);
-    exit;
-
-  case 'listarRegistrosRecepciones':
-    error_log("Fecha Inicio: " . $fechaInicio);
-    error_log("Fecha Fin: " . $fechaFin);
-    $resultadoAuditoriaRegistroRecepciones = $auditoriaController->consultarRegistrosRecepciones($fechaInicio, $fechaFin);
-    echo generarTablaRegistros($resultadoAuditoriaRegistroRecepciones, 1);
-    exit;
-
-  default:
-    // Si no hay acción, obtener la lista de registros por defecto
-    $resultadoEventosTotales = $auditoriaController->listarEventosTotales();
-    $resultadoAuditoriaLogin = $auditoriaController->listarRegistrosInicioSesion();
-    $resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarRegistrosIncidencias();
-    $resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
-    $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
+// Mapear las acciones a los correspondientes campos a mostrar en la tabla
+function obtenerColumnasParaAccion($action)
+{
+    switch ($action) {
+        case 'consultarEventosTotales':
+            return ['fechaFormateada', 'AUD_operacion', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
+        case 'consultarEventosLogin':
+            return ['fechaFormateada', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
+        case 'listarRegistrosIncidencias':
+        case 'listarRegistrosRecepciones':
+            return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
+        default:
+            return [];
+    }
 }
+
+// Ejecutar la acción solicitada y generar la tabla de resultados
+if ($action) {
+    error_log("Fecha Inicio: " . $fechaInicio);
+    error_log("Fecha Fin: " . $fechaFin);
+
+    // Pasar correctamente el parámetro $usuario en la función obtenerRegistros
+    $resultado = obtenerRegistros($action, $auditoriaController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+
+    echo generarTabla($resultado, 1, $columnas);
+    exit();
+}
+
+// Acción por defecto: mostrar todas las tablas
+$resultadoEventosTotales = $auditoriaController->listarEventosTotales();
+$resultadoAuditoriaLogin = $auditoriaController->listarRegistrosInicioSesion();
+$resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarRegistrosIncidencias();
+$resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
+$resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
 ?>
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -133,14 +135,21 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
 
-
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
+
   <!-- Funcionalidades -->
   <script src="./app/View/func/Auditoria/func_auditoria_eventos_totales.js"></script>
-  <script src="./app/View/func/Auditoria/func_auditoria_login.js"></script>
+  <script src="./app/View/func/Auditoria/func_auditoria_eventos_login.js"></script>
+
+
   <script src="./app/View/func/Auditoria/func_auditoria_registro_incidencia.js"></script>
   <script src="./app/View/func/Auditoria/func_auditoria_registro_recepcion.js"></script>
+
+  <!-- Reportes de auditoría -->
+  <script src="./app/View/func/ReportesAuditoria/reporteEventosTotales.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/reporteEventosTotalesFiltro.js"></script>
+
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">

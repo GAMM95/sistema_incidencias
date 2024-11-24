@@ -32,7 +32,7 @@
               <a class="nav-link active text-uppercase" id="totales-tab" data-toggle="tab" href="#totales" role="tab" aria-controls="totales" aria-selected="true">Todos los eventos</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Eventos de inicio de sesi&oacute;n</a>
+              <a class="nav-link text-uppercase" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Eventos de login</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Registros</a>
@@ -46,55 +46,57 @@
           <!-- Contenido de las pestañas -->
           <div class="tab-content grow" id="myTabContent">
             <div class="tab-pane fade show active" id="totales" role="tabpanel" aria-labelledby="totales-tab">
-
               <!-- Inicio de formulario de inicio de sesion de auditoría -->
-              <form id="formEventosTotales" action="auditoria.php?action=lista" method="GET" class="bg-white w-full text-xs ">
+              <form id="formEventosTotales" action="auditoria.php?action=consultarEventosTotales" method="GET" class="bg-white w-full text-xs ">
                 <div class="flex justify-center items-center">
                   <!-- Nombre de persona -->
-                  <!-- <div class="w-full md:w-1/2 md:w-1/6 px-2 mb-2">
-                    <label for="persona" class="block mb-1 font-bold text-xs">Usuario:</label>
-                    <select id="personaEventoTotal" name="personaEventoTotal" class="border p-2 w-full text-xs cursor-pointer">
-                    </select>
-                  </div> -->
-
                   <div class="w-full px-2 mb-2" style="max-width: 250px;">
-                    <label for="persona" class="block mb-1 font-bold text-xs">Usuario:</label>
-                    <select id="personaEventoTotal" name="personaEventoTotal" class="border p-2 w-full text-xs cursor-pointer">
+                    <label for="personaEventosTotales" class="block mb-1 font-bold text-xs">Usuario:</label>
+                    <select id="personaEventosTotales" name="personaEventosTotales" class="border p-2 w-full text-xs cursor-pointer">
                     </select>
                   </div>
 
-
                   <!-- Fecha de inicio -->
                   <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                    <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                    <input type="date" id="fechaInicio_eventos_totales" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                    <label for="fechaInicioEventosTotales" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                    <input type="date" id="fechaInicioEventosTotales" name="fechaInicioEventosTotales" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                   </div>
 
                   <!-- Fecha de fin -->
                   <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                    <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                    <input type="date" id="fechaFin_eventos_totales" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                    <label for="fechaFinEventosTotales" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                    <input type="date" id="fechaFinEventosTotales" name="fechaFinEventosTotales" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                   </div>
 
                   <!-- Botones alineados horizontalmente -->
                   <div class="ml-5 flex space-x-2">
-                    <!-- Botón de buscar -->
+                    <!-- Botón de filtrar -->
                     <button type="submit" id="filtrarListaEventosTotales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
                       <i class="feather icon-filter"></i>
+                    </button>
+
+                    <!-- Boton generar reporte filtrado-->
+                    <button type="button" id="reporteEventosTotalesFiltro" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
+                      <i class="feather mr-2 icon-file"></i>Reporte filtrado
                     </button>
 
                     <!-- Botón de nueva consulta -->
                     <button type="button" id="limpiarCamposEventosTotales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                       <i class="feather icon-refresh-cw"></i>
                     </button>
+
+                    <!-- Boton generar reporte -->
+                    <div class="flex justify-center space-x-2">
+                      <button type="button" id="reporte-eventos-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                    </div>
                   </div>
                   <!-- Fin de botones alineados horizontalmente -->
                 </div>
 
-                <!-- Inicio de tabla de inicios de sesion -->
+                <!-- Inicio de tabla de eventos totales -->
                 <div class="relative sm:rounded-lg mt-2">
                   <div class="max-w-full overflow-hidden sm:rounded-lg">
-                    <table id="tablaLogeos" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                    <table id="tablaEventosTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                       <!-- Encabezado de la tabla -->
                       <thead class="text-xs text-gray-700 uppercase bg-gray-300">
                         <tr>
@@ -145,43 +147,56 @@
             </div>
 
             <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
-
               <!-- Inicio de formulario de inicio de sesion de auditoría -->
-              <form id="formaAuditoriaLogin" action="auditoria.php?action=listarRegistrosInicioSesion" method="GET" class="bg-white w-full text-xs ">
+              <form id="formAuditoriaLogin" action="auditoria.php?action=consultarEventosLogin" method="GET" class="bg-white w-full text-xs ">
                 <div class="flex justify-center items-center">
+                   <!-- Nombre de persona -->
+                   <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                    <label for="usuarioEventosLogin" class="block mb-1 font-bold text-xs">Usuario:</label>
+                    <select id="usuarioEventosLogin" name="usuarioEventosLogin" class="border p-2 w-full text-xs cursor-pointer">
+                    </select>
+                  </div>
+
                   <!-- Fecha de inicio -->
                   <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                    <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                    <input type="date" id="fechaInicio" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                    <label for="fechaInicioEventosLogin" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                    <input type="date" id="fechaInicioEventosLogin" name="fechaInicioEventosLogin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                   </div>
-                  <!-- Fin de fecha de inicio -->
 
                   <!-- Fecha de fin -->
                   <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                    <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                    <input type="date" id="fechaFin" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                    <label for="fechaFinEventosLogin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                    <input type="date" id="fechaFinEventosLogin" name="fechaFinEventosLogin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                   </div>
-                  <!-- Fin de fecha de fin -->
 
                   <!-- Botones alineados horizontalmente -->
                   <div class="ml-5 flex space-x-2">
-                    <!-- Botón de buscar -->
-                    <button type="submit" id="filtrarListaAuditoriaLogeos" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-orange-500 rounded-md flex justify-center items-center">
-                      <i class="feather icon-search"></i>
+                    <!-- Botón de filtrar -->
+                    <button type="submit" id="filtrarListaEventosLogin" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                      <i class="feather icon-filter"></i>
+                    </button>
+
+                    <!-- Boton generar reporte filtrado-->
+                    <button type="button" id="reporteEventosLoginFiltro" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
+                      <i class="feather mr-2 icon-file"></i>Reporte filtrado
                     </button>
 
                     <!-- Botón de nueva consulta -->
-                    <button type="button" id="limpiarCampos" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                    <button type="button" id="limpiarCamposEventosLogin" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                       <i class="feather icon-refresh-cw"></i>
                     </button>
+
+                    <!-- Boton generar reporte -->
+                    <div class="flex justify-center space-x-2">
+                      <button type="button" id="reporteEventosLogin" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                    </div>
                   </div>
                   <!-- Fin de botones alineados horizontalmente -->
                 </div>
-
                 <!-- Inicio de tabla de inicios de sesion -->
                 <div class="relative sm:rounded-lg mt-2">
                   <div class="max-w-full overflow-hidden sm:rounded-lg">
-                    <table id="tablaLogeos" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                    <table id="tablaEventosLogin" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                       <!-- Encabezado de la tabla -->
                       <thead class="text-xs text-gray-700 uppercase bg-orange-300">
                         <tr>

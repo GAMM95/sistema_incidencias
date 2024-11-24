@@ -3550,6 +3550,39 @@ BEGIN
 END
 GO
 
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS TOTALES - AUDITORIA
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_totales
+  @usuario INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT 
+    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
+     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
+    A.AUD_fecha,  -- Campo de fecha original
+    A.AUD_hora,   -- Campo de hora original
+    A.AUD_tabla,
+    A.AUD_usuario,
+    R.ROL_nombre,
+    U.USU_nombre,
+    PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
+    A.AUD_operacion,
+    AR.ARE_nombre,
+    A.AUD_ip,
+    A.AUD_nombreEquipo
+  FROM AUDITORIA A
+  INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
+  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+  WHERE (@fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio)
+    AND (@fechaFin IS NULL OR A.AUD_fecha <= @fechaFin)
+    AND (@usuario IS NULL OR A.AUD_usuario = @usuario)
+  ORDER BY AUD_fecha DESC, AUD_hora DESC;
+END
+GO
+
 --PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LOS INICIOS DE SESION
 CREATE OR ALTER PROCEDURE sp_consultar_auditoria_login
     @fechaInicio DATE = NULL,

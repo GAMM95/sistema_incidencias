@@ -12,20 +12,22 @@ $(document).ready(function () {
     type: 'GET',
     dataType: 'json',
     success: function (data) {
-      var select = $('#personaEventosTotales');
+      console.log("Datos recibidos del servidor:", data); // Depuración
+      var select = $('#usuarioEventosLogin');
       select.empty();
       select.append('<option value="" selected disabled>Seleccione un usuario</option>');
       $.each(data, function (index, value) {
         select.append('<option value="' + value.USU_codigo + '">' + value.persona + '</option>');
       });
     },
+
     error: function (error) {
       console.error(error);
     }
   });
 
   // BUSCADOR PARA EL COMBO AREA 
-  $('#personaEventosTotales').select2({
+  $('#usuarioEventosLogin').select2({
     allowClear: true,
     width: '100%',
     dropdownCssClass: 'text-xs', // Use Tailwind CSS class
@@ -37,23 +39,23 @@ $(document).ready(function () {
   });
 
   // Evento para limpiar los campos y renderizar la tabla
-  function nuevaConsultaEventosTotales() {
+  function nuevaConsultaEventosLogin() {
     // Limpiar los campos de fecha y el input de persona (resetea el formulario)
-    $('#fechaInicioEventosTotales').val('');
-    $('#fechaFinEventosTotales').val('');
-    $('#personaEventosTotales').val(null).trigger('change');  // Reset del select2 con trigger
+    $('#fechaInicioEventosLogin').val('');
+    $('#fechaFinEventosLogin').val('');
+    $('#usuarioEventosLogin').val(null).trigger('change');  // Reset del select2 con trigger
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
-      url: 'auditoria.php?action=consultarEventosTotales', // No pasamos filtros en esta consulta
+      url: 'auditoria.php?action=consultarEventosLogin', // No pasamos filtros en esta consulta 
       type: 'GET',
       dataType: 'html', // Esperamos HTML para renderizar la tabla
       success: function (response) {
         console.log("Resultados de nueva consulta (sin filtros):", response);
         // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaEventosTotales tbody').empty();
+        $('#tablaEventosLogin tbody').empty();
         // Actualiza el contenido de la tabla con la respuesta
-        $('#tablaEventosTotales tbody').html(response);
+        $('#tablaEventosLogin tbody').html(response);
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
@@ -61,13 +63,13 @@ $(document).ready(function () {
     });
   }
 
-  $('#limpiarCamposEventosTotales').on('click', nuevaConsultaEventosTotales);
+  $('#limpiarCamposEventosLogin').on('click', nuevaConsultaEventosLogin);
 
-  $('#formEventosTotales').submit(function (event) {
+  $('#formAuditoriaLogin').submit(function (event) {
     event.preventDefault(); // Evita el envío del formulario por defecto
 
     // Verifica si los campos y las fechas son válidos
-    if (!validarCamposEventosTotales() || !validarFechasEventosTotalesFiltro()) {
+    if (!validarCamposEventosLogin() || !validarFechasEventosLoginFiltro()) {
       return; // Detiene el envío si los campos o las fechas no son válidos
     }
 
@@ -84,39 +86,39 @@ $(document).ready(function () {
 
     // Realiza la solicitud AJAX
     $.ajax({
-      url: 'auditoria.php?action=consultarEventosTotales',
+      url: 'auditoria.php?action=consultarEventosLogin',
       type: 'GET',
       data: dataObject,
       success: function (response) {
         console.log("Resultados filtrados:", response); // Depuración
         // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaEventosTotales tbody').empty();
+        $('#tablaEventosLogin tbody').empty();
         // Actualiza el contenido de la tabla con la respuesta
-        $('#tablaEventosTotales tbody').html(response);
+        $('#tablaEventosLogin tbody').html(response);
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
       }
     });
 
-    function validarCamposEventosTotales() {
+    function validarCamposEventosLogin() {
       var valido = false;
       var mensajeError = '';
 
-      var faltaUsuario = ($('#personaEventosTotales').val() !== null && $('#personaEventosTotales').val().trim() !== '');
-      var fechaInicioSeleccionada = ($('#fechaInicioEventosTotales').val() !== null && $('#fechaInicioEventosTotales').val().trim() !== '');
-      var fechaFinSeleccionada = ($('#fechaFinEventosTotales').val() !== null && $('#fechaFinEventosTotales').val().trim() !== '');
+      var faltaUsuario = ($('#usuarioEventosLogin').val() !== null && $('#usuarioEventosLogin').val().trim() !== '');
+      var fechaInicioSeleccionada = ($('#fechaInicioEventosLogin').val() !== null && $('#fechaInicioEventosLogin').val().trim() !== '');
+      var fechaFinSeleccionada = ($('#fechaFinEventosLogin').val() !== null && $('#fechaFinEventosLogin').val().trim() !== '');
 
       // Verificar si al menos un campo está lleno
       if (faltaUsuario && fechaInicioSeleccionada || fechaFinSeleccionada) {
         mensajeError = 'Debe completar al menos un campo para realizar la b&uacute;squeda.';
         valido = true;
-      } else if(faltaUsuario) {
+      } else if (faltaUsuario) {
         mensajeError = 'Debe seleccionar un usuario para realizar la b&uacute;squeda.';
         valido = true;
-      } else if(fechaInicioSeleccionada || fechaFinSeleccionada) {
+      } else if (fechaInicioSeleccionada || fechaFinSeleccionada) {
         mensajeError = 'Debe ingresar al menos un campo para realizar la b&uacute;squeda.';
-        valido = true; 
+        valido = true;
       }
 
       if (!valido) {
@@ -165,16 +167,16 @@ $(document).ready(function () {
   // }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicioEventosTotales, #fechaFinEventosTotales, #personaEventosTotales').on('change', function () {
-    validarCamposEventosTotalesFiltro(); // Llama a la validación de fechas y de la persona seleccionada
+  $('#fechaInicioEventosLogin, #fechaFinEventosLogin, #usuarioEventosLogin').on('change', function () {
+    validarCamposEventosLoginFiltro(); // Llama a la validación de fechas y de la persona seleccionada
   });
 });
 
 
-function validarFechasEventosTotalesFiltro() {
+function validarFechasEventosLoginFiltro() {
   // Obtener valores de los campos de fecha
-  const fechaInicio = new Date($('#fechaInicioEventosTotales').val());
-  const fechaFin = new Date($('#fechaFinEventosTotales').val());
+  const fechaInicio = new Date($('#fechaInicioEventosLogin').val());
+  const fechaFin = new Date($('#fechaFinEventosLogin').val());
 
   // Obtener la fecha actual
   const fechaHoy = new Date();
@@ -209,20 +211,20 @@ function validarFechasEventosTotalesFiltro() {
 }
 
 // Agregar eventos para validar fechas cuando cambien
-$('#fechaInicioEventosTotales, #fechaFinEventosTotales').on('change', function () {
-  validarFechasEventosTotalesFiltro();
+$('#fechaInicioEventosLogin, #fechaFinEventosLogin').on('change', function () {
+  validarFechasEventosLoginFiltro();
 });
 
 
 // Seleccionar los elementos de los campos de fecha, persona y el botón de reporte
 // const personaSeleccionada = document.getElementById("personaEventosTotales");
-const fechaInicio = document.getElementById("fechaInicioEventosTotales");
-const fechaFin = document.getElementById("fechaFinEventosTotales");
-const reporteButton = document.getElementById("reporteEventosTotalesFiltro");
-const limpiarCamposButton = document.getElementById("limpiarCamposEventosTotales");
+const fechaInicio = document.getElementById("fechaInicioEventosLogin");
+const fechaFin = document.getElementById("fechaFinEventosLogin");
+const reporteButton = document.getElementById("reporteEventosLoginFiltro");
+const limpiarCamposButton = document.getElementById("limpiarCamposEventosLogin");
 
 // Función que valida si al menos un campo (persona, fecha inicio o fecha fin) tiene valor
-function validarCamposEventosTotalesFiltro() {
+function validarCamposEventosLoginFiltro() {
   if (fechaInicio.value !== "" && fechaFin.value !== "") {
     // Si hay valor en alguno de los campos, habilitar el botón de reporte
     reporteButton.disabled = false;
@@ -237,9 +239,9 @@ function validarCamposEventosTotalesFiltro() {
 }
 
 // Escuchar los cambios en los campos de fecha y persona
-fechaInicio.addEventListener("input", validarCamposEventosTotalesFiltro);
-fechaFin.addEventListener("input", validarCamposEventosTotalesFiltro);
-personaSeleccionada.addEventListener("change", validarCamposEventosTotalesFiltro);
+fechaInicio.addEventListener("input", validarCamposEventosLoginFiltro);
+fechaFin.addEventListener("input", validarCamposEventosLoginFiltro);
+personaSeleccionada.addEventListener("change", validarCamposEventosLoginFiltro);
 
 // Deshabilitar el botón de reporte al cargar la página
 window.onload = function () {
