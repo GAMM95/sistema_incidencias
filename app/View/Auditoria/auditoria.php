@@ -76,9 +76,9 @@
                     </button>
 
                     <!-- Boton generar reporte filtrado-->
-                    <button type="button" id="reporteEventosTotalesFiltro" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
+                    <!-- <button type="button" id="reporteEventosTotalesFiltro" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
                       <i class="feather mr-2 icon-file"></i>Reporte filtrado
-                    </button>
+                    </button> -->
 
                     <!-- Botón de nueva consulta -->
                     <button type="button" id="limpiarCamposEventosTotales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
@@ -86,9 +86,22 @@
                     </button>
 
                     <!-- Boton generar reporte -->
-                    <div class="flex justify-center space-x-2">
+                    <!-- <div class="flex justify-center space-x-2">
                       <button type="button" id="reporte-eventos-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                    </div> -->
+
+
+                    <div class="btn-group mr-2">
+                      <div class="flex justify-center space-x-2">
+                        <button type="button" class="btn btn-secondary dropdown-toggle py-2 px-3 rounded-md" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather mr-2 icon-file"></i>Reportes</button>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporte-eventos-totales">Totales</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesFiltro">Totales</div>
+                        </div>
+                      </div>
                     </div>
+
+
                   </div>
                   <!-- Fin de botones alineados horizontalmente -->
                 </div>
@@ -150,8 +163,8 @@
               <!-- Inicio de formulario de inicio de sesion de auditoría -->
               <form id="formAuditoriaLogin" action="auditoria.php?action=consultarEventosLogin" method="GET" class="bg-white w-full text-xs ">
                 <div class="flex justify-center items-center">
-                   <!-- Nombre de persona -->
-                   <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                  <!-- Nombre de persona -->
+                  <div class="w-full px-2 mb-2" style="max-width: 250px;">
                     <label for="usuarioEventosLogin" class="block mb-1 font-bold text-xs">Usuario:</label>
                     <select id="usuarioEventosLogin" name="usuarioEventosLogin" class="border p-2 w-full text-xs cursor-pointer">
                     </select>

@@ -175,29 +175,29 @@ $(document).ready(function () {
 
 function validarFechasEventosLoginFiltro() {
   // Obtener valores de los campos de fecha
-  const fechaInicio = new Date($('#fechaInicioEventosLogin').val());
-  const fechaFin = new Date($('#fechaFinEventosLogin').val());
+  const fechaInicioLogin = new Date($('#fechaInicioEventosLogin').val());
+  const fechaFinLogin = new Date($('#fechaFinEventosLogin').val());
 
   // Obtener la fecha actual
-  const fechaHoy = new Date();
+  const fechaHoyLogin = new Date();
 
   // Validar la fecha de inicio y fin
   let valido = true;
   let mensajeError = '';
 
   // Bloquear fechas posteriores a la fecha actual
-  if (fechaInicio > fechaHoy) {
+  if (fechaInicioLogin > fechaHoyLogin) {
     mensajeError = 'La fecha de inicio no puede ser posterior a la fecha actual.';
     valido = false;
   }
 
-  if (fechaFin > fechaHoy) {
+  if (fechaFinLogin > fechaHoyLogin) {
     mensajeError = 'La fecha fin no puede ser posterior a la fecha actual.';
     valido = false;
   }
 
   // Verificar que la fecha de fin sea posterior a la fecha de inicio
-  if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
+  if (fechaInicioLogin && fechaFinLogin && fechaFinLogin < fechaInicioLogin) {
     mensajeError = 'La fecha fin debe ser posterior a la fecha de inicio.';
     valido = false;
   }
@@ -217,47 +217,47 @@ $('#fechaInicioEventosLogin, #fechaFinEventosLogin').on('change', function () {
 
 
 // Seleccionar los elementos de los campos de fecha, persona y el botón de reporte
-// const personaSeleccionada = document.getElementById("personaEventosTotales");
-const fechaInicio = document.getElementById("fechaInicioEventosLogin");
-const fechaFin = document.getElementById("fechaFinEventosLogin");
-const reporteButton = document.getElementById("reporteEventosLoginFiltro");
-const limpiarCamposButton = document.getElementById("limpiarCamposEventosLogin");
+const usuarioSeleccionadoLogin = document.getElementById("usuarioEventosLogin");
+const fechaInicioLogin = document.getElementById("fechaInicioEventosLogin");
+const fechaFinLogin = document.getElementById("fechaFinEventosLogin");
+const reporteButtonLogin = document.getElementById("reporteEventosLoginFiltro");
+const limpiarCamposButtonLogin = document.getElementById("limpiarCamposEventosLogin");
 
 // Función que valida si al menos un campo (persona, fecha inicio o fecha fin) tiene valor
 function validarCamposEventosLoginFiltro() {
-  if (fechaInicio.value !== "" && fechaFin.value !== "") {
+  if (fechaInicioLogin.value !== "" && fechaFinLogin.value !== "") {
     // Si hay valor en alguno de los campos, habilitar el botón de reporte
-    reporteButton.disabled = false;
-    reporteButton.classList.remove("bg-gray-300", "cursor-not-allowed");
-    reporteButton.classList.add("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
+    reporteButtonLogin.disabled = false;
+    reporteButtonLogin.classList.remove("bg-gray-300", "cursor-not-allowed");
+    reporteButtonLogin.classList.add("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
   } else {
     // Si no hay valor en ningún campo, deshabilitar el botón de reporte
-    reporteButton.disabled = true;
-    reporteButton.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
-    reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
+    reporteButtonLogin.disabled = true;
+    reporteButtonLogin.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
+    reporteButtonLogin.classList.add("bg-gray-300", "cursor-not-allowed");
   }
 }
 
 // Escuchar los cambios en los campos de fecha y persona
-fechaInicio.addEventListener("input", validarCamposEventosLoginFiltro);
-fechaFin.addEventListener("input", validarCamposEventosLoginFiltro);
-personaSeleccionada.addEventListener("change", validarCamposEventosLoginFiltro);
+fechaInicioLogin.addEventListener("input", validarCamposEventosLoginFiltro);
+fechaFinLogin.addEventListener("input", validarCamposEventosLoginFiltro);
+usuarioSeleccionadoLogin.addEventListener("change", validarCamposEventosLoginFiltro);
 
 // Deshabilitar el botón de reporte al cargar la página
 window.onload = function () {
-  reporteButton.disabled = true;
-  reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
+  reporteButtonLogin.disabled = true;
+  reporteButtonLogin.classList.add("bg-gray-300", "cursor-not-allowed");
 };
 
 // Función que se ejecuta cuando se hace clic en el botón "Nueva Consulta"
-limpiarCamposButton.addEventListener("click", function () {
+limpiarCamposButtonLogin.addEventListener("click", function () {
   // Deshabilitar el botón de reporte y aplicar clases de deshabilitado
-  reporteButton.disabled = true;
-  reporteButton.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
-  reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
+  reporteButtonLogin.disabled = true;
+  reporteButtonLogin.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
+  reporteButtonLogin.classList.add("bg-gray-300", "cursor-not-allowed");
 
   // Limpiar los campos de fecha y persona (opcional)
-  fechaInicio.value = "";
-  fechaFin.value = "";
-  personaSeleccionada.value = "";
+  fechaInicioLogin.value = "";
+  fechaFinLogin.value = "";
+  usuarioSeleccionadoLogin.value = "";
 });
