@@ -44,7 +44,7 @@ function obtenerRegistros($action, $controller, $usuario, $fechaInicio, $fechaFi
         case 'consultarEventosTotales':
             return $controller->consultarEventosTotales($usuario, $fechaInicio, $fechaFin);
         case 'consultarEventosLogin':
-            return $controller->consultarRegistrosInicioSesion($fechaInicio, $fechaFin);
+            return $controller->consultarEventosLogin($usuario, $fechaInicio, $fechaFin);
         case 'listarRegistrosIncidencias':
             return $controller->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
         case 'listarRegistrosRecepciones':
@@ -85,7 +85,8 @@ if ($action) {
 
 // Acción por defecto: mostrar todas las tablas
 $resultadoEventosTotales = $auditoriaController->listarEventosTotales();
-$resultadoAuditoriaLogin = $auditoriaController->listarRegistrosInicioSesion();
+$resultadoAuditoriaLogin = $auditoriaController->listarEventosLogin();
+// TODO: Listar Registros de Incidencias
 $resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarRegistrosIncidencias();
 $resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
 $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
@@ -151,6 +152,8 @@ $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosA
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesFecha.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesUsuario.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesUsuarioFecha.js"></script>
+
+
 
 
   <script src="https://cdn.tailwindcss.com"></script>

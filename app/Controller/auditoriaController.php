@@ -10,6 +10,7 @@ class AuditoriaController
     $this->auditoriaModel = new AuditoriaModel();
   }
 
+  // Metodo para consultar todos los eventos para la tabla auditoria
   public function consultarEventosTotales($usuario = NULL, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
@@ -23,6 +24,7 @@ class AuditoriaController
       return $consultaEventosTotales;
     }
   }
+
   // Metodo para listar los eventos totales en la tabla de auditoria
   public function listarEventosTotales()
   {
@@ -30,25 +32,26 @@ class AuditoriaController
     return $resultadoEventosTotales;
   }
 
-  // Metodo para listar los registros de inicio de sesion en la tabla auditoria
-  public function listarRegistrosInicioSesion()
+  // Metodo para consultar los eventos de logeo de los usuarios
+  public function consultarEventosLogin($usuario = NULL, $fechaInicio = null, $fechaFin = null)
   {
-    $resultadoAuditoriaLogin = $this->auditoriaModel->listarRegistrosInicioSesion();
-    return $resultadoAuditoriaLogin;
-  }
-
-  // Metodo para consultar inicios de sesion en la tabla de auditoria
-  public function consultarRegistrosInicioSesion($fechaInicio = null, $fechaFin = null)
-  {
-
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
-      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
-
-      $resultadoAuditoriaLogin = $this->auditoriaModel->consultarRegistrosInicioSesion($fechaInicio, $fechaFin);
-      return $resultadoAuditoriaLogin;
+      $usuario = isset($_GET['usuarioEventosLogin']) ? (int) $_GET['usuarioEventosLogin'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosLogin']) ? $_GET['fechaInicioEventosLogin'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosLogin']) ? $_GET['fechaFinEventosLogin'] : null;
+      // Llamar al método para consultar incidencias por área, código patrimonial y fecha
+      $consultaEventosLogin = $this->auditoriaModel->buscarEventosLogin($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosLogin;
     }
+  }
+
+  // Metodo para listar los registros de inicio de sesion en la tabla auditoria
+  public function listarEventosLogin()
+  {
+    $resultadoAuditoriaLogin = $this->auditoriaModel->listarEventosLogin();
+    return $resultadoAuditoriaLogin;
   }
 
   // Metodo para listar los registros de incidencias en la tabla auditoria

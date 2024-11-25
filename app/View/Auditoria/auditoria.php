@@ -45,6 +45,8 @@
 
           <!-- Contenido de las pestañas -->
           <div class="tab-content grow" id="myTabContent">
+
+            <!-- Eventos totales - Auditoria -->
             <div class="tab-pane fade show active" id="totales" role="tabpanel" aria-labelledby="totales-tab">
               <!-- Inicio de formulario de inicio de sesion de auditoría -->
               <form id="formEventosTotales" action="auditoria.php?action=consultarEventosTotales" method="GET" class="bg-white w-full text-xs ">
@@ -97,11 +99,9 @@
                       </div>
                     </div>
                   </div>
-
-                  <!-- Fin de botones alineados horizontalmente -->
                 </div>
 
-                <!-- Inicio de tabla de eventos totales -->
+                <!-- Tabla de eventos totales - Auditoria -->
                 <div class="relative sm:rounded-lg mt-2">
                   <div class="max-w-full overflow-hidden sm:rounded-lg">
                     <table id="tablaEventosTotales" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
@@ -151,7 +151,9 @@
                 </div>
               </form>
             </div>
+            <!-- Fin de eventos totales - Auditoria -->
 
+            <!-- Eventos de login - Auditoria -->
             <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
               <!-- Inicio de formulario de inicio de sesion de auditoría -->
               <form id="formAuditoriaLogin" action="auditoria.php?action=consultarEventosLogin" method="GET" class="bg-white w-full text-xs ">
@@ -180,27 +182,33 @@
                   <!-- Botones alineados horizontalmente -->
                   <div class="ml-5 flex space-x-2">
                     <!-- Botón de filtrar -->
-                    <button type="submit" id="filtrarListaEventosLogin" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                    <button type="submit" id="filtrarListaEventosLogin" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
                       <i class="feather icon-filter"></i>
                     </button>
 
-                    <!-- Boton generar reporte filtrado-->
-                    <button type="button" id="reporteEventosLoginFiltro" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
-                      <i class="feather mr-2 icon-file"></i>Reporte filtrado
-                    </button>
-
                     <!-- Botón de nueva consulta -->
-                    <button type="button" id="limpiarCamposEventosLogin" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                    <button type="button" id="limpiarCamposEventosLogin" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                       <i class="feather icon-refresh-cw"></i>
                     </button>
 
                     <!-- Boton generar reporte -->
-                    <div class="flex justify-center space-x-2">
-                      <button type="button" id="reporteEventosLogin" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                    <div class="btn-group mr-2">
+                      <div class="flex justify-center space-x-2">
+                        <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="feather mr-2 icon-file"></i>Reporte
+                        </button>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporte-eventos-login">Todos los eventos</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginFecha">Por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginUsuario">Por usuario</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginUsuarioFecha">Usuario y fechas</div>
+                        </div>
+                      </div>
                     </div>
                   </div>
                   <!-- Fin de botones alineados horizontalmente -->
                 </div>
+                
                 <!-- Inicio de tabla de inicios de sesion -->
                 <div class="relative sm:rounded-lg mt-2">
                   <div class="max-w-full overflow-hidden sm:rounded-lg">
