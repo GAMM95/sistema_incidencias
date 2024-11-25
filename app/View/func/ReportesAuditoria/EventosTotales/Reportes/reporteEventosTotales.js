@@ -9,7 +9,7 @@ $(document).ready(function () {
   $('#reporte-eventos-totales').click(function () {
     // Realizar la solicitud AJAX para obtener los datos
     $.ajax({
-      url: 'ajax/getReporteEventosTotales.php',
+      url: 'ajax/ReportesAuditoria/EventosTotales/getReporteEventosTotales.php',
       method: 'GET',
       dataType: 'json',
       success: function (data) {

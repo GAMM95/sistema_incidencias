@@ -1,5 +1,5 @@
 <?php
-require_once '../config/conexion.php';
+require_once '../../../config/conexion.php';  
 
 class ReporteEventostotales extends Conexion
 {
@@ -24,3 +24,4 @@ $reporte = $reporteEventosTotales->getReporteEventosTotales();
 
 header('Content-Type: application/json');
 echo json_encode($reporte);
+exit();

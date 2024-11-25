@@ -35,7 +35,7 @@
               <a class="nav-link text-uppercase" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Eventos de login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Registros</a>
+              <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Incidencias</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-uppercase" id="mantenedor-tab" data-toggle="tab" href="#mantenedor" role="tab" aria-controls="mantenedor" aria-selected="false">Mantenedor</a>
@@ -54,6 +54,8 @@
                     <label for="personaEventosTotales" class="block mb-1 font-bold text-xs">Usuario:</label>
                     <select id="personaEventosTotales" name="personaEventosTotales" class="border p-2 w-full text-xs cursor-pointer">
                     </select>
+                    <input type="hidden" id="codigoUsuarioEventosTotales" name="codigoUsuarioEventosTotales" readonly>
+                    <input type="hidden" id="nombreUsuarioEventosTotales" name="nombreUsuarioEventosTotales" readonly>
                   </div>
 
                   <!-- Fecha de inicio -->
@@ -71,38 +73,31 @@
                   <!-- Botones alineados horizontalmente -->
                   <div class="ml-5 flex space-x-2">
                     <!-- Botón de filtrar -->
-                    <button type="submit" id="filtrarListaEventosTotales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                    <button type="submit" id="filtrarListaEventosTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
                       <i class="feather icon-filter"></i>
                     </button>
 
-                    <!-- Boton generar reporte filtrado-->
-                    <!-- <button type="button" id="reporteEventosTotalesFiltro" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
-                      <i class="feather mr-2 icon-file"></i>Reporte filtrado
-                    </button> -->
-
                     <!-- Botón de nueva consulta -->
-                    <button type="button" id="limpiarCamposEventosTotales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                    <button type="button" id="limpiarCamposEventosTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                       <i class="feather icon-refresh-cw"></i>
                     </button>
 
                     <!-- Boton generar reporte -->
-                    <!-- <div class="flex justify-center space-x-2">
-                      <button type="button" id="reporte-eventos-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
-                    </div> -->
-
-
                     <div class="btn-group mr-2">
                       <div class="flex justify-center space-x-2">
-                        <button type="button" class="btn btn-secondary dropdown-toggle py-2 px-3 rounded-md" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false"><i class="feather mr-2 icon-file"></i>Reportes</button>
+                        <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="feather mr-2 icon-file"></i>Reporte
+                        </button>
                         <div class="dropdown-menu">
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporte-eventos-totales">Totales</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesFiltro">Totales</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporte-eventos-totales">Todos los eventos</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesFecha">Por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesUsuario">Por usuario</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesUsuarioFecha">Usuario y fechas</div>
                         </div>
                       </div>
                     </div>
-
-
                   </div>
+
                   <!-- Fin de botones alineados horizontalmente -->
                 </div>
 
@@ -154,9 +149,7 @@
                     </table>
                   </div>
                 </div>
-                <!-- Fin de tabla de inicios de sesion -->
               </form>
-              <!-- Fin de formulario de inicio de sesion de auditoría -->
             </div>
 
             <div class="tab-pane fade" id="login" role="tabpanel" aria-labelledby="login-tab">
@@ -168,6 +161,8 @@
                     <label for="usuarioEventosLogin" class="block mb-1 font-bold text-xs">Usuario:</label>
                     <select id="usuarioEventosLogin" name="usuarioEventosLogin" class="border p-2 w-full text-xs cursor-pointer">
                     </select>
+                    <input type="hidden" id="codigoUsuarioEventosLogin" name="codigoUsuarioEventosLogin" readonly>
+                    <input type="hidden" id="nombreUsuarioEventosLogin" name="nombreUsuarioEventosLogin" readonly>
                   </div>
 
                   <!-- Fecha de inicio -->

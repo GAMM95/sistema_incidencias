@@ -139,16 +139,18 @@ $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosA
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
 
   <!-- Funcionalidades -->
-  <script src="./app/View/func/Auditoria/func_auditoria_eventos_totales.js"></script>
-  <script src="./app/View/func/Auditoria/func_auditoria_eventos_login.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/func_auditoria_eventos_totales.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosLogin/func_auditoria_eventos_login.js"></script>
 
 
-  <script src="./app/View/func/Auditoria/func_auditoria_registro_incidencia.js"></script>
-  <script src="./app/View/func/Auditoria/func_auditoria_registro_recepcion.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_incidencia.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_recepcion.js"></script>
 
   <!-- Reportes de auditoría -->
-  <script src="./app/View/func/ReportesAuditoria/reporteEventosTotales.js"></script>
-  <script src="./app/View/func/ReportesAuditoria/reporteEventosTotalesFiltro.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotales.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesUsuario.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesUsuarioFecha.js"></script>
 
 
   <script src="https://cdn.tailwindcss.com"></script>

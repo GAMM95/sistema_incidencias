@@ -24,7 +24,16 @@ $(document).ready(function () {
     }
   });
 
-  // BUSCADOR PARA EL COMBO AREA 
+  // Setear campos del usuario seleccionado
+  $('#personaEventosTotales').change(function () {
+    var selectedOption = $(this).find('option:selected');
+    var codigoUsuario = selectedOption.val();
+    var nombreUsuario = selectedOption.text();
+    $('#codigoUsuarioEventosTotales').val(codigoUsuario);
+    $('#nombreUsuarioEventosTotales').val(nombreUsuario);
+  });
+
+  // Buscador para el combo usuario
   $('#personaEventosTotales').select2({
     allowClear: true,
     width: '100%',
@@ -36,7 +45,7 @@ $(document).ready(function () {
     }
   });
 
-  // Evento para limpiar los campos y renderizar la tabla
+  // Función para realizar la consulta sin filtros (nueva consulta)
   function nuevaConsultaEventosTotales() {
     // Limpiar los campos de fecha y el input de persona (resetea el formulario)
     $('#fechaInicioEventosTotales').val('');
@@ -45,7 +54,7 @@ $(document).ready(function () {
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
-      url: 'auditoria.php?action=consultarEventosTotales', // No pasamos filtros en esta consulta
+      url: 'auditoria.php?action=consultarEventosTotales',
       type: 'GET',
       dataType: 'html', // Esperamos HTML para renderizar la tabla
       success: function (response) {
@@ -61,8 +70,10 @@ $(document).ready(function () {
     });
   }
 
+  // Evento para el botón de limpiar campos
   $('#limpiarCamposEventosTotales').on('click', nuevaConsultaEventosTotales);
 
+  // Validación y envío del formulario
   $('#formEventosTotales').submit(function (event) {
     event.preventDefault(); // Evita el envío del formulario por defecto
 
@@ -74,9 +85,9 @@ $(document).ready(function () {
     var formData = $(this).serializeArray(); // Recopila los datos del formulario
     var dataObject = {}; // Crea un objeto para los datos del formulario
     console.log(dataObject);
-    // Recorre los datos del formulario
+
+    // Recorre los datos del formulario y llena el objeto con los valores
     formData.forEach(function (item) {
-      // Solo agrega los parámetros al objeto si tienen valor
       if (item.value.trim() !== '') {
         dataObject[item.name] = item.value;
       }
@@ -88,17 +99,16 @@ $(document).ready(function () {
       type: 'GET',
       data: dataObject,
       success: function (response) {
-        console.log("Resultados filtrados:", response); // Depuración
-        // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaEventosTotales tbody').empty();
-        // Actualiza el contenido de la tabla con la respuesta
-        $('#tablaEventosTotales tbody').html(response);
+        console.log("Resultados filtrados:", response);
+        $('#tablaEventosTotales tbody').empty(); // Limpia el contenido actual de la tabla antes de agregar nuevos datos
+        $('#tablaEventosTotales tbody').html(response); // Actualiza el contenido de la tabla con la respuesta
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
       }
     });
 
+    // Función para validar los campos de usuario y fechas
     function validarCamposEventosTotales() {
       var valido = false;
       var mensajeError = '';
@@ -111,7 +121,7 @@ $(document).ready(function () {
       if (faltaUsuario || fechaInicioSeleccionada || fechaFinSeleccionada) {
         valido = true;
       } else {
-        mensajeError = 'Debe completar al menos un campo para realizar la b&uacute;squeda.';
+        mensajeError = 'Debe completar al menos un campo para filtrar la tabla.';
       }
 
       if (!valido) {
@@ -122,19 +132,15 @@ $(document).ready(function () {
     }
   });
 
+  // Función para validar fechas
   function validarFechasEventosTotales() {
-    // Obtener valores de los campos de fecha
     const fechaInicio = new Date($('#fechaInicioEventosTotales').val());
     const fechaFin = new Date($('#fechaFinEventosTotales').val());
-
-    // Obtener la fecha actual
     const fechaHoy = new Date();
 
-    // Validar la fecha de inicio y fin
     let valido = true;
     let mensajeError = '';
 
-    // Bloquear fechas posteriores a la fecha actual
     if (fechaInicio > fechaHoy) {
       mensajeError = 'La fecha de inicio no puede ser posterior a la fecha actual.';
       valido = false;
@@ -145,13 +151,11 @@ $(document).ready(function () {
       valido = false;
     }
 
-    // Verificar que la fecha de fin sea posterior a la fecha de inicio
     if (fechaInicio && fechaFin && fechaFin < fechaInicio) {
       mensajeError = 'La fecha fin debe ser posterior a la fecha de inicio.';
       valido = false;
     }
 
-    // Mostrar mensaje de error con Toastr si la validación falla
     if (!valido) {
       toastr.warning(mensajeError.trim(), 'Advertencia');
     }
@@ -160,53 +164,7 @@ $(document).ready(function () {
   }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicioEventosTotales, #fechaFinEventosTotales, #personaEventosTotales').on('change', function () {
-    validarCamposEventosTotalesFiltro(); // Llama a la validación de fechas y de la persona seleccionada
+  $('#fechaInicioEventosTotales, #fechaFinEventosTotales').on('change', function () {
+    validarFechasEventosTotales();
   });
-});
-
-// Seleccionar los elementos de los campos de fecha, persona y el botón de reporte
-const personaSeleccionada = document.getElementById("personaEventosTotales");
-const fechaInicio = document.getElementById("fechaInicioEventosTotales");
-const fechaFin = document.getElementById("fechaFinEventosTotales");
-const reporteButton = document.getElementById("reporteEventosTotalesFiltro");
-const limpiarCamposButton = document.getElementById("limpiarCamposEventosTotales");
-
-// Función que valida si al menos un campo (persona, fecha inicio o fecha fin) tiene valor
-function validarCamposEventosTotalesFiltro() {
-  if (personaSeleccionada.value !== "" || fechaInicio.value !== "" || fechaFin.value !== "") {
-    // Si hay valor en alguno de los campos, habilitar el botón de reporte
-    reporteButton.disabled = false;
-    reporteButton.classList.remove("bg-gray-300", "cursor-not-allowed");
-    reporteButton.classList.add("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
-  } else {
-    // Si no hay valor en ningún campo, deshabilitar el botón de reporte
-    reporteButton.disabled = true;
-    reporteButton.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
-    reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
-  }
-}
-
-// Escuchar los cambios en los campos de fecha y persona
-fechaInicio.addEventListener("input", validarCamposEventosTotalesFiltro);
-fechaFin.addEventListener("input", validarCamposEventosTotalesFiltro);
-personaSeleccionada.addEventListener("change", validarCamposEventosTotalesFiltro);
-
-// Deshabilitar el botón de reporte al cargar la página
-window.onload = function () {
-  reporteButton.disabled = true;
-  reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
-};
-
-// Función que se ejecuta cuando se hace clic en el botón "Nueva Consulta"
-limpiarCamposButton.addEventListener("click", function () {
-  // Deshabilitar el botón de reporte y aplicar clases de deshabilitado
-  reporteButton.disabled = true;
-  reporteButton.classList.remove("bg-blue-500", "hover:bg-blue-600", "cursor-pointer");
-  reporteButton.classList.add("bg-gray-300", "cursor-not-allowed");
-
-  // Limpiar los campos de fecha y persona (opcional)
-  fechaInicio.value = "";
-  fechaFin.value = "";
-  personaSeleccionada.value = "";
 });
