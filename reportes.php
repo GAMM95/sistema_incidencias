@@ -1,5 +1,6 @@
 <?php
 session_start();
+
 // Verificar si no hay una sesión iniciada
 if (!isset($_SESSION['usuario'])) {
   header("Location: index.php"); // Redirigir a la página de inicio de sesión si no hay sesión iniciada
@@ -7,7 +8,6 @@ if (!isset($_SESSION['usuario'])) {
 }
 $action = $_GET['action'] ?? '';
 $state = $_GET['state'] ?? '';
-
 $rol = $_SESSION['rol'];
 $area = $_SESSION['codigoArea'];
 
@@ -19,41 +19,25 @@ $incidenciaController = new IncidenciaController();
 $recepcionController = new RecepcionController();
 $cierreController = new CierreController();
 
-
 $fechaInicio = $_GET['fechaInicio'] ?? '';
 $fechaFin = $_GET['fechaFin'] ?? '';
 
-if ($action === 'consultarTotales') {
-  // Depuración: mostrar los parámetros recibidos
-  error_log("Fecha Inicio: " . $fechaInicio);
-  error_log("Fecha Fin: " . $fechaFin);
-
-  // Obtener los resultados de la búsqueda
-  $resultadoIncidenciasTotales = $incidenciaController->filtrarIncidenciasTotalesFecha($fechaInicio, $fechaFin);
-
-  // Imprimir el resultado de la depuración
-  error_log("Resultado de la consulta: " . print_r($resultadoIncidenciasTotales, true));
-
-  // Dibujar tabla de consultas
+// Funcion generia para generar las tablas de reportes
+function generarTablaTotales($resultado, $itemCount, $columnas)
+{
   $html = '';
-  if (!empty($resultadoIncidenciasTotales)) {
-    $item = 1; // Iniciar contador para el ítem
-    foreach ($resultadoIncidenciasTotales as $totales) {
+  if (!empty($resultado)) {
+    foreach ($resultado as $item) {
       $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
-      $html .= '<td class="px-3 py-2 text-center">' . $item++ . '</td>'; // Columna de ítem
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_numero_formato']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['fechaIncidenciaFormateada']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_asunto']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_documento']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['INC_codigoPatrimonial']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['BIE_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['ARE_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['PRI_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($totales['CON_descripcion']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
+      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
 
-      // Manejar el estado de la incidencia
-      $estadoDescripcion = htmlspecialchars($totales['Estado']);
+      // Generar las celdas para las columnas normales
+      foreach ($columnas as $columna) {
+        $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item[$columna]) . '</td>';
+      }
+
+      // Verificar el estado y asignar la clase de badge correspondiente
+      $estadoDescripcion = htmlspecialchars($item['Estado']);
       $badgeClass = '';
       switch ($estadoDescripcion) {
         case 'ABIERTO':
@@ -70,52 +54,33 @@ if ($action === 'consultarTotales') {
           break;
       }
 
-      $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
-      $html .= '</td></tr>';
+      // Añadir la celda con el badge en la última columna
+      $html .= '<td class="px-3 py-2 text-center"><span class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</span></td>';
+
+      $html .= '</tr>';
     }
   } else {
-    $html = '<tr><td colspan="11" class="text-center py-3">No se han registrado incidencias.</td></tr>';
+    $html = '<tr><td colspan="' . (count($columnas) + 1) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
   }
-
-  // Devolver el HTML de las filas
-  echo $html;
-  exit;
-} else {
-  // Si no hay acción, obtener la lista de las incidencias
-  $resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales();
+  return $html;
 }
 
-$resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre(); // Obtener los datos de las incidencias pendientes de cierre
-
-if ($action === 'consultarCerradas') {
-  // Depuración: mostrar los parámetros recibidos
-  error_log("Fecha Inicio: " . $fechaInicio);
-  error_log("Fecha Fin: " . $fechaFin);
-
-  // Obtener los resultados de la búsqueda
-  $resultadoIncidenciasCerradas = $cierreController->filtrarIncidenciasCerradasFecha($fechaInicio, $fechaFin);
-
-  // Imprimir el resultado de la depuración
-  error_log("Resultado de la consulta: " . print_r($resultadoIncidenciasCerradas, true));
-
-  // Dibujar tabla de consultas
+// Funcion para generar la tabla de incidencias cerradas
+function generarTablaCerradas($resultado, $itemCount, $columnas)
+{
   $html = '';
-  if (!empty($resultadoIncidenciasCerradas)) {
-    $item = 1; // Iniciar contador para el ítem
-    foreach ($resultadoIncidenciasCerradas as $cerradas) {
+  if (!empty($resultado)) {
+    foreach ($resultado as $item) {
       $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
-      $html .= '<td class="px-3 py-2 text-center">' . $item++ . '</td>'; // Columna de ítem
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_numero_formato']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['fechaCierreFormateada']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_asunto']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_documento']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['INC_codigoPatrimonial']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['BIE_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['ARE_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cerradas['PRI_nombre']) . '</td>';
-      $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
-      // Manejar el estado de la incidencia
-      $estadoDescripcion = htmlspecialchars($cerradas['CON_descripcion']);
+      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
+
+      // Generar las celdas para las columnas normales
+      foreach ($columnas as $columna) {
+        $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item[$columna]) . '</td>';
+      }
+
+      // Verificar el estado y asignar la clase de badge correspondiente
+      $estadoDescripcion = htmlspecialchars($item['CON_descripcion']);
       $badgeClass = '';
       switch ($estadoDescripcion) {
         case 'OPERATIVO':
@@ -134,22 +99,94 @@ if ($action === 'consultarCerradas') {
           $badgeClass = 'badge-light-secondary';
           break;
       }
-      $html .= '<label class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</label>';
-      $html .= '</td></tr>';
+
+      // Añadir la celda con el badge en la última columna
+      $html .= '<td class="px-3 py-2 text-center"><span class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</span></td>';
+
+      $html .= '</tr>';
     }
   } else {
-    $html = '<tr><td colspan="10" class="text-center py-3">No se encontraron incidencias cerradas.</td></tr>';
+    $html = '<tr><td colspan="' . (count($columnas) + 1) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
   }
-
-  // Devolver el HTML de las filas
-  echo $html;
-  exit;
-} else {
-  // Si no hay acción, obtener la lista de incidencias
-  $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
+  return $html;
 }
 
+// Funcion generia para generar las tablas de reportes
+function generarTabla($resultado, $itemCount, $columnas)
+{
+  $html = '';
+  if (!empty($resultado)) {
+    foreach ($resultado as $item) {
+      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
+
+      foreach ($columnas as $columna) {
+        $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item[$columna]) . '</td>';
+      }
+      $html .= '</tr>';
+    }
+  } else {
+    $html = '<tr><td colspan="' . (count($columnas) + 1) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
+  }
+  return $html;
+}
+
+// Función para manejar los filtros de fecha, usuario y obtener resultados
+function obtenerRegistros($action, $controller, $usuario = null, $fechaInicio, $fechaFin)
+{
+  switch ($action) {
+    case 'consultarTotales':
+      return $controller->filtrarIncidenciasTotalesFecha($fechaInicio, $fechaFin);
+    case 'consultarCerradas':
+      return $controller->filtrarIncidenciasCerradasFecha($fechaInicio, $fechaFin); // Asegúrate de que este método esté en el controlador adecuado
+    default:
+      return [];
+  }
+}
+
+
+// Mapear las acciones a los correspondientes campos a mostrar en la tabla
+function obtenerColumnasParaAccion($action)
+{
+  switch ($action) {
+    case 'consultarTotales':
+      return ['INC_numero_formato', 'fechaIncidenciaFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'CON_descripcion'];
+    case 'consultarCerradas':
+      return ['INC_numero_formato', 'fechaCierreFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre'];
+    default:
+      return [];
+  }
+}
+
+// Ejecutar la acción solicitada y generar la tabla de resultados
+if ($action) {
+  error_log("Fecha Inicio: " . $fechaInicio);
+  error_log("Fecha Fin: " . $fechaFin);
+
+  // Verificar la acción y ejecutar la correspondiente
+  if ($action == 'consultarTotales') {
+    // Consultar y generar la tabla de incidencias totales
+    $resultadoTotales = obtenerRegistros($action, $incidenciaController, null, $fechaInicio, $fechaFin);
+    $columnasTotales = obtenerColumnasParaAccion($action);
+    echo generarTablaTotales($resultadoTotales, 1, $columnasTotales);
+  } elseif ($action == 'consultarCerradas') {
+    // Consultar y generar la tabla de incidencias cerradas
+    $resultadoCerradas = obtenerRegistros($action, $cierreController, null, $fechaInicio, $fechaFin);
+    $columnasCerradas = obtenerColumnasParaAccion($action);
+    echo generarTablaCerradas($resultadoCerradas, 1, $columnasCerradas);
+  }
+
+  // Terminar el script después de generar la tabla
+  exit();
+}
+
+// Acción por defecto: mostrar todas las tablas
+$resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales();
+$resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre();
+$resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
 ?>
+
+
 
 <!DOCTYPE html>
 <html lang="es">
@@ -203,11 +240,18 @@ if ($action === 'consultarCerradas') {
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
   <script src="./app/View/func/func_reportes.js"></script>
 
-  <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script>
+  <!-- Funcionalidades -->
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/func_reportesGenerales.js"></script>
+
+  <!-- Reportes -->
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reportes/reporteTotalIncidencias.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reportes/reporteIncidenciasTotalesFecha.js"></script>
+
+  <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->
   <script src="./app/View/func/Reports/reportePendientesCierre.js"></script>
   <script src="./app/View/func/Reports/reportesPorArea.js"></script>
   <script src="./app/View/func/Reports/reportePorCodigoPatrimonial.js"></script>
-  <script src="./app/View/func/Reports/reporteIncidenciasPorFecha.js"></script>
+  <!-- <script src="./app/View/func/Reports/reporteIncidenciasPorFecha.js"></script> -->
   <script src="./app/View/func/Reports/reporteCierresPorFecha.js"></script>
   <script src="./app/View/func/Reports/reporteNumeroIncidencia.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleCierreNumIncidencia.js"></script>

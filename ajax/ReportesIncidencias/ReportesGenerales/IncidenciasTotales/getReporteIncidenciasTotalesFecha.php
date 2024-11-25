@@ -1,14 +1,14 @@
 <?php
-require_once '../config/conexion.php';
+require_once '../../../../config/conexion.php';
 
-class ReporteIncidenciasPorFecha extends Conexion
+class ReporteIncidenciasTotalesFecha extends Conexion
 {
   public function __construct()
   {
     parent::__construct();
   }
 
-  public function getReporteIncidenciasPorFecha($fechaInicio, $fechaFin)
+  public function getReporteIncidenciasTotalesFecha($fechaInicio, $fechaFin)
   {
     $conector = parent::getConexion();
     $sql = "SELECT
@@ -66,8 +66,8 @@ class ReporteIncidenciasPorFecha extends Conexion
 $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : '';
 $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : '';
 
-$reporteIncidenciasPorFecha = new ReporteIncidenciasPorFecha();
-$reporte = $reporteIncidenciasPorFecha->getReporteIncidenciasPorFecha($fechaInicio, $fechaFin);
+$reporteIncidenciasTotalesFecha = new ReporteIncidenciasTotalesFecha();
+$reporte = $reporteIncidenciasTotalesFecha->getReporteIncidenciasTotalesFecha($fechaInicio, $fechaFin);
 
 header('Content-Type: application/json');
 echo json_encode($reporte);

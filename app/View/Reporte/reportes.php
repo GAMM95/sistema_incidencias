@@ -66,39 +66,40 @@
                     <div class="flex justify-center items-center mt-2">
                       <!-- Fecha de inicio -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                        <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                        <input type="date" id="fechaInicio_incidencias_totales" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                        <label for="fechaInicioIncidenciasTotales" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                        <input type="date" id="fechaInicioIncidenciasTotales" name="fechaInicioIncidenciasTotales" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
 
                       <!-- Fecha de fin -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                        <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                        <input type="date" id="fechaFin_incidencias_totales" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                        <label for="fechaFinIncidenciasTotales" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                        <input type="date" id="fechaFinIncidenciasTotales" name="fechaFinIncidenciasTotales" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
 
                       <!-- Botones alineados horizontalmente -->
                       <div class="ml-5 flex space-x-2">
                         <!-- Botón de buscar -->
-                        <button type="submit" id="filtrarIncidenciasTotalesFecha" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                        <button type="submit" id="filtrarIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
                           <i class="feather icon-filter"></i>
                         </button>
 
                         <!-- Botón de nueva consulta -->
-                        <button type="button" id="limpiarCampos_incidencias_totales" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-secondary rounded-md flex justify-center items-center">
+                        <button type="button" id="limpiarCampos_incidencias_totales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
                           <i class="feather icon-refresh-cw"></i>
                         </button>
 
-                        <!-- Boton generar reporte filtrado-->
-                        <button type="button" id="reporte-incidencias-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
-                          <i class="feather mr-2 icon-file"></i>Reporte filtrado
-                        </button>
-                        <!-- Fin de boton de generar reporte filtrado-->
-
                         <!-- Boton generar reporte -->
-                        <div class="flex justify-center space-x-2">
-                          <button type="button" id="reporte-incidencias-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                        <div class="btn-group mr-2">
+                          <div class="flex justify-center space-x-2">
+                            <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="feather mr-2 icon-file"></i>Reporte
+                            </button>
+                            <div class="dropdown-menu">
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasTotales">Todos las incidencias</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasTotalesFecha">Incidencias por fechas</div>
+                            </div>
+                          </div>
                         </div>
-                        <!-- Fin de boton de generar reporte -->
                       </div>
                       <!-- Fin de botones alineados horizontalmente -->
                     </div>

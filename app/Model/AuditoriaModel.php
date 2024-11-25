@@ -146,7 +146,7 @@ class AuditoriaModel extends Conexion
     try {
       if ($conector != null) {
         $sql = "SELECT * FROM vw_auditoria_login
-        ORDER BY fechaFormateada DESC";
+        ORDER BY AUD_fecha DESC, AUD_hora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

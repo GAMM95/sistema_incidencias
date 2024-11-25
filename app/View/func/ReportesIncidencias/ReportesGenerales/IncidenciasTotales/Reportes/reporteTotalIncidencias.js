@@ -7,11 +7,11 @@ $(document).ready(function () {
 });
 
 // Generacion del PDF al hacer clic en boton
-$('#reporte-incidencias-totales').click(function () {
+$('#reporteIncidenciasTotales').click(function () {
 
   // Realziar la solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/getReporteIncidenciaTotales.php',
+    url: 'ajax/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/getReporteIncidenciaTotales.php',
     method: 'GET',
     dataType: 'json',
     success: function (data) {
@@ -93,7 +93,6 @@ $('#reporte-incidencias-totales').click(function () {
             item++,
             reporte.INC_numero_formato,
             reporte.fechaIncidenciaFormateada,
-            // reporte.CAT_nombre,
             reporte.INC_asunto,
             reporte.INC_documento,
             reporte.INC_codigoPatrimonial,
