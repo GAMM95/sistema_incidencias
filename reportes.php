@@ -135,10 +135,10 @@ function generarTabla($resultado, $itemCount, $columnas)
 function obtenerRegistros($action, $controller, $usuario = null, $fechaInicio, $fechaFin)
 {
   switch ($action) {
-    case 'consultarTotales':
+    case 'consultarIncidenciasTotales':
       return $controller->filtrarIncidenciasTotalesFecha($fechaInicio, $fechaFin);
-    case 'consultarCerradas':
-      return $controller->filtrarIncidenciasCerradasFecha($fechaInicio, $fechaFin); // Asegúrate de que este método esté en el controlador adecuado
+    case 'consultarIncidenciasCerradas':
+      return $controller->filtrarIncidenciasCerradasFecha($fechaInicio, $fechaFin);
     default:
       return [];
   }
@@ -149,9 +149,9 @@ function obtenerRegistros($action, $controller, $usuario = null, $fechaInicio, $
 function obtenerColumnasParaAccion($action)
 {
   switch ($action) {
-    case 'consultarTotales':
+    case 'consultarIncidenciasTotales':
       return ['INC_numero_formato', 'fechaIncidenciaFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'CON_descripcion'];
-    case 'consultarCerradas':
+    case 'consultarIncidenciasCerradas':
       return ['INC_numero_formato', 'fechaCierreFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre'];
     default:
       return [];
@@ -164,12 +164,12 @@ if ($action) {
   error_log("Fecha Fin: " . $fechaFin);
 
   // Verificar la acción y ejecutar la correspondiente
-  if ($action == 'consultarTotales') {
+  if ($action == 'consultarIncidenciasTotales') {
     // Consultar y generar la tabla de incidencias totales
     $resultadoTotales = obtenerRegistros($action, $incidenciaController, null, $fechaInicio, $fechaFin);
     $columnasTotales = obtenerColumnasParaAccion($action);
     echo generarTablaTotales($resultadoTotales, 1, $columnasTotales);
-  } elseif ($action == 'consultarCerradas') {
+  } elseif ($action == 'consultarIncidenciasCerradas') {
     // Consultar y generar la tabla de incidencias cerradas
     $resultadoCerradas = obtenerRegistros($action, $cierreController, null, $fechaInicio, $fechaFin);
     $columnasCerradas = obtenerColumnasParaAccion($action);
@@ -243,12 +243,21 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
   <!-- Funcionalidades -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/func_reportesGenerales.js"></script>
 
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/func_reportesCerradas.js"></script>
+
+
+
   <!-- Reportes -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reportes/reporteTotalIncidencias.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reportes/reporteIncidenciasTotalesFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteIncidenciasTotalesFecha.js"></script>
+
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/PendientesCierre/reportePendientesCierre.js"></script>
+
+
+
+
 
   <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->
-  <script src="./app/View/func/Reports/reportePendientesCierre.js"></script>
   <script src="./app/View/func/Reports/reportesPorArea.js"></script>
   <script src="./app/View/func/Reports/reportePorCodigoPatrimonial.js"></script>
   <!-- <script src="./app/View/func/Reports/reporteIncidenciasPorFecha.js"></script> -->
@@ -263,8 +272,8 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
 
 
   <!-- Filtros o consultas por fecha para generar reportes -->
-  <script src="./app/View/func/Consultas/func_consulta_totales_fecha.js"></script>
-  <script src="./app/View/func/Consultas/func_consulta_cierres_fecha.js"></script>
+  <!-- <script src="./app/View/func/Consultas/func_consulta_totales_fecha.js"></script>
+  <script src="./app/View/func/Consultas/func_consulta_cierres_fecha.js"></script> -->
 
 
   <script src="./app/View/func/Mantenedores/tipoBien.js"></script>

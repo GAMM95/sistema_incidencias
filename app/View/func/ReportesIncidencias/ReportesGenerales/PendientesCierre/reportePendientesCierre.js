@@ -7,11 +7,11 @@ $(document).ready(function () {
 });
 
 // Generacion del PDF al hacer clic en boton
-$('#reporte-pendientes-cierre').click(function () {
+$('#reportePendientesCierre').click(function () {
 
   // Realziar la solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/getReportePendientesCierre.php',
+    url: 'ajax/ReportesIncidencias/ReportesGenerales/PendientesCierre/getReportePendientesCierre.php',
     method: 'GET',
     dataType: 'json',
     success: function (data) {

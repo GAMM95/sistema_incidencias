@@ -177,8 +177,8 @@ class cierreController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
-      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
+      $fechaInicio = isset($_GET['fechaInicioIncidenciasCerradas']) ? $_GET['fechaInicioIncidenciasCerradas'] : null;
+      $fechaFin = isset($_GET['fechaFinIncidenciasCerradas']) ? $_GET['fechaFinIncidenciasCerradas'] : null;
       error_log("Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
       // Llamar al método para consultar incidencias por fecha
       $consultaIncidencia = $this->cierreModel->buscarIncidenciaCerradasFecha($fechaInicio, $fechaFin);

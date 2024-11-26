@@ -222,7 +222,7 @@ $('#reporteEventosTotalesFecha').click(function () {
           }
 
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de eventos por usuario y fechas generado.', 'Mensaje');
+          toastr.success('Reporte de eventos por rango de fechas generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {

@@ -147,10 +147,10 @@ $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosA
   <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_recepcion.js"></script>
 
   <!-- Reportes de auditoría -->
-  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotales.js"></script>
-  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesFecha.js"></script>
-  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesUsuario.js"></script>
-  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reportes/reporteEventosTotalesUsuarioFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotales.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotalesFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotalesUsuario.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotalesUsuarioFecha.js"></script>
 
 
 

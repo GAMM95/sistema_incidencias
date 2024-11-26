@@ -1,5 +1,5 @@
 <?php
-require_once '../config/conexion.php';
+require_once '../../../../config/conexion.php';
 
 class ReportePendientesCierre extends Conexion
 {
@@ -21,7 +21,6 @@ class ReportePendientesCierre extends Conexion
     return $resultado;
   }
 }
-
 
 $reportePendientesCierre = new ReportePendientesCierre();
 $reporte = $reportePendientesCierre->getReportePendientesCierre();

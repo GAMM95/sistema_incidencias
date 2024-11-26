@@ -173,7 +173,7 @@ class IncidenciaModel extends Conexion
     try {
       if ($conector != null) {
         $sql = "SELECT * FROM vw_reporte_incidencias_totales
-        ORDER BY INC_numero DESC";
+                ORDER BY INC_numero DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

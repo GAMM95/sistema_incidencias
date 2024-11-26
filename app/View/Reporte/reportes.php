@@ -53,6 +53,9 @@
                 <li class="nav-item">
                   <a class="nav-link" id="pills-incidenciasCerradas-tab" data-toggle="pill" href="#pills-incidenciasCerradas" role="tab" aria-controls="pills-incidenciasCerradas" aria-selected="false">Incidencias cerradas</a>
                 </li>
+                <li class="nav-item">
+                  <a class="nav-link" id="pills-incidenciasAsignadas-tab" data-toggle="pill" href="#pills-incidenciasAsignadas" role="tab" aria-controls="pills-incidenciasAsignadas" aria-selected="false">Incidencias asignadas</a>
+                </li>
               </ul>
 
               <!-- Fin de pestañas del primer tab -->
@@ -61,7 +64,7 @@
                 <div class="tab-pane fade show active" id="pills-incidenciasTotales" role="tabpanel" aria-labelledby="pills-incidenciasTotales-tab">
 
                   <!-- Inicio de formulario de consulta de incidencias totales -->
-                  <form id="formConsultarIncidenciasTotales" action="reportes.php?action=consultarTotales" method="GET" class="bg-white w-full text-xs ">
+                  <form id="formIncidenciasTotales" action="reportes.php?action=consultarIncidenciasTotales" method="GET" class="bg-white w-full text-xs ">
                     <!-- Inputs y botones para filtrar incidencias -->
                     <div class="flex justify-center items-center mt-2">
                       <!-- Fecha de inicio -->
@@ -79,12 +82,12 @@
                       <!-- Botones alineados horizontalmente -->
                       <div class="ml-5 flex space-x-2">
                         <!-- Botón de buscar -->
-                        <button type="submit" id="filtrarIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                        <button type="submit" id="filtrarListaIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
                           <i class="feather icon-filter"></i>
                         </button>
 
                         <!-- Botón de nueva consulta -->
-                        <button type="button" id="limpiarCampos_incidencias_totales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                        <button type="button" id="limpiarCamposIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
                           <i class="feather icon-refresh-cw"></i>
                         </button>
 
@@ -181,15 +184,15 @@
                   </form>
                   <!-- Fin de formulario de consulta de incidencias totales -->
                 </div>
-                <!-- Fin de primer tab -->
+                <!-- Fin de incidencias totales -->
 
                 <!-- Tab Incidencias Pendientes de Cierre -->
                 <div class="tab-pane fade" id="pills-pendientesCierre" role="tabpanel" aria-labelledby="pills-pendientesCierre-tab">
                   <!-- Inicio formulario de consulta de incidencias pendientes de cierre -->
-                  <form id="formConsultarPendientesCierre" action="reportes.php?action=consultarPendientesCierre" method="GET" class="bg-white w-full text-xs ">
+                  <form id="formPendientesCierre" action="reportes.php?action=consultarPendientesCierre" method="GET" class="bg-white w-full text-xs ">
                     <!-- Boton para generar reporte -->
                     <div class="flex justify-center space-x-2">
-                      <button type="button" id="reporte-pendientes-cierre" class="bn bg-red-400 text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
+                      <button type="button" id="reportePendientesCierre" class="bn  h-10 btn-secondary text-xs text-white font-bold py-2 px-3  rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
                     </div>
 
                     <!-- Tabla de resultados de incidencias pendientes de cierre -->
@@ -265,48 +268,53 @@
                     <!-- Fin de tabla de resultados de incidencias pendientes de cierre -->
                   </form>
                 </div>
-                <!--Fin de segundo tab -->
+                <!--Fin de incidencias pendientes de cierre -->
 
-                <!-- TODO: Tab Incidencias Cerradas -->
+                <!-- Tab Incidencias Cerradas -->
                 <div class="tab-pane fade" id="pills-incidenciasCerradas" role="tabpanel" aria-labelledby="pills-incidenciasCerradas-tab">
                   <!-- Inicio formulario de consulta de incidencias cerradas -->
-                  <form id="formConsultarIncidenciasCerradas" action="reportes.php?action=consultarCerradas" method="GET" class="bg-white w-full text-xs ">
+                  <form id="formIncidenciasCerradas" action="reportes.php?action=consultarIncidenciasCerradas" method="GET" class="bg-white w-full text-xs ">
                     <!-- Inputs y botones para filtrar incidencias -->
                     <div class="flex justify-center items-center mt-2">
                       <!-- Fecha de inicio -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                        <label for="fechaInicio" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                        <input type="date" id="fechaInicio_incidencias_cerradas" name="fechaInicio" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                        <label for="fechaInicioIncidenciasCerradas" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                        <input type="date" id="fechaInicioIncidenciasCerradas" name="fechaInicioIncidenciasCerradas" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de fecha de inicio -->
 
                       <!-- Fecha de fin -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                        <label for="fechaFin" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                        <input type="date" id="fechaFin_incidencias_cerradas" name="fechaFin" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                        <label for="fechaFinIncidenciasCerradas" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                        <input type="date" id="fechaFinIncidenciasCerradas" name="fechaFinIncidenciasCerradas" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
-                      <!-- Fin de fecha de fin -->
 
                       <!-- Botones alineados horizontalmente -->
                       <div class="ml-5 flex space-x-2">
                         <!-- Botón de buscar -->
-                        <button type="button" id="filtrarIncidenciasCerradasFecha" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 btn-primary rounded-md flex justify-center items-center">
+                        <button type="submit" id="filtrarListaIncidenciasCerradas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
                           <i class="feather icon-filter"></i>
                         </button>
+
                         <!-- Botón de nueva consulta -->
-                        <button type="button" id="limpiarCampos_incidencias_cerradas" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                        <button type="button" id="limpiarCamposIncidenciasCerradas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
                           <i class="feather icon-refresh-cw"></i>
                         </button>
-                        <!-- Boton generar reporte filtrado-->
-                        <button type="button" id="reportes-cierres-fechas" class="bn text-xs font-bold py-2 px-3 rounded-md text-white bg-gray-300 cursor-not-allowed" disabled>
-                          <i class="feather mr-2 icon-file"></i>Reporte filtrado
-                        </button>
+
                         <!-- Boton generar reporte -->
-                        <div class="flex justify-center space-x-2">
-                          <button type="button" id="reporte-incidencias-totales" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-file"></i>Reporte totales</button>
+                        <div class="btn-group mr-2">
+                          <div class="flex justify-center space-x-2">
+                            <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="feather mr-2 icon-file"></i>Reporte
+                            </button>
+                            <div class="dropdown-menu">
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradas">Todos las incidencias</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradasFecha">Incidencias por fechas</div>
+                            </div>
+                          </div>
                         </div>
                       </div>
                       <!-- Fin de botones alineados horizontalmente -->
+
                     </div>
                     <!-- Fin de inputs y botones para filtrar incidencias -->
 
@@ -387,6 +395,136 @@
                   </form>
                 </div>
                 <!-- Fin de tercer tab -->
+
+                <!-- Tab Incidencias Asignadas -->
+                <div class="tab-pane fade" id="pills-incidenciasAsignadas" role="tabpanel" aria-labelledby="pills-incidenciasAsignadas-tab">
+                  <!-- Inicio formulario de consulta de incidencias asignadas -->
+                  <form id="formIncidenciasAsignadas" action="reportes.php?action=consultarIncidenciasAsignadas" method="GET" class="bg-white w-full text-xs ">
+                    <!-- Inputs y botones para filtrar incidencias -->
+                    <div class="flex justify-center items-center mt-2">
+                      <!-- Nombre de usuario asignado -->
+                      <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                        <label for="usuarioIncidenciasAsignadas" class="block mb-1 font-bold text-xs">Usuario:</label>  
+                        <select id="usuarioIncidenciasAsignadas" name="usuarioIncidenciasAsignadas" class="border p-2 w-full text-xs cursor-pointer">
+                        </select>
+                        <input type="hidden" id="codigoUsuarioIncidenciasAsignadas" name="codigoUsuarioIncidenciasAsignadas" readonly>  
+                        <input type="hidden" id="nombreUsuarioIncidenciasAsignadas" name="nombreUsuarioIncidenciasAsignadas" readonly>  
+                      </div>
+                      <!-- Fecha de inicio -->
+                      <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                        <label for="fechaInicioIncidenciasAsignadas" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                        <input type="date" id="fechaInicioIncidenciasAsignadas" name="fechaInicioIncidenciasAsignadas" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                      </div>
+
+                      <!-- Fecha de fin -->
+                      <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                        <label for="fechaFinIncidenciasAsignadas" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                        <input type="date" id="fechaFinIncidenciasAsignadas" name="fechaFinIncidenciasAsignadas" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                      </div>
+
+                      <!-- Botones alineados horizontalmente -->
+                      <div class="ml-5 flex space-x-2">
+                        <!-- Botón de buscar -->
+                        <button type="submit" id="filtrarListaAsignaciones" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                          <i class="feather icon-filter"></i> </button>
+                        <!-- Botón de nueva consulta -->
+                        <button type="button" id="limpiarCamposIncidenciasAsignadas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                          <i class="feather icon-refresh-cw"></i>
+                        </button>
+
+                        <!-- Boton generar reporte -->
+                        <div class="btn-group mr-2">
+                          <div class="flex justify-center space-x-2">
+                            <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                              <i class="feather mr-2 icon-file"></i>Reporte
+                            </button>
+                            <div class="dropdown-menu">
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadas">Todos las incidencias</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadasFecha">Incidencias por fechas</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadasUsuario">Incidencias por usuario</div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <!-- Fin de botones alineados horizontalmente -->
+                    </div>
+                    <div class="relative sm:rounded-lg mt-2">
+                      <div class="max-w-full overflow-hidden sm:rounded-lg">
+                        <table id="tablaIncidenciasAsignadas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                          <!-- Encabezado de la tabla -->
+                          <thead class="text-xs text-gray-700 uppercase bg-orange-300">
+                            <tr>
+                              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
+                              <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                              <th scope="col" class="px-3 py-2 text-center">Fecha de asignación</th>
+                              <th scope="col" class="px-3 py-2 text-center">Usuario asignado</th>
+                              <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                              <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
+                              <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
+                              <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
+                              <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
+                              <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                              <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
+                              <th scope="col" class="px-3 py-2 text-center">Estado</th>
+                            </tr>
+                          </thead>
+                          <!-- Fin de encabezado de la tabla -->
+
+                          <!-- Cuerpo de la tabla -->
+                          <tbody>
+                            <?php if (!empty($resultadoIncidenciasAsignadas)): ?>
+                              <?php $item = 1; // Iniciar contador para el ítem 
+                              ?>
+                              <?php foreach ($resultadoIncidenciasAsignadas as $asignadas): ?>
+                                <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                  <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['INC_numero_formato']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['fechaAsignacionFormateada']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['USU_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['INC_asunto']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['ARE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['INC_codigoPatrimonial']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['BIE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['ARE_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['PRI_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['CON_descripcion']) ?></td>
+                                  <td class="px-3 py-2 text-center text-xs align-middle">
+                                    <?php
+                                    $estadoDescripcion = htmlspecialchars($asignadas['Estado']);
+                                    $badgeClass = '';
+                                    switch ($estadoDescripcion) {
+                                      case 'ABIERTO':
+                                        $badgeClass = 'badge-light-danger';
+                                        break;
+                                      case 'RECEPCIONADO':
+                                        $badgeClass = 'badge-light-success';
+                                        break;
+                                      case 'CERRADO':
+                                        $badgeClass = 'badge-light-primary';
+                                        break;
+                                      default:
+                                        $badgeClass = 'badge-light-secondary';
+                                        break;
+                                    }
+                                    ?>
+                                    <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                                  </td>
+                                </tr>
+                              <?php endforeach; ?>
+                            <?php else: ?>
+                              <tr>
+                                <td colspan="10" class="text-center py-3">No se encontraron registros de incidencias asignadas.</td>
+                              </tr>
+                            <?php endif; ?>
+                          </tbody>
+                          <!-- Fin de cuerpo de tabla -->
+                        </table>
+                      </div>
+                    </div>
+                    <!-- Fin de tabla de resultados de incidencias asignadas -->
+                  </form>
+                </div>
+                <!-- Fin de cuarto tab -->
               </div>
             </div>
             <!-- Fin de contenido de la primera pestaña -->

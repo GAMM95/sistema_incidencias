@@ -367,8 +367,8 @@ class IncidenciaController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
-      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
+      $fechaInicio = isset($_GET['fechaInicioIncidenciasTotales']) ? $_GET['fechaInicioIncidenciasTotales'] : null;
+      $fechaFin = isset($_GET['fechaFinIncidenciasTotales']) ? $_GET['fechaFinIncidenciasTotales'] : null;
       error_log("Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
       // Llamar al método para consultar incidencias por fecha
       $consultaIncidencia = $this->incidenciaModel->buscarIncidenciaTotalesFecha($fechaInicio, $fechaFin);

@@ -43,7 +43,7 @@ class ReporteIncidenciasTotalesFecha extends Conexion
             LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
             LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
             INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
-            WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5))
+            WHERE (I.EST_codigo IN (3, 4, 7) OR C.EST_codigo IN (3, 4, 7))
             AND INC_fecha BETWEEN :fechaInicio AND :fechaFin
             ORDER BY I.INC_numero_formato ASC";
 
@@ -63,8 +63,8 @@ class ReporteIncidenciasTotalesFecha extends Conexion
 }
 
 // Obtención del parámetro 'fechaInicio' y 'fechaFin' desde la solicitud
-$fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : '';
-$fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : '';
+$fechaInicio = isset($_GET['fechaInicioIncidenciasTotales']) ? $_GET['fechaInicioIncidenciasTotales'] : '';
+$fechaFin = isset($_GET['fechaFinIncidenciasTotales']) ? $_GET['fechaFinIncidenciasTotales'] : '';
 
 $reporteIncidenciasTotalesFecha = new ReporteIncidenciasTotalesFecha();
 $reporte = $reporteIncidenciasTotalesFecha->getReporteIncidenciasTotalesFecha($fechaInicio, $fechaFin);
