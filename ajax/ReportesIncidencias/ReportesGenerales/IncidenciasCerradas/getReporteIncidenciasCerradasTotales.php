@@ -1,7 +1,7 @@
 <?php
 require_once '../../../../config/conexion.php';
 
-class getReporteIncidenciasCerradasTotales extends Conexion
+class ReporteIncidenciasCerradasTotales extends Conexion
 {
   public function __construct()
   {
@@ -22,7 +22,7 @@ class getReporteIncidenciasCerradasTotales extends Conexion
   }
 }
 
-$reporteIncidenciasCerradasTotales = new getReporteIncidenciasCerradasTotales();
+$reporteIncidenciasCerradasTotales = new ReporteIncidenciasCerradasTotales();
 $reporte = $reporteIncidenciasCerradasTotales->getReporteIncidenciasCerradasTotales();
 
 header('Content-Type: application/json');

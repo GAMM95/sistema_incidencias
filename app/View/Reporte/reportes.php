@@ -316,8 +316,10 @@
                               <i class="feather mr-2 icon-file"></i>Reporte
                             </button>
                             <div class="dropdown-menu">
-                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradas">Todos las incidencias</div>
-                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradasFecha">Incidencias por fechas</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradas">Todos las incidencias cerradas</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradasFecha">Cierres por fechas</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradasUsuario">Cierres por usuario</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasCerradasUsuarioFecha">Cierres por usuario y fechas</div>
                             </div>
                           </div>
                         </div>

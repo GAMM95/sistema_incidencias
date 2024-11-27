@@ -247,13 +247,11 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
   <!-- Reportes incidencias totales -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteIncidenciasTotalesFecha.js"></script>
-
   <!-- Rporte pendiente de cierre -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/PendientesCierre/reportePendientesCierre.js"></script>
-
   <!-- Reportes incidencias cerradas -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteTotalIncidenciasCerradas.js"></script>
-
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasFecha.js"></script>
   <!-- Reportes de detalle -->
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleIncidencia.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
