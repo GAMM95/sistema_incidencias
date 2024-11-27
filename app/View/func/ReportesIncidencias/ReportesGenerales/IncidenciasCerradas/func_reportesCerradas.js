@@ -5,11 +5,51 @@ $(document).ready(function () {
     "timeOut": "2000"
   };
 
+  // Seteo del combo de usuario que realizaron el cierre
+  $.ajax({
+    url: 'ajax/getUsuarioCierre.php',
+    type: 'GET',
+    dataType: 'json',
+    success: function (data) {
+      var select = $('#usuarioIncidenciasCerradas');
+      select.empty();
+      select.append('<option value="" selected disabled>Seleccione un usuario</option>');
+      $.each(data, function (index, value) {
+        select.append('<option value="' + value.USU_codigo + '">' + value.usuarioCierre + '</option>');
+      });
+    },
+    error: function (error) {
+      console.error(error);
+    }
+  });
+
+  // Setear campos del usuario seleccionado
+  $('#usuarioIncidenciasCerradas').change(function () {
+    var selectedOption = $(this).find('option:selected');
+    var codigoUsuario = selectedOption.val();
+    var nombreUsuario = selectedOption.text();
+    $('#codigoUsuarioIncidenciasCerradas').val(codigoUsuario);
+    $('#nombreUsuarioIncidenciasCerradas').val(nombreUsuario);
+  });
+
+  // Buscador para el combo de usuario que realizaron el cierre
+  $('#usuarioIncidenciasCerradas').select2({
+    allowClear: true,
+    width: '100%',
+    dropdownCssClass: 'text-xs', // Use Tailwind CSS class
+    language: {
+      noResults: function () {
+        return "No se encontraron resultados";
+      }
+    }
+  });
+
   // Funcion para realizar la consulta sin filtros
   function nuevaConsultaIncidenciasCerradas() {
     // limpiar los campos fechas 
     $('#fechaInicioIncidenciasCerradas').val('');
     $('#fechaFinIncidenciasCerradas').val('');
+    $('#usuarioIncidenciasCerradas').val(null).trigger('change');
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
@@ -72,12 +112,13 @@ $(document).ready(function () {
       var valido = false;
       var mensajeError = '';
 
+      var faltaUsuario = ($('#usuarioIncidenciasCerradas').val() !== null && $('#usuarioIncidenciasCerradas').val().trim() !== '');
       var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasCerradas').val() !== null && $('#fechaInicioIncidenciasCerradas').val().trim() !== '');
-      var fechaFinSeleccionada = ($('#fechaFinIncidenciasCerradas').val() !== null && $('#fechaFinIncidenciasCerradas').val().trim() !== ''); 
+      var fechaFinSeleccionada = ($('#fechaFinIncidenciasCerradas').val() !== null && $('#fechaFinIncidenciasCerradas').val().trim() !== '');
 
 
       // Verificar si al menos un campo está lleno
-      if (fechaInicioSeleccionada || fechaFinSeleccionada) {
+      if (faltaUsuario || fechaInicioSeleccionada || fechaFinSeleccionada) {
         valido = true;
       } else {
         mensajeError = 'Debe completar al menos un campo para filtrar la tabla.';

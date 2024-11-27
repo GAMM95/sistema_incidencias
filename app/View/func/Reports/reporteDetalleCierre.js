@@ -17,7 +17,7 @@ $(document).ready(function () {
 
     // Realizar una solicitud AJAX para obtener los datos de la incidencia
     $.ajax({
-      url: 'ajax/getReporteDetalleCierre.php',
+      url: 'ajax/ReportesIncidencias/ReporteDetalle/getReporteDetalleCierre.php',
       method: 'GET',
       data: { numero: numeroCierre },
       dataType: 'json',
@@ -38,7 +38,7 @@ $(document).ready(function () {
 
               const fechaImpresion = new Date().toLocaleDateString();
               const headerText2 = 'Subgerencia de Informática y Sistemas';
-              const reportTitle = 'REPORTE DE CIERRE';
+              const reportTitle = 'REPORTE DETALLADO DE CIERRE';
 
               const pageWidth = doc.internal.pageSize.width;
               const marginX = 10;

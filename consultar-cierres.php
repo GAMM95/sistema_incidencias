@@ -44,7 +44,7 @@ if ($action === 'consultar') {
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['BIE_nombre']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['INC_asunto']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['CIE_documento']) . '</td>';
-      // $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['CON_descripcion']) . '</td>';
+      $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($cierre['Usuario']) . '</td>';
       $html .= '<td class="px-3 py-2 text-center text-xs align-middle">';
       // Manejar el estado de la incidencia
       $estadoDescripcion = htmlspecialchars($cierre['CON_descripcion']);
@@ -70,7 +70,7 @@ if ($action === 'consultar') {
       $html .= '</td></tr>';
     }
   } else {
-    $html = '<tr><td colspan="9" class="text-center py-3">No se encontraron incidencias atentidas.</td></tr>';
+    $html = '<tr><td colspan="10" class="text-center py-3">No se encontraron incidencias atentidas.</td></tr>';
   }
 
   echo $html;

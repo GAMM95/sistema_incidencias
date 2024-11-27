@@ -152,7 +152,7 @@ function obtenerColumnasParaAccion($action)
     case 'consultarIncidenciasTotales':
       return ['INC_numero_formato', 'fechaIncidenciaFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'CON_descripcion'];
     case 'consultarIncidenciasCerradas':
-      return ['INC_numero_formato', 'fechaCierreFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre'];
+      return ['INC_numero_formato', 'fechaCierreFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'Usuario'];
     default:
       return [];
   }
@@ -238,38 +238,41 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_reportes.js"></script>
 
   <!-- Funcionalidades -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/func_reportesGenerales.js"></script>
-
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/func_reportesCerradas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/func_reporteDetalles.js"></script>
 
-
-
-  <!-- Reportes -->
+  <!-- Reportes incidencias totales -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteIncidenciasTotalesFecha.js"></script>
 
+  <!-- Rporte pendiente de cierre -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/PendientesCierre/reportePendientesCierre.js"></script>
 
+  <!-- Reportes incidencias cerradas -->
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteTotalIncidenciasCerradas.js"></script>
 
+  <!-- Reportes de detalle -->
+  <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleIncidencia.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
 
 
 
   <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->
-  <script src="./app/View/func/Reports/reportesPorArea.js"></script>
-  <script src="./app/View/func/Reports/reportePorCodigoPatrimonial.js"></script>
+  <!-- <script src="./app/View/func/Reports/reportesPorArea.js"></script>
+  <script src="./app/View/func/Reports/reportePorCodigoPatrimonial.js"></script> -->
   <!-- <script src="./app/View/func/Reports/reporteIncidenciasPorFecha.js"></script> -->
-  <script src="./app/View/func/Reports/reporteCierresPorFecha.js"></script>
+  <!-- <script src="./app/View/func/Reports/reporteCierresPorFecha.js"></script>
   <script src="./app/View/func/Reports/reporteNumeroIncidencia.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleCierreNumIncidencia.js"></script>
   <script src="./app/View/func/Reports/reporteAreasPorFecha.js"></script>
   <script src="./app/View/func/Reports/reporteBienesPorFecha.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleCierreReporte.js"></script>
-  <script src="./app/View/func/Reports/reporteDetalleIncidenciaReporte.js"></script>
+  <script src="./app/View/func/Reports/reporteDetalleIncidenciaReporte.js"></script> -->
 
-
+<!-- <script src="./app/View/func/func_reportes.js"></script> -->
 
   <!-- Filtros o consultas por fecha para generar reportes -->
   <!-- <script src="./app/View/func/Consultas/func_consulta_totales_fecha.js"></script>

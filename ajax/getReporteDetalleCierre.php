@@ -54,7 +54,6 @@ class ReporteIncidencia extends Conexion
 
     $sql = "SELECT * FROM vista_cierres";
     $stmt = $conector->prepare($sql);
-    // $stmt->bindParam(':numeroIncidencia', $numeroIncidencia);
     try {
       $stmt->execute();
       $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

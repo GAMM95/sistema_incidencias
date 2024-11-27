@@ -276,6 +276,15 @@
                   <form id="formIncidenciasCerradas" action="reportes.php?action=consultarIncidenciasCerradas" method="GET" class="bg-white w-full text-xs ">
                     <!-- Inputs y botones para filtrar incidencias -->
                     <div class="flex justify-center items-center mt-2">
+                      <!-- Nombre de persona -->
+                      <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                        <label for="usuarioIncidenciasCerradas" class="block mb-1 font-bold text-xs">Usuario de cierre:</label>
+                        <select id="usuarioIncidenciasCerradas" name="usuarioIncidenciasCerradas" class="border p-2 w-full text-xs cursor-pointer">
+                        </select>
+                        <input type="hidden" id="codigoUsuarioIncidenciasCerradas" name="codigoUsuarioIncidenciasCerradas" readonly>
+                        <input type="hidden" id="nombreUsuarioIncidenciasCerradas" name="nombreUsuarioIncidenciasCerradas" readonly>
+                      </div>
+
                       <!-- Fecha de inicio -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
                         <label for="fechaInicioIncidenciasCerradas" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
@@ -334,6 +343,7 @@
                               <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
                               <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
                               <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                              <th scope="col" class="px-3 py-2 text-center">Usuario Cierre</th>
                               <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
                             </tr>
                           </thead>
@@ -355,6 +365,7 @@
                                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['BIE_nombre']) ?></td>
                                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['ARE_nombre']) ?></td>
                                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['PRI_nombre']) ?></td>
+                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cerradas['Usuario']) ?></td>
                                   <td class="px-3 py-2 text-center text-xs align-middle">
                                     <?php
                                     $condicionDescripcion = htmlspecialchars($cerradas['CON_descripcion']);
@@ -383,7 +394,7 @@
                               <?php endforeach; ?>
                             <?php else: ?>
                               <tr>
-                                <td colspan="10" class="text-center py-3">No se encontraron registros de incidencias cerradas.</td>
+                                <td colspan="11" class="text-center py-3">No se encontraron registros de incidencias cerradas.</td>
                               </tr>
                             <?php endif; ?>
                           </tbody>
@@ -404,11 +415,11 @@
                     <div class="flex justify-center items-center mt-2">
                       <!-- Nombre de usuario asignado -->
                       <div class="w-full px-2 mb-2" style="max-width: 250px;">
-                        <label for="usuarioIncidenciasAsignadas" class="block mb-1 font-bold text-xs">Usuario:</label>  
+                        <label for="usuarioIncidenciasAsignadas" class="block mb-1 font-bold text-xs">Usuario:</label>
                         <select id="usuarioIncidenciasAsignadas" name="usuarioIncidenciasAsignadas" class="border p-2 w-full text-xs cursor-pointer">
                         </select>
-                        <input type="hidden" id="codigoUsuarioIncidenciasAsignadas" name="codigoUsuarioIncidenciasAsignadas" readonly>  
-                        <input type="hidden" id="nombreUsuarioIncidenciasAsignadas" name="nombreUsuarioIncidenciasAsignadas" readonly>  
+                        <input type="hidden" id="codigoUsuarioIncidenciasAsignadas" name="codigoUsuarioIncidenciasAsignadas" readonly>
+                        <input type="hidden" id="nombreUsuarioIncidenciasAsignadas" name="nombreUsuarioIncidenciasAsignadas" readonly>
                       </div>
                       <!-- Fecha de inicio -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">

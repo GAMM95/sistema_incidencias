@@ -16,7 +16,8 @@ $(document).ready(function () {
 
     // Realizar una solicitud AJAX para obtener los datos de la incidencia
     $.ajax({
-      url: 'ajax/getReporteDetalleCierre.php',
+      // url: 'ajax/getReporteDetalleCierre.php',
+      url: 'ajax/ReportesIncidencias/ReporteDetalle/getReporteDetalleCierre.php',
       method: 'GET',
       data: { numero: numeroCierre },
       dataType: 'json',

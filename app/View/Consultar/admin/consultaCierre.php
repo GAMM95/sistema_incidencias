@@ -73,6 +73,7 @@
               <th scope="col" class="px-3 py-2 text-center">Nombre del bien</th>
               <th scope="col" class="px-3 py-2 text-center">Asunto de Cierre</th>
               <th scope="col" class="px-3 py-2 text-center">Documento de Cierre</th>
+              <th scope="col" class="px-3 py-2 text-center">Usuario de Cierre</th>
               <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
             </tr>
           </thead>
@@ -93,6 +94,7 @@
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['BIE_nombre']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['INC_asunto']) ?></td>
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['CIE_documento']) ?></td>
+                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierre['Usuario']) ?></td>
                   <td class="px-3 py-2 text-center text-xs align-middle">
                     <?php
                     $estadoDescripcion = htmlspecialchars($cierre['CON_descripcion']);
@@ -121,7 +123,7 @@
               <?php endforeach; ?>
             <?php else: ?>
               <tr>
-                <td colspan="9" class="text-center py-3">No se encontraron cierres.</td>
+                <td colspan="10" class="text-center py-3">No se encontraron cierres.</td>
               </tr>
             <?php endif; ?>
           </tbody>

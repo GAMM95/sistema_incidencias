@@ -173,15 +173,16 @@ class cierreController
   }
 
   // Metodo para filtrar incidencias cerradas por fecha ingresada
-  public function filtrarIncidenciasCerradasFecha($fechaInicio = null, $fechaFin = null)
+  public function filtrarIncidenciasCerradasFecha($usuario = null, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioIncidenciasCerradas']) ? (int) $_GET['usuarioIncidenciasCerradas'] : null;
       $fechaInicio = isset($_GET['fechaInicioIncidenciasCerradas']) ? $_GET['fechaInicioIncidenciasCerradas'] : null;
       $fechaFin = isset($_GET['fechaFinIncidenciasCerradas']) ? $_GET['fechaFinIncidenciasCerradas'] : null;
       error_log("Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
       // Llamar al método para consultar incidencias por fecha
-      $consultaIncidencia = $this->cierreModel->buscarIncidenciaCerradasFecha($fechaInicio, $fechaFin);
+      $consultaIncidencia = $this->cierreModel->buscarIncidenciaCerradas($usuario, $fechaInicio, $fechaFin);
       // Retornar el resultado de la consulta
       return $consultaIncidencia;
     }

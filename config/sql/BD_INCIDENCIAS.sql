@@ -3406,8 +3406,9 @@ BEGIN
 END
 GO
 
--- PROCEDIMIENTO ALMACENADO PARA FILTRAR INCIDENCIAS CERRADAS POR FECHA
-CREATE OR ALTER PROCEDURE sp_filtrar_incidencias_cerradas_fecha
+-- PROCEDIMIENTO ALMACENADO PARA FILTRAR INCIDENCIAS CERRADAS 
+CREATE OR ALTER PROCEDURE sp_filtrar_incidencias_cerradas
+  @usuario INT = NULL,
   @fechaInicio DATE = NULL,
   @fechaFin DATE = NULL
 AS
@@ -3431,6 +3432,7 @@ BEGIN
 		C.CIE_recomendaciones,
 		C.CIE_documento,
 		O.CON_descripcion,
+    C.USU_codigo,
 		U.USU_nombre,
 		S.SOL_descripcion,
 		CASE
@@ -3460,6 +3462,7 @@ BEGIN
 		C.EST_codigo = 7 -- Solo incidencias con estado 7 (cerradas)
 		AND (@fechaInicio IS NULL OR C.CIE_fecha >= @fechaInicio)
 		AND (@fechaFin IS NULL OR C.CIE_fecha <= @fechaFin)
+    AND (@usuario IS NULL OR C.USU_codigo = @usuario)
 	GROUP BY
 		I.INC_numero,
 		I.INC_numero_formato,
@@ -3479,6 +3482,7 @@ BEGIN
 		C.CIE_recomendaciones,
 		C.CIE_documento,
 		O.CON_descripcion,
+    C.USU_codigo,
 		U.USU_nombre,
 		S.SOL_descripcion,
 		P.PER_nombres,

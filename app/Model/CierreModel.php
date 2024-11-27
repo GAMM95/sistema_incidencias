@@ -309,13 +309,14 @@ class CierreModel extends Conexion
   }
 
   // Metodo para consultar incidencias cerradas para la visualción de reportes
-  public function buscarIncidenciaCerradasFecha($fechaInicio, $fechaFin)
+  public function buscarIncidenciaCerradas($usuario, $fechaInicio, $fechaFin)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_filtrar_incidencias_cerradas_fecha  :fechaInicio, :fechaFin";
+        $sql = "EXEC sp_filtrar_incidencias_cerradas :usuario, :fechaInicio, :fechaFin";
         $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
         $stmt->bindParam(':fechaInicio', $fechaInicio);
         $stmt->bindParam(':fechaFin', $fechaFin);
         $stmt->execute();
@@ -325,7 +326,7 @@ class CierreModel extends Conexion
         throw new Exception("Error de conexión con la base de datos.");
       }
     } catch (PDOException $e) {
-      throw new Exception("Error al obtener las incidencias cerradas por fecha: " . $e->getMessage());
+      throw new Exception("Error al obtener las incidencias cerradas: " . $e->getMessage());
     }
   }
 }
