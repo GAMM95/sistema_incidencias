@@ -7,17 +7,17 @@ $(document).ready(function () {
 });
 
 // Generación del PDF al hacer clic en el botón "Usuario y fechas"
-$('#reporteEventosTotalesUsuarioFecha').click(function () {
-  const usuario = $("#personaEventosTotales").val();
-  const fechaInicio = $('#fechaInicioEventosTotales').val();
-  const fechaFin = $('#fechaFinEventosTotales').val();
+$('#reporteIncidenciasCerradasUsuarioFecha').click(function () {
+  const usuario = $("#usuarioIncidenciasCerradas").val();
+  const fechaInicio = $('#fechaInicioIncidenciasCerradas').val();
+  const fechaFin = $('#fechaFinIncidenciasCerradas').val();
 
   console.log('Usuario:', usuario);
   console.log('Fecha Inicio:', fechaInicio);
   console.log('Fecha Fin:', fechaFin);
 
   // Verificar si los campos son validos
-  if (!validarCamposEventosTotalesUsuarioFecha()) {
+  if (!validarCamposIncidenciasCerradasUsuarioFecha()) {
     return;
   }
 
@@ -34,12 +34,12 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesAuditoria/EventosTotales/getReporteEventosTotalesUsuarioFecha.php',
+    url: 'ajax/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/getReporteIncidenciasCerradasUsuarioFecha.php',
     method: 'GET',
     data: {
-      personaEventosTotales: usuario,
-      fechaInicioEventosTotales: fechaInicio,
-      fechaFinEventosTotales: fechaFin
+      usuarioIncidenciasCerradas: usuario,
+      fechaInicioIncidenciasCerradas: fechaInicio,
+      fechaFinIncidenciasCerradas: fechaFin
     },
     dataType: 'json',
     success: function (data) {
@@ -71,7 +71,7 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = 'REPORTE DE EVENTOS POR USUARIO Y FECHAS';
+            const reportTitle = 'REPORTE DE INCIDENCIAS CERRADAS POR USUARIO Y FECHAS';
             const headerText2 = 'Subgerencia de Informática y Sistemas';
             const fechaImpresion = new Date().toLocaleDateString();
 
@@ -127,9 +127,9 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
             };
 
             // Obtener valores
-            const usuarioNombre = $('#nombreUsuarioEventosLogin').val() || '-';
-            const fechaInicioOriginal = $('#fechaInicioEventosTotales').val();
-            const fechaFinOriginal = $('#fechaFinEventosTotales').val();
+            const usuarioNombre = $('#nombreUsuarioIncidenciasCerradas').val() || '-';
+            const fechaInicioOriginal = $('#fechaInicioIncidenciasCerradas').val();
+            const fechaFinOriginal = $('#fechaFinIncidenciasCerradas').val();
 
             // Función para formatear la fecha
             function formatearFecha(fecha) {
@@ -183,20 +183,21 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
           function addTable(doc) {
             let item = 1;
             doc.autoTable({
-              startY: 36,
+              startY: 35,
               margin: { left: 4 },
-              head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+              head: [['N°', 'INCIDENCIA', 'FECHA INC', 'ASUNTO', 'DOCUMENTO', 'CÓD. PATRIMONIAL', 'NOMBRE DEL BIEN', 'ÁREA SOLICITANTE', 'PRIORIDAD', 'USUARIO CIERRE', 'CONDICIÓN']],
               body: data.map(reporte => [
                 item++,
-                reporte.fechaFormateada,
-                reporte.AUD_operacion,
-                reporte.AUD_tabla,
-                reporte.ROL_nombre,
-                reporte.USU_nombre,
-                reporte.NombreCompleto,
+                reporte.INC_numero_formato,
+                reporte.fechaIncidenciaFormateada,
+                reporte.INC_asunto,
+                reporte.INC_documento,
+                reporte.INC_codigoPatrimonial,
+                reporte.BIE_nombre,
                 reporte.ARE_nombre,
-                reporte.AUD_ip,
-                reporte.AUD_nombreEquipo
+                reporte.PRI_nombre,
+                reporte.Usuario,
+                reporte.CON_descripcion,
               ]),
               styles: {
                 fontSize: 7,
@@ -211,16 +212,17 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
                 halign: 'center'
               },
               columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 30 },
-                2: { cellWidth: 35 },
-                3: { cellWidth: 25 },
-                4: { cellWidth: 20 },
-                5: { cellWidth: 25 },
-                6: { cellWidth: 38 },
-                7: { cellWidth: 42 },
-                8: { cellWidth: 30 },
-                9: { cellWidth: 35 }
+                0: { cellWidth: 8 }, // Ancho para la columna item
+                1: { cellWidth: 25 }, // Ancho para la columna Número de incidencia
+                2: { cellWidth: 17 }, // Ancho para la columna Fecha formateada
+                3: { cellWidth: 35 }, // Ancho para la columna asunto
+                4: { cellWidth: 35 }, // Ancho para la columna documento
+                5: { cellWidth: 35 }, // Ancho para la columna Documento
+                6: { cellWidth: 28 }, // Ancho para la columna codigo patrimonial
+                7: { cellWidth: 35 }, // Ancho para la columna Área solicitante
+                8: { cellWidth: 20 }, // Ancho para la columna prioridad
+                9: { cellWidth: 25 }, // Ancho para la columna Usuario Cierre
+                10: { cellWidth: 25 }, // Ancho para la columna condicion
               }
             });
           }
@@ -238,14 +240,14 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
           }
 
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de eventos por usuario y fechas generado.', 'Mensaje');
+          toastr.success('Reporte de incidencias cerradas por usuario y fechas generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
             window.open(doc.output('bloburl'));
           }, 2000);
         } else {
-          toastr.warning('No se ha encontrado eventos para los campos ingresados.', 'Advertencia');
+          toastr.warning('No se ha encontrado incidencias cerradas para los campos ingresados.', 'Advertencia');
         }
       } catch (error) {
         toastr.error('Hubo un error al generar reporte.', 'Mensaje de error');
@@ -253,20 +255,20 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
       }
     },
     error: function (xhr, status, error) {
-      toastr.error('Hubo un error al obtener datos de los eventos.', 'Mensaje de error');
+      toastr.error('Hubo un error al obtener datos de las incidencias cerradas.', 'Mensaje de error');
       console.error('Error al realizar la solicitud AJAX:', error);
     }
   });
 });
 
-function validarCamposEventosTotalesUsuarioFecha() {
+function validarCamposIncidenciasCerradasUsuarioFecha() {
   var valido = false;
   var mensajeError = '';
 
   // Verificar si los campos no están vacíos
-  var fechaInicioSeleccionada = ($('#fechaInicioEventosTotales').val() !== null && $('#fechaInicioEventosTotales').val().trim() !== '');
-  var fechaFinSeleccionada = ($('#fechaFinEventosTotales').val() !== null && $('#fechaFinEventosTotales').val().trim() !== '');
-  var usuarioSeleccionado = ($('#personaEventosTotales').val() !== null && $('#personaEventosTotales').val().trim() !== '');
+  var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasCerradas').val() !== null && $('#fechaInicioIncidenciasCerradas').val().trim() !== '');
+  var fechaFinSeleccionada = ($('#fechaFinIncidenciasCerradas').val() !== null && $('#fechaFinIncidenciasCerradas').val().trim() !== '');
+  var usuarioSeleccionado = ($('#usuarioIncidenciasCerradas').val() !== null && $('#usuarioIncidenciasCerradas').val().trim() !== '');
 
   // Verificar si al menos uno de los campos tiene datos
   if (fechaInicioSeleccionada && fechaFinSeleccionada && usuarioSeleccionado) {

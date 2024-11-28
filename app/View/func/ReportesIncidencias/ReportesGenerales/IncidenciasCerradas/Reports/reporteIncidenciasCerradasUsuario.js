@@ -7,13 +7,13 @@ $(document).ready(function () {
 });
 
 // Generación del PDF al hacer clic en el botón "Usuario"
-$('#reporteEventosTotalesUsuario').click(function () {
-  const usuario = $("#personaEventosTotales").val();
+$('#reporteIncidenciasCerradasUsuario').click(function () {
+  const usuario = $("#usuarioIncidenciasCerradas").val();
 
   console.log('Usuario:', usuario);
 
   // Verificar si los campos son validos
-  if (!validarCamposEventosTotalesUsuario()) {
+  if (!validarCamposIncidenciasCerradasUsuario()) {
     return;
   }
 
@@ -30,10 +30,10 @@ $('#reporteEventosTotalesUsuario').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesAuditoria/EventosTotales/getReporteEventosTotalesUsuario.php',
+    url: 'ajax/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/getReporteIncidenciasCerradasUsuario.php',
     method: 'GET',
     data: {
-      personaEventosTotales: usuario
+      usuarioIncidenciasCerradas: usuario
     },
     dataType: 'json',
     success: function (data) {
@@ -65,7 +65,7 @@ $('#reporteEventosTotalesUsuario').click(function () {
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = 'REPORTE DE EVENTOS POR USUARIO';
+            const reportTitle = 'REPORTE DE INCIDENCIAS CERRADAS POR USUARIO';
             const headerText2 = 'Subgerencia de Informática y Sistemas';
             const fechaImpresion = new Date().toLocaleDateString();
 
@@ -119,7 +119,7 @@ $('#reporteEventosTotalesUsuario').click(function () {
             };
 
             // Obtener valores
-            const usuarioNombre = $('#nombreUsuarioEventosLogin').val() || '-';
+            const usuarioNombre = $('#nombreUsuarioIncidenciasCerradas').val() || '-';
 
             // Dibujar datos de usuario
             doc.setFont('helvetica', 'bold');
@@ -142,18 +142,19 @@ $('#reporteEventosTotalesUsuario').click(function () {
             doc.autoTable({
               startY: 35,
               margin: { left: 4 },
-              head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+              head: [['N°', 'INCIDENCIA', 'FECHA INC', 'ASUNTO', 'DOCUMENTO', 'CÓD. PATRIMONIAL', 'NOMBRE DEL BIEN', 'ÁREA SOLICITANTE', 'PRIORIDAD', 'USUARIO CIERRE', 'CONDICIÓN']],
               body: data.map(reporte => [
                 item++,
-                reporte.fechaFormateada,
-                reporte.AUD_operacion,
-                reporte.AUD_tabla,
-                reporte.ROL_nombre,
-                reporte.USU_nombre,
-                reporte.NombreCompleto,
+                reporte.INC_numero_formato,
+                reporte.fechaIncidenciaFormateada,
+                reporte.INC_asunto,
+                reporte.INC_documento,
+                reporte.INC_codigoPatrimonial,
+                reporte.BIE_nombre,
                 reporte.ARE_nombre,
-                reporte.AUD_ip,
-                reporte.AUD_nombreEquipo
+                reporte.PRI_nombre,
+                reporte.Usuario,
+                reporte.CON_descripcion,
               ]),
               styles: {
                 fontSize: 7,
@@ -168,16 +169,17 @@ $('#reporteEventosTotalesUsuario').click(function () {
                 halign: 'center'
               },
               columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 30 },
-                2: { cellWidth: 35 },
-                3: { cellWidth: 25 },
-                4: { cellWidth: 20 },
-                5: { cellWidth: 25 },
-                6: { cellWidth: 38 },
-                7: { cellWidth: 42 },
-                8: { cellWidth: 30 },
-                9: { cellWidth: 35 }
+                0: { cellWidth: 8 }, // Ancho para la columna item
+                1: { cellWidth: 25 }, // Ancho para la columna Número de incidencia
+                2: { cellWidth: 17 }, // Ancho para la columna Fecha formateada
+                3: { cellWidth: 35 }, // Ancho para la columna asunto
+                4: { cellWidth: 35 }, // Ancho para la columna documento
+                5: { cellWidth: 35 }, // Ancho para la columna Documento
+                6: { cellWidth: 28 }, // Ancho para la columna codigo patrimonial
+                7: { cellWidth: 35 }, // Ancho para la columna Área solicitante
+                8: { cellWidth: 20 }, // Ancho para la columna prioridad
+                9: { cellWidth: 25 }, // Ancho para la columna Usuario Cierre
+                10: { cellWidth: 25 }, // Ancho para la columna condicion
               }
             });
           }
@@ -195,14 +197,14 @@ $('#reporteEventosTotalesUsuario').click(function () {
           }
 
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de eventos por usuario generado.', 'Mensaje');
+          toastr.success('Reporte de incidencias cerradas por usuario generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
             window.open(doc.output('bloburl'));
           }, 2000);
         } else {
-          toastr.warning('No se ha encontrado eventos para el usuario seleccionado.', 'Advertencia');
+          toastr.warning('No se ha encontrado incidencias cerradas para el usuario seleccionado.', 'Advertencia');
         }
       } catch (error) {
         toastr.error('Hubo un error al generar reporte.', 'Mensaje de error');
@@ -210,18 +212,18 @@ $('#reporteEventosTotalesUsuario').click(function () {
       }
     },
     error: function (xhr, status, error) {
-      toastr.error('Hubo un error al obtener datos de los eventos.', 'Mensaje de error');
+      toastr.error('Hubo un error al obtener datos de las incidencias cerradas.', 'Mensaje de error');
       console.error('Error al realizar la solicitud AJAX:', error);
     }
   });
 });
 
 // Funcion para validar que el campo usuario tenga un valor
-function validarCamposEventosTotalesUsuario() {
+function validarCamposIncidenciasCerradasUsuario() {
   var valido = false;
   var mensajeError = '';
 
-  var faltaUsuario = ($('#personaEventosTotales').val() !== null && $('#personaEventosTotales').val().trim() !== '');
+  var faltaUsuario = ($('#usuarioIncidenciasCerradas').val() !== null && $('#usuarioIncidenciasCerradas').val().trim() !== '');
 
   // Verificar si al menos un campo está lleno
   if (faltaUsuario) {

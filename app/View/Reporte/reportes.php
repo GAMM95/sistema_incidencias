@@ -28,7 +28,7 @@
               <a class="nav-link active text-uppercase" id="generales-tab" data-toggle="tab" href="#generales" role="tab" aria-controls="generales" aria-selected="true">Reportes generales</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" id="detalle-tab" data-toggle="tab" href="#detalle" role="tab" aria-controls="detalle" aria-selected="false">Detalle de reporte</a>
+              <a class="nav-link text-uppercase" id="detalle-tab" data-toggle="tab" href="#detalle" role="tab" aria-controls="detalle" aria-selected="false">Reportes de detalle</a>
             </li>
             <li class="nav-item">
               <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Reportes por ...</a>
@@ -452,9 +452,10 @@
                               <i class="feather mr-2 icon-file"></i>Reporte
                             </button>
                             <div class="dropdown-menu">
-                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadas">Todos las incidencias</div>
-                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadasFecha">Incidencias por fechas</div>
-                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadasUsuario">Incidencias por usuario</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadas">Todos las incidencias asignadas</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadasFecha">Asignaciones por fechas</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadasUsuario">Asignaciones por usuario</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAsignadasUsuarioFecha">Asignaciones por usuario y fechas</div>
                             </div>
                           </div>
                         </div>
@@ -467,18 +468,19 @@
                           <!-- Encabezado de la tabla -->
                           <thead class="text-xs text-gray-700 uppercase bg-orange-300">
                             <tr>
-                              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
-                              <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                              <th scope="col" class="px-3 py-2 text-center">Fecha de asignación</th>
-                              <th scope="col" class="px-3 py-2 text-center">Usuario asignado</th>
-                              <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                              <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
-                              <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
-                              <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
-                              <th scope="col" class="px-3 py-2 text-center">&Aacute;rea solicitante</th>
-                              <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
-                              <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
-                              <th scope="col" class="px-3 py-2 text-center">Estado</th>
+                              <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+                              <th scope="col" class="px-6 py-2 hidden">Asignaci&oacute;n</th>
+                              <th scope="col" class="px-6 py-2 hidden">Recepci&oacute;n</th>
+                              <th scope="col" class="px-6 py-2 text-center">Incidencia</th>
+                              <th scope="col" class="px-6 py-2 text-center">&Aacute;rea solicitante</th>
+                              <th scope="col" class="px-6 py-2 text-center">Asunto</th>
+                              <th scope="col" class="px-6 py-2 text-center">Equipo</th>
+                              <th scope="col" class="px-6 py-2 text-center">Nombre del bien</th>
+                              <th scope="col" class="px-6 py-2 text-center">Fecha de asignaci&oacute;n</th>
+                              <th scope="col" class="px-6 py-2 text-center">Fecha de finalizaci&oacute;n</th>
+                              <th scope="col" class="px-6 py-2 text-center">Usuario asignado</th>
+                              <th scope="col" class="px-6 py-2 text-center">Tiempo de mantenimiento</th>
+                              <th scope="col" class="px-6 py-2 text-center">Estado</th>
                             </tr>
                           </thead>
                           <!-- Fin de encabezado de la tabla -->
@@ -491,32 +493,31 @@
                               <?php foreach ($resultadoIncidenciasAsignadas as $asignadas): ?>
                                 <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
                                   <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['INC_numero_formato']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['fechaAsignacionFormateada']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['USU_nombre']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['INC_asunto']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['ARE_nombre']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['INC_codigoPatrimonial']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['BIE_nombre']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['ARE_nombre']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['PRI_nombre']) ?></td>
-                                  <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignadas['CON_descripcion']) ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['INC_numero_formato']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['ARE_nombre']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['INC_asunto']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['INC_codigoPatrimonial']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['BIE_nombre']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['fechaAsignacionFormateada']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['fechaMantenimientoFormateada']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['usuarioSoporte']; ?></td>
+                                  <td class='px-6 py-2 text-center'><?= $asignadas['tiempoMantenimientoFormateado']; ?></td>
                                   <td class="px-3 py-2 text-center text-xs align-middle">
                                     <?php
                                     $estadoDescripcion = htmlspecialchars($asignadas['Estado']);
                                     $badgeClass = '';
                                     switch ($estadoDescripcion) {
-                                      case 'ABIERTO':
+                                      case 'EN ESPERA':
                                         $badgeClass = 'badge-light-danger';
                                         break;
-                                      case 'RECEPCIONADO':
-                                        $badgeClass = 'badge-light-success';
-                                        break;
-                                      case 'CERRADO':
+                                      case 'RESUELTO':
                                         $badgeClass = 'badge-light-primary';
                                         break;
-                                      default:
+                                      case 'CERRADO':
                                         $badgeClass = 'badge-light-secondary';
+                                        break;
+                                      default:
+                                        $badgeClass = 'badge-light-info';
                                         break;
                                     }
                                     ?>
@@ -526,7 +527,7 @@
                               <?php endforeach; ?>
                             <?php else: ?>
                               <tr>
-                                <td colspan="10" class="text-center py-3">No se encontraron registros de incidencias asignadas.</td>
+                                <td colspan="11" class="text-center py-3">No se encontraron registros de incidencias asignadas.</td>
                               </tr>
                             <?php endif; ?>
                           </tbody>

@@ -14,10 +14,14 @@ $area = $_SESSION['codigoArea'];
 require_once './app/Controller/incidenciaController.php';
 require_once './app/Controller/recepcionController.php';
 require_once './app/Controller/cierreController.php';
+require_once './app/Controller/asignacionController.php';
+require_once './app/Controller/mantenimientoController.php';
 
 $incidenciaController = new IncidenciaController();
 $recepcionController = new RecepcionController();
 $cierreController = new CierreController();
+$asignacionController = new AsignacionController();
+$mantenimientoController = new MantenimientoController();
 
 $fechaInicio = $_GET['fechaInicio'] ?? '';
 $fechaFin = $_GET['fechaFin'] ?? '';
@@ -111,6 +115,49 @@ function generarTablaCerradas($resultado, $itemCount, $columnas)
   return $html;
 }
 
+// Funcion para generar la tabla de incidencias asignadas
+function generarTablaAsignaciones($resultado, $itemCount, $columnas)
+{
+  $html = '';
+  if (!empty($resultado)) {
+    foreach ($resultado as $item) {
+      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
+
+      // Generar las celdas para las columnas normales
+      foreach ($columnas as $columna) {
+        $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item[$columna]) . '</td>';
+      }
+
+      // Verificar el estado y asignar la clase de badge correspondiente
+      $estadoDescripcion = htmlspecialchars($item['Estado']);
+      $badgeClass = '';
+      switch ($estadoDescripcion) {
+        case 'EN ESPERA':
+          $badgeClass = 'badge-light-danger';
+          break;
+        case 'RESUELTO':
+          $badgeClass = 'badge-light-primary';
+          break;
+        case 'CERRADO':
+          $badgeClass = 'badge-light-secondary';
+          break;
+        default:
+          $badgeClass = 'badge-light-info';
+          break;
+      }
+
+      // Añadir la celda con el badge en la última columna
+      $html .= '<td class="px-3 py-2 text-center"><span class="badge ' . $badgeClass . '">' . $estadoDescripcion . '</span></td>';
+
+      $html .= '</tr>';
+    }
+  } else {
+    $html = '<tr><td colspan="' . (count($columnas) + 1) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
+  }
+  return $html;
+}
+
 // Funcion generia para generar las tablas de reportes
 function generarTabla($resultado, $itemCount, $columnas)
 {
@@ -138,7 +185,9 @@ function obtenerRegistros($action, $controller, $usuario = null, $fechaInicio, $
     case 'consultarIncidenciasTotales':
       return $controller->filtrarIncidenciasTotalesFecha($fechaInicio, $fechaFin);
     case 'consultarIncidenciasCerradas':
-      return $controller->filtrarIncidenciasCerradasFecha($fechaInicio, $fechaFin);
+      return $controller->filtrarIncidenciasCerradas($usuario, $fechaInicio, $fechaFin);
+    case 'consultarIncidenciasAsignadas':
+      return $controller->filtrarIncidenciasAsignadas($usuario, $fechaInicio, $fechaFin);
     default:
       return [];
   }
@@ -153,6 +202,8 @@ function obtenerColumnasParaAccion($action)
       return ['INC_numero_formato', 'fechaIncidenciaFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'CON_descripcion'];
     case 'consultarIncidenciasCerradas':
       return ['INC_numero_formato', 'fechaCierreFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'Usuario'];
+    case 'consultarIncidenciasAsignadas':
+      return ['INC_numero_formato', 'ARE_nombre', 'INC_asunto', 'INC_codigoPatrimonial', 'BIE_nombre', 'BIE_nombre', 'fechaAsignacionFormateada', 'fechaMantenimientoFormateada', 'usuarioSoporte', 'tiempoMantenimientoFormateado', 'Estado'];
     default:
       return [];
   }
@@ -174,16 +225,22 @@ if ($action) {
     $resultadoCerradas = obtenerRegistros($action, $cierreController, null, $fechaInicio, $fechaFin);
     $columnasCerradas = obtenerColumnasParaAccion($action);
     echo generarTablaCerradas($resultadoCerradas, 1, $columnasCerradas);
-  }
+  } elseif ($action == 'consultarIncidenciasAsignadas') {
+    // Consultar y generar la tabla de incidencias asignadas
+    $resultadoAsignadas = obtenerRegistros($action, $incidenciaController, null, $fechaInicio, $fechaFin);
+    $columnasAsignadas = obtenerColumnasParaAccion($action);
+    echo generarTablaAsignaciones($resultadoAsignadas, 1, $columnasAsignadas);
 
-  // Terminar el script después de generar la tabla
-  exit();
+    // Terminar el script después de generar la tabla
+    exit();
+  }
 }
 
 // Acción por defecto: mostrar todas las tablas
 $resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales();
 $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre();
 $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
+$resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMantenimiento();
 ?>
 
 
@@ -242,7 +299,9 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
   <!-- Funcionalidades -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/func_reportesGenerales.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/func_reportesCerradas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/func_reportesAsignaciones.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/func_reporteDetalles.js"></script>
+
 
   <!-- Reportes incidencias totales -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
@@ -252,6 +311,14 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
   <!-- Reportes incidencias cerradas -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteTotalIncidenciasCerradas.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasUsuario.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasUsuarioFecha.js"></script>
+  <!-- Reportes incidencias asignadas -->
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteTotalIncidenciasAsignadas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasUsuario.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasUsuarioFecha.js"></script>
+
   <!-- Reportes de detalle -->
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleIncidencia.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
@@ -270,7 +337,7 @@ $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
   <script src="./app/View/func/Reports/reporteDetalleCierreReporte.js"></script>
   <script src="./app/View/func/Reports/reporteDetalleIncidenciaReporte.js"></script> -->
 
-<!-- <script src="./app/View/func/func_reportes.js"></script> -->
+  <!-- <script src="./app/View/func/func_reportes.js"></script> -->
 
   <!-- Filtros o consultas por fecha para generar reportes -->
   <!-- <script src="./app/View/func/Consultas/func_consulta_totales_fecha.js"></script>

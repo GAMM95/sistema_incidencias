@@ -173,7 +173,7 @@ class cierreController
   }
 
   // Metodo para filtrar incidencias cerradas por fecha ingresada
-  public function filtrarIncidenciasCerradasFecha($usuario = null, $fechaInicio = null, $fechaFin = null)
+  public function filtrarIncidenciasCerradas($usuario = null, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
