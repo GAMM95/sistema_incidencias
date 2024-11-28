@@ -174,49 +174,20 @@ class AsignacionController
     }
   }
 
+  public function filtrarAsignaciones($usuario = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioAsignado']) ? (int) $_GET['usuarioAsignado'] : null;
+      $codigoPatrimonial = isset($_GET['codigoPatrimonial']) ? $_GET['codigoPatrimonial'] : null;
+      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
+      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
+      error_log("Usuario asignado: $usuario, CodigoPatrimonial: $codigoPatrimonial, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
 
-  // Metodo para eliinar la recepcion 
-  // public function eliminarRecepcion()
-  // {
-  //   if ($_SERVER["REQUEST_METHOD"] == "POST") {
-  //     // Obtener y validar los parámetros
-  //     $numeroRecepcion = $_POST['num_recepcion'] ?? null;
-
-  //     if (empty($numeroRecepcion)) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'Debe seleccionar una incidencia recepcionada'
-  //       ]);
-  //       exit();
-  //     }
-
-  //     try {
-  //       // Llamar al modelo para actualizar la incidencia
-  //       $deleteSuccess = $this->recepcionModel->eliminarRecepcion($numeroRecepcion);
-
-  //       if ($deleteSuccess) {
-  //         echo json_encode([
-  //           'success' => true,
-  //           'message' => 'Recepci&oacute;n eliminada.'
-  //         ]);
-  //       } else {
-  //         echo json_encode([
-  //           'success' => false,
-  //           'message' => 'No se realiz&oacute; ninguna eliminaci&oacute;n.'
-  //         ]);
-  //       }
-  //     } catch (Exception $e) {
-  //       echo json_encode([
-  //         'success' => false,
-  //         'message' => 'Error: ' . $e->getMessage()
-  //       ]);
-  //     }
-  //     exit();
-  //   } else {
-  //     echo json_encode([
-  //       'success' => false,
-  //       'message' => 'M&eacute;todo no permitido.'
-  //     ]);
-  //   }
-  // }
+      // Llamar al método para consultar cierres 
+      $resultado = $this->asignacionModel->buscarAsignaciones($usuario, $codigoPatrimonial, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $resultado;
+    }
+  }
 }
