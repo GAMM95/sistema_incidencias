@@ -254,4 +254,26 @@ class AsignacionModel extends Conexion
       throw new Exception("Error al obtener los asignaciones: " . $e->getMessage());
     }
   }
+
+  // Metodo para filstrar incidencias asignadas en el formulario de reportes
+  public function filtrarAsignaciones($usuario, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_filtrar_incidencias_asignadas :usuario, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario, PDO::PARAM_INT);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el query
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las asignaciones filtradas: " . $e->getMessage());
+    }
+  }
 }

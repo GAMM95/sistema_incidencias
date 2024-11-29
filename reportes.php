@@ -203,7 +203,7 @@ function obtenerColumnasParaAccion($action)
     case 'consultarIncidenciasCerradas':
       return ['INC_numero_formato', 'fechaCierreFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'Usuario'];
     case 'consultarIncidenciasAsignadas':
-      return ['INC_numero_formato', 'ARE_nombre', 'INC_asunto', 'INC_codigoPatrimonial', 'BIE_nombre', 'BIE_nombre', 'fechaAsignacionFormateada', 'fechaMantenimientoFormateada', 'usuarioSoporte', 'tiempoMantenimientoFormateado', 'Estado'];
+      return ['INC_numero_formato', 'ARE_nombre', 'INC_asunto', 'INC_codigoPatrimonial', 'BIE_nombre','fechaAsignacionFormateada', 'fechaMantenimientoFormateada', 'usuarioSoporte', 'tiempoMantenimientoFormateado'];
     default:
       return [];
   }
@@ -227,13 +227,11 @@ if ($action) {
     echo generarTablaCerradas($resultadoCerradas, 1, $columnasCerradas);
   } elseif ($action == 'consultarIncidenciasAsignadas') {
     // Consultar y generar la tabla de incidencias asignadas
-    $resultadoAsignadas = obtenerRegistros($action, $incidenciaController, null, $fechaInicio, $fechaFin);
+    $resultadoAsignadas = obtenerRegistros($action, $asignacionController, null, $fechaInicio, $fechaFin);
     $columnasAsignadas = obtenerColumnasParaAccion($action);
     echo generarTablaAsignaciones($resultadoAsignadas, 1, $columnasAsignadas);
-
-    // Terminar el script después de generar la tabla
-    exit();
   }
+  exit();  // Terminar el script después de generar la tabla
 }
 
 // Acción por defecto: mostrar todas las tablas

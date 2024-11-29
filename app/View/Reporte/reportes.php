@@ -417,7 +417,7 @@
                     <div class="flex justify-center items-center mt-2">
                       <!-- Nombre de usuario asignado -->
                       <div class="w-full px-2 mb-2" style="max-width: 250px;">
-                        <label for="usuarioIncidenciasAsignadas" class="block mb-1 font-bold text-xs">Usuario:</label>
+                        <label for="usuarioIncidenciasAsignadas" class="block mb-1 font-bold text-xs">Usuario asignado:</label>
                         <select id="usuarioIncidenciasAsignadas" name="usuarioIncidenciasAsignadas" class="border p-2 w-full text-xs cursor-pointer">
                         </select>
                         <input type="hidden" id="codigoUsuarioIncidenciasAsignadas" name="codigoUsuarioIncidenciasAsignadas" readonly>
@@ -425,13 +425,13 @@
                       </div>
                       <!-- Fecha de inicio -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                        <label for="fechaInicioIncidenciasAsignadas" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                        <label for="fechaInicioIncidenciasAsignadas" class="block mb-1 font-bold text-center text-xs">Fecha de asignaci&oacute;n de inicio:</label>
                         <input type="date" id="fechaInicioIncidenciasAsignadas" name="fechaInicioIncidenciasAsignadas" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
 
                       <!-- Fecha de fin -->
                       <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                        <label for="fechaFinIncidenciasAsignadas" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                        <label for="fechaFinIncidenciasAsignadas" class="block mb-1 font-bold text-center text-xs">Fecha de asignaci&oacute;n final:</label>
                         <input type="date" id="fechaFinIncidenciasAsignadas" name="fechaFinIncidenciasAsignadas" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                       </div>
 

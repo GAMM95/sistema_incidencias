@@ -174,18 +174,17 @@ class AsignacionController
     }
   }
 
-  public function filtrarAsignaciones($usuario = NULL, $fechaInicio = null, $fechaFin = null)
+  public function filtrarIncidenciasAsignadas($usuario = NULL, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $usuario = isset($_GET['usuarioAsignado']) ? (int) $_GET['usuarioAsignado'] : null;
-      $codigoPatrimonial = isset($_GET['codigoPatrimonial']) ? $_GET['codigoPatrimonial'] : null;
-      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
-      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
-      error_log("Usuario asignado: $usuario, CodigoPatrimonial: $codigoPatrimonial, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+      $usuario = isset($_GET['usuarioIncidenciasAsignadas']) ? (int) $_GET['usuarioIncidenciasAsignadas'] : null;
+      $fechaInicio = isset($_GET['fechaInicioIncidenciasAsignadas']) ? $_GET['fechaInicioIncidenciasAsignadas'] : null;
+      $fechaFin = isset($_GET['fechaFinIncidenciasAsignadas']) ? $_GET['fechaFinIncidenciasAsignadas'] : null;
+      error_log("Usuario asignado: $usuario, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
 
       // Llamar al método para consultar cierres 
-      $resultado = $this->asignacionModel->buscarAsignaciones($usuario, $codigoPatrimonial, $fechaInicio, $fechaFin);
+      $resultado = $this->asignacionModel->filtrarAsignaciones($usuario, $fechaInicio, $fechaFin);
       // Retornar el resultado de la consulta
       return $resultado;
     }

@@ -1,14 +1,14 @@
 <?php
 require_once '../../../../config/conexion.php';
 
-class ReporteIncidenciasAsignadasFecha extends Conexion
+class ReporteIncidenciasAsignadasUsuario extends Conexion
 {
   public function __construct()
   {
     parent::__construct();
   }
 
-  public function getReporteIncidenciasAsignadasFecha($fechaInicio, $fechaFin)
+  public function getReporteIncidenciasAsignadasUsuario($usuario)
   {
     $conector = parent::getConexion();
     $sql = "SELECT 
@@ -128,7 +128,7 @@ class ReporteIncidenciasAsignadasFecha extends Conexion
       LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
       LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
       LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
-      WHERE ASI.ASI_fecha BETWEEN :fechaInicio AND :fechaFin
+      WHERE U.USU_codigo = :usuario
     GROUP BY 
       I.INC_numero, 
       ASI.ASI_codigo, 
@@ -154,9 +154,9 @@ class ReporteIncidenciasAsignadasFecha extends Conexion
       EC.EST_descripcion, 
       E.EST_descripcion
     ORDER BY ultimaFecha DESC, ultimaHora DESC";
-      $stmt = $conector->prepare($sql);
-      $stmt->bindParam(':fechaInicio', $fechaInicio);
-      $stmt->bindParam(':fechaFin', $fechaFin);
+    $stmt = $conector->prepare($sql);
+    $stmt->bindParam(':usuario', $usuario);
+
     try {
       $stmt->execute();
       $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -169,16 +169,10 @@ class ReporteIncidenciasAsignadasFecha extends Conexion
 }
 
 // Validación de las fechas
-$fechaInicio = isset($_GET['fechaInicioIncidenciasAsignadas']) ? $_GET['fechaInicioIncidenciasAsignadas'] : null;
-$fechaFin = isset($_GET['fechaFinIncidenciasAsignadas']) ? $_GET['fechaFinIncidenciasAsignadas'] : null;
+$usuario = isset($_GET['usuarioIncidenciasAsignadas']) ?  $_GET['usuarioIncidenciasAsignadas'] : null;
 
-if (!$fechaInicio || !$fechaFin) {
-  echo json_encode(['error' => 'Las fechas de inicio y fin son requeridas']);
-  exit;
-}
-
-$reporteIncidenciasAsignadasFecha = new ReporteIncidenciasAsignadasFecha();
-$reporte = $reporteIncidenciasAsignadasFecha->getReporteIncidenciasAsignadasFecha($fechaInicio, $fechaFin);
+$reporteIncidenciasAsignadasUsuario = new ReporteIncidenciasAsignadasUsuario();
+$reporte = $reporteIncidenciasAsignadasUsuario->getReporteIncidenciasAsignadasUsuario($usuario);
 
 header('Content-Type: application/json');
 echo json_encode($reporte);
