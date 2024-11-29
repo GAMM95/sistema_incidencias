@@ -31,16 +31,21 @@
               <a class="nav-link text-uppercase" id="detalle-tab" data-toggle="tab" href="#detalle" role="tab" aria-controls="detalle" aria-selected="false">Reportes de detalle</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Reportes por ...</a>
+              <a class="nav-link text-uppercase" id="areas-tab" data-toggle="tab" href="#areas" role="tab" aria-controls="areas" aria-selected="false">Reportes por &aacute;rea</a>
             </li>
-
+            <li class="nav-item">
+              <a class="nav-link text-uppercase" id="equipos-tab" data-toggle="tab" href="#equipos" role="tab" aria-controls="equipos" aria-selected="false">Reportes por equipo</a>
+            </li>
+            <li class="nav-item">
+              <a class="nav-link text-uppercase" id="otros-tab" data-toggle="tab" href="#otros" role="tab" aria-controls="otros" aria-selected="false">Otros reportes</a>
+            </li>
           </ul>
           <!-- Fin de los titulos de las pestañas -->
 
           <!-- Contenido de las pestañas -->
           <div class="tab-content grow" id="myTabContent">
 
-            <!-- Contenido de la primera pestaña -->
+            <!-- Contenido de la primera pestaña - REPORTES GENERALES -->
             <div class="tab-pane fade show active" id="generales" role="tabpanel" aria-labelledby="generales-tab">
               <!-- Pestañas del primer tab -->
               <ul class="nav nav-pills" id="pills-tab" role="tablist">
@@ -407,7 +412,7 @@
                     <!-- Fin de tabla de resultados de incidencias totales -->
                   </form>
                 </div>
-                <!-- Fin de tercer tab -->
+                <!-- Fin de incidencias cerradas -->
 
                 <!-- Tab Incidencias Asignadas -->
                 <div class="tab-pane fade" id="pills-incidenciasAsignadas" role="tabpanel" aria-labelledby="pills-incidenciasAsignadas-tab">
@@ -538,12 +543,11 @@
                     <!-- Fin de tabla de resultados de incidencias asignadas -->
                   </form>
                 </div>
-                <!-- Fin de cuarto tab -->
+                <!-- Fin de incidencias asignadas -->
               </div>
             </div>
-            <!-- Fin de contenido de la primera pestaña -->
 
-            <!-- Contenido de la segunda pestaña  - DETALLE DE REPORTE -->
+            <!-- Contenido de la segunda pestaña  - REPORTES DE DETALLE -->
             <div class="tab-pane fade" id="detalle" role="tabpanel" aria-labelledby="detalle-tab">
               <div class="flex items-center mb-4 hidden">
                 <!-- Número de incidencia -->
@@ -652,10 +656,179 @@
               <!-- Fin de tabla de incidencias -->
 
             </div>
-            <!-- Fin de contenido de la segunda pestaña -->
 
-            <!-- Contenido de la tercera pestaña -->
-            <div class="tab-pane fade" id="registros" role="tabpanel" aria-labelledby="registros-tab">
+            <!-- Contenido de la tercera pestaña - REPORTES POR ÁREA -->
+            <div class="tab-pane fade" id="areas" role="tabpanel" aria-labelledby="areas-tab">
+              <!-- Inicio formulario de consulta de incidencias asignadas -->
+              <form id="formIncidenciasAreas" action="reportes.php?action=consultarIncidenciasAreas" method="GET" class="bg-white w-full text-xs ">
+                <!-- Inputs y botones para filtrar incidencias -->
+                <div class="flex justify-center items-center mt-2">
+                  <!-- Nombre de area seleccionada -->
+                  <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                    <label for="areaSeleccionada" class="block mb-1 font-bold text-xs">&Aacute;rea seleccionada:</label>
+                    <select id="areaSeleccionada" name="areaSeleccionada" class="border p-2 w-full text-xs cursor-pointer">
+                    </select>
+                    <input type="hidden" id="codigoAreaSeleccionada" name="codigoAreaSeleccionada" readonly>
+                    <input type="hidden" id="nombreAreaSeleccionada" name="nombreAreaSeleccionada" readonly>
+                  </div>
+
+
+                  <!-- Fecha de inicio -->
+                  <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                    <label for="fechaInicioIncidenciasArea" class="block mb-1 font-bold text-center text-xs">Fecha de inicio:</label>
+                    <input type="date" id="fechaInicioIncidenciasArea" name="fechaInicioIncidenciasArea" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                  </div>
+
+                  <!-- Fecha de fin -->
+                  <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                    <label for="fechaFinIncidenciasArea" class="block mb-1 font-bold text-center text-xs">Fecha fin:</label>
+                    <input type="date" id="fechaFinIncidenciasArea" name="fechaFinIncidenciasArea" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                  </div>
+
+                  <!-- Botones alineados horizontalmente -->
+                  <div class="ml-5 flex space-x-2">
+                    <!-- Botón de buscar -->
+                    <button type="submit" id="filtrarListaIncidenciasArea" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                      <i class="feather icon-filter"></i> </button>
+                    <!-- Botón de nueva consulta -->
+                    <button type="button" id="limpiarCamposIncidenciasAreas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                      <i class="feather icon-refresh-cw"></i>
+                    </button>
+
+                    <!-- Boton generar reporte -->
+                    <div class="btn-group mr-2">
+                      <div class="flex justify-center space-x-2">
+                        <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="feather mr-2 icon-file"></i>Reporte
+                        </button>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreas">Todos las incidencias</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaUsuario">Incidencas por &aacute;rea y fecha</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Fin de botones alineados horizontalmente -->
+                </div>
+                <div class="relative sm:rounded-lg mt-2">
+                  <div class="max-w-full overflow-hidden sm:rounded-lg">
+                    <table id="tablaIncidenciasArea" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                      <!-- Encabezado de la tabla -->
+                      <thead class="text-xs text-gray-700 uppercase bg-green-300">
+                        <tr>
+                          <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+                          <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                          <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
+                          <th scope="col" class="px-3 py-2 text-center">Asunto</th>
+                          <th scope="col" class="px-3 py-2 text-center">Documento</th>
+                          <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
+                          <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
+                          <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                          <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
+                          <th scope="col" class="px-3 py-2 text-center">Estado</th>
+                        </tr>
+                      </thead>
+                      <!-- Fin de encabezado de la tabla -->
+
+                      <!-- Cuerpo de la tabla -->
+                      <tbody>
+
+                      </tbody>
+                      <!-- Fin de cuerpo de tabla -->
+                    </table>
+                  </div>
+                </div>
+                <!-- Fin de tabla de resultados de incidencias asignadas -->
+              </form>
+            </div>
+            <!-- Fin del contenido de la tercera pestaña -->
+
+            <!-- Contenido de la cuarta pestaña - REPORTES POR EQUIPO O CODIGO PATRIMONIAL -->
+            <div class="tab-pane fade" id="equipos" role="tabpanel" aria-labelledby="equipos-tab">
+              <!-- Inicio formulario de consulta de incidencias asignadas -->
+              <form id="formIncidenciasEquipos" action="reportes.php?action=consultarIncidenciasEquipos" method="GET" class="bg-white w-full text-xs ">
+                <!-- Inputs y botones para filtrar incidencias -->
+                <div class="flex justify-center items-center mt-2">
+                  <!-- input código patrimonial -->
+                  <div class="text-center w-full md:w-1/4">
+                    <label for="codigoPatrimonial" class="block mb-1 font-bold text-xs">C&oacute;digo Patrimonial:</label>
+                    <input type="text" id="codigoPatrimonial" name="codigoPatrimonial" class="border p-2 w-full text-xs text-center rounded-md" maxlength="12" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo patrimonial">
+                  </div>
+
+                  <!-- Fecha de inicio -->
+                  <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                    <label for="fechaInicioIncidenciasArea" class="block mb-1 font-bold text-center text-xs">Fecha de inicio:</label>
+                    <input type="date" id="fechaInicioIncidenciasArea" name="fechaInicioIncidenciasArea" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                  </div>
+
+                  <!-- Fecha de fin -->
+                  <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                    <label for="fechaFinIncidenciasArea" class="block mb-1 font-bold text-center text-xs">Fecha fin:</label>
+                    <input type="date" id="fechaFinIncidenciasArea" name="fechaFinIncidenciasArea" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                  </div>
+
+                  <!-- Botones alineados horizontalmente -->
+                  <div class="ml-5 flex space-x-2">
+                    <!-- Botón de buscar -->
+                    <button type="submit" id="filtrarListaIncidenciasArea" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                      <i class="feather icon-filter"></i> </button>
+                    <!-- Botón de nueva consulta -->
+                    <button type="button" id="limpiarCamposIncidenciasAreas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                      <i class="feather icon-refresh-cw"></i>
+                    </button>
+
+                    <!-- Boton generar reporte -->
+                    <div class="btn-group mr-2">
+                      <div class="flex justify-center space-x-2">
+                        <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="feather mr-2 icon-file"></i>Reporte
+                        </button>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreas">Todos las incidencias</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaUsuario">Incidencas por equipo y fecha</div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                  <!-- Fin de botones alineados horizontalmente -->
+                </div>
+                <div class="relative sm:rounded-lg mt-2">
+                  <div class="max-w-full overflow-hidden sm:rounded-lg">
+                    <table id="tablaIncidenciasArea" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                      <!-- Encabezado de la tabla -->
+                      <thead class="text-xs text-gray-700 uppercase bg-sky-300">
+                        <tr>
+                          <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+                          <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                          <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
+                          <th scope="col" class="px-3 py-2 text-center">Asunto</th>
+                          <th scope="col" class="px-3 py-2 text-center">Documento</th>
+                          <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
+                          <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
+                          <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
+                          <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
+                          <th scope="col" class="px-3 py-2 text-center">Estado</th>
+                        </tr>
+                      </thead>
+                      <!-- Fin de encabezado de la tabla -->
+
+                      <!-- Cuerpo de la tabla -->
+                      <tbody>
+
+                      </tbody>
+                      <!-- Fin de cuerpo de tabla -->
+                    </table>
+                  </div>
+                </div>
+                <!-- Fin de tabla de resultados de incidencias asignadas -->
+              </form>
+            </div>
+            <!-- Fin del contenido de la tercera pestaña -->
+
+            <!-- Contenido de la tercera pestaña - REPORTES POR ÁREA -->
+            <div class="tab-pane fade" id="otros" role="tabpanel" aria-labelledby="otros-tab">
               <div class="col-sm-20">
                 <!-- <div class="card"> -->
                 <div class="card-body">
@@ -663,8 +836,8 @@
                     <!-- Pestañas verticales -->
                     <div class="col-md-2 col-sm-10">
                       <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
-                        <li><a class="nav-link text-left active" id="v-pills-area-tab" data-toggle="pill" href="#v-pills-area" role="tab" aria-controls="v-pills-area" aria-selected="false">&Aacute;rea</a></li>
-                        <li><a class="nav-link text-left" id="v-pills-codPatrimonial-tab" data-toggle="pill" href="#v-pills-codPatrimonial" role="tab" aria-controls="v-pills-codPatrimonial" aria-selected="false">C&oacute;d. Patrimonial</a></li>
+                        <li><a class="nav-link text-left active" id="v-pills-area-tab" data-toggle="pill" href="#v-pills-area" role="tab" aria-controls="v-pills-area" aria-selected="false">&Aacute;reas con m&aacute;s incidencias</a></li>
+                        <li><a class="nav-link text-left" id="v-pills-codPatrimonial-tab" data-toggle="pill" href="#v-pills-codPatrimonial" role="tab" aria-controls="v-pills-codPatrimonial" aria-selected="false">Equipos m&aacute;s afectados</a></li>
                       </ul>
                     </div>
                     <!-- Fin de pestañas verticales -->
@@ -717,20 +890,9 @@
                                   <!-- Las filas se agregarán aquí dinámicamente -->
                                 </tbody>
                               </table>
-
                             </div>
                           </div>
                           <!-- Fin de tabla de resultados de incidencias totales -->
-
-
-
-
-
-
-
-
-
-
                         </div>
                         <!-- Fin de contenido de la primera pestaña -->
 
@@ -766,7 +928,6 @@
 
             </div>
             <!-- Fin del contenido de la tercera pestaña -->
-
           </div>
         </div>
       </div>
@@ -776,55 +937,3 @@
 </div>
 
 <script src="https://cdn.tailwindcss.com"></script>
-<script>
-  document.addEventListener("DOMContentLoaded", function() {
-    const codigoArea = $('#area').val();
-    // Cuando se selecciona un área
-
-
-    // Función para cargar los datos de la tabla por área seleccionada
-    function cargarTablaPorArea(codigoArea) {
-      console.log(`Cargando datos para el área: ${codigoArea}`); // Mensaje en consola para depurar
-      $.ajax({
-        url: 'ajax/getReportePorArea.php', // Cambia esta ruta según el archivo que maneja la consulta
-        method: 'GET',
-        data: {
-          area: codigoArea
-        },
-        dataType: 'json',
-        success: function(response) {
-          console.log('Datos obtenidos:', response); // Mostrar los datos en consola
-          if (response && response.length > 0) {
-            // Limpiar la tabla antes de agregar nuevos datos
-            $('#tablaReporteAreas tbody').empty();
-
-            // Recorrer los resultados y agregar las filas a la tabla
-            response.forEach(function(incidencia) {
-              $('#tablaReporteAreas tbody').append(`
-                  <tr>
-                    <td class="px-3 py-2 text-center">${incidencia.INC_numero_formato}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.INC_asunto}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.fechaIncidenciaFormateada}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.INC_asunto}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.INC_documento}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.INC_codigoPatrimonial}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.BIE_nombre}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.PRI_nombre}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.CON_descripcion}</td>
-                    <td class="px-3 py-2 text-center">${incidencia.ESTADO}</td>
-                  </tr>
-                `);
-            });
-          } else {
-            // Si no hay resultados, mostrar un mensaje
-            $('#tablaReporteAreas tbody').html('<tr><td colspan="10" class="text-center p-2">No se encontraron resultados.</td></tr>');
-            console.log('No se encontraron datos para el área seleccionada.');
-          }
-        },
-        error: function(xhr, status, error) {
-          console.error("Error en la solicitud AJAX: " + error); // Mostrar error en consola
-        }
-      });
-    }
-  });
-</script>

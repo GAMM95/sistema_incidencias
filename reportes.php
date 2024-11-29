@@ -203,7 +203,7 @@ function obtenerColumnasParaAccion($action)
     case 'consultarIncidenciasCerradas':
       return ['INC_numero_formato', 'fechaCierreFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'ARE_nombre', 'PRI_nombre', 'Usuario'];
     case 'consultarIncidenciasAsignadas':
-      return ['INC_numero_formato', 'ARE_nombre', 'INC_asunto', 'INC_codigoPatrimonial', 'BIE_nombre','fechaAsignacionFormateada', 'fechaMantenimientoFormateada', 'usuarioSoporte', 'tiempoMantenimientoFormateado'];
+      return ['INC_numero_formato', 'ARE_nombre', 'INC_asunto', 'INC_codigoPatrimonial', 'BIE_nombre', 'fechaAsignacionFormateada', 'fechaMantenimientoFormateada', 'usuarioSoporte', 'tiempoMantenimientoFormateado'];
     default:
       return [];
   }
@@ -299,6 +299,7 @@ $resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMant
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/func_reportesCerradas.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/func_reportesAsignaciones.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/func_reporteDetalles.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/func_reportesAreas.js"></script>
 
 
   <!-- Reportes incidencias totales -->
@@ -321,6 +322,12 @@ $resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMant
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleIncidencia.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
 
+  <!-- Reportes por area -->
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteTotalIncidenciasPorArea.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorAreaFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteCierresPorAreaFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteNumeroIncidenciaPorArea.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteDetalleCierreNumIncidenciaPorArea.js"></script>
 
 
   <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->

@@ -1,5 +1,5 @@
 <?php
-require_once '../config/conexion.php';
+require_once '../../../config/conexion.php';
 
 class ReportePorArea extends Conexion
 {
@@ -23,7 +23,6 @@ class ReportePorArea extends Conexion
       PRI.PRI_nombre,
       U.USU_nombre,
       O.CON_descripcion,
-      -- p.PER_nombres + ' ' + PER_apellidoPaterno AS Usuario,
       CASE
           WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
           ELSE E.EST_descripcion
@@ -34,7 +33,7 @@ class ReportePorArea extends Conexion
       INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
       LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
       LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-      LEFT JOIN ASIGNACION ASI ON ASI.REC_numero =R.REC_numero
+      LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
       LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
       LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
       LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
@@ -43,12 +42,11 @@ class ReportePorArea extends Conexion
       LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
       LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
       INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
-      WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5))
-      AND A.ARE_codigo = :are_codigo   
+      WHERE (I.EST_codigo IN (3, 4, 7) OR C.EST_codigo IN (3, 4, 7))
+      AND A.ARE_codigo = :area   
       ORDER BY I.INC_numero_formato ASC";
-
     $stmt = $conector->prepare($sql);
-    $stmt->bindParam(':are_codigo', $area);
+    $stmt->bindParam(':area', $area);
 
     try {
       $stmt->execute();
@@ -62,10 +60,11 @@ class ReportePorArea extends Conexion
 }
 
 // Obtención del parámetro 'area' desde la solicitud
-$area = isset($_GET['area']) ? intval($_GET['area']) : 0;
+$area = isset($_GET['areaSeleccionada']) ? intval($_GET['areaSeleccionada']) : 0;
 
 $reporteAreas = new ReportePorArea();
 $reporte = $reporteAreas->getReportePorArea($area);
 
 header('Content-Type: application/json');
 echo json_encode($reporte);
+exit();

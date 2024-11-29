@@ -273,7 +273,7 @@ GO
 
 -- VOLCADO DE DATOS PARA LA TABLA PERSONA
 INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
-VALUES ('70555000', 'Jose', 'Castro', 'Gonzales', '', '');
+VALUES ('18066272', 'Jose', 'Castro', 'Gonzales', '', '');
 INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
 VALUES ('11111111', 'Percy', 'Carranza', 'X', '', '');
 INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_email, PER_celular)
