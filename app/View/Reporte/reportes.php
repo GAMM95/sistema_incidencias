@@ -663,6 +663,7 @@
               <form id="formIncidenciasAreas" action="reportes.php?action=consultarIncidenciasAreas" method="GET" class="bg-white w-full text-xs ">
                 <!-- Inputs y botones para filtrar incidencias -->
                 <div class="flex justify-center items-center mt-2">
+
                   <!-- Nombre de area seleccionada -->
                   <div class="w-full px-2 mb-2" style="max-width: 250px;">
                     <label for="areaSeleccionada" class="block mb-1 font-bold text-xs">&Aacute;rea seleccionada:</label>
@@ -671,7 +672,6 @@
                     <input type="hidden" id="codigoAreaSeleccionada" name="codigoAreaSeleccionada" readonly>
                     <input type="hidden" id="nombreAreaSeleccionada" name="nombreAreaSeleccionada" readonly>
                   </div>
-
 
                   <!-- Fecha de inicio -->
                   <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
@@ -702,9 +702,8 @@
                           <i class="feather mr-2 icon-file"></i>Reporte
                         </button>
                         <div class="dropdown-menu">
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreas">Todos las incidencias</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por fechas</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaUsuario">Incidencas por &aacute;rea y fecha</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasArea">Incidencias por &aacute;rea</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por &aacute;rea y fechas</div>
                         </div>
                       </div>
                     </div>

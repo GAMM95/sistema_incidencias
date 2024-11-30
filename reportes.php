@@ -323,11 +323,7 @@ $resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMant
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
 
   <!-- Reportes por area -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteTotalIncidenciasPorArea.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorAreaFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteCierresPorAreaFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteNumeroIncidenciaPorArea.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteDetalleCierreNumIncidenciaPorArea.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorArea.js"></script>
 
 
   <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->
