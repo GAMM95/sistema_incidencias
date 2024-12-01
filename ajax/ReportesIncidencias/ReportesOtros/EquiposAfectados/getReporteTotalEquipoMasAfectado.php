@@ -1,23 +1,31 @@
 <?php
 require_once '../../../../config/conexion.php';
 
-class ReporteTotalAreaMasAfectada extends Conexion
+class ReporteTotalEquipoMasAfectado extends Conexion
 {
   public function __construct()
   {
     parent::__construct();
   }
 
-  public function getReporteTotalAreaMasAfectada()
+  public function getReporteTotalEquipoMasAfectado()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT A.ARE_nombre AS areaMasIncidencia, COUNT(*) AS cantidadIncidencias
-      FROM INCIDENCIA I
-      INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
-      GROUP BY A.ARE_nombre
-      ORDER BY cantidadIncidencias DESC";
+    $sql = "SELECT
+    i.INC_codigoPatrimonial AS codigoPatrimonial,
+    -- Subconsulta para obtener el nombre del bien utilizando los primeros 8 dígitos
+      (SELECT BIE_nombre 
+      FROM BIEN 
+      WHERE LEFT(i.INC_codigoPatrimonial, 8) = LEFT(BIE_codigoIdentificador, 8)) AS nombreBien,
+    a.ARE_nombre AS nombreArea, 
+    COUNT(*) AS cantidadIncidencias
+    FROM INCIDENCIA i
+    INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo 
+    WHERE i.INC_codigoPatrimonial IS NOT NULL 
+    AND i.INC_codigoPatrimonial <> ''
+    GROUP BY i.INC_codigoPatrimonial, a.ARE_nombre
+    ORDER BY cantidadIncidencias DESC";
     $stmt = $conector->prepare($sql);
-
     try {
       $stmt->execute();
       $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
@@ -29,8 +37,8 @@ class ReporteTotalAreaMasAfectada extends Conexion
   }
 }
 
-$reporteTotalAreaMasAfectada = new ReporteTotalAreaMasAfectada();
-$reporte = $reporteTotalAreaMasAfectada->getReporteTotalAreaMasAfectada();
+$reporteTotalEquipoMasAfectado = new ReporteTotalEquipoMasAfectado();
+$reporte = $reporteTotalEquipoMasAfectado->getReporteTotalEquipoMasAfectado();
 
 header('Content-Type: application/json');
 echo json_encode($reporte);

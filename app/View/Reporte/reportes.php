@@ -1048,9 +1048,10 @@
                                       <i class="feather mr-2 icon-file"></i>Reporte
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreas">Todos las incidencias</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaUsuario">Incidencas por equipo y fecha</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEquiposAfectados">Todos las incidencias</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEquiposAfectadosFecha">Reporte por fecha</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEquiposAfectadosCodigoPatrimonial">Reporte por equipo</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEquiposAfectadosCodigoPatrimonialFecha">Reporte por equipo y fecha</div>
                                     </div>
                                   </div>
                                 </div>

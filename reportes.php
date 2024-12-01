@@ -466,9 +466,15 @@ $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
 
   <!-- Reportes otros -->
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteTotalAreasAfectadas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorFecha.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoria.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoriaFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquiposMasAfectados.js"></script>  
+  
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteTotalEquiposAfectados.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquiposPorFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodigoPatrimonial.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodPatrimonialFecha.js"></script>
+
 
 
   <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->

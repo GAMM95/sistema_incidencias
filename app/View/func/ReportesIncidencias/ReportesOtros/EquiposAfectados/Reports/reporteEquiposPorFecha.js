@@ -6,25 +6,51 @@ $(document).ready(function () {
   };
 });
 
-$('#reportes-bienes-fechas').click(function () {
-  const fechaInicio = $('#fechaInicio').val();
-  const fechaFin = $('#fechaFin').val();
+// Generación del PDF al hacer clic en el botón Por fecha
+$('#reporteEquiposAfectadosFecha').click(function () {
+  const fechaInicio = $('#fechaInicioIncidenciasEquipos').val();
+  const fechaFin = $('#fechaFinIncidenciasEquipos').val();
 
-  if (!validarCampos() || !validarFechas()) {
-    return;
+  console.log('Fecha Inicio:', fechaInicio);
+  console.log('Fecha Fin:', fechaFin);
+
+  // Verificar si los campos son validos
+  if (!validarCamposEquiposMasAfectadosFecha()) {
+    return; // Detiene el envío si los campos fechas no son válidos
   }
+
+  var formData = $(this).serializeArray(); // Recopila los datos del formulario
+  var dataObject = {}; // Crea un objeto para los datos del formulario
+  console.log(dataObject);
+
+  // Recorre los datos del formulario y llena el objeto con los valores
+  formData.forEach(function (item) {
+    if (item.value.trim() !== '') {
+      dataObject[item.name] = item.value;
+    }
+  });
 
   // Realizar una solicitud AJAX para obtener los datos del cierre de incidencia
   $.ajax({
-    url: 'ajax/getReporteEquipoMasIncidencia.php',
+    url: 'ajax/ReportesIncidencias/ReportesOtros/EquiposAfectados/getReporteEquipoMasAfectadoFecha.php',
     method: 'GET',
-    data: { fechaInicio: fechaInicio, fechaFin: fechaFin },
+    data: {
+      fechaInicioIncidenciasEquipos: fechaInicio,
+      fechaFinIncidenciasEquipos: fechaFin
+    },
     dataType: 'json',
     success: function (data) {
       console.log("Datos recibidos:", data);
-
       if (data.error) {
         toastr.error('Error en la solicitud: ' + data.error);
+        return;
+      }
+
+      // Obtener la cantidad de registros
+      const totalRecords = data.length;
+      // Verificar si hay registros
+      if (totalRecords === 0) {
+        toastr.warning('No se encontraron datos para el rango de fecha ingresado.', 'Advertencia');
         return;
       }
 
@@ -32,16 +58,16 @@ $('#reportes-bienes-fechas').click(function () {
         if (data.length > 0) {
           const { jsPDF } = window.jspdf;
           const doc = new jsPDF('portrait');
-
           const logoUrl = './public/assets/escudo.png';
 
+          // Funcion para agregar encabezado
           function addHeader(doc) {
             doc.setFontSize(9);
             doc.setFont('helvetica', 'normal');
 
             const fechaImpresion = new Date().toLocaleDateString();
             const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const reportTitle = 'EQUIPOS CON MÁS INCIDENCIAS';
+            const reportTitle = ' EQUIPOS CON MÁS INCIDENCIAS';
 
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
@@ -85,8 +111,8 @@ $('#reportes-bienes-fechas').click(function () {
           const fechaFinText = 'Fecha de Fin:';
 
           // Obtener las fechas en formato original
-          const fechaInicioOriginal = $('#fechaInicio').val();
-          const fechaFinOriginal = $('#fechaFin').val();
+          const fechaInicioOriginal = $('#fechaInicioIncidenciasEquipos').val();
+          const fechaFinOriginal = $('#fechaFinIncidenciasEquipos').val();
 
           // Función para formatear la fecha a dd/mm/aaaa
           function formatearFecha(fecha) {
@@ -140,6 +166,7 @@ $('#reportes-bienes-fechas').click(function () {
             startY: 35, // Altura de la tabla respecto a la parte superior
             margin: { left: 10 },
             head: [['N°', 'CÓDIGO PATRIMONIAL', 'NOMBRE DE BIEN', 'ÁREA', 'CANTIDAD']],
+
             body: data.map(reporte => [
               item++,
               reporte.codigoPatrimonial,
@@ -190,12 +217,10 @@ $('#reportes-bienes-fechas').click(function () {
           }
 
           // Mostrar mensaje de exito de pdf generado
-          toastr.success('Reporte de equipos con m&aacute;s incidencias generado.', 'Mensaje');
+          toastr.success('Reporte de los equipos m&aacute;s afectados por fecha generado.', 'Mensaje');
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
             window.open(doc.output('bloburl'));
-            $('#fechaInicio').val('');
-            $('#fechaFin').val('');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado equipos con m&aacute;s incidencias para las fechas seleccionadas.', 'Advertencia');
@@ -211,13 +236,13 @@ $('#reportes-bienes-fechas').click(function () {
     }
   });
 
-  
-  function validarCampos() {
+
+  function validarCamposEquiposMasAfectadosFecha() {
     var valido = false;
     var mensajeError = '';
 
-    var fechaInicioSeleccionada = ($('#fechaInicio').val() !== null && $('#fechaInicio').val().trim() !== '');
-    var fechaFinSeleccionada = ($('#fechaFin').val() !== null && $('#fechaFin').val().trim() !== '');
+    var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasEquipos').val() !== null && $('#fechaInicioIncidenciasEquipos').val().trim() !== '');
+    var fechaFinSeleccionada = ($('#fechaFinIncidenciasEquipos').val() !== null && $('#fechaFinIncidenciasEquipos').val().trim() !== '');
 
     // Verificar si al menos un campo está lleno
     if (fechaInicioSeleccionada || fechaFinSeleccionada) {
@@ -234,10 +259,10 @@ $('#reportes-bienes-fechas').click(function () {
   }
 
 
-  function validarFechas() {
+  function validarFechasEquiposMasAfectadosFecha() {
     // Obtener valores de los campos de fecha
-    const fechaInicio = new Date($('#fechaInicio').val());
-    const fechaFin = new Date($('#fechaFin').val());
+    const fechaInicio = new Date($('#fechaInicioIncidenciasEquipos').val());
+    const fechaFin = new Date($('#fechaFinIncidenciasEquipos').val());
 
     // Obtener la fecha actual
     const fechaHoy = new Date();
@@ -272,7 +297,7 @@ $('#reportes-bienes-fechas').click(function () {
   }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicio, #fechaFin').on('change', function () {
-    validarFechas();
+  $('#fechaInicioIncidenciasEquipos, #fechaFinIncidenciasEquipos').on('change', function () {
+    validarFechasEquiposMasAfectadosFecha();
   });
 });

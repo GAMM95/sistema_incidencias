@@ -9,5 +9,5 @@ define("PASSWORD", "sql");
 define("DATABASE", "BD_INCIDENCIAS");
 // Dirección del servidor de la base de datos
 // define("SERVIDOR", "INF08\JHONATANMM");
-// define("SERVIDOR", "GUSTAVOMM");
-define("SERVIDOR", "JHONATANMM");
+define("SERVIDOR", "GUSTAVOMM");
+// define("SERVIDOR", "JHONATANMM");
