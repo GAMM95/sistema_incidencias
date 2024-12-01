@@ -425,6 +425,55 @@ class IncidenciaController
   }
 
   // Metodo para filtrar incidencias por area para el reporte
+  public function filtrarEquiposMasAfectados($codigoPatrimonial = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $codigoPatrimonial = isset($_GET['codigoEquipo']) ? $_GET['codigoEquipo'] : null;
+      $fechaInicio = isset($_GET['fechaInicioIncidenciasEquipos']) ? $_GET['fechaInicioIncidenciasEquipos'] : null;
+      $fechaFin = isset($_GET['fechaFinIncidenciasEquipos']) ? $_GET['fechaFinIncidenciasEquipos'] : null;
+      error_log("Equipo: $codigoPatrimonial, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+
+      try {
+        // Validar existencia del bien
+        if (!$this->bienModel->validarBienExistente($codigoPatrimonial)) {
+          echo json_encode([
+            'success' => false,
+            'message' => 'Verificar c&oacute;digo patrimonial ingresado.'
+          ]);
+          exit();
+        }
+
+        // Validar que el código patrimonial sea nulo o tenga 12 dígitos
+        if (!empty($codigoPatrimonial) && strlen($codigoPatrimonial) !== 12) {
+          echo json_encode([
+            'success' => false,
+            'message' => 'Debe ingresar los 12 d&iacute;gitos del c&oacute;digo patrimonial.'
+          ]);
+          exit();
+        }
+        // Llamar al método para consultar incidencias por área, estado y fecha
+        $resultado = $this->incidenciaModel->buscarEquiposMasAfectados($codigoPatrimonial, $fechaInicio, $fechaFin);
+        // Retornar el resultado de la consulta
+        return $resultado;
+      } catch (Exception $e) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Error: ' . $e->getMessage()
+        ]);
+      }
+      exit();
+    }
+  }
+
+  // Metodo para listar las equipos con mas incidencias
+  public function listarEquiposMasAfectados()
+  {
+    $resultado = $this->incidenciaModel->listarEquiposMasAfectados();
+    return $resultado;
+  }
+
+  // Metodo para filtrar incidencias por area para el reporte
   public function filtrarAreasMasAfectadas($categoria = NULL, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {

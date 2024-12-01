@@ -1315,6 +1315,23 @@ INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
 GROUP BY a.ARE_nombre;
 GO
 
+-- Vista para listar los equipos mas afectados
+CREATE OR ALTER VIEW vw_equipos_mas_afectados AS
+SELECT 
+    i.INC_codigoPatrimonial AS codigoPatrimonial,
+    -- Subconsulta para obtener el nombre del bien utilizando los primeros 8 dígitos
+    (SELECT BIE_nombre 
+     FROM BIEN 
+     WHERE LEFT(i.INC_codigoPatrimonial, 8) = LEFT(BIE_codigoIdentificador, 8)) AS nombreBien,
+    a.ARE_nombre AS nombreArea, 
+    COUNT(*) AS cantidadIncidencias
+FROM INCIDENCIA i
+INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo 
+WHERE i.INC_codigoPatrimonial IS NOT NULL
+AND i.INC_codigoPatrimonial <> ''
+GROUP BY i.INC_codigoPatrimonial, a.ARE_nombre;
+GO
+
 -- Vista para listar todos los eventos de auditoria
 CREATE OR ALTER VIEW vw_eventos_totales AS
 SELECT 
@@ -3832,6 +3849,35 @@ BEGIN
     (@fechaFin IS NULL OR I.INC_fecha <= @fechaFin) AND
     (@categoria IS NULL OR I.CAT_codigo = @categoria)
   GROUP BY A.ARE_nombre
+  ORDER BY cantidadIncidencias DESC;
+END
+GO
+
+-- Procedimiento almacenado para filtrar equipos mas afectados - reportes
+CREATE OR ALTER PROCEDURE sp_filtrar_equipos_afectados
+  @codigoPatrimonial CHAR(12),
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT 
+    i.INC_codigoPatrimonial AS codigoPatrimonial,
+    -- Subconsulta para obtener el nombre del bien utilizando los primeros 8 dígitos
+    (SELECT BIE_nombre 
+     FROM BIEN 
+     WHERE LEFT(i.INC_codigoPatrimonial, 8) = LEFT(BIE_codigoIdentificador, 8)) AS nombreBien,
+    a.ARE_nombre AS nombreArea, 
+    COUNT(*) AS cantidadIncidencias
+  FROM INCIDENCIA i
+  INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
+  WHERE i.INC_codigoPatrimonial IS NOT NULL
+    AND i.INC_codigoPatrimonial <> ''
+    -- Filtrar por el rango de fechas si los parámetros no son nulos
+    AND (@fechaInicio IS NULL OR i.INC_fecha >= @fechaInicio)
+    AND (@fechaFin IS NULL OR i.INC_fecha <= @fechaFin)
+    -- Filtrar por código patrimonial si el parámetro no es nulo
+    AND (@codigoPatrimonial IS NULL OR i.INC_codigoPatrimonial = @codigoPatrimonial)
+  GROUP BY i.INC_codigoPatrimonial, a.ARE_nombre
   ORDER BY cantidadIncidencias DESC;
 END
 GO

@@ -19,13 +19,6 @@ $incidenciaController = new IncidenciaController();
 // Obtiene las incidencias para la página actual
 $resultado = $incidenciaController->listarIncidenciasRegistradas();
 
-// if ($INC_numero != '') {
-//   global $incidenciaRegistrada;
-//   $incidenciaRegistrada = $incidenciaModel->obtenerIncidenciaPorId($INC_numero);
-// } else {
-//   $incidenciaRegistrada = null;
-// }
-
 switch ($action) {
   case 'registrar':
     $incidenciaController->registrarIncidenciaAdministrador();

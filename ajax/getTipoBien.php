@@ -30,7 +30,16 @@ class TipoBien extends Conexion
 }
 
 // Obtener el código patrimonial del parámetro GET
-$codigoPatrimonial = isset($_GET['codigo_patrimonial']) ? $_GET['codigo_patrimonial'] : '';
+// $codigoPatrimonial = isset($_GET['codigo_patrimonial']) ? $_GET['codigoEquipo'] : '';
+// Obtener el código patrimonial de los parámetros GET (prioridad a 'codigo_patrimonial' si ambos están presentes)
+$codigoPatrimonial = '';
+if (isset($_GET['codigo_patrimonial']) && !empty($_GET['codigo_patrimonial'])) {
+  $codigoPatrimonial = $_GET['codigo_patrimonial'];
+} elseif (isset($_GET['codigoEquipo']) && !empty($_GET['codigoEquipo'])) {
+  $codigoPatrimonial = $_GET['codigoEquipo'];
+}elseif (isset($_GET['codigoPatrimonial']) && !empty($_GET['codigoPatrimonial'])) {
+  $codigoPatrimonial = $_GET['codigoPatrimonial'];
+}
 
 // Instanciar la clase y obtener el tipo de bien
 $tipoBien = new TipoBien();

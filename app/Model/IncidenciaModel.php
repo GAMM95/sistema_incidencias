@@ -672,6 +672,29 @@ class IncidenciaModel extends Conexion
     }
   }
 
+    // Metodo para filtrar areas mas afectadas por incidencias
+    public function buscarEquiposMasAfectados($codigoPatrimonial, $fechaInicio, $fechaFin)
+    {
+      $conector = parent::getConexion();
+      try {
+        if ($conector != null) {
+          $sql = "EXEC sp_filtrar_equipos_afectados :codigoPatrimonial, :fechaInicio, :fechaFin";
+          $stmt = $conector->prepare($sql);
+          $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);
+          $stmt->bindParam(':fechaInicio', $fechaInicio);
+          $stmt->bindParam(':fechaFin', $fechaFin);
+          $stmt->execute(); // Ejecuta el procedimiento almacenado
+          $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener los resultados
+          return $result;
+        } else {
+          throw new Exception("Error de conexión con la base de datos.");
+        }
+      } catch (PDOException $e) {
+        throw new Exception("Error al obtener los equipos mas afectados: " . $e->getMessage());
+      }
+    }
+
+    
   // Metodo para filtrar areas mas afectadas por incidencias
   public function buscarAreasMasAfectadas($categoria, $fechaInicio, $fechaFin)
   {
@@ -745,6 +768,27 @@ class IncidenciaModel extends Conexion
     } catch (PDOException $e) {
       echo "Error al contar incidencias: " . $e->getMessage();
       return null;
+    }
+  }
+  
+
+  // Metodo para listar las equipos con mas incidencias
+  public function listarEquiposMasAfectados()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_equipos_mas_afectados
+                ORDER BY cantidadIncidencias DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al listar las equipos con mas incidencias: " . $e->getMessage());
     }
   }
 

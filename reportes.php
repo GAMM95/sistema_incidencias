@@ -27,6 +27,7 @@ $fechaFin = $_GET['fechaFin'] ?? '';
 $categoria = $_GET['codigoCategoria'] ?? '';
 $usuario = $_GET['codigoUsuario'] ?? '';
 $area = $_GET['codigoArea'] ?? '';
+$equipo = $_GET['codigoPatrimonial'] ?? '';
 
 // Funcion generia para generar las tablas de reportes
 function generarTablaTotales($resultado, $itemCount, $columnas)
@@ -161,7 +162,7 @@ function generarTablaAsignaciones($resultado, $itemCount, $columnas)
 }
 
 // Funcion generia para generar las tablas de reportes
-function generarTablaAreasAfectadas($resultado, $itemCount, $columnas)
+function generarTablaAfectados($resultado, $itemCount, $columnas)
 {
   error_log(print_r($resultado, true));  // Para ver qué datos tiene $resultado
 
@@ -268,6 +269,8 @@ function obtenerRegistros($action, $controller, $usuario, $area, $equipo, $categ
       return $controller->filtrarIncidenciasArea($area, $fechaInicio, $fechaFin);
     case 'consultarIncidenciasEquipos':
       return $controller->filtrarIncidenciasEquipo($equipo, $fechaInicio, $fechaFin);
+    case 'consultarEquiposMasAfectados':
+      return $controller->filtrarEquiposMasAfectados($equipo, $fechaInicio, $fechaFin);
     case 'consultarAreasMasAfectadas':
       return $controller->filtrarAreasMasAfectadas($categoria, $fechaInicio, $fechaFin);
     default:
@@ -288,6 +291,8 @@ function obtenerColumnasParaAccion($action)
       return ['INC_numero_formato', 'ARE_nombre', 'INC_asunto', 'INC_codigoPatrimonial', 'BIE_nombre', 'fechaAsignacionFormateada', 'fechaMantenimientoFormateada', 'usuarioSoporte', 'tiempoMantenimientoFormateado'];
     case 'consultarIncidenciasAreas':
       return ['INC_numero_formato', 'fechaIncidenciaFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'PRI_nombre'];
+    case 'consultarEquiposMasAfectados':
+      return ['codigoPatrimonial', 'nombreBien', 'nombreArea', 'cantidadIncidencias'];
     case 'consultarAreasMasAfectadas':
       return ['areaMasIncidencia', 'cantidadIncidencias'];
     default:
@@ -335,11 +340,19 @@ if ($action) {
     } else {
       error_log("No se encontraron registros para 'consultarIncidenciasAreas'.");
     }
+  } else if ($action == 'consultarEquiposMasAfectados') {
+    $resultadoEquiposMasAfectados = obtenerRegistros($action, $incidenciaController, null, null, $equipo, null, $fechaInicio, $fechaFin);
+    $columnasEquiposMasAfectados = obtenerColumnasParaAccion($action);
+    if ($resultadoEquiposMasAfectados) {
+      echo generarTablaAfectados($resultadoEquiposMasAfectados, 1, $columnasEquiposMasAfectados);
+    } else {
+      error_log("No se encontraron registros para 'consultarEquiposMasAfectados'.");
+    }
   } else if ($action == 'consultarAreasMasAfectadas') {
     $resultadoAreaMasAfectadas = obtenerRegistros($action, $incidenciaController, null, null, null, $categoria, $fechaInicio, $fechaFin);
     $columnasAreaMasAfectadas = obtenerColumnasParaAccion($action);
     if ($resultadoAreaMasAfectadas) {
-      echo generarTablaAreasAfectadas($resultadoAreaMasAfectadas, 1, $columnasAreaMasAfectadas);
+      echo generarTablaAfectados($resultadoAreaMasAfectadas, 1, $columnasAreaMasAfectadas);
     } else {
       error_log("No se encontraron registros para 'consultarAreaMasAfectadas'.");
     }
@@ -357,6 +370,7 @@ $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCi
 $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
 $resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMantenimiento();
 $resultadoIncidenciasAreas = $incidenciaController->listarIncidenciasAreaEquipo();
+$resultadoEquiposMasAfectados = $incidenciaController->listarEquiposMasAfectados();
 $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
 ?>
 
@@ -421,7 +435,8 @@ $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/func_reportesAreas.js"></script>
 
 
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/func_reportesAreasAfectadas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/func_reportesAreasAfectadas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
 
 
 
@@ -450,10 +465,10 @@ $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorArea.js"></script>
 
   <!-- Reportes otros -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteAreasPorFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteAreasPorCategoria.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteTotalAreasAfectadas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteAreasPorCategoriaFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteTotalAreasAfectadas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoria.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoriaFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquiposMasAfectados.js"></script>  
 
 
   <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->
@@ -475,7 +490,7 @@ $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
   <script src="./app/View/func/Consultas/func_consulta_cierres_fecha.js"></script> -->
 
 
-  <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
+  <!-- <script src="./app/View/func/Mantenedores/tipoBien.js"></script> -->
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">

@@ -816,7 +816,7 @@
                 <!-- Inputs y botones para filtrar incidencias -->
                 <div class="flex justify-center items-center mt-2">
                   <!-- input código patrimonial -->
-                  <div class="text-center w-full md:w-1/4">
+                  <div class="text-center w-full md:w-1/4 px-2 mb-2">
                     <label for="codigoPatrimonial" class="block mb-1 font-bold text-xs">C&oacute;digo Patrimonial:</label>
                     <input type="text" id="codigoPatrimonial" name="codigoPatrimonial" class="border p-2 w-full text-xs text-center rounded-md" maxlength="12" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo patrimonial">
                   </div>
@@ -966,11 +966,10 @@
                                   </div>
                                 </div>
                               </div>
-
                               <!-- Fin de botones alineados horizontalmente -->
                             </div>
 
-                            <!-- Tabla de resultados de incidencias totales -->
+                            <!-- Tabla de resultados las areas mas afectadas -->
                             <div class="relative sm:rounded-lg mt-2">
                               <div class="max-w-full overflow-hidden sm:rounded-lg">
                                 <table id="tablaAreasMasAfectadas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
@@ -1004,7 +1003,7 @@
                                 </table>
                               </div>
                             </div>
-                            <!-- Fin de tabla de resultados de incidencias totales -->
+                            <!-- Fin de tabla de resultados de las areas mas afectadas -->
                           </form>
                         </div>
                         <!-- Fin de contenido de la primera pestaña -->
@@ -1012,8 +1011,96 @@
                         <!-- Contenido de la segunda pestaña -->
                         <div class="tab-pane fade" id="v-pills-codPatrimonial" role="tabpanel" aria-labelledby="v-pills-codPatrimonial-tab">
                           <form id="formEquiposMasAfectados" action="reportes.php?action=consultarEquiposMasAfectados" method="GET" class="bg-white w-full text-xs ">
+                            <!-- Inputs y botones para filtrar incidencias -->
+                            <div class="flex justify-center items-center mt-2">
+                              <!-- input código patrimonial -->
+                              <div class="text-center w-full md:w-1/4 px-2 mb-2">
+                                <label for="codigoEquipo" class="block mb-1 font-bold text-xs">C&oacute;digo Patrimonial:</label>
+                                <input type="text" id="codigoEquipo" name="codigoEquipo" class="border p-2 w-full text-xs text-center rounded-md" maxlength="12" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo patrimonial">
+                              </div>
 
+                              <!-- Fecha de inicio -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaInicioIncidenciasEquipos" class="block mb-1 font-bold text-center text-xs">Fecha de inicio:</label>
+                                <input type="date" id="fechaInicioIncidenciasEquipos" name="fechaInicioIncidenciasEquipos" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
 
+                              <!-- Fecha de fin -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaFinIncidenciasEquipos" class="block mb-1 font-bold text-center text-xs">Fecha fin:</label>
+                                <input type="date" id="fechaFinIncidenciasEquipos" name="fechaFinIncidenciasEquipos" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+
+                              <!-- Botones alineados horizontalmente -->
+                              <div class="ml-5 flex space-x-2">
+                                <!-- Botón de buscar -->
+                                <button type="submit" id="filtrarListaIncidenciasEquipos" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
+                                  <i class="feather icon-filter"></i> </button>
+                                <!-- Botón de nueva consulta -->
+                                <button type="button" id="limpiarCamposIncidenciasEquipos" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center" title="Limpiar campos">
+                                  <i class="feather icon-refresh-cw"></i>
+                                </button>
+
+                                <!-- Boton generar reporte -->
+                                <div class="btn-group mr-2">
+                                  <div class="flex justify-center space-x-2">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="feather mr-2 icon-file"></i>Reporte
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreas">Todos las incidencias</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaUsuario">Incidencas por equipo y fecha</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Fin de botones alineados horizontalmente -->
+                            </div>
+                            <!-- input tipo de bien (más largo) -->
+                            <div class="flex justify-center items-center text-center mt-2">
+                              <input type="text" id="tipoBienEquiposAfectados" name="tipoBienEquiposAfectados" class="border p-2 w-3/4 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
+                            </div>
+
+                            <!-- Tabla de resultados los equipos mas afectadas -->
+                            <div class="relative sm:rounded-lg mt-2">
+                              <div class="max-w-full overflow-hidden sm:rounded-lg">
+                                <table id="tablaEquiposMasAfectados" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                  <!-- Encabezado de la tabla -->
+                                  <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                                    <tr>
+                                      <th scope="col" class="px-1 py-2 text-center">N&deg;</th>
+                                      <th scope="col" class="px-3 py-2 text-center">C&oacute;digo Patrimonial</th>
+                                      <th scope="col" class="px-5 py-2 text-center">Nombre del bien</th>
+                                      <th scope="col" class="px-5 py-2 text-center">&Aacute;rea</th>
+                                      <th scope="col" class="px-1 py-2 text-center">Cantidad</th>
+                                    </tr>
+                                  </thead>
+                                  <!-- Fin de encabezado de la tabla -->
+                                  <!-- Cuerpo de la tabla -->
+                                  <tbody>
+                                    <?php $item = 1; // Iniciar contador para el ítem 
+                                    ?>
+                                    <?php foreach ($resultadoEquiposMasAfectados as $equiposAfectados): ?>
+                                      <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                        <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                        <td class="px-3 py-2 text-center"><?= htmlspecialchars($equiposAfectados['codigoPatrimonial']) ?></td>
+                                        <td class="px-3 py-2 text-center"><?= htmlspecialchars($equiposAfectados['nombreBien']) ?></td>
+                                        <td class="px-3 py-2 text-center"><?= htmlspecialchars($equiposAfectados['nombreArea']) ?></td>
+                                        <td class="px-3 py-2 text-center"><?= htmlspecialchars($equiposAfectados['cantidadIncidencias']) ?></td>
+                                      </tr>
+                                    <?php endforeach; ?>
+                                    <?php if (empty($resultadoEquiposMasAfectados)): ?>
+                                      <tr>
+                                        <td colspan="5" class="text-center py-3">No se encontraron registros de incidencias.</td>
+                                      </tr>
+                                    <?php endif; ?>
+                                  </tbody>
+                                  <!-- Fin de cuerpo de tabla -->
+                                </table>
+                              </div>
+                            </div>
+                            <!-- Fin de tabla de resultados de incidencias totales -->
                           </form>
                         </div>
                         <!-- Fin de contenido de la segunda pestaña -->
