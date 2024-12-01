@@ -7,15 +7,15 @@ $(document).ready(function () {
 
   // Seteo del combo de usuario que realizaron el cierre
   $.ajax({
-    url: 'ajax/getAreaData.php',
+    url: 'ajax/getCategoryData.php',
     type: 'GET',
     dataType: 'json',
     success: function (data) {
-      var select = $('#areaSeleccionada');
+      var select = $('#categoriaSeleccionada');
       select.empty();
-      select.append('<option value="" selected disabled>Seleccione un &aacute;rea</option>');
+      select.append('<option value="" selected disabled>Seleccione una categor&iacute;a</option>');
       $.each(data, function (index, value) {
-        select.append('<option value="' + value.ARE_codigo + '">' + value.ARE_nombre + '</option>');
+        select.append('<option value="' + value.CAT_codigo + '">' + value.CAT_nombre + '</option>');
       });
     },
     error: function (error) {
@@ -24,18 +24,18 @@ $(document).ready(function () {
   });
 
   // Setear campos del usuario seleccionado
-  $('#areaSeleccionada').change(function () {
+  $('#categoriaSeleccionada').change(function () {
     var selectedOption = $(this).find('option:selected');
-    var codigoArea = selectedOption.val();
-    var nombreArea = selectedOption.text();
-    $('#codigoAreaSeleccionada').val(codigoArea);
-    $('#nombreAreaSeleccionada').val(nombreArea);
+    var copdigoCategoria = selectedOption.val();
+    var nombreCategoria = selectedOption.text();
+    $('#codigoCategoriaSeleccionada').val(copdigoCategoria);
+    $('#nombreCategoriaSeleccionada').val(nombreCategoria);
   });
 
-  // Buscador para el combo de usuario que se le han asignado las incidencias
-  $('#areaSeleccionada').select2({
+  // Buscador para el combo de usuario que realizaron el cierre
+  $('#categoriaSeleccionada').select2({
     allowClear: true,
-    width: '100%',
+    width: '120%',
     dropdownCssClass: 'text-xs', // Use Tailwind CSS class
     language: {
       noResults: function () {
@@ -44,24 +44,24 @@ $(document).ready(function () {
     }
   });
 
-  // Funcion para relaizar la consulta 
-  function nuevaConsultaIncidenciasArea() {
+  // Funcion para realizar la consulta sin filtros
+  function nuevaConsultaAreasMasAfectadas() {
     // limpiar los campos fechas 
-    $('#fechaInicioIncidenciasArea').val('');
-    $('#fechaFinIncidenciasArea').val('');
-    $('#areaSeleccionada').val(null).trigger('change');
+    $('#fechaInicioAreaMasAfectada').val('');
+    $('#fechaFinAreaMasAfectada').val('');
+    $('#categoriaSeleccionada').val(null).trigger('change');
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
-      url: 'reportes.php?action=consultarIncidenciasAreas',
+      url: 'reportes.php?action=consultarAreasMasAfectadas',
       type: 'GET',
       dataType: 'html', // Esperamos HTML para renderizar la tabla
       success: function (response) {
-        console.log("Resultados de nueva consulta areas:", response);
+        console.log("Resultados de nueva consulta: ", response);
         // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaIncidenciasAreas tbody').empty();
+        $('#tablaAreasMasAfectadas tbody').empty();
         // Actualiza el contenido de la tabla con la respuesta
-        $('#tablaIncidenciasAreas tbody').html(response);
+        $('#tablaAreasMasAfectadas tbody').html(response);
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
@@ -69,15 +69,15 @@ $(document).ready(function () {
     });
   }
 
-  // Evento para el boton limpiar campos
-    $('#limpiarCamposIncidenciasAreas').on('click', nuevaConsultaIncidenciasArea);
+  // Evento para el botón de limpiar campos
+  $('#limpiarCamposAreasMasAfectadas').on('click', nuevaConsultaAreasMasAfectadas);
 
   // Validación y envío del formulario
-  $('#formIncidenciasAreas').submit(function (event) {
+  $('#formAreasMasAfectadas').submit(function (event) {
     event.preventDefault(); // Evita el envío del formulario por defecto
 
     // Verifica si los campos y las fechas son válidos
-    if (!validarCamposIncidenciasArea() || !validarFechasIncidenciasArea()) {
+    if (!validarCamposAreasMasAfectadas() || !validarFechasAreasMasAfectadas()) {
       return; // Detiene el envío si los campos o las fechas no son válidos
     }
 
@@ -94,13 +94,13 @@ $(document).ready(function () {
 
     // Realiza la solicitud AJAX
     $.ajax({
-      url: 'reportes.php?action=consultarIncidenciasAreas',
+      url: 'reportes.php?action=consultarAreasMasAfectadas',
       type: 'GET',
       data: dataObject,
       success: function (response) {
         console.log("Resultados filtrados:", response);
-        $('#tablaIncidenciasAreas tbody').empty(); // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaIncidenciasAreas tbody').html(response); // Actualiza el contenido de la tabla con la respuesta
+        $('#tablaAreasMasAfectadas tbody').empty(); // Limpia el contenido actual de la tabla antes de agregar nuevos datos
+        $('#tablaAreasMasAfectadas tbody').html(response); // Actualiza el contenido de la tabla con la respuesta
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
@@ -108,16 +108,17 @@ $(document).ready(function () {
     });
 
     // Función para validar los campos fechas
-    function validarCamposIncidenciasArea() {
+    function validarCamposAreasMasAfectadas() {
       var valido = false;
       var mensajeError = '';
 
-      var faltaArea = ($('#areaSeleccionada').val() !== null && $('#areaSeleccionada').val().trim() !== '');
-      var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasArea').val() !== null && $('#fechaInicioIncidenciasArea').val().trim() !== '');
-      var fechaFinSeleccionada = ($('#fechaFinIncidenciasArea').val() !== null && $('#fechaFinIncidenciasArea').val().trim() !== '');
+      var faltaUsuario = ($('#categoriaSeleccionada').val() !== null && $('#categoriaSeleccionada').val().trim() !== '');
+      var fechaInicioSeleccionada = ($('#fechaInicioAreaMasAfectada').val() !== null && $('#fechaInicioAreaMasAfectada').val().trim() !== '');
+      var fechaFinSeleccionada = ($('#fechaFinAreaMasAfectada').val() !== null && $('#fechaFinAreaMasAfectada').val().trim() !== '');
+
 
       // Verificar si al menos un campo está lleno
-      if (faltaArea || fechaInicioSeleccionada || fechaFinSeleccionada) {
+      if (faltaUsuario || fechaInicioSeleccionada || fechaFinSeleccionada) {
         valido = true;
       } else {
         mensajeError = 'Debe completar al menos un campo para filtrar la tabla.';
@@ -126,14 +127,15 @@ $(document).ready(function () {
       if (!valido) {
         toastr.warning(mensajeError.trim(), 'Advertencia');
       }
+
       return valido;
-    }     
+    }
   });
 
   // Función para validar fechas
-  function validarFechasIncidenciasArea() {
-    const fechaInicio = new Date($('#fechaInicioIncidenciasArea').val());
-    const fechaFin = new Date($('#fechaFinIncidenciasArea').val());
+  function validarFechasAreasMasAfectadas() {
+    const fechaInicio = new Date($('#fechaInicioAreaMasAfectada').val());
+    const fechaFin = new Date($('#fechaFinAreaMasAfectada').val());
     const fechaHoy = new Date();
     fechaHoy.setHours(0, 0, 0, 0); // Ajustar la hora para comparar solo las fechas
 
@@ -157,11 +159,13 @@ $(document).ready(function () {
 
     if (!valido) {
       toastr.warning(mensajeError.trim(), 'Advertencia'); // Ahora mensajeError siempre será una cadena
-    }   
+    }
+
+    return valido;
   }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicioIncidenciasArea, #fechaFinIncidenciasArea').on('change', function () {
-    validarFechasIncidenciasArea();
+  $('#fechaInicioAreaMasAfectada, #fechaFinAreaMasAfectada').on('change', function () {
+    validarFechasAreasMasAfectadas();
   });
-}); 
+});

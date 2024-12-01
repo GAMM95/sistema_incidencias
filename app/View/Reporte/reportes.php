@@ -87,12 +87,12 @@
                       <!-- Botones alineados horizontalmente -->
                       <div class="ml-5 flex space-x-2">
                         <!-- Botón de buscar -->
-                        <button type="submit" id="filtrarListaIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                        <button type="submit" id="filtrarListaIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
                           <i class="feather icon-filter"></i>
                         </button>
 
                         <!-- Botón de nueva consulta -->
-                        <button type="button" id="limpiarCamposIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                        <button type="button" id="limpiarCamposIncidenciasTotales" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center" title="Limpiar campos">
                           <i class="feather icon-refresh-cw"></i>
                         </button>
 
@@ -305,12 +305,12 @@
                       <!-- Botones alineados horizontalmente -->
                       <div class="ml-5 flex space-x-2">
                         <!-- Botón de buscar -->
-                        <button type="submit" id="filtrarListaIncidenciasCerradas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                        <button type="submit" id="filtrarListaIncidenciasCerradas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
                           <i class="feather icon-filter"></i>
                         </button>
 
                         <!-- Botón de nueva consulta -->
-                        <button type="button" id="limpiarCamposIncidenciasCerradas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                        <button type="button" id="limpiarCamposIncidenciasCerradas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center" title="Limpiar campos">
                           <i class="feather icon-refresh-cw"></i>
                         </button>
 
@@ -443,10 +443,10 @@
                       <!-- Botones alineados horizontalmente -->
                       <div class="ml-5 flex space-x-2">
                         <!-- Botón de buscar -->
-                        <button type="submit" id="filtrarListaAsignaciones" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                        <button type="submit" id="filtrarListaAsignaciones" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
                           <i class="feather icon-filter"></i> </button>
                         <!-- Botón de nueva consulta -->
-                        <button type="button" id="limpiarCamposIncidenciasAsignadas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                        <button type="button" id="limpiarCamposIncidenciasAsignadas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center" title="Limpiar campos">
                           <i class="feather icon-refresh-cw"></i>
                         </button>
 
@@ -688,10 +688,10 @@
                   <!-- Botones alineados horizontalmente -->
                   <div class="ml-5 flex space-x-2">
                     <!-- Botón de buscar -->
-                    <button type="submit" id="filtrarListaIncidenciasArea" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                    <button type="submit" id="filtrarListaIncidenciasAreas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
                       <i class="feather icon-filter"></i> </button>
                     <!-- Botón de nueva consulta -->
-                    <button type="button" id="limpiarCamposIncidenciasAreas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                    <button type="button" id="limpiarCamposIncidenciasAreas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center" title="Limpiar campos">
                       <i class="feather icon-refresh-cw"></i>
                     </button>
 
@@ -712,7 +712,7 @@
                 </div>
                 <div class="relative sm:rounded-lg mt-2">
                   <div class="max-w-full overflow-hidden sm:rounded-lg">
-                    <table id="tablaIncidenciasArea" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                    <table id="tablaIncidenciasAreas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                       <!-- Encabezado de la tabla -->
                       <thead class="text-xs text-gray-700 uppercase bg-green-300">
                         <tr>
@@ -732,7 +732,73 @@
 
                       <!-- Cuerpo de la tabla -->
                       <tbody>
-
+                        <?php $item = 1; // Iniciar contador para el ítem 
+                        ?>
+                        <?php foreach ($resultadoIncidenciasAreas as $totales): ?>
+                          <tr class="second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b" data-id="<?= $totales['INC_numero']; ?>">
+                            <th scope="row" class="px-3 py-2 font-medium text-gray-900 whitespace-nowrap hidden"><?= $totales['INC_numero']; ?></th>
+                            <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($totales['INC_numero']) ?></td>
+                            <td class="px-3 py-2 text-center hidden"><?= htmlspecialchars($totales['CIE_numero']) ?></td>
+                            <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                            <td class="px-3 py-2 text-center"><?= $totales['INC_numero_formato']; ?></td>
+                            <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['fechaIncidenciaFormateada']); ?></td>
+                            <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_asunto']); ?></td>
+                            <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_documento']); ?></td>
+                            <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['INC_codigoPatrimonial']); ?></td>
+                            <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['BIE_nombre']); ?></td>
+                            <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['PRI_nombre']); ?></td>
+                            <td class="px-3 py-2 text-center text-xs align-middle">
+                              <?php
+                              $condicionDescripcion = htmlspecialchars($totales['CON_descripcion']);
+                              $badgeClass = '';
+                              switch ($condicionDescripcion) {
+                                case 'OPERATIVO':
+                                  $badgeClass = 'badge-light-info';
+                                  break;
+                                case 'INOPERATIVO':
+                                  $badgeClass = 'badge-light-danger';
+                                  break;
+                                case 'SOLUCIONADO':
+                                  $badgeClass = 'badge-light-info';
+                                  break;
+                                case 'NO SOLUCIONADO':
+                                  $badgeClass = 'badge-light-danger';
+                                  break;
+                                default:
+                                  $badgeClass = 'badge-light-secondary';
+                                  break;
+                              }
+                              ?>
+                              <label class="badge <?= $badgeClass ?>"><?= $condicionDescripcion ?></label>
+                            </td>
+                            <td class="px-3 py-2 text-center text-xs align-middle">
+                              <?php
+                              $estadoDescripcion = htmlspecialchars($totales['Estado']);
+                              $badgeClass = '';
+                              switch ($estadoDescripcion) {
+                                case 'ABIERTO':
+                                  $badgeClass = 'badge-light-danger';
+                                  break;
+                                case 'RECEPCIONADO':
+                                  $badgeClass = 'badge-light-success';
+                                  break;
+                                case 'CERRADO':
+                                  $badgeClass = 'badge-light-primary';
+                                  break;
+                                default:
+                                  $badgeClass = 'badge-light-secondary';
+                                  break;
+                              }
+                              ?>
+                              <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
+                            </td>
+                          </tr>
+                        <?php endforeach; ?>
+                        <?php if (empty($resultadoIncidenciasAreas)): ?>
+                          <tr>
+                            <td colspan="10" class="text-center py-3">No se encontraron registros de incidencias.</td>
+                          </tr>
+                        <?php endif; ?>
                       </tbody>
                       <!-- Fin de cuerpo de tabla -->
                     </table>
@@ -770,10 +836,10 @@
                   <!-- Botones alineados horizontalmente -->
                   <div class="ml-5 flex space-x-2">
                     <!-- Botón de buscar -->
-                    <button type="submit" id="filtrarListaIncidenciasArea" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center">
+                    <button type="submit" id="filtrarListaIncidenciasArea" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
                       <i class="feather icon-filter"></i> </button>
                     <!-- Botón de nueva consulta -->
-                    <button type="button" id="limpiarCamposIncidenciasAreas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center">
+                    <button type="button" id="limpiarCamposIncidenciasAreas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center" title="Limpiar campos">
                       <i class="feather icon-refresh-cw"></i>
                     </button>
 
@@ -793,6 +859,11 @@
                   </div>
                   <!-- Fin de botones alineados horizontalmente -->
                 </div>
+                <!-- input tipo de bien (más largo) -->
+                <div class="flex justify-center items-center text-center">
+                  <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-3/4 text-xs text-center rounded-md" disabled readonly>
+                </div>
+                <!-- Fin de input tipo de bien -->
                 <div class="relative sm:rounded-lg mt-2">
                   <div class="max-w-full overflow-hidden sm:rounded-lg">
                     <table id="tablaIncidenciasArea" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
@@ -826,7 +897,7 @@
             </div>
             <!-- Fin del contenido de la tercera pestaña -->
 
-            <!-- Contenido de la tercera pestaña - REPORTES POR ÁREA -->
+            <!-- Contenido de la tercera pestaña - REPORTES OTROS -->
             <div class="tab-pane fade" id="otros" role="tabpanel" aria-labelledby="otros-tab">
               <div class="col-sm-20">
                 <!-- <div class="card"> -->
@@ -844,76 +915,106 @@
                     <!-- Contenido de las pestañas -->
                     <div class="col-md-10 col-sm-18">
                       <div class="tab-content" id="v-pills-tabContent">
-
                         <!-- Contenido de la primera pestaña -->
                         <div class="tab-pane fade show active" id="v-pills-area" role="tabpanel" aria-labelledby="v-pills-area-tab">
-                          <div class="flex justify-center space-x-4">
-                            <!-- Buscar por área -->
-                            <div class="text-center w-full md:w-3/4">
-                              <select id="area" name="area" class="border p-2 w-full text-xs cursor-pointer">
-                              </select>
-                              <input type="" id="codigoArea" name="codigoArea" readonly>
-                              <input type="" id="nombreArea" name="nombreArea" readonly>
+                          <form id="formAreasMasAfectadas" action="reportes.php?action=consultarAreasMasAfectadas" method="GET" class="bg-white w-full text-xs ">
+
+                            <!-- Inputs y botones para filtrar incidencias -->
+                            <div class="flex justify-center items-center mt-2">
+                              <!-- Nombre de categoria seleccionada -->
+                              <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                                <label for="categoriaSeleccionada" class="block mb-1 font-bold text-xs">Categor&iacute;a seleccionada:</label>
+                                <select id="categoriaSeleccionada" name="categoriaSeleccionada" class="border p-2 w-full text-xs cursor-pointer">
+                                </select>
+                                <input type="hidden" id="codigoCategoriaSeleccionada" name="codigoCategoriaSeleccionada" readonly>
+                                <input type="hidden" id="nombreCategoriaSeleccionada" name="nombreCategoriaSeleccionada" readonly>
+                              </div>
+                              <!-- Fecha de inicio -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 ml-5 px-2 mb-2">
+                                <label for="fechaInicioAreaMasAfectada" class="block mb-1 font-bold text-center text-xs">Fecha de inicio:</label>
+                                <input type="date" id="fechaInicioAreaMasAfectada" name="fechaInicioAreaMasAfectada" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+
+                              <!-- Fecha de fin -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaFinAreaMasAfectada" class="block mb-1 font-bold text-center text-xs">Fecha fin:</label>
+                                <input type="date" id="fechaFinAreaMasAfectada" name="fechaFinAreaMasAfectada" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+
+                              <!-- Botones alineados horizontalmente -->
+                              <div class="ml-5 flex space-x-2">
+                                <!-- Botón de buscar -->
+                                <button type="submit" id="filtrarListaAreaMasAfectadas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-primary rounded-md flex justify-center items-center" title="Previsualizar reporte">
+                                  <i class="feather icon-filter"></i> </button>
+                                <!-- Botón de nueva consulta -->
+                                <button type="button" id="limpiarCamposAreasMasAfectadas" class="h-10 w-12 text-xs text-white font-bold py-2 px-3 btn-secondary rounded-md flex justify-center items-center" title="Limpiar campos">
+                                  <i class="feather icon-refresh-cw"></i>
+                                </button>
+
+                                <!-- Boton generar reporte -->
+                                <div class="btn-group mr-2">
+                                  <div class="flex justify-center space-x-2">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="feather mr-2 icon-file"></i>Reporte
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidencias">Todas las incidencias</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidenciasFecha">Reporte por fecha</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidenciasCategoria">Reporte por categor&iacute;a</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidenciasCategoriaFecha">Reporte por categor&iacute;a y fecha</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+
+                              <!-- Fin de botones alineados horizontalmente -->
                             </div>
 
-                            <!-- Botones -->
-                            <div class="text-center w-full md:w-1/4">
-                              <button type="button" id="filtrar-areas" class="bn btn-primary text-xs text-white font-bold p-2 rounded-md">
-                                <i class="feather mr-2 icon-filter"></i> </button>
-                              <button type="button" id="reportes-areas" class="bn btn-primary text-xs text-white font-bold p-2 rounded-md">
-                                <i class="feather mr-2 icon-printer"></i>Generar reporte
-                              </button>
+                            <!-- Tabla de resultados de incidencias totales -->
+                            <div class="relative sm:rounded-lg mt-2">
+                              <div class="max-w-full overflow-hidden sm:rounded-lg">
+                                <table id="tablaAreasMasAfectadas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                  <!-- Encabezado de la tabla -->
+                                  <thead class="text-xs text-gray-700 uppercase bg-gray-300">
+                                    <tr>
+                                      <th scope="col" class="px-1 py-2 text-center">N&deg;</th>
+                                      <th scope="col" class="px-5 py-2 text-center">&Aacute;rea</th>
+                                      <th scope="col" class="px-1 py-2 text-center">Cantidad</th>
+                                    </tr>
+                                  </thead>
+                                  <!-- Fin de encabezado de la tabla -->
+                                  <!-- Cuerpo de la tabla -->
+                                  <tbody>
+                                    <?php $item = 1; // Iniciar contador para el ítem 
+                                    ?>
+                                    <?php foreach ($resultadoAreaMasAfectadas as $areasAfectadas): ?>
+                                      <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                        <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                        <td class="px-3 py-2 text-center"><?= htmlspecialchars($areasAfectadas['areaMasIncidencia']) ?></td>
+                                        <td class="px-3 py-2 text-center"><?= htmlspecialchars($areasAfectadas['cantidadIncidencias']) ?></td>
+                                      </tr>
+                                    <?php endforeach; ?>
+                                    <?php if (empty($resultadoAreaMasAfectadas)): ?>
+                                      <tr>
+                                        <td colspan="3" class="text-center py-3">No se encontraron registros de incidencias.</td>
+                                      </tr>
+                                    <?php endif; ?>
+                                  </tbody>
+                                  <!-- Fin de cuerpo de tabla -->
+                                </table>
+                              </div>
                             </div>
-                          </div>
-                          <!-- Tabla de resultados de incidencias totales -->
-                          <div class="relative sm:rounded-lg mt-2">
-                            <div class="max-w-full overflow-hidden sm:rounded-lg">
-                              <table id="tablaReporteAreas" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
-                                <!-- Encabezado de la tabla -->
-                                <thead class="text-xs text-gray-700 uppercase bg-gray-300">
-                                  <tr>
-                                    <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Asunto</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Documento</th>
-                                    <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Nombre del Bien</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Prioridad</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Condici&oacute;n</th>
-                                    <th scope="col" class="px-3 py-2 text-center">Estado</th>
-                                  </tr>
-                                </thead>
-                                <!-- Fin de encabezado de la tabla -->
-                                <tbody>
-                                  <!-- Las filas se agregarán aquí dinámicamente -->
-                                </tbody>
-                              </table>
-                            </div>
-                          </div>
-                          <!-- Fin de tabla de resultados de incidencias totales -->
+                            <!-- Fin de tabla de resultados de incidencias totales -->
+                          </form>
                         </div>
                         <!-- Fin de contenido de la primera pestaña -->
 
                         <!-- Contenido de la segunda pestaña -->
                         <div class="tab-pane fade" id="v-pills-codPatrimonial" role="tabpanel" aria-labelledby="v-pills-codPatrimonial-tab">
-                          <div class="flex justify-center space-x-4">
-                            <!-- input código patrimonial -->
-                            <div class="text-center w-full md:w-1/4">
-                              <input type="text" id="codigoPatrimonial" name="codigoPatrimonial" class="border p-2 w-full text-xs text-center rounded-md" maxlength="12" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo patrimonial">
-                            </div>
-                            <!-- Fin de input de código patrimonial -->
+                          <form id="formEquiposMasAfectados" action="reportes.php?action=consultarEquiposMasAfectados" method="GET" class="bg-white w-full text-xs ">
 
-                            <!-- input tipo de bien (más largo) -->
-                            <div class="text-center w-full md:w-3/4">
-                              <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-full text-xs text-center rounded-md" disabled readonly>
-                            </div>
-                            <!-- Fin de input tipo de bien -->
-                          </div>
-                          <!-- Botones -->
-                          <div class="flex justify-center space-x-2 mt-2">
-                            <button type="button" id="reportes-codigoPatrimonial" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-printer"></i>Generar reporte</button>
-                          </div>
+
+                          </form>
                         </div>
                         <!-- Fin de contenido de la segunda pestaña -->
                       </div>

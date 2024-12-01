@@ -327,7 +327,7 @@ class IncidenciaController
       exit();
     }
   }
-  
+
   // Método de controlador para consultar incidencias filtradas - ADMINISTRADOR
   public function consultarIncidenciasPendientesAdministrador($area = NULL, $estado = null, $fechaInicio = null, $fechaFin = null)
   {
@@ -395,10 +395,55 @@ class IncidenciaController
     }
   }
 
+  // Metodo para filtrar incidencias por area para el reporte
+  public function filtrarIncidenciasArea($area = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $area = isset($_GET['areaSeleccionada']) ? (int) $_GET['areaSeleccionada'] : null;
+      $fechaInicio = isset($_GET['fechaInicioIncidenciasArea']) ? $_GET['fechaInicioIncidenciasArea'] : null;
+      $fechaFin = isset($_GET['fechaFinIncidenciasArea']) ? $_GET['fechaFinIncidenciasArea'] : null;
+      error_log("Usuario: $area, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+      // Llamar al método para consultar incidencias por área, estado y fecha
+      $resultado = $this->incidenciaModel->buscarIncidenciasArea($area, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $resultado;
+    }
+  }
+
   // Metodo para listar incidencias totales para reporte
   public function listarIncidenciasTotales()
   {
     $resultado = $this->incidenciaModel->listarIncidenciasTotales();
+    return $resultado;
+  }
+
+  public function listarIncidenciasAreaEquipo()
+  {
+    $resultado = $this->incidenciaModel->listarIncidenciasAreaEquipo();
+    return $resultado;
+  }
+
+  // Metodo para filtrar incidencias por area para el reporte
+  public function filtrarAreasMasAfectadas($categoria = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $categoria = isset($_GET['categoriaSeleccionada']) ? (int) $_GET['categoriaSeleccionada'] : null;
+      $fechaInicio = isset($_GET['fechaInicioAreaMasAfectada']) ? $_GET['fechaInicioAreaMasAfectada'] : null;
+      $fechaFin = isset($_GET['fechaFinAreaMasAfectada']) ? $_GET['fechaFinAreaMasAfectada'] : null;
+      error_log("Categoria: $categoria, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+      // Llamar al método para consultar incidencias por área, estado y fecha
+      $resultado = $this->incidenciaModel->buscarAreasMasAfectadas($categoria, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $resultado;
+    }
+  }
+
+  // Metodo para listar las areas con mas incidencias
+  public function listarAreasMasAfectadas()
+  {
+    $resultado = $this->incidenciaModel->listarAreasMasAfectadas();
     return $resultado;
   }
 

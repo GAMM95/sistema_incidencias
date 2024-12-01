@@ -186,6 +186,27 @@ class IncidenciaModel extends Conexion
     }
   }
 
+  // Metodo para listar incidencias totales para reporte
+  public function listarIncidenciasAreaEquipo()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_reporte_incidencias_area_equipo
+                  ORDER BY INC_numero DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias totales: " . $e->getMessage());
+    }
+  }
+
+
   // Metodo listar las incidencias totales - ADMINISTRADOR 
   public function listarIncidenciasTotalesAdministrador()
   {
@@ -279,6 +300,8 @@ class IncidenciaModel extends Conexion
       throw new Exception("Error al listar incidencias registradas por el administrador: " . $e->getMessage());
     }
   }
+
+  // Metodo para listar incidencias registradas por el administrador
   public function listarIncidenciasRegistroAdmin()
   {
     $conector = parent::getConexion();
@@ -609,7 +632,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_ConsultarIncidenciasUsuario :area, :codigoPatrimonial, :estado, :fechaInicio, :fechaFin";
+        $sql = "EXEC sp_consultar_incidencias_usuario :area, :codigoPatrimonial, :estado, :fechaInicio, :fechaFin";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
         $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);
@@ -623,9 +646,54 @@ class IncidenciaModel extends Conexion
         throw new Exception("Error de conexión con la base de datos.");
       }
     } catch (PDOException $e) {
-      throw new Exception("Error al obtener las incidencias  usuario DX: " . $e->getMessage());
+      throw new Exception("Error al obtener las incidencias por usuario: " . $e->getMessage());
     }
   }
+
+  // Metodo para filtrar incidencias por area y rango de fechas
+  public function buscarIncidenciasArea($area, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_filtrar_incidencias_area :area, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':area', $area, PDO::PARAM_INT);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el procedimiento almacenado
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener los resultados
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias por area: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para filtrar areas mas afectadas por incidencias
+  public function buscarAreasMasAfectadas($categoria, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_filtrar_areas_afectadas :categoria, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':categoria', $categoria, PDO::PARAM_INT);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el procedimiento almacenado
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener los resultados
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las areas mas afectadas: " . $e->getMessage());
+    }
+  }
+
 
   // METODO PARA CONTAR LA CANTIDAD DE AREAS
   public function contarIncidencias()
@@ -676,6 +744,28 @@ class IncidenciaModel extends Conexion
       }
     } catch (PDOException $e) {
       echo "Error al contar incidencias: " . $e->getMessage();
+      return null;
+    }
+  }
+
+  // METODO PARA LISTAR LAS AREAS CON MAS INCIDENCIAS - Reporte
+  public function listarAreasMasAfectadas()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_area_mas_afectada
+                ORDER BY cantidadIncidencias DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al listar areas con mas incidencias: " . $e->getMessage());
       return null;
     }
   }

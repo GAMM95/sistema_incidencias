@@ -1163,6 +1163,49 @@ SELECT
     WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5));
 GO
 
+
+--VISTA PARA REPORTE DE INCIDENCIAS TOTALES
+CREATE OR ALTER VIEW vw_reporte_incidencias_area_equipo AS
+SELECT
+    I.INC_numero,
+	C.CIE_numero,
+    I.INC_numero_formato,
+    (CONVERT(VARCHAR(10), INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), INC_hora, 0), 7), 6, 0, ' '))  AS fechaIncidenciaFormateada,
+    A.ARE_nombre,
+    CAT.CAT_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_codigoPatrimonial,
+	B.BIE_nombre,
+    (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+    PRI.PRI_nombre,
+    IMP.IMP_descripcion,
+    (CONVERT(VARCHAR(10), CIE_fecha, 103)) AS fechaCierreFormateada,
+    O.CON_descripcion,
+    U.USU_nombre,
+    p.PER_nombres + ' ' + PER_apellidoPaterno AS Usuario,
+    CASE
+        WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+        ELSE E.EST_descripcion
+    END AS Estado
+    FROM INCIDENCIA I
+    INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+    INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+	LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+	LEFT JOIN ASIGNACION ASI ON ASI.REC_numero =R.REC_numero
+	LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+	LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
+    LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+    LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+    LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+    LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+    INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+    WHERE (I.EST_codigo IN (3, 4, 7) OR C.EST_codigo IN (3, 4, 7));
+GO
+
 CREATE OR ALTER VIEW vw_reporte_incidencias_area AS
 SELECT
       I.INC_numero_formato,
@@ -1264,6 +1307,14 @@ GROUP BY
     p.PER_apellidoPaterno;
 GO
 
+-- VISTA PARA LISTAR LAS AREAS MAS AFECTADAS
+CREATE OR ALTER VIEW vw_area_mas_afectada AS
+SELECT a.ARE_nombre AS areaMasIncidencia, COUNT(*) AS cantidadIncidencias
+FROM INCIDENCIA i
+INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
+GROUP BY a.ARE_nombre;
+GO
+
 -- Vista para listar todos los eventos de auditoria
 CREATE OR ALTER VIEW vw_eventos_totales AS
 SELECT 
@@ -1284,7 +1335,7 @@ FROM AUDITORIA A
 INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
 INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
 INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo;
 GO
 
 --Vista para ver los incios de sesion
@@ -3653,7 +3704,7 @@ END
 GO
 
 -- PROCEDIMIENTO ALMANCENADO PARA CONSULTAR INCIDENCIAS - USUARIO
-CREATE OR ALTER PROCEDURE sp_ConsultarIncidenciasUsuario
+CREATE OR ALTER PROCEDURE sp_consultar_incidencias_usuario
   @area INT,
   @codigoPatrimonial CHAR(12),
   @estado INT,
@@ -3704,10 +3755,84 @@ BEGIN
     (@fechaInicio IS NULL OR I.INC_fecha >= @fechaInicio) AND
     (@fechaFin IS NULL OR I.INC_fecha <= @fechaFin) AND
     (@area IS NULL OR A.ARE_codigo = @area)
-    AND (I.EST_codigo IN (3, 4, 5) OR EC.EST_codigo IN (3, 4, 5))
+    AND (I.EST_codigo IN (3, 4, 7) OR EC.EST_codigo IN (3, 4, 7))
   ORDER BY 
     SUBSTRING(I.INC_numero_formato, CHARINDEX('-', I.INC_numero_formato) + 1, 4) DESC,
     I.INC_numero_formato DESC;
+END
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA FILTRAR INCIDENCIAS POR AREA Y RANGO DE FECHAS - REPORTE
+CREATE OR ALTER PROCEDURE sp_filtrar_incidencias_area
+  @area INT,
+  @fechaInicio DATE,
+  @fechaFin DATE
+AS
+BEGIN
+  SELECT 
+    I.INC_numero,
+    I.INC_numero_formato,
+    (CONVERT(VARCHAR(10), INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
+    I.INC_codigoPatrimonial,
+	B.BIE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_descripcion,
+    (CONVERT(VARCHAR(10), R.REC_fecha, 103)) AS fechaRecepcionFormateada,
+    PRI.PRI_nombre,
+    O.CON_descripcion,
+	  (CONVERT(VARCHAR(10), C.CIE_fecha, 103)) AS fechaCierreFormateada,
+    CAT.CAT_nombre,
+    A.ARE_nombre,
+    CASE
+      WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+      ELSE E.EST_descripcion
+    END AS Estado,
+    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario
+  FROM INCIDENCIA I
+  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+  INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+  INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+  LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+  LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+  LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+  LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+  LEFT JOIN CIERRE C ON R.REC_numero = C.MAN_codigo
+  LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+  LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+  LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+  LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+  LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+  INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+  WHERE 
+    (@fechaInicio IS NULL OR I.INC_fecha >= @fechaInicio) AND
+    (@fechaFin IS NULL OR I.INC_fecha <= @fechaFin) AND
+    (@area IS NULL OR A.ARE_codigo = @area)
+    AND (I.EST_codigo IN (3, 4, 7) OR EC.EST_codigo IN (3, 4, 7))
+  ORDER BY 
+    SUBSTRING(I.INC_numero_formato, CHARINDEX('-', I.INC_numero_formato) + 1, 4) DESC,
+    I.INC_numero_formato DESC;
+END
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA FILTRAR AREAS MAS AFECTADAS
+CREATE OR ALTER PROCEDURE sp_filtrar_areas_afectadas
+  @categoria INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT 
+    A.ARE_nombre AS areaMasIncidencia,
+    COUNT(*) AS cantidadIncidencias
+  FROM INCIDENCIA I
+  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+  WHERE 
+    (@fechaInicio IS NULL OR I.INC_fecha >= @fechaInicio) AND
+    (@fechaFin IS NULL OR I.INC_fecha <= @fechaFin) AND
+    (@categoria IS NULL OR I.CAT_codigo = @categoria)
+  GROUP BY A.ARE_nombre
+  ORDER BY cantidadIncidencias DESC;
 END
 GO
 

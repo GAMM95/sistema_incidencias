@@ -9,6 +9,7 @@ if (!isset($_SESSION['usuario'])) {
 $action = $_GET['action'] ?? '';
 $state = $_GET['state'] ?? '';
 $rol = $_SESSION['rol'];
+$area = $_SESSION['codigoArea'];
 
 require_once './app/Controller/incidenciaController.php';
 require_once './app/Controller/recepcionController.php';
@@ -24,9 +25,6 @@ $mantenimientoController = new MantenimientoController();
 
 $fechaInicio = $_GET['fechaInicio'] ?? '';
 $fechaFin = $_GET['fechaFin'] ?? '';
-$categoria = $_GET['codigoCategoria'] ?? '';
-$usuario = $_GET['codigoUsuario'] ?? '';
-$area = $_GET['codigoArea'] ?? '';
 
 // Funcion generia para generar las tablas de reportes
 function generarTablaTotales($resultado, $itemCount, $columnas)
@@ -163,18 +161,14 @@ function generarTablaAsignaciones($resultado, $itemCount, $columnas)
 // Funcion generia para generar las tablas de reportes
 function generarTablaAreasAfectadas($resultado, $itemCount, $columnas)
 {
-  error_log(print_r($resultado, true));  // Para ver qué datos tiene $resultado
-
   $html = '';
   if (!empty($resultado)) {
     foreach ($resultado as $item) {
       $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
       $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>'; // Columna de ítem
 
-      // Iterar sobre las columnas y verificar si la clave existe
       foreach ($columnas as $columna) {
-        $valor = isset($item[$columna]) ? htmlspecialchars($item[$columna]) : 'N/A'; // Verificar si la clave existe
-        $html .= '<td class="px-3 py-2 text-center">' . $valor . '</td>';
+        $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item[$columna]) . '</td>';
       }
       $html .= '</tr>';
     }
@@ -184,7 +178,6 @@ function generarTablaAreasAfectadas($resultado, $itemCount, $columnas)
   return $html;
 }
 
-
 // Función genérica para generar las tablas de reportes
 function generarTabla($resultado, $itemCount, $columnas)
 {
@@ -193,12 +186,13 @@ function generarTabla($resultado, $itemCount, $columnas)
   if (!empty($resultado)) {
     foreach ($resultado as $item) {
       $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+
+      // Columna del contador de ítem
       $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>';
 
       // Generar las columnas dinámicas
       foreach ($columnas as $columna) {
-        $valor = isset($item[$columna]) ? htmlspecialchars($item[$columna]) : 'N/A'; // Verificar si la clave existe
-        $html .= '<td class="px-3 py-2 text-center">' . $valor . '</td>';
+        $html .= '<td class="px-3 py-2 text-center">' . htmlspecialchars($item[$columna]) . '</td>';
       }
 
       // Badge para 'CON_descripcion'
@@ -247,7 +241,7 @@ function generarTabla($resultado, $itemCount, $columnas)
     }
   } else {
     // Si no hay resultados, mostrar un mensaje de "No se encontraron registros."
-    $html = '<tr><td colspan="' . (count($columnas) + 1) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
+    $html = '<tr><td colspan="' . (count($columnas) + 2) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
   }
 
   return $html;
@@ -255,7 +249,7 @@ function generarTabla($resultado, $itemCount, $columnas)
 
 
 // Función para manejar los filtros de fecha, usuario y obtener resultados
-function obtenerRegistros($action, $controller, $usuario, $area, $equipo, $categoria, $fechaInicio, $fechaFin)
+function obtenerRegistros($action, $controller, $usuario = null, $area = null, $equipo = null, $categoria = null, $fechaInicio = null, $fechaFin = null)
 {
   switch ($action) {
     case 'consultarIncidenciasTotales':
@@ -303,39 +297,38 @@ if ($action) {
 
   // Verificar la acción y ejecutar la correspondiente
   if ($action == 'consultarIncidenciasTotales') {
-    // Pasar los argumentos necesarios, aunque algunos pueden ser null si no se necesitan
-    $resultadoTotales = obtenerRegistros($action, $incidenciaController, null, null, null, null, $fechaInicio, $fechaFin);
+    $resultadoTotales = obtenerRegistros($action, $incidenciaController, null, $fechaInicio, $fechaFin);
     $columnasTotales = obtenerColumnasParaAccion($action);
     if ($resultadoTotales) {
       echo generarTablaTotales($resultadoTotales, 1, $columnasTotales);
     } else {
       error_log("No se encontraron registros para 'consultarIncidenciasTotales'.");
     }
-  } else if ($action == 'consultarIncidenciasCerradas') {
-    $resultadoCerradas = obtenerRegistros($action, $cierreController, $usuario, null, null, null, $fechaInicio, $fechaFin);
+  } elseif ($action == 'consultarIncidenciasCerradas') {
+    $resultadoCerradas = obtenerRegistros($action, $cierreController, null, $fechaInicio, $fechaFin);
     $columnasCerradas = obtenerColumnasParaAccion($action);
     if ($resultadoCerradas) {
       echo generarTablaCerradas($resultadoCerradas, 1, $columnasCerradas);
     } else {
       error_log("No se encontraron registros para 'consultarIncidenciasCerradas'.");
     }
-  } else if ($action == 'consultarIncidenciasAsignadas') {
-    $resultadoAsignadas = obtenerRegistros($action, $asignacionController, $usuario, null, null, null, $fechaInicio, $fechaFin);
+  } elseif ($action == 'consultarIncidenciasAsignadas') {
+    $resultadoAsignadas = obtenerRegistros($action, $asignacionController, null, $fechaInicio, $fechaFin);
     $columnasAsignadas = obtenerColumnasParaAccion($action);
     if ($resultadoAsignadas) {
       echo generarTablaAsignaciones($resultadoAsignadas, 1, $columnasAsignadas);
     } else {
       error_log("No se encontraron registros para 'consultarIncidenciasAsignadas'.");
     }
-  } else if ($action == 'consultarIncidenciasAreas') {
-    $resultadoArea = obtenerRegistros($action, $incidenciaController, null, $area, null, null, $fechaInicio, $fechaFin);
+  } elseif ($action == 'consultarIncidenciasAreas') {
+    $resultadoArea = obtenerRegistros($action, $incidenciaController,null, $area, null, null, $fechaInicio, $fechaFin);
     $columnasArea = obtenerColumnasParaAccion($action);
     if ($resultadoArea) {
-      echo generarTabla($resultadoArea, 1, $columnasArea, 'Incidencias por &aacute;rea');
+      echo generarTabla($resultadoArea, 1, $columnasArea);
     } else {
       error_log("No se encontraron registros para 'consultarIncidenciasAreas'.");
     }
-  } else if ($action == 'consultarAreasMasAfectadas') {
+  } elseif ($action == 'consultarAreasMasAfectadas') {
     $resultadoAreaMasAfectadas = obtenerRegistros($action, $incidenciaController, null, null, null, $categoria, $fechaInicio, $fechaFin);
     $columnasAreaMasAfectadas = obtenerColumnasParaAccion($action);
     if ($resultadoAreaMasAfectadas) {
@@ -449,11 +442,6 @@ $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
   <!-- Reportes por area -->
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorArea.js"></script>
 
-  <!-- Reportes otros -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteAreasPorFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteAreasPorCategoria.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteTotalAreasAfectadas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Reports/reporteAreasPorCategoriaFecha.js"></script>
 
 
   <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->
