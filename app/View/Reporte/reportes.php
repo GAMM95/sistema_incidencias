@@ -1111,23 +1111,17 @@
                         <div class="tab-pane fade" id="v-pills-graficos" role="tabpanel" aria-labelledby="v-pills-graficos-tab">
                           <form id="formGraficos" action="reportes.php?action=consultarEquiposMasAfectados" method="GET" class="bg-white w-full text-xs ">
                             <!-- Widget del grafico -->
-                            <div id="grafico" class="col-md-12 col-xl-8">
-                              <div class="card support-bar overflow-hidden">
-                                <div class="card-body pb-0">
+                            <div id="grafico" class="col-md-12  w-full col-xl-8">
+                              <div class="card support-bar overflow-hidden w-full">
+                                <div class="card-body w-full">
                                   <!-- Contar el total de incidencias en el mes -->
                                   <!-- <h2 class="m-0 text-lg font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h2> -->
-                                  <span class="text-c-blue font-bold">INCIDENCIAS</span>
+                                  <span class="text-c-blue font-bold">INCIDENCIAS ANUALES</span>
 
                                   <?php
-                                  // Establecer la configuración regional para el idioma español
-                                  setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish');
-
-                                  // Establecer la zona horaria
-                                  date_default_timezone_set('America/Lima');
-
-                                  // Crear un objeto DateTime para la fecha actual
-                                  $dateTimeObj = new DateTime('now', new DateTimeZone('America/Lima'));
-
+                                  setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish');  // Establecer la configuración regional para el idioma español
+                                  date_default_timezone_set('America/Lima'); // Establecer la zona horaria
+                                  $dateTimeObj = new DateTime('now', new DateTimeZone('America/Lima')); // Crear un objeto DateTime para la fecha actual
                                   // Crear un objeto IntlDateFormatter para formatear la fecha
                                   $formatter = new IntlDateFormatter(
                                     'es_ES', // Configuración regional para el idioma español
@@ -1137,29 +1131,11 @@
                                     null, // Calendario gregoriano
                                     'MMMM' // Formato para mes
                                   );
-
-                                  // Obtener el nombre del mes
-                                  $nombreMes = $formatter->format($dateTimeObj);
+                                  $nombreMes = $formatter->format($dateTimeObj); // Obtener el nombre del mesf
                                   ?>
 
                                   <!-- Integrar el selector de mes en la línea de texto sin bordes -->
-                                  <p class="mb-3 mt-3">
-                                    Total de incidencias en el mes de <?php echo $nombreMes; ?>
-                                    <select id="mes-selector" class="bg-transparent text-md font-bold outline-none cursor-pointer">
-                                      <?php
-                                      // Crear opciones de mes
-                                      for ($i = 1; $i <= 12; $i++) {
-                                        // Crear un objeto DateTime para cada mes
-                                        $mesObj = DateTime::createFromFormat('!m', $i);
-                                        $nombreMesOption = $formatter->format($mesObj);
-                                        // Si el mes actual coincide con el mes en el bucle, seleccionarlo
-                                        $selected = ($i == $dateTimeObj->format('n')) ? 'selected' : '';
-                                        echo "<option value=\"$i\" $selected>$nombreMesOption</option>";
-                                      }
-                                      ?>
-                                    </select>
-                                    del <?php echo date('Y'); ?>.
-                                  </p>
+                                  <p class="mb-3 mt-3"> Total de incidencias en el mes de <?php echo $nombreMes; ?> del <?php echo date('Y'); ?>. </p>
 
                                 </div>
                                 <div id="support-chart"></div>

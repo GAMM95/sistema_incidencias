@@ -380,9 +380,12 @@ $resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMant
 $resultadoIncidenciasAreas = $incidenciaController->listarIncidenciasAreaEquipo();
 $resultadoEquiposMasAfectados = $incidenciaController->listarEquiposMasAfectados();
 $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
+
+// Metodo para mostrar cantidades de incidencias mensuales
+if ($rol === 'Administrador' || $rol === 'Soporte') {
+  $cantidades = $incidenciaController->mostrarCantidadIncidenciasMes();
+}
 ?>
-
-
 
 <!DOCTYPE html>
 <html lang="es">

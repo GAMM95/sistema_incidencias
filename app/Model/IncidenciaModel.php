@@ -909,11 +909,10 @@ class IncidenciaModel extends Conexion
     // Bucle a través de los meses del año (del 1 al 12)
     for ($mes = 1; $mes <= 12; $mes++) {
       // Preparar la consulta SQL corregida
-      $sql = "
-                SELECT COUNT(*) AS incidencias_mes_año
-                FROM INCIDENCIA
-                WHERE INC_FECHA >= :inicio_mes
-                  AND INC_FECHA < :inicio_mes_siguiente";
+      $sql = "SELECT COUNT(*) AS incidencias_mes_año
+              FROM INCIDENCIA
+              WHERE INC_FECHA >= :inicio_mes
+              AND INC_FECHA < :inicio_mes_siguiente";
 
       // Definir las fechas de inicio y fin del mes
       $inicioMes = "$año-$mes-01";
@@ -931,5 +930,30 @@ class IncidenciaModel extends Conexion
     }
 
     return $incidenciasPorMes;
+  }
+
+  // TODO: Metodos para  obtener las cantidades de incidencias mensuales
+  public function contarIncidenciasEnero($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+
+        $sql = "SELECT COUNT(*) AS incidencias_enero
+              FROM INCIDENCIA
+              WHERE INC_FECHA >= DATEFROMPARTS(:anio, 1, 1)
+              AND INC_FECHA < DATEFROMPARTS(:anio, 2, 1)";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_enero'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias por mes: " . $e->getMessage());
+      return null;
+    }
   }
 }
