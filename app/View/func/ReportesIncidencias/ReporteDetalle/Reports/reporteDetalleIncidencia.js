@@ -16,7 +16,7 @@ $(document).ready(function () {
 
     // Realizar una solicitud AJAX para obtener los datos de la incidencia
     $.ajax({
-      url: 'ajax/getReporteIncidencia.php',
+      url: 'ajax/ReportesIncidencias/ReporteDetalle/getReporteDetalleIncidencia.php',
       method: 'GET',
       data: { numero: numeroIncidencia },
       dataType: 'json',
@@ -37,25 +37,26 @@ $(document).ready(function () {
 
               const fechaImpresion = new Date().toLocaleDateString();
               const headerText2 = 'Subgerencia de Informática y Sistemas';
-              const reportTitle = 'REPORTE DE INCIDENCIA';
+              const reportTitle = 'REPORTE DETALLADO DE INCIDENCIA';
 
               const pageWidth = doc.internal.pageSize.width;
               const marginX = 10;
-              const marginY = 10;
+              const marginY = 5;
+
               const logoWidth = 25;
               const logoHeight = 25;
 
               doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
               doc.setFont('helvetica', 'bold');
-              doc.setFontSize(16);
+              doc.setFontSize(15);
               const titleWidth = doc.getTextWidth(reportTitle);
               const titleX = (pageWidth - titleWidth) / 2;
               const titleY = 25;
 
               doc.text(reportTitle, titleX, titleY);
               doc.setLineWidth(0.5);
-              doc.line(titleX, titleY + 3, titleX + titleWidth, titleY + 3);
+              doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
 
               doc.setFontSize(8);
               doc.setFont('helvetica', 'normal');
@@ -64,7 +65,7 @@ $(document).ready(function () {
               const fechaTextWidth = doc.getTextWidth(fechaText);
               const headerText2X = pageWidth - marginX - headerText2Width;
               const fechaTextX = pageWidth - marginX - fechaTextWidth;
-              const headerText2Y = marginY + logoHeight / 2;
+              const headerText2Y = marginY + logoHeight / 3;
               const fechaTextY = headerText2Y + 5;
 
               doc.text(headerText2, headerText2X, headerText2Y);
@@ -101,7 +102,7 @@ $(document).ready(function () {
                 valign: 'middle'
               },
               headStyles: {
-                fillColor: [9, 4, 6],
+                fillColor: [44, 62, 80],
                 textColor: [255, 255, 255],
                 fontStyle: 'bold',
               },
@@ -153,13 +154,13 @@ $(document).ready(function () {
             }
 
             // Mostrar mensaje de exito de pdf generado
-            toastr.success('Reporte de incidencia generado.', 'Mensaje');
+            toastr.success('Reporte detallado de incidencia generado.', 'Mensaje');
             // Retrasar la apertura del PDF y limpiar el campo de entrada
             setTimeout(() => {
               window.open(doc.output('bloburl'));
             }, 2000);
           } catch (error) {
-            toastr.error('Hubo un error al generar reporte de incidencia.', 'Mensaje de error');
+            toastr.error('Hubo un error al generar reporte detallado de incidencia.', 'Mensaje de error');
             console.error('Error al generar el PDF:', error.message);
           }
         } else {

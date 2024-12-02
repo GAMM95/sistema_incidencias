@@ -3985,3 +3985,20 @@ GO
 --SELECT MAN_codigo, MAN_fecha, MAN_hora, M.EST_codigo, E.EST_descripcion, ASI_codigo FROM MANTENIMIENTO M
 --LEFT JOIN ESTADO E ON E.EST_codigo = M.EST_codigo;
 --GO
+
+
+DECLARE @año INT = 2024; -- Ingresar el año deseado
+DECLARE @mes INT = 11;    -- Ingresar el mes deseado
+
+SELECT COUNT(*) AS incidencias_mes_año
+FROM INCIDENCIA
+WHERE INC_FECHA >= DATEFROMPARTS(@año, @mes, 1)
+  AND INC_FECHA < DATEFROMPARTS(
+        CASE 
+            WHEN @mes = 12 THEN @año + 1 
+            ELSE @año 
+        END,
+        CASE 
+            WHEN @mes = 12 THEN 1 
+            ELSE @mes + 1 
+        END, 1);

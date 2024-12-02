@@ -107,7 +107,7 @@ switch ($action) {
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_recepcion_admin.js"></script>
+  <script src="./app/View/func/Registros/Recepcion/func_recepcion_admin.js"></script>
 
   <!-- Framework CSS -->
   <script src="https://cdn.tailwindcss.com"></script>

@@ -126,4 +126,4 @@
 
 </html>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="./app/View/func/func_login.js"></script>
+<script src="./app/View/func/Login/func_login.js"></script>

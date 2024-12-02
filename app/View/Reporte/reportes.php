@@ -908,6 +908,7 @@
                       <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <li><a class="nav-link text-left active" id="v-pills-area-tab" data-toggle="pill" href="#v-pills-area" role="tab" aria-controls="v-pills-area" aria-selected="false">&Aacute;reas con m&aacute;s incidencias</a></li>
                         <li><a class="nav-link text-left" id="v-pills-codPatrimonial-tab" data-toggle="pill" href="#v-pills-codPatrimonial" role="tab" aria-controls="v-pills-codPatrimonial" aria-selected="false">Equipos m&aacute;s afectados</a></li>
+                        <li><a class="nav-link text-left" id="v-pills-graficos-tab" data-toggle="pill" href="#v-pills-graficos" role="tab" aria-controls="v-pills-graficos" aria-selected="false">Gr&aacute;ficos</a></li>
                       </ul>
                     </div>
                     <!-- Fin de pestañas verticales -->
@@ -1105,6 +1106,109 @@
                           </form>
                         </div>
                         <!-- Fin de contenido de la segunda pestaña -->
+
+                        <!-- Contenido de la tercera pestaña -->
+                        <div class="tab-pane fade" id="v-pills-graficos" role="tabpanel" aria-labelledby="v-pills-graficos-tab">
+                          <form id="formGraficos" action="reportes.php?action=consultarEquiposMasAfectados" method="GET" class="bg-white w-full text-xs ">
+                            <!-- Widget del grafico -->
+                            <div id="grafico" class="col-md-12 col-xl-8">
+                              <div class="card support-bar overflow-hidden">
+                                <div class="card-body pb-0">
+                                  <!-- Contar el total de incidencias en el mes -->
+                                  <!-- <h2 class="m-0 text-lg font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h2> -->
+                                  <span class="text-c-blue font-bold">INCIDENCIAS</span>
+
+                                  <?php
+                                  // Establecer la configuración regional para el idioma español
+                                  setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish');
+
+                                  // Establecer la zona horaria
+                                  date_default_timezone_set('America/Lima');
+
+                                  // Crear un objeto DateTime para la fecha actual
+                                  $dateTimeObj = new DateTime('now', new DateTimeZone('America/Lima'));
+
+                                  // Crear un objeto IntlDateFormatter para formatear la fecha
+                                  $formatter = new IntlDateFormatter(
+                                    'es_ES', // Configuración regional para el idioma español
+                                    IntlDateFormatter::NONE, // Sin formato de fecha completa
+                                    IntlDateFormatter::NONE, // Sin formato de tiempo
+                                    null, // Usar la zona horaria predeterminada
+                                    null, // Calendario gregoriano
+                                    'MMMM' // Formato para mes
+                                  );
+
+                                  // Obtener el nombre del mes
+                                  $nombreMes = $formatter->format($dateTimeObj);
+                                  ?>
+
+                                  <!-- Integrar el selector de mes en la línea de texto sin bordes -->
+                                  <p class="mb-3 mt-3">
+                                    Total de incidencias en el mes de <?php echo $nombreMes; ?>
+                                    <select id="mes-selector" class="bg-transparent text-md font-bold outline-none cursor-pointer">
+                                      <?php
+                                      // Crear opciones de mes
+                                      for ($i = 1; $i <= 12; $i++) {
+                                        // Crear un objeto DateTime para cada mes
+                                        $mesObj = DateTime::createFromFormat('!m', $i);
+                                        $nombreMesOption = $formatter->format($mesObj);
+                                        // Si el mes actual coincide con el mes en el bucle, seleccionarlo
+                                        $selected = ($i == $dateTimeObj->format('n')) ? 'selected' : '';
+                                        echo "<option value=\"$i\" $selected>$nombreMesOption</option>";
+                                      }
+                                      ?>
+                                    </select>
+                                    del <?php echo date('Y'); ?>.
+                                  </p>
+
+                                </div>
+                                <div id="support-chart"></div>
+                                <!-- etiquetas inferiores del gráfico -->
+                                <div class="card-footer bg-primary text-white">
+                                  <div class="row text-center">
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h4>
+                                      <span>Incidencias Nuevas</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h4>
+                                      <span>Incidencias Pendientes</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h4>
+                                      <span>Incidencias Cerradas</span>
+                                    </div>
+                                  </div>
+                                </div>
+                                <!-- fin de etiquetas inferiores del gráfico -->
+                              </div>
+                            </div>
+
+                            <script>
+                              document.getElementById('mes-selector').addEventListener('change', function() {
+                                var mesNombre = this.options[this.selectedIndex].text;
+                                document.getElementById('mes-nombre').textContent = mesNombre;
+                              });
+                            </script>
+                            <!-- Fin del widget del grafico -->
+
+                            <!-- Tarjetas de las cantidades  -->
+                            <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+                            <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script>
+                              // Pasar datos de PHP a JavaScript
+                              var incidenciasData = <?php echo json_encode([
+                                                      (int)$cantidades['pendientes_mes_actual'],
+                                                      (int)$cantidades['recepciones_mes_actual'],
+                                                      (int)$cantidades['cierres_mes_actual']
+                                                    ]); ?>;
+                            </script>
+                            <!-- Fin de las tarjetas de las cantidades -->
+
+
+                          </form>
+                        </div>
+                        <!-- Fin del contenido de la tercera pestaña -->
                       </div>
                     </div>
                     <!-- Fin de contenido de las pestañas -->

@@ -15,26 +15,7 @@ require_once 'app/Model/incidenciaModel.php';
 $incidenciaController = new IncidenciaController();
 $incidenciaModel = new IncidenciaModel();
 
-// // Paginacion de la tabla
-// $limit = 1; // Número de filas por página
-// $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Página actual
-// $start = ($page - 1) * $limit; // Calcula el índice de inicio
-
-// // Obtiene el total de registros
-// $totalIncidencias = $incidenciaModel->contarIncidenciasUsuario($_SESSION['codigoArea']);
-// $totalPages = ceil($totalIncidencias / $limit);
-
-// Obtiene las incidencias para la página actual
-// $resultado = $incidenciaModel->listarIncidenciasRegistroUsuario($_SESSION['codigoArea'], $start, $limit);
 $resultado = $incidenciaModel->listarIncidenciasRegistroUsuario($_SESSION['codigoArea']);
-
-
-if ($INC_numero != '') {
-  global $incidenciaRegistrada;
-  $incidenciaRegistrada = $incidenciaModel->obtenerIncidenciaPorId($INC_numero);
-} else {
-  $incidenciaRegistrada = null;
-}
 
 switch ($action) {
   case 'registrar':
@@ -85,9 +66,10 @@ switch ($action) {
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
 
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/func_incidencia_user.js"></script>
-  <script src="./app/View/func/Reports/reporteDetalleIncidencia.js"></script>
-  <!-- <script src="./app/View/func/Reports/reporteNumeroIncidencia.js"></script> -->
+
+  <!-- Funciones y reportes -->
+  <script src="./app/View/func/Registros/Incidencia/func_incidencia_user.js"></script>
+  <script src="./app/View/func/Registros/Incidencia/reporteDetalleIncidencia.js"></script>
   <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 

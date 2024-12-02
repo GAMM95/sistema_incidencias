@@ -28,24 +28,7 @@ $totalRecepcionesSinCerrar = $mantenmientoModel->contarIncidenciasFinalizadas();
 $totalPages = ceil($totalRecepcionesSinCerrar / $limit);
 $recepciones = $mantenmientoModel->listarIncidenciasFinalizadas($start, $limit);
 
-
-// Paginacion de la tabla de incidencias cerradas
-// $limite = 1; // Número de filas por página
-// $pageCierres = isset($_GET['pageCierres']) ? (int)$_GET['pageCierres'] : 1; // Página actual
-// $inicio = ($pageCierres - 1) * $limite; // Calcula el índice de inicio
-
-// // Obtiene el total de registros
-// $totalCierres = $cierreModel->contarIncidenciasCerradas();
-// $totalPagesCierres  = ceil($totalCierres / $limite);
-
 $cierres = $cierreModel->listarCierres();
-
-// if ($CIE_numero != '') {
-//   global $cierreRegistrado;
-//   $cierreRegistrado = $cierreModel->obtenerCierrePorID($CIE_numero);
-// } else {
-//   $cierreRegistrado = null;
-// }
 
 switch ($action) {
   case 'registrar':
@@ -104,7 +87,6 @@ switch ($action) {
   ?>
   <!-- [ Main Content ] end -->
 
-
   <!-- Required Js -->
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
@@ -114,8 +96,9 @@ switch ($action) {
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
 
-  <script src="./app/View/func/func_cierre_admin.js"></script>
-  <script src="./app/View/func/Reports/reporteDetalleCierre.js"></script>
+   <!-- Funciones para cierres -->
+  <script src="./app/View/func/Registros/Cierre/func_cierre_admin.js"></script>
+  <script src="./app/View/func/Registros/Cierre/reporteDetalleCierre.js"></script>
 
   <!-- Framework CSS -->
   <script src="https://cdn.tailwindcss.com"></script>

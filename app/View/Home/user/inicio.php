@@ -214,4 +214,4 @@
   </div>
 </div>
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="./app/View/func/func_inicio_user.js"></script>
+<script src="./app/View/func/Inicio/func_inicio_user.js"></script>

@@ -200,8 +200,7 @@
             </div>
             <div class="col-sm-9">
               <h6 class="text-xs mb-2">
-                <!-- &Aacute;rea con m&aacute;s incidencias del mes actual -->
-
+                <!-- Area con más incidencias del mes actual -->
                 <p>
                   &Aacute;rea con m&aacute;s incidencias en el mes <?php echo $nombreMes; ?>
                   <!-- <select id="mes-selector" class="bg-transparent text-md font-bold outline-none cursor-pointer">
@@ -298,4 +297,4 @@
 </div>
 <script src="https://cdn.tailwindcss.com"></script>
 <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
-<script src="./app/View/func/func_inicio_admin.js"></script>
+<script src="./app/View/func/Inicio/func_inicio_admin.js"></script>

@@ -11,7 +11,7 @@ class LoginController
   public function mostrarFormLogin()
   {
     // Incluye la vista del formulario de inicio de sesión
-    require_once 'app/View/PnlLogin.php';
+    require_once 'app/View/Login/PnlLogin.php';
   }
 
   /**

@@ -42,21 +42,21 @@ $(document).ready(function () {
 
               const pageWidth = doc.internal.pageSize.width;
               const marginX = 10;
-              const marginY = 10;
+              const marginY = 5;
               const logoWidth = 25;
               const logoHeight = 25;
 
               doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
               doc.setFont('helvetica', 'bold');
-              doc.setFontSize(16);
+              doc.setFontSize(15);
               const titleWidth = doc.getTextWidth(reportTitle);
               const titleX = (pageWidth - titleWidth) / 2;
               const titleY = 25;
 
               doc.text(reportTitle, titleX, titleY);
               doc.setLineWidth(0.5);
-              doc.line(titleX, titleY + 3, titleX + titleWidth, titleY + 3);
+              doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
 
               doc.setFontSize(8);
               doc.setFont('helvetica', 'normal');
@@ -78,7 +78,7 @@ $(document).ready(function () {
             const titleY = 45;
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(12);
-            doc.text('Detalle del cierre:', 20, titleY);
+            doc.text('Información del cierre:', 20, titleY);
 
             doc.setFontSize(10);
             doc.text(`Número de incidencia: ${cierre.INC_numero_formato}`, 120, titleY);
@@ -156,7 +156,7 @@ $(document).ready(function () {
 
 
             // Mostrar mensaje de exito de pdf generado
-            toastr.success('Reporte de cierre generado.', 'Mensaje');
+            toastr.success('Reporte detallado de cierre generado.', 'Mensaje');
             // Retrasar la apertura del PDF y limpiar el campo de entrada
             setTimeout(() => {
               window.open(doc.output('bloburl'));
@@ -165,8 +165,8 @@ $(document).ready(function () {
             // doc.save(`incidencia_${numeroIncidencia}.pdf`);
             // $('#modalBuscarIncidencia').modal('hide');
           } catch (error) {
-            console.error('Error al generar el reporte de cierre:', error);
-            toastr.error('Hubo un error al generar el reporte de cierre.', 'Mensaje de error');
+            console.error('Error al generar el reporte detallado de cierre:', error);
+            toastr.error('Hubo un error al generar el reporte detallado de cierre.', 'Mensaje de error');
           }
         } else {
           toastr.warning('No se ha encontrado datos para la incidencia cerrada.', 'Advertencia');

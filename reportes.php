@@ -11,16 +11,24 @@ $state = $_GET['state'] ?? '';
 $rol = $_SESSION['rol'];
 
 require_once './app/Controller/incidenciaController.php';
+require_once './app/Model/IncidenciaModel.php'; // TODO:agregado
 require_once './app/Controller/recepcionController.php';
 require_once './app/Controller/cierreController.php';
 require_once './app/Controller/asignacionController.php';
 require_once './app/Controller/mantenimientoController.php';
+
+
 
 $incidenciaController = new IncidenciaController();
 $recepcionController = new RecepcionController();
 $cierreController = new CierreController();
 $asignacionController = new AsignacionController();
 $mantenimientoController = new MantenimientoController();
+
+// TODO: Obtener las incidencias por mes para el año 2024
+$incidenciasModel = new IncidenciaModel();
+$año = 2024;
+$incidenciasPorMes = $incidenciasModel->getIncidenciasPorMes($año);
 
 $fechaInicio = $_GET['fechaInicio'] ?? '';
 $fechaFin = $_GET['fechaFin'] ?? '';
@@ -434,12 +442,12 @@ $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/func_reporteDetalles.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/func_reportesAreas.js"></script>
 
-
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/func_reportesAreasAfectadas.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
-
-
-
+  <!-- graficos -->
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
 
   <!-- Reportes incidencias totales -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
@@ -469,34 +477,13 @@ $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorFecha.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoria.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoriaFecha.js"></script>
-  
+
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteTotalEquiposAfectados.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquiposPorFecha.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodigoPatrimonial.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodPatrimonialFecha.js"></script>
 
 
-
-  <!-- <script src="./app/View/func/Reports/reporteTotalIncidencias.js"></script> -->
-  <!-- <script src="./app/View/func/Reports/reportesPorArea.js"></script>
-  <script src="./app/View/func/Reports/reportePorCodigoPatrimonial.js"></script> -->
-  <!-- <script src="./app/View/func/Reports/reporteIncidenciasPorFecha.js"></script> -->
-  <!-- <script src="./app/View/func/Reports/reporteCierresPorFecha.js"></script>
-  <script src="./app/View/func/Reports/reporteNumeroIncidencia.js"></script>
-  <script src="./app/View/func/Reports/reporteDetalleCierreNumIncidencia.js"></script>
-  <script src="./app/View/func/Reports/reporteAreasPorFecha.js"></script>
-  <script src="./app/View/func/Reports/reporteBienesPorFecha.js"></script>
-  <script src="./app/View/func/Reports/reporteDetalleCierreReporte.js"></script>
-  <script src="./app/View/func/Reports/reporteDetalleIncidenciaReporte.js"></script> -->
-
-  <!-- <script src="./app/View/func/func_reportes.js"></script> -->
-
-  <!-- Filtros o consultas por fecha para generar reportes -->
-  <!-- <script src="./app/View/func/Consultas/func_consulta_totales_fecha.js"></script>
-  <script src="./app/View/func/Consultas/func_consulta_cierres_fecha.js"></script> -->
-
-
-  <!-- <script src="./app/View/func/Mantenedores/tipoBien.js"></script> -->
 
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">

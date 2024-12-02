@@ -79,10 +79,9 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
 
-  <script src="./app/View/func/func_incidencia_admin.js"></script>
-  <!-- <script src="./app/View/func/Reports/reporteIncidencia.js"></script> -->
-  <script src="./app/View/func/Reports/reporteDetalleIncidencia.js"></script>
-  <script src="./app/View/func/Reports/reporteNumeroIncidencia.js"></script>
+  <script src="./app/View/func/Registros/Incidencia/func_incidencia_admin.js"></script>
+  <script src="./app/View/func/Registros/Incidencia/reporteDetalleIncidencia.js"></script>
+  <script src="./app/View/func/Registros/Incidencia/reporteNumeroIncidencia.js"></script>
   <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
 
   <!-- Framework CSS -->

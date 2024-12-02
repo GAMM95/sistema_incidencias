@@ -25,8 +25,7 @@ $limite = 2; // Numero de filas para la tabla de recepciones
 $pageRecepciones =  isset($_GET['pageRecepciones']) ? (int)$_GET['pageRecepciones'] : 1; // pagina de la tabla actual
 $inicio = ($pageRecepciones - 1) * $limite;
 // Obtener el total de registros
-$totalRecepciones = $recepcionController->contarRecepcionesRegistradas
-();
+$totalRecepciones = $recepcionController->contarRecepcionesRegistradas();
 $totalPagesRecepciones = ceil($totalRecepciones / $limite);
 // Listar incidencias recepcionadas
 $resultadoRecepciones = $recepcionController->listarRecepcionesPaginacion($inicio, $limite);
@@ -105,6 +104,9 @@ switch ($action) {
   ?>
   <!-- [ Main Content ] end -->
 
+  <!-- Funciones para asignaciones -->
+  <script src="./app/View/func/Registros/Asignacion/func_asignacion.js"></script>
+  <script src="./app/View/func/Registros/Asignacion/func_mantenimiento.js"></script>
 
   <!-- Required Js -->
   <script src="dist/assets/js/vendor-all.min.js"></script>
@@ -112,10 +114,8 @@ switch ($action) {
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
 
-
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
- <script src="./app/View/func/Asignaciones/func_asignacion.js"></script>
 
   <!-- Framework CSS -->
   <script src="https://cdn.tailwindcss.com"></script>

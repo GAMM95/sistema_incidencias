@@ -672,29 +672,29 @@ class IncidenciaModel extends Conexion
     }
   }
 
-    // Metodo para filtrar areas mas afectadas por incidencias
-    public function buscarEquiposMasAfectados($codigoPatrimonial, $fechaInicio, $fechaFin)
-    {
-      $conector = parent::getConexion();
-      try {
-        if ($conector != null) {
-          $sql = "EXEC sp_filtrar_equipos_afectados :codigoPatrimonial, :fechaInicio, :fechaFin";
-          $stmt = $conector->prepare($sql);
-          $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);
-          $stmt->bindParam(':fechaInicio', $fechaInicio);
-          $stmt->bindParam(':fechaFin', $fechaFin);
-          $stmt->execute(); // Ejecuta el procedimiento almacenado
-          $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener los resultados
-          return $result;
-        } else {
-          throw new Exception("Error de conexión con la base de datos.");
-        }
-      } catch (PDOException $e) {
-        throw new Exception("Error al obtener los equipos mas afectados: " . $e->getMessage());
+  // Metodo para filtrar areas mas afectadas por incidencias
+  public function buscarEquiposMasAfectados($codigoPatrimonial, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_filtrar_equipos_afectados :codigoPatrimonial, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el procedimiento almacenado
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener los resultados
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
       }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener los equipos mas afectados: " . $e->getMessage());
     }
+  }
 
-    
+
   // Metodo para filtrar areas mas afectadas por incidencias
   public function buscarAreasMasAfectadas($categoria, $fechaInicio, $fechaFin)
   {
@@ -770,7 +770,7 @@ class IncidenciaModel extends Conexion
       return null;
     }
   }
-  
+
 
   // Metodo para listar las equipos con mas incidencias
   public function listarEquiposMasAfectados()
@@ -874,5 +874,62 @@ class IncidenciaModel extends Conexion
     } catch (PDOException $e) {
       throw new Exception("Error al listar notificaciones: " . $e->getMessage());
     }
+  }
+
+  // Reporte de cantidad de incidencias por mes
+  public function listarIncidenciasMes($fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_reporte_incidencias_mes :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el procedimiento almacenado
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener los resultados
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias por mes: " . $e->getMessage());
+    }
+  }
+
+
+
+
+  // Método para obtener incidencias por mes para un año dado
+  public function getIncidenciasPorMes($año)
+  {
+    $conector = parent::getConexion();
+    $incidenciasPorMes = [];
+
+    // Bucle a través de los meses del año (del 1 al 12)
+    for ($mes = 1; $mes <= 12; $mes++) {
+      // Preparar la consulta SQL corregida
+      $sql = "
+                SELECT COUNT(*) AS incidencias_mes_año
+                FROM INCIDENCIA
+                WHERE INC_FECHA >= :inicio_mes
+                  AND INC_FECHA < :inicio_mes_siguiente";
+
+      // Definir las fechas de inicio y fin del mes
+      $inicioMes = "$año-$mes-01";
+      $inicioMesSiguiente = ($mes == 12) ? ($año + 1) . "-01-01" : "$año-" . ($mes + 1) . "-01";
+
+      // Preparar la consulta y ejecutar
+      $stmt = $conector->prepare($sql);
+      $stmt->bindParam(':inicio_mes', $inicioMes, PDO::PARAM_STR);
+      $stmt->bindParam(':inicio_mes_siguiente', $inicioMesSiguiente, PDO::PARAM_STR);
+      $stmt->execute();
+
+      // Obtener el resultado y almacenar en el array
+      $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+      $incidenciasPorMes[$mes] = $resultado['incidencias_mes_año'];
+    }
+
+    return $incidenciasPorMes;
   }
 }
