@@ -4,6 +4,7 @@ require 'app/Model/IncidenciaModel.php';
 require 'app/Model/BienModel.php';
 $area = $_SESSION['codigoArea'];
 
+
 class IncidenciaController
 {
   private $incidenciaModel;
@@ -566,19 +567,21 @@ class IncidenciaController
   // Metodo para mostrar las incidencias por cada mes
   public function mostrarCantidadIncidenciasMes()
   {
+    $anio = 2024;
+
     try {
-      $cantidadIncidenciasEnero = $this->incidenciasModel->contarIncidenciasUltimoMesAdministrador();
-      $cantidadIncidenciasFebrero = $this->incidenciasModel->contarPendientesUltimoMesAdministrador();
-      $cantidadIncidenciasMarzo = $this->incidenciasModel->contarRecepcionesUltimoMesAdministrador();
-      $cantidadIncidenciasAbril = $this->incidenciasModel->contarRecepcionesEnEsperaUltimoMesAdministrador();
-      $cantidadIncidenciasMayo = $this->incidenciasModel->contarRecepcionesFinalizadasUltimoMesAdministrador();
-      $cantidadIncidenciasJunio = $this->incidenciasModel->totalRecepcionesAlMes();
-      $cantidadIncidenciasJulio = $this->incidenciasModel->contarCierresUltimoMesAdministrador();
-      $cantidadIncidenciasAgosto = $this->incidenciasModel->contarAreas();
-      $cantidadIncidenciasSetiembre = $this->incidenciasModel->contarUsuarios();
-      $cantidadIncidenciasOctubre = $this->incidenciasModel->contarIncidencias();
-      $cantidadIncidenciasNoviembre = $this->incidenciasModel->contarCategorias();
-      $cantidadIncidenciasDiciembre = $this->incidenciasModel->areasConMasIncidencias();
+      $cantidadIncidenciasEnero = $this->incidenciaModel->contarIncidenciasEnero($anio);
+      $cantidadIncidenciasFebrero = $this->incidenciaModel->contarIncidenciasFebrero($anio);
+      $cantidadIncidenciasMarzo = $this->incidenciaModel->contarIncidenciasMarzo($anio);
+      $cantidadIncidenciasAbril = $this->incidenciaModel->contarIncidenciasAbril($anio);
+      $cantidadIncidenciasMayo = $this->incidenciaModel->contarIncidenciasMayo($anio);
+      $cantidadIncidenciasJunio = $this->incidenciaModel->contarIncidenciasJunio($anio);
+      $cantidadIncidenciasJulio = $this->incidenciaModel->contarIncidenciasJulio($anio);
+      $cantidadIncidenciasAgosto = $this->incidenciaModel->contarIncidenciasAgosto($anio);
+      $cantidadIncidenciasSetiembre = $this->incidenciaModel->contarIncidenciasSetiembre($anio);
+      $cantidadIncidenciasOctubre = $this->incidenciaModel->contarIncidenciasOctubre($anio);
+      $cantidadIncidenciasNoviembre = $this->incidenciaModel->contarIncidenciasNoviembre($anio);      
+      $cantidadIncidenciasDiciembre = $this->incidenciaModel->contarIncidenciasDiciembre($anio);
 
       return [
         'incidencias_enero' => $cantidadIncidenciasEnero,

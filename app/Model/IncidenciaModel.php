@@ -938,11 +938,10 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-
         $sql = "SELECT COUNT(*) AS incidencias_enero
-              FROM INCIDENCIA
-              WHERE INC_FECHA >= DATEFROMPARTS(:anio, 1, 1)
-              AND INC_FECHA < DATEFROMPARTS(:anio, 2, 1)";
+                      FROM INCIDENCIA
+                      WHERE YEAR(INC_FECHA) = :anio
+                      AND MONTH(INC_FECHA) = 1";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
         $stmt->execute();
@@ -952,7 +951,271 @@ class IncidenciaModel extends Conexion
         throw new Exception("Error de conexión a la base de datos.");
       }
     } catch (PDOException $e) {
-      throw new PDOException("Error al obtener las incidencias por mes: " . $e->getMessage());
+      throw new PDOException("Error al obtener las incidencias de enero: " . $e->getMessage());
+    }
+  }
+
+
+  // Metodo para obtener la cantidad de incidencias en febrero
+  public function contarIncidenciasFebrero($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_febrero
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 2";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_febrero'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de febrero: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en marzo
+  public function contarIncidenciasMarzo($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_marzo
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 3";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_marzo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de marzo: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en abril
+  public function contarIncidenciasAbril($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_abril
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 4";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_abril'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de abril: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en mayo
+  public function contarIncidenciasMayo($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_mayo
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 5";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_mayo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de mayo: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en junio
+  public function contarIncidenciasJunio($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_junio
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 6";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_junio'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de junio: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en junio
+  public function contarIncidenciasJulio($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_julio
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 7";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_julio'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de julio: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en agosto
+  public function contarIncidenciasAgosto($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_agosto
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 8";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_agosto'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de agosto: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en septiembre
+  public function contarIncidenciasSetiembre($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_setiembre
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 9";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_setiembre'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de septiembre: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en octubre
+  public function contarIncidenciasOctubre($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_octubre
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 10";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_octubre'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de octubre: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en noviembre
+  public function contarIncidenciasNoviembre($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_noviembre
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 11";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_noviembre'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de noviembre: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para obtener la cantidad de incidencias en diciembre
+  public function contarIncidenciasDiciembre($anio)
+  {    
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS incidencias_diciembre
+        FROM INCIDENCIA
+        WHERE YEAR(INC_FECHA) = :anio
+        AND MONTH(INC_FECHA) = 12";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['incidencias_diciembre'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de diciembre: " . $e->getMessage());
       return null;
     }
   }

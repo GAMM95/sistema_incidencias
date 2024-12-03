@@ -4002,3 +4002,4 @@ WHERE INC_FECHA >= DATEFROMPARTS(@año, @mes, 1)
             WHEN @mes = 12 THEN 1 
             ELSE @mes + 1 
         END, 1);
+    

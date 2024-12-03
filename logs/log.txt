@@ -1738,3 +1738,15 @@ IP: ::1
 Nombre de Equipo: GustavoMM
 ------- END LOGIN LOGS ---------
 
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-12-03 03:08:35
+Nombre de Persona: Jhonatan Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: GustavoMM
+------- END LOGIN LOGS ---------
+

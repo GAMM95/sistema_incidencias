@@ -11,24 +11,16 @@ $state = $_GET['state'] ?? '';
 $rol = $_SESSION['rol'];
 
 require_once './app/Controller/incidenciaController.php';
-require_once './app/Model/IncidenciaModel.php'; // TODO:agregado
 require_once './app/Controller/recepcionController.php';
 require_once './app/Controller/cierreController.php';
 require_once './app/Controller/asignacionController.php';
 require_once './app/Controller/mantenimientoController.php';
-
-
 
 $incidenciaController = new IncidenciaController();
 $recepcionController = new RecepcionController();
 $cierreController = new CierreController();
 $asignacionController = new AsignacionController();
 $mantenimientoController = new MantenimientoController();
-
-// TODO: Obtener las incidencias por mes para el año 2024
-$incidenciasModel = new IncidenciaModel();
-$año = 2024;
-$incidenciasPorMes = $incidenciasModel->getIncidenciasPorMes($año);
 
 $fechaInicio = $_GET['fechaInicio'] ?? '';
 $fechaFin = $_GET['fechaFin'] ?? '';
@@ -433,7 +425,12 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
+  <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
 
+
+  <!-- Apex Chart -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
@@ -449,8 +446,7 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
   <!-- graficos -->
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
   <!-- Reportes incidencias totales -->
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
@@ -487,9 +483,11 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodPatrimonialFecha.js"></script>
 
 
-
-  <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+  <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
 
   <!-- Mensajes toastr -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">

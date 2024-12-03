@@ -1109,86 +1109,103 @@
 
                         <!-- Contenido de la tercera pestaña -->
                         <div class="tab-pane fade" id="v-pills-graficos" role="tabpanel" aria-labelledby="v-pills-graficos-tab">
-                          <form id="formGraficos" action="reportes.php?action=consultarEquiposMasAfectados" method="GET" class="bg-white w-full text-xs ">
+                          <form id="formGraficos" action="reportes.php?action=graficos" method="GET" class="bg-white w-full text-xs ">
                             <!-- Widget del grafico -->
-                            <div id="grafico" class="col-md-12  w-full col-xl-8">
+                            <div id="grafico" class="w-full">
                               <div class="card support-bar overflow-hidden w-full">
                                 <div class="card-body w-full">
-                                  <!-- Contar el total de incidencias en el mes -->
-                                  <!-- <h2 class="m-0 text-lg font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h2> -->
                                   <span class="text-c-blue font-bold">INCIDENCIAS ANUALES</span>
-
-                                  <?php
-                                  setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish');  // Establecer la configuración regional para el idioma español
-                                  date_default_timezone_set('America/Lima'); // Establecer la zona horaria
-                                  $dateTimeObj = new DateTime('now', new DateTimeZone('America/Lima')); // Crear un objeto DateTime para la fecha actual
-                                  // Crear un objeto IntlDateFormatter para formatear la fecha
-                                  $formatter = new IntlDateFormatter(
-                                    'es_ES', // Configuración regional para el idioma español
-                                    IntlDateFormatter::NONE, // Sin formato de fecha completa
-                                    IntlDateFormatter::NONE, // Sin formato de tiempo
-                                    null, // Usar la zona horaria predeterminada
-                                    null, // Calendario gregoriano
-                                    'MMMM' // Formato para mes
-                                  );
-                                  $nombreMes = $formatter->format($dateTimeObj); // Obtener el nombre del mesf
-                                  ?>
-
                                   <!-- Integrar el selector de mes en la línea de texto sin bordes -->
-                                  <p class="mb-3 mt-3"> Total de incidencias en el mes de <?php echo $nombreMes; ?> del <?php echo date('Y'); ?>. </p>
-
+                                  <p class="mb-3 mt-3"> Total de incidencias en el a&ntilde;o <?php echo date('Y'); ?>. </p>
                                 </div>
-                                <div id="support-chart"></div>
+                                <div id="support-chart_report"></div>
                                 <!-- etiquetas inferiores del gráfico -->
                                 <div class="card-footer bg-primary text-white">
                                   <div class="row text-center">
                                     <div class="col">
-                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h4>
-                                      <span>Incidencias Nuevas</span>
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_enero']; ?></h4>
+                                      <span>Enero</span>
                                     </div>
                                     <div class="col">
-                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h4>
-                                      <span>Incidencias Pendientes</span>
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_febrero']; ?></h4>
+                                      <span>Febrero</span>
                                     </div>
                                     <div class="col">
-                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_mes_año']; ?></h4>
-                                      <span>Incidencias Cerradas</span>
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_marzo']; ?></h4>
+                                      <span>Marzo</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_abril']; ?></h4>
+                                      <span>Abril</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_mayo']; ?></h4>
+                                      <span>Mayo</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_junio']; ?></h4>
+                                      <span>Junio</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_julio']; ?></h4>
+                                      <span>Julio</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_agosto']; ?></h4>
+                                      <span>Agosto</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_setiembre']; ?></h4>
+                                      <span>Setiembre</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_octubre']; ?></h4>
+                                      <span>Octubre</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_noviembre']; ?></h4>
+                                      <span>Noviembre</span>
+                                    </div>
+                                    <div class="col">
+                                      <h4 class="m-0 text-white font-bold"><?php echo $cantidades['incidencias_diciembre']; ?></h4>
+                                      <span>Diciembre</span>
                                     </div>
                                   </div>
                                 </div>
                                 <!-- fin de etiquetas inferiores del gráfico -->
                               </div>
                             </div>
-
-                            <script>
-                              document.getElementById('mes-selector').addEventListener('change', function() {
-                                var mesNombre = this.options[this.selectedIndex].text;
-                                document.getElementById('mes-nombre').textContent = mesNombre;
-                              });
-                            </script>
                             <!-- Fin del widget del grafico -->
 
                             <!-- Tarjetas de las cantidades  -->
                             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+                            <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
                             <script>
                               // Pasar datos de PHP a JavaScript
-                              var incidenciasData = <?php echo json_encode([
-                                                      (int)$cantidades['pendientes_mes_actual'],
-                                                      (int)$cantidades['recepciones_mes_actual'],
-                                                      (int)$cantidades['cierres_mes_actual']
-                                                    ]); ?>;
+                              var incidenciasPorMes = <?php echo json_encode([
+                                                        (int)$cantidades['incidencias_enero'],
+                                                        (int)$cantidades['incidencias_febrero'],
+                                                        (int)$cantidades['incidencias_marzo'],
+                                                        (int)$cantidades['incidencias_abril'],
+                                                        (int)$cantidades['incidencias_mayo'],
+                                                        (int)$cantidades['incidencias_junio'],
+                                                        (int)$cantidades['incidencias_julio'],
+                                                        (int)$cantidades['incidencias_agosto'],
+                                                        (int)$cantidades['incidencias_setiembre'],
+                                                        (int)$cantidades['incidencias_octubre'],
+                                                        (int)$cantidades['incidencias_noviembre'],
+                                                        (int)$cantidades['incidencias_diciembre']
+                                                      ]); ?>;
                             </script>
                             <!-- Fin de las tarjetas de las cantidades -->
-
-
                           </form>
                         </div>
                         <!-- Fin del contenido de la tercera pestaña -->
                       </div>
                     </div>
                     <!-- Fin de contenido de las pestañas -->
-
                   </div>
                 </div>
                 <!-- </div> -->
@@ -1205,3 +1222,4 @@
 </div>
 
 <script src="https://cdn.tailwindcss.com"></script>
+<script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script>
