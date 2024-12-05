@@ -104,15 +104,16 @@ switch ($action) {
   ?>
   <!-- [ Main Content ] end -->
 
-  <!-- Funciones para asignaciones -->
-  <script src="./app/View/func/Registros/Asignacion/func_asignacion.js"></script>
-  <script src="./app/View/func/Registros/Asignacion/func_mantenimiento.js"></script>
-
   <!-- Required Js -->
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
+
+
+  <!-- Funciones paFra asignaciones -->
+  <script src="./app/View/func/Registros/Asignacion/func_asignacion.js"></script>
+  <script src="./app/View/func/Registros/Asignacion/func_mantenimiento.js"></script>
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>

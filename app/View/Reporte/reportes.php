@@ -656,7 +656,6 @@
               <!-- Fin de tabla de incidencias -->
 
             </div>
-
             <!-- Contenido de la tercera pestaña - REPORTES POR ÁREA -->
 
             <!-- Fin del contenido de la tercera pestaña -->
@@ -702,9 +701,10 @@
                           <i class="feather mr-2 icon-file"></i>Reporte
                         </button>
                         <div class="dropdown-menu">
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreas">Todos las incidencias</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por fechas</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaUsuario">Incidencas por equipo y fecha</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteTotalEquipos">Todas las incidencias</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEquiposPorFecha">Reporte por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEquiposPorCodigoPatrimonial">Reporte por equipo</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEquiposPorCodPatrimonialFecha">Reporte por equipo y fechas</div>
                         </div>
                       </div>
                     </div>

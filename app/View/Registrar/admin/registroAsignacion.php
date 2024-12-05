@@ -25,7 +25,7 @@
 
     <!-- Titulo y paginacion de tabla de recepciones -->
     <div id="noRecepciones" class="flex justify-between items-center mb-2">
-      <h1 class="text-xl text-gray-400">Incidencias recepcionadas</h1> 
+      <h1 class="text-xl text-gray-400">Incidencias recepcionadas</h1>
       <div id="paginadorRecepciones" class="flex justify-end items-center mt-1">
         <?php if ($totalPagesRecepciones > 1) : ?>
           <?php if ($pageRecepciones > 1) : ?>
@@ -166,16 +166,6 @@
           </div>
         </div>
 
-        <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX -->
-        <script>
-          // document.getElementById('incidencia').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['INC_numero'] : ''; ?>';
-          // document.getElementById('num_recepcion').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_numero'] : ''; ?>';
-          // document.getElementById('hora').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_hora'] : $hora_actual; ?>';
-          // document.getElementById('fecha').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_fecha'] : $fecha_actual; ?>';
-          // document.getElementById('prioridad').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['PRI_codigo'] : ''; ?>';
-          // document.getElementById('impacto').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['IMP_codigo'] : ''; ?>';
-        </script>
-
         <!-- Botones de formulario -->
         <div class="flex justify-center items-center space-x-4 mt-3 ml-5">
           <button type="submit" id="guardar-asignacion" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Asignar</button>
@@ -240,7 +230,7 @@
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_asunto']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['INC_codigoPatrimonial']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $asignaciones['BIE_nombre']; ?></td>
-                  <td class='px-6 py-2 text-center'><?= $asignaciones['usuarioSoporte']; ?></td>                
+                  <td class='px-6 py-2 text-center'><?= $asignaciones['usuarioSoporte']; ?></td>
                 </tr>
               <?php endforeach; ?>
             <?php else: ?>

@@ -13,7 +13,7 @@ class PersonaAuditoria extends Conexion
     $conector = parent::getConexion();
     $query = "SELECT u.USU_codigo, p.PER_codigo, 
             -- (USU_nombre + '  ' + '-'+ '  '+ PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno) AS persona 
-            (PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno) AS persona 
+            (PER_nombres + ' ' + PER_apellidoPaterno) AS persona 
             FROM PERSONA p
             INNER JOIN USUARIO u ON u.PER_codigo = p.PER_codigo
             ORDER BY persona ASC";

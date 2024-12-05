@@ -18,9 +18,9 @@ require_once 'app/Controller/asignacionController.php';
 $mantenimientoController = new MantenimientoController();
 $asignacionController = new AsignacionController();
 
-if($rol === 'Soporte') {
+if ($rol === 'Soporte') {
   $resultadoAsignaciones = $asignacionController->listarAsignacionesSoporte($usuario);
-}else if($rol === 'Administrador') {
+} else if ($rol === 'Administrador') {
   $resultadoMantenimiento = $mantenimientoController->listarAsignacionesAdministrador();
 }
 
@@ -71,7 +71,7 @@ switch ($action) {
     include('app/View/partials/soporte/navbar.php');
     include('app/View/partials/soporte/header.php');
     include('app/View/Registrar/soporte/registroMantenimiento.php');
-  }else if ($rol === 'Administrador') {
+  } else if ($rol === 'Administrador') {
     include('app/View/partials/admin/navbar.php');
     include('app/View/partials/admin/header.php');
     include('app/View/Registrar/admin/registroMantenimiento.php');
@@ -85,12 +85,12 @@ switch ($action) {
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
-
+  <script src="./app/View/func/Registros/Asignacion/func_asignacion.js"></script>
+  <script src="./app/View/func/Registros/Asignacion/func_mantenimiento.js"></script>
 
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/Asignaciones/func_asignacion.js"></script>
-  <script src="./app/View/func/func_mantenimiento.js"></script>
+
 
   <!-- Framework CSS -->
   <script src="https://cdn.tailwindcss.com"></script>

@@ -403,7 +403,7 @@ if ($action) {
       error_log("No se encontraron registros para 'consultarIncidenciasAsignadas'.");
     }
   } else if ($action == 'consultarIncidenciasAreas') {
-    $resultadoArea = obtenerRegistros($action, $incidenciaController, $area,null,  null,  null, $fechaInicio, $fechaFin);
+    $resultadoArea = obtenerRegistros($action, $incidenciaController, $area, null,  null,  null, $fechaInicio, $fechaFin);
     $columnasArea = obtenerColumnasParaAccion($action);
     if ($resultadoArea) {
       echo generarTablaArea($resultadoArea, 1, $columnasArea);
@@ -547,6 +547,9 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <!-- Reportes de detalle -->
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleIncidencia.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
+
+  <!-- Reportes por codigo patrimonial - equipos -->
+  <script src="./app/View/func/ReportesIncidencias/ReporteEquipos/Reports/reporteTotalEquipos.js"></script>
 
   <!-- Reportes por area -->
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorArea.js"></script>
