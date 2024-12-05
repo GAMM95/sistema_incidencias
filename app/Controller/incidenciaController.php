@@ -401,16 +401,32 @@ class IncidenciaController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $area = isset($_GET['areaSeleccionada']) ? (int) $_GET['areaSeleccionada'] : null;
+      $area = isset($_GET['areaIncidencia']) ? (int) $_GET['areaIncidencia'] : null;
       $fechaInicio = isset($_GET['fechaInicioIncidenciasArea']) ? $_GET['fechaInicioIncidenciasArea'] : null;
       $fechaFin = isset($_GET['fechaFinIncidenciasArea']) ? $_GET['fechaFinIncidenciasArea'] : null;
-      error_log("Usuario: $area, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+      error_log("Area: $area, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
       // Llamar al método para consultar incidencias por área, estado y fecha
       $resultado = $this->incidenciaModel->buscarIncidenciasArea($area, $fechaInicio, $fechaFin);
       // Retornar el resultado de la consulta
       return $resultado;
     }
   }
+
+    // Metodo para filtrar incidencias por equipo para el reporte
+    public function filtrarIncidenciasEquipo($equipo = NULL, $fechaInicio = null, $fechaFin = null)
+    {
+      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        // Obtener los valores de los parámetros GET o asignar null si no existen
+        $equipo = isset($_GET['codigoPatrimonialEquipo']) ? $_GET['codigoPatrimonialEquipo'] : null;
+        $fechaInicio = isset($_GET['fechaInicioIncidenciasEquipo']) ? $_GET['fechaInicioIncidenciasEquipo'] : null;
+        $fechaFin = isset($_GET['fechaFinIncidenciasEquipo']) ? $_GET['fechaFinIncidenciasEquipo'] : null;
+        error_log("Equipo: $equipo, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+        // Llamar al método para consultar incidencias por área, estado y fecha
+        $resultado = $this->incidenciaModel->buscarIncidenciasEquipo($equipo, $fechaInicio, $fechaFin);
+        // Retornar el resultado de la consulta
+        return $resultado;
+      }
+    }
 
   // Metodo para listar incidencias totales para reporte
   public function listarIncidenciasTotales()

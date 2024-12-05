@@ -187,7 +187,75 @@ function generarTablaAfectados($resultado, $itemCount, $columnas)
 
 
 // Función genérica para generar las tablas de reportes
-function generarTabla($resultado, $itemCount, $columnas)
+function generarTablaArea($resultado, $itemCount, $columnas)
+{
+  $html = '';
+
+  if (!empty($resultado)) {
+    foreach ($resultado as $item) {
+      $html .= '<tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">';
+      $html .= '<td class="px-3 py-2 text-center">' . $itemCount++ . '</td>';
+
+      // Generar las columnas dinámicas
+      foreach ($columnas as $columna) {
+        $valor = isset($item[$columna]) ? htmlspecialchars($item[$columna]) : ' '; // Verificar si la clave existe
+        $html .= '<td class="px-3 py-2 text-center">' . $valor . '</td>';
+      }
+
+      // Badge para 'CON_descripcion'
+      $condicionDescripcion = htmlspecialchars($item['CON_descripcion']);
+      $badgeClassCondicion = '';
+      switch ($condicionDescripcion) {
+        case 'OPERATIVO':
+        case 'SOLUCIONADO':
+          $badgeClassCondicion = 'badge-light-info';
+          break;
+        case 'INOPERATIVO':
+        case 'NO SOLUCIONADO':
+          $badgeClassCondicion = 'badge-light-danger';
+          break;
+        default:
+          $badgeClassCondicion = 'badge-light-secondary';
+          break;
+      }
+
+      // Celda con el badge de condición
+      $html .= '<td class="px-3 py-2 text-center"><span class="badge ' . $badgeClassCondicion . '">' . $condicionDescripcion . '</span></td>';
+
+      // Badge para 'Estado'
+      $estadoDescripcion = htmlspecialchars($item['Estado']);
+      $badgeClassEstado = '';
+      switch ($estadoDescripcion) {
+        case 'ABIERTO':
+          $badgeClassEstado = 'badge-light-danger';
+          break;
+        case 'RECEPCIONADO':
+          $badgeClassEstado = 'badge-light-success';
+          break;
+        case 'CERRADO':
+          $badgeClassEstado = 'badge-light-primary';
+          break;
+        default:
+          $badgeClassEstado = 'badge-light-secondary';
+          break;
+      }
+
+      // Celda con el badge de estado
+      $html .= '<td class="px-3 py-2 text-center"><span class="badge ' . $badgeClassEstado . '">' . $estadoDescripcion . '</span></td>';
+
+      // Cierre de la fila
+      $html .= '</tr>';
+    }
+  } else {
+    // Si no hay resultados, mostrar un mensaje de "No se encontraron registros."
+    $html = '<tr><td colspan="' . (count($columnas) + 1) . '" class="text-center py-3">No se encontraron registros.</td></tr>';
+  }
+
+  return $html;
+}
+
+// Función genérica para generar las tablas de reportes
+function generarTablaCodigoPatrimonial($resultado, $itemCount, $columnas)
 {
   $html = '';
 
@@ -291,6 +359,8 @@ function obtenerColumnasParaAccion($action)
       return ['INC_numero_formato', 'ARE_nombre', 'INC_asunto', 'INC_codigoPatrimonial', 'BIE_nombre', 'fechaAsignacionFormateada', 'fechaMantenimientoFormateada', 'usuarioSoporte', 'tiempoMantenimientoFormateado'];
     case 'consultarIncidenciasAreas':
       return ['INC_numero_formato', 'fechaIncidenciaFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'PRI_nombre'];
+    case 'consultarIncidenciasEquipos':
+      return ['INC_numero_formato', 'fechaIncidenciaFormateada', 'INC_asunto', 'INC_documento', 'INC_codigoPatrimonial', 'BIE_nombre', 'PRI_nombre'];
     case 'consultarEquiposMasAfectados':
       return ['codigoPatrimonial', 'nombreBien', 'nombreArea', 'cantidadIncidencias'];
     case 'consultarAreasMasAfectadas':
@@ -333,12 +403,20 @@ if ($action) {
       error_log("No se encontraron registros para 'consultarIncidenciasAsignadas'.");
     }
   } else if ($action == 'consultarIncidenciasAreas') {
-    $resultadoArea = obtenerRegistros($action, $incidenciaController, null, $area, null, null, $fechaInicio, $fechaFin);
+    $resultadoArea = obtenerRegistros($action, $incidenciaController, $area,null,  null,  null, $fechaInicio, $fechaFin);
     $columnasArea = obtenerColumnasParaAccion($action);
     if ($resultadoArea) {
-      echo generarTabla($resultadoArea, 1, $columnasArea, 'Incidencias por &aacute;rea');
+      echo generarTablaArea($resultadoArea, 1, $columnasArea);
     } else {
       error_log("No se encontraron registros para 'consultarIncidenciasAreas'.");
+    }
+  } else if ($action == 'consultarIncidenciasEquipos') {
+    $resultadoEquipos = obtenerRegistros($action, $incidenciaController, null, null, $equipo, null, $fechaInicio, $fechaFin);
+    $columnasEquipos = obtenerColumnasParaAccion($action);
+    if ($resultadoEquipos) {
+      echo generarTablaCodigoPatrimonial($resultadoEquipos, 1, $columnasEquipos);
+    } else {
+      error_log("No se encontraron registros para 'consultarIncidenciasEquipos'.");
     }
   } else if ($action == 'consultarEquiposMasAfectados') {
     $resultadoEquiposMasAfectados = obtenerRegistros($action, $incidenciaController, null, null, $equipo, null, $fechaInicio, $fechaFin);
@@ -370,6 +448,7 @@ $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCi
 $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
 $resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMantenimiento();
 $resultadoIncidenciasAreas = $incidenciaController->listarIncidenciasAreaEquipo();
+$resultadoIncidenciasEquipos = $incidenciaController->listarIncidenciasAreaEquipo();
 $resultadoEquiposMasAfectados = $incidenciaController->listarEquiposMasAfectados();
 $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
 
@@ -441,11 +520,12 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/func_reportesAsignaciones.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/func_reporteDetalles.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/func_reportesAreas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/func_reportesEquipo.js"></script>
 
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/func_reportesAreasAfectadas.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
   <!-- graficos -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script>
+  <!-- <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script> -->
 
 
   <!-- Reportes incidencias totales -->

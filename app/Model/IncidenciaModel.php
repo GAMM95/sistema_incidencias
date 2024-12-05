@@ -658,7 +658,7 @@ class IncidenciaModel extends Conexion
       if ($conector != null) {
         $sql = "EXEC sp_filtrar_incidencias_area :area, :fechaInicio, :fechaFin";
         $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':area', $area, PDO::PARAM_INT);
+        $stmt->bindParam(':area', $area);
         $stmt->bindParam(':fechaInicio', $fechaInicio);
         $stmt->bindParam(':fechaFin', $fechaFin);
         $stmt->execute(); // Ejecuta el procedimiento almacenado
@@ -671,6 +671,29 @@ class IncidenciaModel extends Conexion
       throw new Exception("Error al obtener las incidencias por area: " . $e->getMessage());
     }
   }
+
+  // Metodo para filtrar incidencias por equipo y rango de fechas
+  public function buscarIncidenciasEquipo($equipo, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_filtrar_incidencias_equipo :equipo, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':equipo', $equipo);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute(); // Ejecuta el procedimiento almacenado
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC); // Obtener los resultados
+        return $result;
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias por equipo: " . $e->getMessage());
+    }
+  }
+
 
   // Metodo para filtrar areas mas afectadas por incidencias
   public function buscarEquiposMasAfectados($codigoPatrimonial, $fechaInicio, $fechaFin)
@@ -1198,7 +1221,7 @@ class IncidenciaModel extends Conexion
 
   // Metodo para obtener la cantidad de incidencias en diciembre
   public function contarIncidenciasDiciembre($anio)
-  {    
+  {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {

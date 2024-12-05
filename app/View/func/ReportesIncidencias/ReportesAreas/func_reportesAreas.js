@@ -11,7 +11,7 @@ $(document).ready(function () {
     type: 'GET',
     dataType: 'json',
     success: function (data) {
-      var select = $('#areaSeleccionada');
+      var select = $('#areaIncidencia');
       select.empty();
       select.append('<option value="" selected disabled>Seleccione un &aacute;rea</option>');
       $.each(data, function (index, value) {
@@ -23,20 +23,20 @@ $(document).ready(function () {
     }
   });
 
-  // Setear campos del usuario seleccionado
-  $('#areaSeleccionada').change(function () {
+  // Setear campos del área seleccionada
+  $('#areaIncidencia').change(function () {
     var selectedOption = $(this).find('option:selected');
     var codigoArea = selectedOption.val();
     var nombreArea = selectedOption.text();
-    $('#codigoAreaSeleccionada').val(codigoArea);
-    $('#nombreAreaSeleccionada').val(nombreArea);
+    $('#codigoArea').val(codigoArea);
+    $('#nombreArea').val(nombreArea);
   });
 
-  // Buscador para el combo de usuario que se le han asignado las incidencias
-  $('#areaSeleccionada').select2({
+  // Inicialización de select2
+  $('#areaIncidencia').select2({
     allowClear: true,
     width: '100%',
-    dropdownCssClass: 'text-xs', // Use Tailwind CSS class
+    dropdownCssClass: 'text-xs',
     language: {
       noResults: function () {
         return "No se encontraron resultados";
@@ -44,12 +44,11 @@ $(document).ready(function () {
     }
   });
 
-  // Funcion para relaizar la consulta 
-  function nuevaConsultaIncidenciasArea() {
-    // limpiar los campos fechas 
+  // Función para limpiar los campos y realizar una nueva consulta sin filtros
+  function nuevaConsultaAreas() {
     $('#fechaInicioIncidenciasArea').val('');
     $('#fechaFinIncidenciasArea').val('');
-    $('#areaSeleccionada').val(null).trigger('change');
+    $('#areaIncidencia').val(null).trigger('change');
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
@@ -57,11 +56,8 @@ $(document).ready(function () {
       type: 'GET',
       dataType: 'html', // Esperamos HTML para renderizar la tabla
       success: function (response) {
-        console.log("Resultados de nueva consulta areas:", response);
-        // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaIncidenciasAreas tbody').empty();
-        // Actualiza el contenido de la tabla con la respuesta
-        $('#tablaIncidenciasAreas tbody').html(response);
+        $('#tablaIncidenciasArea tbody').empty(); // Limpia el contenido actual de la tabla
+        $('#tablaIncidenciasArea tbody').html(response); // Actualiza con nuevos datos
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
@@ -69,76 +65,71 @@ $(document).ready(function () {
     });
   }
 
-  // Evento para el boton limpiar campos
-    $('#limpiarCamposIncidenciasAreas').on('click', nuevaConsultaIncidenciasArea);
+  // Evento para el botón "Limpiar Campos"
+  $('#limpiarCamposIncidenciasArea').on('click', nuevaConsultaAreas);
 
-  // Validación y envío del formulario
+  // Validación de campos y fechas antes de enviar el formulario
   $('#formIncidenciasAreas').submit(function (event) {
-    event.preventDefault(); // Evita el envío del formulario por defecto
+    event.preventDefault(); // Evitar envío normal del formulario
 
     // Verifica si los campos y las fechas son válidos
-    if (!validarCamposIncidenciasArea() || !validarFechasIncidenciasArea()) {
-      return; // Detiene el envío si los campos o las fechas no son válidos
+    if (!validarCamposAreas() || !validarFechasAreas()) {
+      return; // Detiene el envío si hay problemas en la validación
     }
 
-    var formData = $(this).serializeArray(); // Recopila los datos del formulario
-    var dataObject = {}; // Crea un objeto para los datos del formulario
-    console.log(dataObject);
+    var formData = $(this).serializeArray(); // Recopilar datos del formulario
+    var dataObject = {}; // Convertir el array a un objeto
 
-    // Recorre los datos del formulario y llena el objeto con los valores
+    // Agregar solo los campos no vacíos al objeto
     formData.forEach(function (item) {
       if (item.value.trim() !== '') {
         dataObject[item.name] = item.value;
       }
     });
 
-    // Realiza la solicitud AJAX
+    // Realizar la solicitud AJAX para filtrar los resultados
     $.ajax({
       url: 'reportes.php?action=consultarIncidenciasAreas',
       type: 'GET',
-      data: dataObject,
+      data: dataObject, // Enviar solo los campos con valores
       success: function (response) {
-        console.log("Resultados filtrados:", response);
-        $('#tablaIncidenciasAreas tbody').empty(); // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaIncidenciasAreas tbody').html(response); // Actualiza el contenido de la tabla con la respuesta
+        $('#tablaIncidenciasArea tbody').empty(); // Limpiar la tabla antes de agregar nuevos datos
+        $('#tablaIncidenciasArea tbody').html(response); // Actualizar la tabla con los nuevos datos
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
       }
     });
-
-    // Función para validar los campos fechas
-    function validarCamposIncidenciasArea() {
-      var valido = false;
-      var mensajeError = '';
-
-      var faltaArea = ($('#areaSeleccionada').val() !== null && $('#areaSeleccionada').val().trim() !== '');
-      var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasArea').val() !== null && $('#fechaInicioIncidenciasArea').val().trim() !== '');
-      var fechaFinSeleccionada = ($('#fechaFinIncidenciasArea').val() !== null && $('#fechaFinIncidenciasArea').val().trim() !== '');
-
-      // Verificar si al menos un campo está lleno
-      if (faltaArea || fechaInicioSeleccionada || fechaFinSeleccionada) {
-        valido = true;
-      } else {
-        mensajeError = 'Debe completar al menos un campo para filtrar la tabla.';
-      }
-
-      if (!valido) {
-        toastr.warning(mensajeError.trim(), 'Advertencia');
-      }
-      return valido;
-    }     
   });
 
+  // Función para validar que al menos un campo esté lleno
+  function validarCamposAreas() {
+    var valido = false;
+    var mensajeError = '';
+
+    var areaSeleccionada = $('#areaIncidencia').val() !== null;
+    var fechaInicioSeleccionada = $('#fechaInicioIncidenciasArea').val().trim() !== '';
+    var fechaFinSeleccionada = $('#fechaFinIncidenciasArea').val().trim() !== '';
+
+    if (areaSeleccionada || fechaInicioSeleccionada || fechaFinSeleccionada) {
+      valido = true;
+    } else {
+      mensajeError = 'Debe completar al menos un campo para filtrar la tabla.';
+      toastr.warning(mensajeError, 'Advertencia');
+    }
+
+    return valido;
+  }
+
   // Función para validar fechas
-  function validarFechasIncidenciasArea() {
+  function validarFechasAreas() {
     const fechaInicio = new Date($('#fechaInicioIncidenciasArea').val());
     const fechaFin = new Date($('#fechaFinIncidenciasArea').val());
     const fechaHoy = new Date();
     fechaHoy.setHours(0, 0, 0, 0); // Ajustar la hora para comparar solo las fechas
 
     let valido = true;
-    let mensajeError = ''; // Asegurarse de que mensajeError sea una cadena vacía
+    let mensajeError = '';
 
     if (fechaInicio > fechaHoy) {
       mensajeError = 'La fecha de inicio no puede ser posterior a la fecha actual.';
@@ -156,12 +147,14 @@ $(document).ready(function () {
     }
 
     if (!valido) {
-      toastr.warning(mensajeError.trim(), 'Advertencia'); // Ahora mensajeError siempre será una cadena
-    }   
+      toastr.warning(mensajeError, 'Advertencia');
+    }
+
+    return valido;
   }
 
-  // Agregar eventos para validar fechas cuando cambien
+  // Validar fechas al cambiar las fechas en los inputs
   $('#fechaInicioIncidenciasArea, #fechaFinIncidenciasArea').on('change', function () {
-    validarFechasIncidenciasArea();
+    validarFechasAreas();
   });
-}); 
+});
