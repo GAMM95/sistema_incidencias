@@ -11,7 +11,7 @@ class PersonaModel extends Conexion
   public function getPersonaData()
   {
     $conector = parent::getConexion();
-    $query = "SELECT PER_codigo, (PER_nombres + ' ' + PER_apellidoPaterno) AS persona 
+    $query = "SELECT PER_codigo, (PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno) AS persona 
               FROM PERSONA ORDER BY persona ASC";
     $stmt = $conector->prepare($query);
     $stmt->execute();

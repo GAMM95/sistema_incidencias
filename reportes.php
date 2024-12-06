@@ -523,7 +523,7 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
 
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/func_reportesAreasAfectadas.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
-  
+
   <!-- graficos -->
   <!-- <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script> -->
 
@@ -550,6 +550,9 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
 
   <!-- Reportes por codigo patrimonial - equipos -->
   <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteTotalEquipos.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquiposFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquipoCodPatrimonial.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquipoCodPatrimonialFecha.js"></script>
 
   <!-- Reportes por area -->
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorArea.js"></script>

@@ -654,11 +654,7 @@
                 </div>
               </div>
               <!-- Fin de tabla de incidencias -->
-
             </div>
-            <!-- Contenido de la tercera pestaña - REPORTES POR ÁREA -->
-
-            <!-- Fin del contenido de la tercera pestaña -->
 
             <!-- Contenido de la cuarta pestaña - REPORTES POR EQUIPO O CODIGO PATRIMONIAL -->
             <div class="tab-pane fade" id="equipos" role="tabpanel" aria-labelledby="equipos-tab">

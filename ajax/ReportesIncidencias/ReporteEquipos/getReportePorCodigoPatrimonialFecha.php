@@ -1,14 +1,14 @@
 <?php
 require_once '../../../config/conexion.php';
 
-class ReporteEquipoCodigoPatrimonial extends Conexion
+class ReporteEquipoCodigoPatrimonialFecha extends Conexion
 {
   public function __construct()
   {
     parent::__construct();
   }
 
-  public function getReporteEquipoCodigoPatrimonial($codigoPatrimonial)
+  public function getReporteEquipoCodigoPatrimonialFecha($codigoPatrimonial, $fechaInicio, $fechaFin)
   {
     $conector = parent::getConexion();
     $sql = "SELECT 
@@ -46,7 +46,8 @@ class ReporteEquipoCodigoPatrimonial extends Conexion
     LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
     LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
     INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
-    WHERE INC_codigoPatrimonial LIKE :codigo
+    WHERE INC_fecha BETWEEN :fechaInicio AND :fechaFin
+    AND INC_codigoPatrimonial LIKE :codigo
     AND (I.EST_codigo IN (3, 4, 7) OR EC.EST_codigo IN (3, 4, 7))
     AND i.INC_codigoPatrimonial IS NOT NULL
     AND i.INC_codigoPatrimonial <> ''
@@ -55,6 +56,8 @@ class ReporteEquipoCodigoPatrimonial extends Conexion
     I.INC_numero_formato DESC";
     $stmt = $conector->prepare($sql);
     $stmt->bindParam(':codigo', $codigoPatrimonial, PDO::PARAM_STR);
+    $stmt->bindParam(':fechaInicio', $fechaInicio);
+    $stmt->bindParam(':fechaFin', $fechaFin);
 
     try {
       $stmt->execute();
@@ -69,9 +72,16 @@ class ReporteEquipoCodigoPatrimonial extends Conexion
 
 // Validación de las fechas
 $equipo = isset($_GET['codigoPatrimonialEquipo']) ? $_GET['codigoPatrimonialEquipo'] : null;
+$fechaInicio = isset($_GET['fechaInicioIncidenciasEquipo']) ? $_GET['fechaInicioIncidenciasEquipo'] : null;
+$fechaFin = isset($_GET['fechaFinIncidenciasEquipo']) ? $_GET['fechaFinIncidenciasEquipo'] : null;
 
-$reporteEquipoCodigoPatrimonial = new ReporteEquipoCodigoPatrimonial();
-$reporte = $reporteEquipoCodigoPatrimonial->getReporteEquipoCodigoPatrimonial($equipo);
+if (!$fechaInicio || !$fechaFin) {
+  echo json_encode(['error' => 'Las fechas de inicio y fin son requeridas']);
+  exit;
+}
+
+$reporteEquipoCodigoPatrimonialFecha = new ReporteEquipoCodigoPatrimonialFecha();
+$reporte = $reporteEquipoCodigoPatrimonialFecha->getReporteEquipoCodigoPatrimonialFecha($equipo, $fechaInicio, $fechaFin);
 
 header('Content-Type: application/json');
 echo json_encode($reporte);

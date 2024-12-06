@@ -44,7 +44,7 @@ class RecepcionController
         } else {
           echo json_encode([
             'success' => true,
-            'message' => 'Recepci&oacute;n registrada.',
+            'message' => 'Incidencia recepcionada.',
           ]);
         }
       } catch (Exception $e) {
