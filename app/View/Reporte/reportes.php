@@ -811,7 +811,7 @@
             </div>
             <!-- Fin del contenido de la tercera pestaña -->
 
-            <!-- Contenido de la cuarta pestaña - REPORTES POR EQUIPO O CODIGO PATRIMONIAL -->
+            <!-- Contenido de la cuarta pestaña - REPORTES POR AREAS -->
             <div class="tab-pane fade" id="areas" role="tabpanel" aria-labelledby="areas-tab">
               <!-- Inicio formulario de consulta de incidencias asignadas -->
               <form id="formIncidenciasAreas" action="reportes.php?action=consultarIncidenciasAreas" method="GET" class="bg-white w-full text-xs ">
@@ -855,9 +855,10 @@
                           <i class="feather mr-2 icon-file"></i>Reporte
                         </button>
                         <div class="dropdown-menu">
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreas">Todos las incidencias</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Incidencias por fechas</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaUsuario">Incidencas por equipo y fecha</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteTotalAreas">Todas las incidencias</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaFecha">Reporte por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasArea">Reporte por &aacute;rea</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasAreaFecha">Reporte por &aacute;rea y fecha</div>
                         </div>
                       </div>
                     </div>

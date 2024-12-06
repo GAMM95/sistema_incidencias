@@ -6,18 +6,14 @@ $(document).ready(function () {
   };
 });
 
-// Generación del PDF al hacer clic en el botón "Usuario y fechas"
-$('#reporteIncidenciasAreaFecha').click(function () {
+// Generación del PDF al hacer clic en el botón "Usuario"
+$('#reporteIncidenciasArea').click(function () {
   const area = $("#areaIncidencia").val();
-  const fechaInicio = $('#fechaInicioIncidenciasArea').val();
-  const fechaFin = $('#fechaFinIncidenciasArea').val();
 
-  console.log('Área:', area);
-  console.log('Fecha Inicio:', fechaInicio);
-  console.log('Fecha Fin:', fechaFin);
+  console.log('Area:', area);
 
   // Verificar si los campos son validos
-  if (!validarCamposIncidenciasAreaFecha()) {
+  if (!validarCamposArea()) {
     return;
   }
 
@@ -34,12 +30,10 @@ $('#reporteIncidenciasAreaFecha').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesIncidencias/ReportesAreas/getReportePorAreaFecha.php',
+    url: 'ajax/ReportesIncidencias/ReportesAreas/getReportePorArea.php',
     method: 'GET',
     data: {
-      areaIncidencia: area,
-      fechaInicioIncidenciasArea: fechaInicio,
-      fechaFinIncidenciasArea: fechaFin
+      areaIncidencia: area
     },
     dataType: 'json',
     success: function (data) {
@@ -54,7 +48,7 @@ $('#reporteIncidenciasAreaFecha').click(function () {
       const totalRecords = data.length;
       // Verificar si hay registros
       if (totalRecords === 0) {
-        toastr.warning('No se encontraron datos para los campos ingresados.', 'Advertencia');
+        toastr.warning('No se encontraron datos para el &aacute;rea seleccionada.', 'Advertencia');
         return;
       }
 
@@ -71,7 +65,7 @@ $('#reporteIncidenciasAreaFecha').click(function () {
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = 'REPORTE DE INCIDENCIAS POR ÁREA Y FECHAS';
+            const reportTitle = 'REPORTE DE INCIDENCIAS POR ÁREA';
             const headerText2 = 'Subgerencia de Informática y Sistemas';
             const fechaImpresion = new Date().toLocaleDateString();
 
@@ -92,7 +86,7 @@ $('#reporteIncidenciasAreaFecha').click(function () {
             doc.setFontSize(11);
             const subtitleWidth = doc.getTextWidth(subtitleText);
             const subtitleX = (pageWidth - subtitleWidth) / 2;
-            doc.text(subtitleText, subtitleX, marginY + 16);
+            doc.text(subtitleText, subtitleX, marginY + 17);
 
             // Fecha y texto derecho
             doc.setFontSize(8);
@@ -117,34 +111,17 @@ $('#reporteIncidenciasAreaFecha').click(function () {
             doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
-          // Función para agregar datos del area y fechas
-          function addAreaAndDates(doc) {
+          // Función para agregar datos del area
+          function addArea(doc) {
             const pageWidth = doc.internal.pageSize.width;
             const labels = {
-              fechaInicio: 'Fecha de Inicio: ',
-              fechaFin: 'Fecha Fin: ',
-              area: 'Área:'
+              area: 'Área: '
             };
 
             // Obtener valores
             const areaNombre = $('#nombreArea').val() || '-';
-            const fechaInicioOriginal = $('#fechaInicioIncidenciasArea').val();
-            const fechaFinOriginal = $('#fechaFinIncidenciasArea').val();
 
-            // Función para formatear la fecha
-            function formatearFecha(fecha) {
-              if (!fecha) return ' - ';
-              const [yyyy, mm, dd] = fecha.split('-');
-              return `${dd}/${mm}/${yyyy}`;
-            }
-
-            // Fechas formateadas
-            const fechas = {
-              inicio: formatearFecha(fechaInicioOriginal),
-              fin: formatearFecha(fechaFinOriginal)
-            };
-
-            // Dibujar datos de area
+            // Dibujar datos del area
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
 
@@ -153,30 +130,10 @@ $('#reporteIncidenciasAreaFecha').click(function () {
             const areaValueWidth = doc.getTextWidth(` ${areaNombre}`);
             const totalAreaWidth = areaLabelWidth + areaValueWidth;
             const startXArea = (pageWidth - totalAreaWidth) / 2;
-            const titleYArea = 26;
+            const titleYArea = 29;
             doc.text(labels.area, startXArea, titleYArea);
             doc.setFont('helvetica', 'normal');
             doc.text(` ${areaNombre}`, startXArea + areaLabelWidth, titleYArea);
-
-            // Fechas
-            const fechaInicioWidth = doc.getTextWidth(labels.fechaInicio);
-            const fechaFinWidth = doc.getTextWidth(labels.fechaFin);
-            const fechaInicioValueWidth = doc.getTextWidth(` ${fechas.inicio}`);
-            const fechaFinValueWidth = doc.getTextWidth(` ${fechas.fin}`);
-            const spacing = 15;
-            const totalWidthFechas = fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth + fechaFinValueWidth;
-            const startXFechas = (pageWidth - totalWidthFechas) / 2;
-            const titleYFechas = 32;
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(labels.fechaInicio, startXFechas, titleYFechas);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${fechas.inicio}`, startXFechas + fechaInicioWidth, titleYFechas);
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(labels.fechaFin, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing, titleYFechas);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${fechas.fin}`, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth, titleYFechas);
           }
 
           // Función para agregar tabla de datos
@@ -229,7 +186,7 @@ $('#reporteIncidenciasAreaFecha').click(function () {
 
           // Agregar encabezado, datos de usuario y fechas, tabla y pie de página
           addHeader(doc, totalRecords);
-          addAreaAndDates(doc);
+          addArea(doc);
           addTable(doc);
 
           // Agregar pie de página en todas las páginas
@@ -240,14 +197,14 @@ $('#reporteIncidenciasAreaFecha').click(function () {
           }
 
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de incidencias por &aacute;rea y fechas generado.', 'Mensaje');
+          toastr.success('Reporte de incidencias por &aacute;rea generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
             window.open(doc.output('bloburl'));
           }, 2000);
         } else {
-          toastr.warning('No se ha encontrado incidencias para los campos ingresados.', 'Advertencia');
+          toastr.warning('No se ha encontrado incidencias por &aacute;rea. seleccionada.', 'Advertencia');
         }
       } catch (error) {
         toastr.error('Hubo un error al generar reporte.', 'Mensaje de error');
@@ -255,26 +212,24 @@ $('#reporteIncidenciasAreaFecha').click(function () {
       }
     },
     error: function (xhr, status, error) {
-      toastr.error('Hubo un error al obtener datos de las incidencias cerradas.', 'Mensaje de error');
+      toastr.error('Hubo un error al obtener datos de las incidencias por &aacute;rea.', 'Mensaje de error');
       console.error('Error al realizar la solicitud AJAX:', error);
     }
   });
 });
 
-function validarCamposIncidenciasAreaFecha() {
+// Funcion para validar que el campo usuario tenga un valor
+function validarCamposArea() {
   var valido = false;
   var mensajeError = '';
 
-  // Verificar si los campos no están vacíos
-  var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasArea').val() !== null && $('#fechaInicioIncidenciasArea').val().trim() !== '');
-  var fechaFinSeleccionada = ($('#fechaFinIncidenciasArea').val() !== null && $('#fechaFinIncidenciasArea').val().trim() !== '');
-  var areaSeleccionada = ($('#areaIncidencia').val() !== null && $('#areaIncidencia').val().trim() !== '');
+  var faltaArea = ($('#areaIncidencia').val() !== null && $('#areaIncidencia').val().trim() !== '');
 
-  // Verificar si al menos uno de los campos tiene datos
-  if (fechaInicioSeleccionada && fechaFinSeleccionada && areaSeleccionada) {
+  // Verificar si al menos un campo está lleno
+  if (faltaArea) {
     valido = true;
   } else {
-    mensajeError = 'Debe seleccionar un &aacute;rea e ingresar el rango de fechas para generar el reporte.';
+    mensajeError = 'Debe seleccionar un &aacute;rea para generar reporte.';
   }
 
   if (!valido) {
@@ -283,3 +238,4 @@ function validarCamposIncidenciasAreaFecha() {
 
   return valido;
 }
+

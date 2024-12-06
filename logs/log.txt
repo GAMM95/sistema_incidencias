@@ -1822,3 +1822,15 @@ IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2024-12-06 16:10:53
+Nombre de Persona: Jhonatan Mantilla
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 8
+Usuario: JMANTILLA
+IP: ::1
+Nombre de Equipo: INF04.muniesperanza.gob.pe
+------- END LOGIN LOGS ---------
+

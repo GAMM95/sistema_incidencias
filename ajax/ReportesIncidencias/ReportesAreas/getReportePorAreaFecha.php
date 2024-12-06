@@ -67,7 +67,7 @@ class ReportePorAreaFecha extends Conexion
 }
 
 // Obtención del parámetro 'area' desde la solicitud
-$area = isset($_GET['areaSeleccionada']) ?  $_GET['areaSeleccionada'] : null;
+$area = isset($_GET['areaIncidencia']) ?  $_GET['areaIncidencia'] : null;
 $fechaInicio = isset($_GET['fechaInicioIncidenciasArea']) ? $_GET['fechaInicioIncidenciasArea'] : null;
 $fechaFin = isset($_GET['fechaFinIncidenciasArea']) ? $_GET['fechaFinIncidenciasArea'] : null;
 

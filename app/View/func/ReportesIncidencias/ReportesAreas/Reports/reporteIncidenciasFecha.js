@@ -6,15 +6,17 @@ $(document).ready(function () {
   };
 });
 
-// Generación del PDF al hacer clic en el botón "Area"
-$('#reporteIncidenciasArea').click(function () {
-  const area = $("#areaSeleccionada").val();
+// Generación del PDF al hacer clic en el botón Por fecha
+$('#reporteAreaFecha').click(function () {
+  const fechaInicio = $('#fechaInicioIncidenciasArea').val();
+  const fechaFin = $('#fechaFinIncidenciasArea').val();
 
-  console.log('Area:', area);
+  console.log('Fecha Inicio:', fechaInicio);
+  console.log('Fecha Fin:', fechaFin);
 
   // Verificar si los campos son validos
-  if (!validarCamposIncidenciasArea()) {
-    return;
+  if (!validarCamposIncidenciasFecha()) {
+    return; // Detiene el envío si los campos fechas no son válidos
   }
 
   var formData = $(this).serializeArray(); // Recopila los datos del formulario
@@ -30,15 +32,15 @@ $('#reporteIncidenciasArea').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesIncidencias/ReportesAreas/getReportePorArea.php',
+    url: 'ajax/ReportesIncidencias/ReportesAreas/getReportePorFecha.php', 
     method: 'GET',
     data: {
-      areaSeleccionada: area
+      fechaInicioIncidenciasArea: fechaInicio,
+      fechaFinIncidenciasArea: fechaFin
     },
     dataType: 'json',
     success: function (data) {
       console.log("Datos recibidos:", data);
-
       if (data.error) {
         toastr.error('Error en la solicitud: ' + data.error);
         return;
@@ -48,7 +50,7 @@ $('#reporteIncidenciasArea').click(function () {
       const totalRecords = data.length;
       // Verificar si hay registros
       if (totalRecords === 0) {
-        toastr.warning('No se encontraron datos para el &aacute;rea seleccionada.', 'Advertencia');
+        toastr.warning('No se encontraron datos para el rango de fecha ingresado.', 'Advertencia');
         return;
       }
 
@@ -65,7 +67,7 @@ $('#reporteIncidenciasArea').click(function () {
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = 'REPORTE TOTAL DE INCIDENCIAS POR ÁREA';
+            const reportTitle = 'REPORTE DE ÁREAS POR FECHAS';
             const headerText2 = 'Subgerencia de Informática y Sistemas';
             const fechaImpresion = new Date().toLocaleDateString();
 
@@ -73,7 +75,7 @@ $('#reporteIncidenciasArea').click(function () {
             doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
             // Título principal
-            doc.setFont('helvetica', 'bold');
+            doc.setFont('helvetica', 'bold'); // Estilo de fuente
             doc.setFontSize(15);
             const titleWidth = doc.getTextWidth(reportTitle);
             const titleX = (pageWidth - titleWidth) / 2;
@@ -111,29 +113,54 @@ $('#reporteIncidenciasArea').click(function () {
             doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
-          // Función para agregar datos del area
-          function addUser(doc) {
+          // Función para agregar datos del usuario y fechas
+          function addDates(doc) {
             const pageWidth = doc.internal.pageSize.width;
             const labels = {
-              area: 'Área: '
+              fechaInicio: 'Fecha de Inicio: ',
+              fechaFin: 'Fecha Fin: '
             };
 
             // Obtener valores
-            const areaNombre = $('#nombreAreaSeleccionada').val() || '-';
+            const fechaInicioOriginal = $('#fechaInicioIncidenciasArea').val();
+            const fechaFinOriginal = $('#fechaFinIncidenciasArea').val();
 
-            // Dibujar datos de area
+            // Función para formatear la fecha
+            function formatearFecha(fecha) {
+              if (!fecha) return ' - ';
+              const [yyyy, mm, dd] = fecha.split('-');
+              return `${dd}/${mm}/${yyyy}`;
+            }
+
+            // Fechas formateadas
+            const fechas = {
+              inicio: formatearFecha(fechaInicioOriginal),
+              fin: formatearFecha(fechaFinOriginal)
+            };
+
+            // Dibujar datos de usuario
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
 
-            // Area
-            const areaLabelWidth = doc.getTextWidth(labels.area);
-            const areaValueWidth = doc.getTextWidth(` ${areaNombre}`);
-            const totalAreaWidth = areaLabelWidth + areaValueWidth;
-            const startXArea = (pageWidth - totalAreaWidth) / 2;
-            const titleYArea = 29;
-            doc.text(labels.area, startXArea, titleYArea);
+            // Fechas
+            const fechaInicioWidth = doc.getTextWidth(labels.fechaInicio);
+            const fechaFinWidth = doc.getTextWidth(labels.fechaFin);
+            const fechaInicioValueWidth = doc.getTextWidth(` ${fechas.inicio}`);
+            const fechaFinValueWidth = doc.getTextWidth(` ${fechas.fin}`);
+            const spacing = 15;
+            const totalWidthFechas = fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth + fechaFinValueWidth;
+            const startXFechas = (pageWidth - totalWidthFechas) / 2;
+            const titleYFechas = 29;
+
+            doc.setFont('helvetica', 'bold');
+            doc.text(labels.fechaInicio, startXFechas, titleYFechas);
             doc.setFont('helvetica', 'normal');
-            doc.text(` ${areaNombre}`, startXArea + areaLabelWidth, titleYArea);
+            doc.text(` ${fechas.inicio}`, startXFechas + fechaInicioWidth, titleYFechas);
+
+            doc.setFont('helvetica', 'bold');
+            doc.text(labels.fechaFin, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing, titleYFechas);
+            doc.setFont('helvetica', 'normal');
+            doc.text(` ${fechas.fin}`, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth, titleYFechas);
           }
 
           // Función para agregar tabla de datos
@@ -142,18 +169,19 @@ $('#reporteIncidenciasArea').click(function () {
             doc.autoTable({
               startY: 35,
               margin: { left: 4, right: 10 },
-              head: [['N°', 'INCIDENCIA', 'FECHA INC', 'CATEGORÍA', 'ASUNTO', 'DOCUMENTO', 'CÓD PATRIMONIAL', 'PRIORIDAD', 'CONDICIÓN', 'ESTADO']],
+              head: [['N°', 'INCIDENCIA', 'ÁREA SOLICITANTE', 'FECHA INC.', 'ASUNTO', 'DOCUMENTO', 'EQUIPO', 'NOMBRE DEL BIEN', 'PRIORIDAD', 'CONDICIÓN', 'ESTADO']],
               body: data.map(reporte => [
                 item++,
                 reporte.INC_numero_formato,
+                reporte.ARE_nombre,
                 reporte.fechaIncidenciaFormateada,
-                reporte.CAT_nombre,
                 reporte.INC_asunto,
                 reporte.INC_documento,
                 reporte.INC_codigoPatrimonial,
+                reporte.BIE_nombre,
                 reporte.PRI_nombre,
                 reporte.CON_descripcion,
-                reporte.ESTADO
+                reporte.ESTADO,
               ]),
               styles: {
                 fontSize: 7,
@@ -162,29 +190,30 @@ $('#reporteIncidenciasArea').click(function () {
                 valign: 'middle'
               },
               headStyles: {
-                fillColor: [44, 62, 80],
+                fillColor: [9, 4, 6],
                 textColor: [255, 255, 255],
                 fontStyle: 'bold',
                 halign: 'center'
               },
               columnStyles: {
                 0: { cellWidth: 8 }, // Ancho para la columna item
-                1: { cellWidth: 25 }, // Ancho para la columna numero formato incidencia
-                2: { cellWidth: 18 }, // Ancho para la columna fecha de incidencia
-                3: { cellWidth: 45 }, // Ancho para la columna categoria
-                4: { cellWidth: 45 }, // Ancho para la columna asunto
-                5: { cellWidth: 40 }, // Ancho para la columna documento
-                6: { cellWidth: 30 }, // Ancho para la columna coigo patrimonial
-                7: { cellWidth: 25 }, // Ancho para la columna prioridad
-                8: { cellWidth: 25 }, // Ancho para la columna condicion
-                9: { cellWidth: 25 } // Ancho para la columna estado
+                1: { cellWidth: 22 }, // Ancho para la columna Número de incidencia
+                2: { cellWidth: 35 }, // Ancho para la columna area solicitante
+                3: { cellWidth: 35 }, // Ancho para la columna asunto
+                4: { cellWidth: 25 }, // Ancho para la columna equipo
+                5: { cellWidth: 33 }, // Ancho para la columna nombre del bien
+                6: { cellWidth: 30 }, // Ancho para la columna fecha de asignación
+                7: { cellWidth: 30 }, // Ancho para la columna fecha de finalización
+                8: { cellWidth: 22 }, // Ancho para la columna usario asignado
+                9: { cellWidth: 25 }, // Ancho para la columna tiempo de mantenimiento
+                10: { cellWidth: 25 }, // Ancho para la columna estado
               }
             });
           }
 
-          // Agregar encabezado, datos de area, tabla y pie de página
+          // Agregar encabezado, datos de usuario y fechas, tabla y pie de página
           addHeader(doc, totalRecords);
-          addUser(doc);
+          addDates(doc);
           addTable(doc);
 
           // Agregar pie de página en todas las páginas
@@ -195,14 +224,14 @@ $('#reporteIncidenciasArea').click(function () {
           }
 
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de incidencias por &aacute;rea generado.', 'Mensaje');
+          toastr.success('Reporte de equipos afectados por rango de fechas generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
             window.open(doc.output('bloburl'));
           }, 2000);
         } else {
-          toastr.warning('No se ha encontrado incidencias por &aacute;rea.', 'Advertencia');
+          toastr.warning('No se ha encontrado incidencias de &aacute;reas afectadas para los campos ingresados.', 'Advertencia');
         }
       } catch (error) {
         toastr.error('Hubo un error al generar reporte.', 'Mensaje de error');
@@ -210,24 +239,26 @@ $('#reporteIncidenciasArea').click(function () {
       }
     },
     error: function (xhr, status, error) {
-      toastr.error('Hubo un error al obtener el reporte de las incidencias por &aacute;rea.', 'Mensaje de error');
+      toastr.error('Hubo un error al obtener datos de las incidencias de &aacute;reas afectadas.', 'Mensaje de error');
       console.error('Error al realizar la solicitud AJAX:', error);
     }
   });
 });
 
-// Funcion para validar que el campo area tenga un valor
-function validarCamposIncidenciasArea() {
+// Funcion para validar que los campos tengan valores
+function validarCamposIncidenciasFecha() {
   var valido = false;
   var mensajeError = '';
 
-  var faltaArea = ($('#areaSeleccionada').val() !== null && $('#areaSeleccionada').val().trim() !== '');
+  // Verificar si los campos no están vacíos
+  var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasArea').val() !== null && $('#fechaInicioIncidenciasArea').val().trim() !== '');
+  var fechaFinSeleccionada = ($('#fechaFinIncidenciasArea').val() !== null && $('#fechaFinIncidenciasArea').val().trim() !== '');
 
-  // Verificar si al menos un campo está lleno
-  if (faltaArea) {
+  // Verificar si al menos uno de los campos tiene datos
+  if (fechaInicioSeleccionada || fechaFinSeleccionada) {
     valido = true;
   } else {
-    mensajeError = 'Debe seleccionar un &aacute;rea para generar reporte.';
+    mensajeError = 'Debe ingresar un rango de fechas para generar reporte.';
   }
 
   if (!valido) {
@@ -236,4 +267,3 @@ function validarCamposIncidenciasArea() {
 
   return valido;
 }
-

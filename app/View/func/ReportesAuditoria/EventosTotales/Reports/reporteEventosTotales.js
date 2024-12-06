@@ -84,21 +84,20 @@ $(document).ready(function () {
           doc.autoTable({
             startY: 35,
             margin: { left: 4, right: 10 },
-            head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+            head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
             body: data.map(reporte => [
               item++,
               reporte.fechaFormateada,
               reporte.AUD_operacion,
               reporte.AUD_tabla,
               reporte.ROL_nombre,
-              reporte.USU_nombre,
               reporte.NombreCompleto,
               reporte.ARE_nombre,
               reporte.AUD_ip,
               reporte.AUD_nombreEquipo
             ]),
             styles: {
-              fontSize: 7,
+              fontSize: 7.5,
               cellPadding: 2,
               halign: 'center',
               valign: 'middle'
@@ -111,15 +110,14 @@ $(document).ready(function () {
             },
             columnStyles: {
               0: { cellWidth: 8 }, // Ancho para la columna item
-              1: { cellWidth: 30 }, // Ancho para la columna fecha y hora
+              1: { cellWidth: 32 }, // Ancho para la columna fecha y hora
               2: { cellWidth: 35 }, // Ancho para la columna evento
-              3: { cellWidth: 25 }, // Ancho para la columna tabla afectada
+              3: { cellWidth: 30 }, // Ancho para la columna tabla afectada
               4: { cellWidth: 20 }, // Ancho para la columna rol del usuario
-              5: { cellWidth: 25 }, // Ancho para la columna username
-              6: { cellWidth: 38 }, // Ancho para la columna nombre del usuario
-              7: { cellWidth: 42 }, // Ancho para la columna area del usuario
-              8: { cellWidth: 30 }, // Ancho para la columna ip del equipo
-              9: { cellWidth: 35 }, // Ancho para la columna nombre del equipo
+              5: { cellWidth: 40 }, // Ancho para la columna nombre del usuario
+              6: { cellWidth: 45 }, // Ancho para la columna area del usuario
+              7: { cellWidth: 35 }, // Ancho para la columna ip del equipo
+              8: { cellWidth: 40 }, // Ancho para la columna nombre del equipo
             }
           });
 

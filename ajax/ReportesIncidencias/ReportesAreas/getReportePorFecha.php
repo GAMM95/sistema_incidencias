@@ -1,14 +1,14 @@
 <?php
 require_once '../../../config/conexion.php';
 
-class ReportePorArea extends Conexion
+class ReportePorFecha extends Conexion
 {
   public function __construct()
   {
     parent::__construct();
   }
 
-  public function getReportePorArea($area)
+  public function getReportePorFecha($fechaInicio, $fechaFin)
   {
     $conector = parent::getConexion();
     try {
@@ -45,10 +45,11 @@ class ReportePorArea extends Conexion
             LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
             INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
             WHERE (I.EST_codigo IN (3, 4, 7) OR C.EST_codigo IN (3, 4, 7))
-            AND A.ARE_codigo = :area   
+            AND I.INC_fecha BETWEEN :fechaInicio AND :fechaFin
             ORDER BY I.INC_numero_formato ASC";
         $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':area', $area, PDO::PARAM_INT);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $resultado;
@@ -64,10 +65,16 @@ class ReportePorArea extends Conexion
 }
 
 // Obtención del parámetro 'area' desde la solicitud
-$area = isset($_GET['areaIncidencia']) ?  $_GET['areaIncidencia'] : null;
+$fechaInicio = isset($_GET['fechaInicioIncidenciasArea']) ? $_GET['fechaInicioIncidenciasArea'] : null;
+$fechaFin = isset($_GET['fechaFinIncidenciasArea']) ? $_GET['fechaFinIncidenciasArea'] : null;
 
-$reporteAreas = new ReportePorArea();
-$reporte = $reporteAreas->getReportePorArea($area);
+if (!$fechaInicio || !$fechaFin) {
+  echo json_encode(['error' => 'Las fechas de inicio y fin son requeridas']);
+  exit;
+}
+
+$reporteFechas = new ReportePorFecha();
+$reporte = $reporteFechas->getReportePorFecha($fechaInicio, $fechaFin);
 
 header('Content-Type: application/json');
 echo json_encode($reporte);

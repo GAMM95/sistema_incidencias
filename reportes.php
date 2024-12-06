@@ -266,7 +266,7 @@ function generarTablaCodigoPatrimonial($resultado, $itemCount, $columnas)
 
       // Generar las columnas dinámicas
       foreach ($columnas as $columna) {
-        $valor = isset($item[$columna]) ? htmlspecialchars($item[$columna]) : 'N/A'; // Verificar si la clave existe
+        $valor = isset($item[$columna]) ? htmlspecialchars($item[$columna]) : ''; // Verificar si la clave existe
         $html .= '<td class="px-3 py-2 text-center">' . $valor . '</td>';
       }
 
@@ -555,7 +555,10 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquipoCodPatrimonialFecha.js"></script>
 
   <!-- Reportes por area -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorArea.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteTotalAreas.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasArea.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasFecha.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasAreaFecha.js"></script>
 
   <!-- Reportes otros -->
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteTotalAreasAfectadas.js"></script>
