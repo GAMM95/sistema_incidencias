@@ -11,7 +11,7 @@ class ReporteTotalEquipos extends Conexion
   public function getReporteTotalEquipos()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT * FROM vw_reporte_incidencias_area_equipo
+    $sql = "SELECT * FROM vw_reporte_incidencias_equipos
             ORDER BY INC_numero DESC";
     $stmt = $conector->prepare($sql);
     $stmt->execute();

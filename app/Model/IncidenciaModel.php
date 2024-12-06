@@ -206,6 +206,25 @@ class IncidenciaModel extends Conexion
     }
   }
 
+  // Metodo para listar incidencias equipos
+  public function listarIncidenciasEquipos()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_reporte_incidencias_equipos
+                ORDER BY INC_numero DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener las incidencias equipos: " . $e->getMessage());
+    }
+  }
 
   // Metodo listar las incidencias totales - ADMINISTRADOR 
   public function listarIncidenciasTotalesAdministrador()

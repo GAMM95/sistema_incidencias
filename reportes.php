@@ -441,14 +441,13 @@ if ($action) {
   exit();
 }
 
-
 // Acción por defecto: mostrar todas las tablas
 $resultadoIncidenciasTotales = $incidenciaController->listarIncidenciasTotales();
 $resultadoPendientesCierre = $recepcionController->listarIncidenciasPendientesCierre();
 $resultadoIncidenciasCerradas = $cierreController->listarIncidenciasCerradas();
 $resultadoIncidenciasAsignadas = $mantenimientoController->listarIncidenciasMantenimiento();
 $resultadoIncidenciasAreas = $incidenciaController->listarIncidenciasAreaEquipo();
-$resultadoIncidenciasEquipos = $incidenciaController->listarIncidenciasAreaEquipo();
+$resultadoIncidenciasEquipos = $incidenciaController->listarIncidenciasEquipos();
 $resultadoEquiposMasAfectados = $incidenciaController->listarEquiposMasAfectados();
 $resultadoAreaMasAfectadas = $incidenciaController->listarAreasMasAfectadas();
 
@@ -524,6 +523,7 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
 
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/func_reportesAreasAfectadas.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
+  
   <!-- graficos -->
   <!-- <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script> -->
 
@@ -549,7 +549,7 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
 
   <!-- Reportes por codigo patrimonial - equipos -->
-  <script src="./app/View/func/ReportesIncidencias/ReporteEquipos/Reports/reporteTotalEquipos.js"></script>
+  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteTotalEquipos.js"></script>
 
   <!-- Reportes por area -->
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasPorArea.js"></script>

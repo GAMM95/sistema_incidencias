@@ -441,6 +441,13 @@ class IncidenciaController
     return $resultado;
   }
 
+  // Metodo para listar incidencias con codigo patrimonial
+  public function listarIncidenciasEquipos()
+  {
+    $resultado = $this->incidenciaModel->listarIncidenciasEquipos();
+    return $resultado;
+  }
+
   // Metodo para filtrar incidencias por area para el reporte
   public function filtrarEquiposMasAfectados($codigoPatrimonial = NULL, $fechaInicio = null, $fechaFin = null)
   {

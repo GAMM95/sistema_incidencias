@@ -19,7 +19,7 @@ $(document).ready(function () {
       type: 'GET',
       dataType: 'html', // Esperamos HTML para renderizar la tabla
       success: function (response) {
-        console.log("Resultados de nueva consulta: ", response);
+        console.log("Resultados de nueva consulta GENERAL: ", response);
         // Limpia el contenido actual de la tabla antes de agregar nuevos datos
         $('#tablaIncidenciasEquipos tbody').empty();
         // Actualiza el contenido de la tabla con la respuesta
@@ -30,7 +30,6 @@ $(document).ready(function () {
       }
     });
   }
-
 
   // Evento para el botón de limpiar campos
   $('#limpiarCamposIncidenciasEquipo').on('click', nuevaConsultaEquipos);
