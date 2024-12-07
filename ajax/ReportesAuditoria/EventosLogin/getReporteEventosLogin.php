@@ -10,7 +10,7 @@ class ReporteEventosLogin extends Conexion
   public function getReporteEventosLogin()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT * FROM vw_eventos_totales
+    $sql = "SELECT * FROM vw_auditoria_login
             ORDER BY AUD_fecha DESC, AUD_hora DESC";
     $stmt = $conector->prepare($sql);
     $stmt->execute();

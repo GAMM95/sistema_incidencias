@@ -7,15 +7,15 @@ $(document).ready(function () {
 });
 
 // Generación del PDF al hacer clic en el botón Por fecha
-$('#reporteEventosTotalesFecha').click(function () {
-  const fechaInicio = $('#fechaInicioEventosTotales').val();
-  const fechaFin = $('#fechaFinEventosTotales').val();
+$('#reporteEventosLoginFecha').click(function () {
+  const fechaInicio = $('#fechaInicioEventosLogin').val();
+  const fechaFin = $('#fechaFinEventosLogin').val();
 
   console.log('Fecha Inicio:', fechaInicio);
   console.log('Fecha Fin:', fechaFin);
 
   // Verificar si los campos son validos
-  if (!validarCamposEventosTotalesFecha()) {
+  if (!validarCamposEventosLoginFecha()) {
     return; // Detiene el envío si los campos fechas no son válidos
   }
 
@@ -32,11 +32,11 @@ $('#reporteEventosTotalesFecha').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesAuditoria/EventosTotales/getReporteEventosTotalesFecha.php',
+    url: 'ajax/ReportesAuditoria/EventosLogin/getReporteEventosLoginFecha.php',
     method: 'GET',
     data: {
-      fechaInicioEventosTotales: fechaInicio,
-      fechaFinEventosTotales: fechaFin
+      fechaInicioEventosLogin: fechaInicio,
+      fechaFinEventosLogin: fechaFin
     },
     dataType: 'json',
     success: function (data) {
@@ -122,8 +122,8 @@ $('#reporteEventosTotalesFecha').click(function () {
             };
 
             // Obtener valores
-            const fechaInicioOriginal = $('#fechaInicioEventosTotales').val();
-            const fechaFinOriginal = $('#fechaFinEventosTotales').val();
+            const fechaInicioOriginal = $('#fechaInicioEventosLogin').val();
+            const fechaFinOriginal = $('#fechaFinEventosLogin').val();
 
             // Función para formatear la fecha
             function formatearFecha(fecha) {
@@ -168,22 +168,19 @@ $('#reporteEventosTotalesFecha').click(function () {
             let item = 1;
             doc.autoTable({
               startY: 35,
-              margin: { left: 4 },
-              head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+              margin: { left: 8, right: 10 },
+              head: [['N°', 'FECHA Y HORA',  'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
               body: data.map(reporte => [
                 item++,
                 reporte.fechaFormateada,
-                reporte.AUD_operacion,
-                reporte.AUD_tabla,
                 reporte.ROL_nombre,
-                reporte.USU_nombre,
                 reporte.NombreCompleto,
                 reporte.ARE_nombre,
                 reporte.AUD_ip,
                 reporte.AUD_nombreEquipo
               ]),
               styles: {
-                fontSize: 7,
+                fontSize: 8,
                 cellPadding: 2,
                 halign: 'center',
                 valign: 'middle'
@@ -195,16 +192,13 @@ $('#reporteEventosTotalesFecha').click(function () {
                 halign: 'center'
               },
               columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 30 },
-                2: { cellWidth: 35 },
-                3: { cellWidth: 25 },
-                4: { cellWidth: 20 },
-                5: { cellWidth: 25 },
-                6: { cellWidth: 38 },
-                7: { cellWidth: 42 },
-                8: { cellWidth: 30 },
-                9: { cellWidth: 35 }
+                0: { cellWidth: 10 }, // Ancho para la columna item
+                1: { cellWidth: 40 }, // Ancho para la columna fecha y hora
+                2: { cellWidth: 30 }, // Ancho para la columna rol del usuario
+                3: { cellWidth: 42 }, // Ancho para la columna nombre del usuario
+                4: { cellWidth: 65 }, // Ancho para la columna area del usuario
+                5: { cellWidth: 45 }, // Ancho para la columna ip del equipo
+                6: { cellWidth: 50 }, // Ancho para la columna nombre del equipo
               }
             });
           }
@@ -222,14 +216,14 @@ $('#reporteEventosTotalesFecha').click(function () {
           }
 
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de eventos por usuario y fechas generado.', 'Mensaje');
+          toastr.success('Reporte de eventos de inicio de sesi&oacute;n por rango de fechas generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
             window.open(doc.output('bloburl'));
           }, 2000);
         } else {
-          toastr.warning('No se ha encontrado eventos para los campos ingresados.', 'Advertencia');
+          toastr.warning('No se ha encontrado eventos de inicio de sesi&oacute;n por rango de fechas generado.', 'Advertencia');
         }
       } catch (error) {
         toastr.error('Hubo un error al generar reporte.', 'Mensaje de error');
@@ -244,13 +238,13 @@ $('#reporteEventosTotalesFecha').click(function () {
 });
 
 // Funcion para validar que los campos tengan valores
-function validarCamposEventosTotalesFecha() {
+function validarCamposEventosLoginFecha() {
   var valido = false;
   var mensajeError = '';
 
   // Verificar si los campos no están vacíos
-  var fechaInicioSeleccionada = ($('#fechaInicioEventosTotales').val() !== null && $('#fechaInicioEventosTotales').val().trim() !== '');
-  var fechaFinSeleccionada = ($('#fechaFinEventosTotales').val() !== null && $('#fechaFinEventosTotales').val().trim() !== '');
+  var fechaInicioSeleccionada = ($('#fechaInicioEventosLogin').val() !== null && $('#fechaInicioEventosLogin').val().trim() !== '');
+  var fechaFinSeleccionada = ($('#fechaFinEventosLogin').val() !== null && $('#fechaFinEventosLogin').val().trim() !== '');
 
   // Verificar si al menos uno de los campos tiene datos
   if (fechaInicioSeleccionada || fechaFinSeleccionada) {

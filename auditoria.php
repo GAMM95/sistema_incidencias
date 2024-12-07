@@ -146,15 +146,23 @@ $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosA
   <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_incidencia.js"></script>
   <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_recepcion.js"></script>
 
-  <!-- Reportes de auditoría -->
+  <!-- Reportes de eventos totales -->
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotales.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotalesFecha.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotalesUsuario.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotalesUsuarioFecha.js"></script>
 
+  <!-- Reportes de inicio de sesion -->
+  <script src="./app/View/func/ReportesAuditoria/EventosLogin/Reports/reporteEventosLogin.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosLogin/Reports/reporteEventosLoginFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosLogin/Reports/reporteEventosLoginUsuario.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosLogin/Reports/reporteEventosLoginUsuarioFecha.js"></script>
+
+  <!-- Reportes de eventos de incidencias -->
+  <!-- Reporte de incidencias -->
 
 
-
+  
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 

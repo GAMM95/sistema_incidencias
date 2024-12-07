@@ -7,13 +7,13 @@ $(document).ready(function () {
 });
 
 // Generación del PDF al hacer clic en el botón "Usuario"
-$('#reporteEventosTotalesUsuario').click(function () {
-  const usuario = $("#personaEventosTotales").val();
+$('#reporteEventosLoginUsuario').click(function () {
+  const usuario = $("#usuarioEventosLogin").val();
 
   console.log('Usuario:', usuario);
 
   // Verificar si los campos son validos
-  if (!validarCamposEventosTotalesUsuario()) {
+  if (!validarCamposEventosLoginUsuario()) {
     return;
   }
 
@@ -30,10 +30,10 @@ $('#reporteEventosTotalesUsuario').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesAuditoria/EventosTotales/getReporteEventosTotalesUsuario.php',
+    url: 'ajax/ReportesAuditoria/EventosLogin/getReporteEventosLoginUsuario.php',
     method: 'GET',
     data: {
-      personaEventosTotales: usuario
+      usuarioEventosLogin: usuario
     },
     dataType: 'json',
     success: function (data) {
@@ -141,22 +141,19 @@ $('#reporteEventosTotalesUsuario').click(function () {
             let item = 1;
             doc.autoTable({
               startY: 35,
-              margin: { left: 4 },
-              head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+              margin: { left: 8, right: 10 },
+              head: [['N°', 'FECHA Y HORA',  'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
               body: data.map(reporte => [
                 item++,
                 reporte.fechaFormateada,
-                reporte.AUD_operacion,
-                reporte.AUD_tabla,
                 reporte.ROL_nombre,
-                reporte.USU_nombre,
                 reporte.NombreCompleto,
                 reporte.ARE_nombre,
                 reporte.AUD_ip,
                 reporte.AUD_nombreEquipo
               ]),
               styles: {
-                fontSize: 7,
+                fontSize: 8,
                 cellPadding: 2,
                 halign: 'center',
                 valign: 'middle'
@@ -168,16 +165,13 @@ $('#reporteEventosTotalesUsuario').click(function () {
                 halign: 'center'
               },
               columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 30 },
-                2: { cellWidth: 35 },
-                3: { cellWidth: 25 },
-                4: { cellWidth: 20 },
-                5: { cellWidth: 25 },
-                6: { cellWidth: 38 },
-                7: { cellWidth: 42 },
-                8: { cellWidth: 30 },
-                9: { cellWidth: 35 }
+                0: { cellWidth: 10 }, // Ancho para la columna item
+                1: { cellWidth: 40 }, // Ancho para la columna fecha y hora
+                2: { cellWidth: 30 }, // Ancho para la columna rol del usuario
+                3: { cellWidth: 42 }, // Ancho para la columna nombre del usuario
+                4: { cellWidth: 65 }, // Ancho para la columna area del usuario
+                5: { cellWidth: 45 }, // Ancho para la columna ip del equipo
+                6: { cellWidth: 50 }, // Ancho para la columna nombre del equipo
               }
             });
           }
@@ -217,11 +211,11 @@ $('#reporteEventosTotalesUsuario').click(function () {
 });
 
 // Funcion para validar que el campo usuario tenga un valor
-function validarCamposEventosTotalesUsuario() {
+function validarCamposEventosLoginUsuario() {
   var valido = false;
   var mensajeError = '';
 
-  var faltaUsuario = ($('#personaEventosTotales').val() !== null && $('#personaEventosTotales').val().trim() !== '');
+  var faltaUsuario = ($('#usuarioEventosLogin').val() !== null && $('#usuarioEventosLogin').val().trim() !== '');
 
   // Verificar si al menos un campo está lleno
   if (faltaUsuario) {

@@ -127,7 +127,7 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
             };
 
             // Obtener valores
-            const usuarioNombre = $('#nombreUsuarioEventosLogin').val() || '-';
+            const usuarioNombre = $('#nombreUsuarioEventosTotales').val() || '-';
             const fechaInicioOriginal = $('#fechaInicioEventosTotales').val();
             const fechaFinOriginal = $('#fechaFinEventosTotales').val();
 

@@ -6,10 +6,10 @@ $(document).ready(function () {
   };
 
   // Generacion del PDF al hacer clic en botón de "Totales"
-  $('#reporte-eventos-totales').click(function () {
+  $('#reporteEventosTotalesLogin').click(function () {
     // Realizar la solicitud AJAX para obtener los datos
     $.ajax({
-      url: 'ajax/ReportesAuditoria/EventosTotales/getReporteEventosTotales.php',
+      url: 'ajax/ReportesAuditoria/EventosLogin/getReporteEventosLogin.php',
       method: 'GET',
       dataType: 'json',
       success: function (data) {
@@ -31,7 +31,7 @@ $(document).ready(function () {
 
             const fechaImpresion = new Date().toLocaleDateString();
             const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const reportTitle = 'REPORTE DE AUDITORÍA - EVENTOS TOTALES';
+            const reportTitle = 'REPORTE DE EVENTOS DE INICIO DE SESIÓN';
 
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
@@ -83,22 +83,19 @@ $(document).ready(function () {
           let item = 1; // Contador para item
           doc.autoTable({
             startY: 35,
-            margin: { left: 4, right: 10 },
-            head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+            margin: { left: 8, right: 10 },
+            head: [['N°', 'FECHA Y HORA',  'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
             body: data.map(reporte => [
               item++,
               reporte.fechaFormateada,
-              reporte.AUD_operacion,
-              reporte.AUD_tabla,
               reporte.ROL_nombre,
-              reporte.USU_nombre,
               reporte.NombreCompleto,
               reporte.ARE_nombre,
               reporte.AUD_ip,
               reporte.AUD_nombreEquipo
             ]),
             styles: {
-              fontSize: 7,
+              fontSize: 8,
               cellPadding: 2,
               halign: 'center',
               valign: 'middle'
@@ -110,16 +107,13 @@ $(document).ready(function () {
               halign: 'center'
             },
             columnStyles: {
-              0: { cellWidth: 8 }, // Ancho para la columna item
-              1: { cellWidth: 30 }, // Ancho para la columna fecha y hora
-              2: { cellWidth: 35 }, // Ancho para la columna evento
-              3: { cellWidth: 25 }, // Ancho para la columna tabla afectada
-              4: { cellWidth: 20 }, // Ancho para la columna rol del usuario
-              5: { cellWidth: 25 }, // Ancho para la columna username
-              6: { cellWidth: 38 }, // Ancho para la columna nombre del usuario
-              7: { cellWidth: 42 }, // Ancho para la columna area del usuario
-              8: { cellWidth: 30 }, // Ancho para la columna ip del equipo
-              9: { cellWidth: 35 }, // Ancho para la columna nombre del equipo
+              0: { cellWidth: 10 }, // Ancho para la columna item
+              1: { cellWidth: 40 }, // Ancho para la columna fecha y hora
+              2: { cellWidth: 30 }, // Ancho para la columna rol del usuario
+              3: { cellWidth: 42 }, // Ancho para la columna nombre del usuario
+              4: { cellWidth: 65 }, // Ancho para la columna area del usuario
+              5: { cellWidth: 45 }, // Ancho para la columna ip del equipo
+              6: { cellWidth: 50 }, // Ancho para la columna nombre del equipo
             }
           });
 
@@ -146,18 +140,18 @@ $(document).ready(function () {
           }
 
           // Mostrar mensaje de exito de pdf generado
-          toastr.success('Reporte de auditoría de todos los eventos generado.', 'Mensaje');
+          toastr.success('Reporte de eventos de inicio de sesi&oacute;n generado.', 'Mensaje');
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
             window.open(doc.output('bloburl'));
           }, 2000);
         } catch (error) {
-          toastr.error('Hubo un error al generar el reporte de auditoría de todos los eventos.', 'Mensaje de error');
+          toastr.error('Hubo un error al generar el reporte eventos de inicio de sesi&oacute;n.', 'Mensaje de error');
           console.error('Error al generar el PDF:', error.message);
         }
       },
       error: function (xhr, status, error) {
-        toastr.error('Hubo un error al obtener el reporte de auditoría de todos los eventos.', 'Mensaje de error');
+        toastr.error('Hubo un error al obtener el reporte de eventos de inicio de sesi&oacute;n.', 'Mensaje de error');
         console.error('Error en AJAX:', xhr.responseText, 'Status:', status, 'Error:', error);
       }
     });

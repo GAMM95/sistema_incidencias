@@ -7,10 +7,10 @@ $(document).ready(function () {
 });
 
 // Generación del PDF al hacer clic en el botón "Usuario y fechas"
-$('#reporteEventosTotalesUsuarioFecha').click(function () {
-  const usuario = $("#personaEventosTotales").val();
-  const fechaInicio = $('#fechaInicioEventosTotales').val();
-  const fechaFin = $('#fechaFinEventosTotales').val();
+$('#reporteEventosLoginUsuarioFecha').click(function () {
+  const usuario = $("#usuarioEventosLogin").val();
+  const fechaInicio = $('#fechaInicioEventosLogin').val();
+  const fechaFin = $('#fechaFinEventosLogin').val();
 
   console.log('Usuario:', usuario);
   console.log('Fecha Inicio:', fechaInicio);
@@ -34,12 +34,12 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesAuditoria/EventosTotales/getReporteEventosTotalesUsuarioFecha.php',
+    url: 'ajax/ReportesAuditoria/EventosLogin/getReporteEventosLoginUsuarioFecha.php',
     method: 'GET',
     data: {
-      personaEventosTotales: usuario,
-      fechaInicioEventosTotales: fechaInicio,
-      fechaFinEventosTotales: fechaFin
+      usuarioEventosLogin: usuario,
+      fechaInicioEventosLogin: fechaInicio,
+      fechaFinEventosLogin: fechaFin
     },
     dataType: 'json',
     success: function (data) {
@@ -128,8 +128,8 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
 
             // Obtener valores
             const usuarioNombre = $('#nombreUsuarioEventosLogin').val() || '-';
-            const fechaInicioOriginal = $('#fechaInicioEventosTotales').val();
-            const fechaFinOriginal = $('#fechaFinEventosTotales').val();
+            const fechaInicioOriginal = $('#fechaInicioEventosLogin').val();
+            const fechaFinOriginal = $('#fechaFinEventosLogin').val();
 
             // Función para formatear la fecha
             function formatearFecha(fecha) {
@@ -183,23 +183,20 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
           function addTable(doc) {
             let item = 1;
             doc.autoTable({
-              startY: 36,
-              margin: { left: 4 },
-              head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+              startY: 35,
+              margin: { left: 8, right: 10 },
+              head: [['N°', 'FECHA Y HORA',  'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
               body: data.map(reporte => [
                 item++,
                 reporte.fechaFormateada,
-                reporte.AUD_operacion,
-                reporte.AUD_tabla,
                 reporte.ROL_nombre,
-                reporte.USU_nombre,
                 reporte.NombreCompleto,
                 reporte.ARE_nombre,
                 reporte.AUD_ip,
                 reporte.AUD_nombreEquipo
               ]),
               styles: {
-                fontSize: 7,
+                fontSize: 8,
                 cellPadding: 2,
                 halign: 'center',
                 valign: 'middle'
@@ -211,16 +208,13 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
                 halign: 'center'
               },
               columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 30 },
-                2: { cellWidth: 35 },
-                3: { cellWidth: 25 },
-                4: { cellWidth: 20 },
-                5: { cellWidth: 25 },
-                6: { cellWidth: 38 },
-                7: { cellWidth: 42 },
-                8: { cellWidth: 30 },
-                9: { cellWidth: 35 }
+                0: { cellWidth: 10 }, // Ancho para la columna item
+                1: { cellWidth: 40 }, // Ancho para la columna fecha y hora
+                2: { cellWidth: 30 }, // Ancho para la columna rol del usuario
+                3: { cellWidth: 42 }, // Ancho para la columna nombre del usuario
+                4: { cellWidth: 65 }, // Ancho para la columna area del usuario
+                5: { cellWidth: 45 }, // Ancho para la columna ip del equipo
+                6: { cellWidth: 50 }, // Ancho para la columna nombre del equipo
               }
             });
           }
@@ -264,9 +258,9 @@ function validarCamposEventosTotalesUsuarioFecha() {
   var mensajeError = '';
 
   // Verificar si los campos no están vacíos
-  var fechaInicioSeleccionada = ($('#fechaInicioEventosTotales').val() !== null && $('#fechaInicioEventosTotales').val().trim() !== '');
-  var fechaFinSeleccionada = ($('#fechaFinEventosTotales').val() !== null && $('#fechaFinEventosTotales').val().trim() !== '');
-  var usuarioSeleccionado = ($('#personaEventosTotales').val() !== null && $('#personaEventosTotales').val().trim() !== '');
+  var fechaInicioSeleccionada = ($('#fechaInicioEventosLogin').val() !== null && $('#fechaInicioEventosLogin').val().trim() !== '');
+  var fechaFinSeleccionada = ($('#fechaFinEventosLogin').val() !== null && $('#fechaFinEventosLogin').val().trim() !== '');
+  var usuarioSeleccionado = ($('#usuarioEventosLogin').val() !== null && $('#usuarioEventosLogin').val().trim() !== '');
 
   // Verificar si al menos uno de los campos tiene datos
   if (fechaInicioSeleccionada && fechaFinSeleccionada && usuarioSeleccionado) {

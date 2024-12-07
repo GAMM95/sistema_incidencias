@@ -35,10 +35,10 @@
               <a class="nav-link text-uppercase" id="login-tab" data-toggle="tab" href="#login" role="tab" aria-controls="login" aria-selected="true">Eventos de login</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Incidencias</a>
+              <a class="nav-link text-uppercase" id="registros-tab" data-toggle="tab" href="#registros" role="tab" aria-controls="registros" aria-selected="false">Eventos de Incidencias</a>
             </li>
             <li class="nav-item">
-              <a class="nav-link text-uppercase" id="mantenedor-tab" data-toggle="tab" href="#mantenedor" role="tab" aria-controls="mantenedor" aria-selected="false">Mantenedor</a>
+              <a class="nav-link text-uppercase" id="mantenedor-tab" data-toggle="tab" href="#mantenedor" role="tab" aria-controls="mantenedor" aria-selected="false">Eventos de Mantenedores</a>
             </li>
           </ul>
           <!-- Fin de los titulos de las pestañas -->
@@ -91,10 +91,10 @@
                           <i class="feather mr-2 icon-file"></i>Reporte
                         </button>
                         <div class="dropdown-menu">
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporte-eventos-totales">Todos los eventos</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesFecha">Por fechas</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesUsuario">Por usuario</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesUsuarioFecha">Usuario y fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporte-eventos-totales">Reporte total de eventos</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesFecha">Reporte por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesUsuario">Reporte por usuario</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesUsuarioFecha">Reporte por usuario y fechas</div>
                         </div>
                       </div>
                     </div>
@@ -198,10 +198,10 @@
                           <i class="feather mr-2 icon-file"></i>Reporte
                         </button>
                         <div class="dropdown-menu">
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporte-eventos-login">Todos los eventos</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginFecha">Por fechas</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginUsuario">Por usuario</div>
-                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginUsuarioFecha">Usuario y fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesLogin">Reporte total de eventos</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginFecha">Reporte por fechas</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginUsuario">Reporte por usuario</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosLoginUsuarioFecha">Reporte por usuario y fechas</div>
                         </div>
                       </div>
                     </div>
@@ -217,7 +217,7 @@
                       <thead class="text-xs text-gray-700 uppercase bg-orange-300">
                         <tr>
                           <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
-                          <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de logeo </th>
+                          <th scope="col" class="px-3 py-2 text-center">Fecha y Hora </th>
                           <th scope="col" class="px-3 py-2 text-center">Rol</th>
                           <th scope="col" class="px-3 py-2 text-center">Usuario</th>
                           <th scope="col" class="px-3 py-2 text-center">Nombre Completo</th>

@@ -188,8 +188,9 @@ class AuditoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo FROM vw_auditoria_registrar_incidencia
-       ORDER BY fechaFormateada DESC";
+        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo 
+        FROM vw_auditoria_registrar_incidencia
+        ORDER BY fechaFormateada DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

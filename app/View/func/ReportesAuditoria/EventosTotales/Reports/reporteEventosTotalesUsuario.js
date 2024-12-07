@@ -119,13 +119,14 @@ $('#reporteEventosTotalesUsuario').click(function () {
             };
 
             // Obtener valores
-            const usuarioNombre = $('#nombreUsuarioEventosLogin').val() || '-';
+            const usuarioNombre = $('#nombreUsuarioEventosTotales').val() || '-';
 
             // Dibujar datos de usuario
             doc.setFont('helvetica', 'bold');
             doc.setFontSize(11);
 
             // Usuario
+            
             const usuarioLabelWidth = doc.getTextWidth(labels.usuario);
             const usuarioValueWidth = doc.getTextWidth(` ${usuarioNombre}`);
             const totalUsuarioWidth = usuarioLabelWidth + usuarioValueWidth;
