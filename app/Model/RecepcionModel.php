@@ -77,7 +77,7 @@ class RecepcionModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('RECEPCION', 'Eliminar incidencia recepcionada');
+        $this->auditoria->registrarEvento('RECEPCION', 'Eliminar incidencia recepcionada', $codigoRecepcion);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -124,7 +124,7 @@ class RecepcionModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('RECEPCION', 'Actualizar incidencia recepcionada');
+        $this->auditoria->registrarEvento('RECEPCION', 'Actualizar incidencia recepcionada', $recepcion);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexión con la base de datos.");

@@ -164,7 +164,7 @@ $(document).ready(function () {
             console.error('Error al generar el PDF:', error.message);
           }
         } else {
-          toastr.warning('No se ha encontrado la incidencia.', 'Advertencia');
+          toastr.warning('Vuelva a activar la incidencia.', 'Advertencia');
         }
       },
       error: function (xhr, status, error) {

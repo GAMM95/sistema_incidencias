@@ -150,7 +150,7 @@ class AsignacionModel extends Conexion
       $stmt->bindParam(':usuario', $usuario);
       $stmt->execute();
 
-      $this->auditoria->registrarEvento('ASIGNACION', 'Actualiazr asignacion');
+      $this->auditoria->registrarEvento('ASIGNACION', 'Actualizar asignación', $asignacion);
       return $stmt->rowCount() > 0 ? true : false;
     } else {
       throw new Exception("Error de conexion a la base de datos");

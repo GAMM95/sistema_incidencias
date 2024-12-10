@@ -99,7 +99,7 @@ class BienModel extends Conexion
 
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('BIEN', 'Actualizar bien');
+        $auditoria->registrarEvento('BIEN', 'Actualizar bien', $codigoBien);
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -166,7 +166,7 @@ class BienModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('BIEN', 'Habilitar bien');
+          $auditoria->registrarEvento('BIEN', 'Habilitar bien', $codigoBien);
           return true;
         } else {
           return false;
@@ -195,7 +195,7 @@ class BienModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('BIEN', 'Deshabilitar bien');
+          $auditoria->registrarEvento('BIEN', 'Deshabilitar bien', $codigoBien);
           return true;
         } else {
           return false;

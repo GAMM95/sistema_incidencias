@@ -43,6 +43,10 @@ class CierreModel extends Conexion
         $stmt->bindParam(':usuario', $usuario);
         $stmt->bindParam(':solucion', $solucion);
         $stmt->execute();
+
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('INCIDENCIA', 'Cerrar incidencia',);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexión a la base de datos.");
@@ -64,6 +68,9 @@ class CierreModel extends Conexion
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':codigoCierre', $codigoCierre);
         $stmt->execute();
+        // Registrar el evento en la auditoría
+        $auditoria = new AuditoriaModel($conector);
+        $auditoria->registrarEvento('INCIDENCIA', 'Eliminar cierre', $codigoCierre);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -89,11 +96,11 @@ class CierreModel extends Conexion
       $stmt->bindParam(':diagnostico', $diagnostico);
       $stmt->bindParam(':recomendaciones', $recomendaciones);
       $stmt->execute(); // Ejecutar el procedimiento almacenado
-      if ($stmt->rowCount() > 0) {
-        return true;
-      } else {
-        return false;
-      }
+      // Registrar el evento en la auditoría
+      $auditoria = new AuditoriaModel($conector);
+      $auditoria->registrarEvento('INCIDENCIA', 'Actualizar cierre', $cierre);
+      // Confirmar que se ha actualizado al menos una fila
+      return $stmt->rowCount() > 0 ? true : false;
     } else {
       throw new Exception("Error de conexion a la base de datos");
       return null;
@@ -229,7 +236,7 @@ class CierreModel extends Conexion
         // AND INC_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1) 
         // AND CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
         // AND CIE_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1)";
-        $sql ="SELECT
+        $sql = "SELECT
           COUNT(*) AS cierres_mes_actual
           FROM RECEPCION R
           INNER JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
@@ -274,21 +281,21 @@ class CierreModel extends Conexion
         FROM RECEPCION R
         INNER JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
         RIGHT JOIN INCIDENCIA I ON R.INC_numero = I.INC_numero
-        INNER JOIN  AREA A ON I.ARE_codigo = A.ARE_codigo
+        INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
         INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
         INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-	      LEFT JOIN ASIGNACION ASI ON ASI.REC_numero =R.REC_numero
-	      LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
-         LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
+        INNER JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+        INNER JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+        LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
         LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
         INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
         INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
-        INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-        WHERE  I.EST_codigo = 7 OR C.EST_codigo = 7
-        AND INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-        AND INC_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1) 
-        AND CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-        AND CIE_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1) AND
+        INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+        WHERE (I.EST_codigo = 7 OR C.EST_codigo = 7)
+        AND I.INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+        AND I.INC_FECHA < DATEADD(DAY, 1, EOMONTH(GETDATE()))
+        AND C.CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+        AND C.CIE_FECHA < DATEADD(DAY, 1, EOMONTH(GETDATE())) AND
 				a.ARE_codigo = :are_codigo";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro

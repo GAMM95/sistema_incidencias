@@ -29,6 +29,12 @@ switch ($action) {
   case 'eliminar':
     $incidenciaController->eliminarIncidencia();
     break;
+  case 'activar':
+    $incidenciaController->activarIncidencia();
+    break;
+  case 'desactivar':
+    $incidenciaController->desactivarIncidencia();
+    break;
   default:
     break;
 }

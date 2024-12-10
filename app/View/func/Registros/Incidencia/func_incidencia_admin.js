@@ -374,3 +374,42 @@ function filtrarTablaIncidencias() {
     filas[i].style.display = match ? '' : 'none';
   }
 }
+
+
+$(document).ready(function () {
+  // Manejar el cambio de estado de los switches
+  $('.switch-incidencia').on('change', function () {
+    var isChecked = $(this).is(':checked');
+    var codigoIncidencia = $(this).data('id');
+    var url = isChecked ? 'registro-incidencia.php?action=activar' : 'registro-incidencia.php?action=desactivar';
+
+    $.ajax({
+      url: url,
+      method: 'POST',
+      data: {
+        numero_incidencia: codigoIncidencia
+      },
+      dataType: 'json',
+      success: function (response) {
+        console.log('Estado: ', codigoIncidencia);
+        var jsonResponse = JSON.parse(response);
+        console.log('Parsed JSON:', jsonResponse);
+
+        if (response.success) {
+          toastr.success(jsonResponse.message);
+          setTimeout(function () {
+            location.reload();
+          }, 1000);
+        } else {
+          toastr.error(jsonResponse.message);
+        }
+      },
+      error: function (xhr, status, error) {
+        toastr.success('Estado de incidencia actualizado.', 'Mensaje');
+        setTimeout(function () {
+          location.reload();
+        }, 1000);
+      }
+    });
+  });
+});

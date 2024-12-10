@@ -328,9 +328,10 @@
                                   <thead class="text-xs text-gray-700 uppercase bg-red-300">
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de registro</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
                                       <th scope="col" class="px-3 py-2 text-center">Usuario Registro</th>
                                       <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
                                       <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
@@ -349,6 +350,7 @@
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['fechaFormateada']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['NombreCompleto']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['INC_numero_formato']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['AUD_operacion']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['ARE_nombre']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['AUD_ip']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencias['AUD_nombreEquipo']) ?></td>

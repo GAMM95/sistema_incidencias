@@ -86,7 +86,7 @@ if ($action) {
 $resultadoEventosTotales = $auditoriaController->listarEventosTotales();
 $resultadoAuditoriaLogin = $auditoriaController->listarEventosLogin();
 // TODO: Listar Registros de Incidencias
-$resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarRegistrosIncidencias();
+$resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarEventosIncidencias();
 $resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
 $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
 ?>
@@ -162,7 +162,7 @@ $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosA
   <!-- Reporte de incidencias -->
 
 
-  
+
   <script src="https://cdn.tailwindcss.com"></script>
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 

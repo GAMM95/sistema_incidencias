@@ -101,7 +101,7 @@ class IncidenciaModel extends Conexion
         $stmt->execute();
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia');
+        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia', $num_incidencia);
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -130,7 +130,7 @@ class IncidenciaModel extends Conexion
         $stmt->execute(); // Ejecutar el procedimiento almacenado
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia');
+        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia', $num_incidencia);
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -141,6 +141,65 @@ class IncidenciaModel extends Conexion
       return false;
     }
   }
+
+  // Metodo para desactivar una incidencia en caso esta sea falsa
+  public function desactivarIncidencia($codigoIncidencia)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_deshabilitar_incidencia :codigoIncidencia";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':codigoIncidencia', $codigoIncidencia);
+        $stmt->execute();
+        // Confirmar que se ha actualizado al menos una fila
+        if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('INCIDENCIA', 'Desactivar incidencia', $codigoIncidencia);
+          return $stmt->rowCount() > 0 ? true : false;
+        } else {
+          throw new Exception("Error de conexión con la base de datos.");
+        }
+      } else {
+        throw new Exception("Error de conexión a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al desactivar incidencia: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para activar nuevamente incidencia - abrir incidencia
+  public function activarIncidencia($codigoIncidencia)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_habilitar_incidencia :codigoIncidencia";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':codigoIncidencia', $codigoIncidencia);
+        $stmt->execute();
+        // Confirmar que se ha actualizado al menos una fila
+        if ($stmt->rowCount() > 0) {
+          // Registrar el evento en la auditoría
+          $auditoria = new AuditoriaModel($conector);
+          $auditoria->registrarEvento('INCIDENCIA', 'Activar incidencia', $codigoIncidencia);
+          return $stmt->rowCount() > 0 ? true : false;
+        } else {
+          throw new Exception("Error de conexión con la base de datos.");
+        }
+      } else {
+        throw new Exception("Error de conexión a la base de datos");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al activar incidencia: " . $e->getMessage());
+      return null;
+    }
+  }
+
 
   // Metodo para eliminar incidencia
   public function eliminarIncidencia($codigoIncidencia)
@@ -154,7 +213,7 @@ class IncidenciaModel extends Conexion
         $stmt->execute();
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Eliminar incidencia');
+        $auditoria->registrarEvento('INCIDENCIA', 'Eliminar incidencia', $codigoIncidencia);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -299,7 +358,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_administrador
+        $sql = "SELECT * FROM vista_incidencias_recepcionar
           ORDER BY 
           -- Extraer el año de INC_numero_formato y ordenar por año de forma descendente
           SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
@@ -487,7 +546,8 @@ class IncidenciaModel extends Conexion
       if ($conector != null) {
         $sql = "SELECT COUNT(*) as incidencias_mes_actual
         FROM INCIDENCIA 
-        WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)";
+        WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+        AND EST_codigo NOT IN (2)";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -533,8 +593,9 @@ class IncidenciaModel extends Conexion
       if ($conector != null) {
         $sql = "SELECT COUNT(*) as incidencias_mes_actual FROM INCIDENCIA i
         INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
-        WHERE INC_FECHA >= DATEADD(MONTH, -1, GETDATE()) AND 
-        a.ARE_codigo = :are_codigo";
+        WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+        AND i.EST_codigo NOT IN (2)
+        AND a.ARE_codigo = :are_codigo";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
         $stmt->execute();
@@ -558,7 +619,7 @@ class IncidenciaModel extends Conexion
       if ($conector != null) {
         $sql = "SELECT COUNT(*) as pendientes_mes_actual FROM INCIDENCIA i
                 INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
-                WHERE INC_FECHA >= DATEADD(MONTH, -1, GETDATE())
+                WHERE INC_FECHA >=  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
                 AND I.EST_codigo = 3 AND
                 a.ARE_codigo = :are_codigo";
         $stmt = $conector->prepare($sql);
@@ -883,7 +944,7 @@ class IncidenciaModel extends Conexion
     try {
       if ($conector != null) {
         $sql = "SELECT * FROM vista_notificaciones_administrador
-        ORDER BY tiempoDesdeIncidencia ASC";
+        ORDER BY INC_numero DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);

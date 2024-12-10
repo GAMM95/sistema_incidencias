@@ -97,7 +97,7 @@ class CategoriaModel extends Conexion
 
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('CATEGORIA', 'Actualizar categoría');
+        $auditoria->registrarEvento('CATEGORIA', 'Actualizar categoría', $codigoCategoria);
 
         return $stmt->rowCount();
       } else {
@@ -189,7 +189,7 @@ class CategoriaModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('CATEGORIA', 'Habilitar categoría');
+          $auditoria->registrarEvento('CATEGORIA', 'Habilitar categoría', $codigoCategoria);
 
           return true;
         } else {
@@ -219,7 +219,7 @@ class CategoriaModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('CATEGORIA', 'Deshabilitar categoria');
+          $auditoria->registrarEvento('CATEGORIA', 'Deshabilitar categoría', $codigoCategoria);
 
           return true;
         } else {

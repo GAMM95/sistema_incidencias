@@ -55,7 +55,7 @@ class MantenimientoModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('MANTENIMIENTO', 'Encolar mantenimiento');
+        $this->auditoria->registrarEvento('MANTENIMIENTO', 'Encolar mantenimiento', $asignacion);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");

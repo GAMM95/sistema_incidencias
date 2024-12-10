@@ -55,7 +55,7 @@ class PersonaModel extends Conexion
 
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('PERSONA', 'Registro de persona');
+        $auditoria->registrarEvento('PERSONA', 'Registrar persona');
 
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
@@ -114,7 +114,7 @@ class PersonaModel extends Conexion
         
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('PERSONA', 'Actualizacion de  persona');
+        $auditoria->registrarEvento('PERSONA', 'Actualizar persona', $codigoPersona);
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");

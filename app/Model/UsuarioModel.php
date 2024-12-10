@@ -263,7 +263,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('USUARIO', 'Editar datos de usuario');
+        $this->auditoria->registrarEvento('USUARIO', 'Editar datos de usuario', $codigoUsuario);
 
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
@@ -376,7 +376,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('PERSONA', 'Actualizar perfil');
+        $this->auditoria->registrarEvento('PERSONA', 'Actualizar perfil', $codigoUsuario);
 
         return true;
       } else {
@@ -430,7 +430,7 @@ class UsuarioModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $this->auditoria->registrarEvento('USUARIO', 'Habilitar usuario');
+          $this->auditoria->registrarEvento('USUARIO', 'Habilitar usuario', $codigoUsuario);
           return true;
         } else {
           return false;
@@ -461,7 +461,7 @@ class UsuarioModel extends Conexion
 
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('USUARIO', 'Deshabilitar usuario');
+          $auditoria->registrarEvento('USUARIO', 'Deshabilitar usuario', $codigoUsuario);
           return true;
         } else {
           return false;
@@ -521,7 +521,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('USUARIO', 'Restablecer contraseña');
+        $this->auditoria->registrarEvento('USUARIO', 'Restablecer contraseña', $codigoUsuario);
 
         // Obtener el resultado del procedimiento almacenado
         return $stmt->fetch(PDO::FETCH_ASSOC);  // Captura el mensaje retornado
@@ -548,7 +548,7 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('USUARIO', 'Restablecer contraseña');
+        $this->auditoria->registrarEvento('USUARIO', 'Restablecer contraseña', $codigoUsuario);
 
         // Obtener el resultado del procedimiento almacenado
         return $stmt->fetch(PDO::FETCH_ASSOC);  // Captura el mensaje retornado

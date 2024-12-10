@@ -218,7 +218,7 @@
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 hidden">descripcion</th>
               <th scope="col" class="px-6 py-2 hidden">Estado</th>
-              <th scope="col" class="px-6 py-2 ">Estado</th>
+              <th scope="col" class="px-6 py-2 hidden">Estado</th>
               <th scope="col" class="px-6 py-2 hidden">Usuario</th>
               <th scope="col" class="px-6 py-2 text-center">Acci&oacute;n</th>
             </tr>
@@ -229,14 +229,7 @@
           <tbody>
             <?php if (!empty($resultado)) : ?>
               <?php foreach ($resultado as $incidencia) : ?>
-                <?php
-                $estado = htmlspecialchars($incidencia['EST_descripcion']);
-                $isActive = ($estado === 'ABIERTO');
-                $codigoIncidencia = htmlspecialchars($incidencia['INC_numero']);
-                // Aplicar clase de texto rojo si el ARE_estado es 2
-                $incidenciaInactiva = ($estado ==='INACTIVO') ? 'text-red-600' : 'text-gray-900';
-                ?>
-                <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $codigoIncidencia; ?>">
+                <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $incidencia['INC_numero']; ?>">
                   <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'> <?= $incidencia['INC_numero']; ?></th>
                   <td class='px-6 py-3 text-center'><?= $incidencia['INC_numero_formato']; ?></td>
                   <td class='px-4 py-3 text-center'><?= $incidencia['fechaIncidenciaFormateada']; ?></td>
@@ -246,9 +239,10 @@
                   <td class='px-6 py-3 text-center'><?= $incidencia['CAT_nombre']; ?></td>
                   <td class='px-6 py-3 text-center'><?= $incidencia['ARE_nombre']; ?></td>
                   <td class='px-6 py-3 hidden'><?= $incidencia['INC_descripcion']; ?></td>
-                  <td class="px-3 py-3 text-center ">
+                  <td class='px-6 py-3 text-center hidden'><?= $incidencia['ESTADO']; ?></td>
+                  <td class="px-3 py-3 text-center hidden">
                     <?php
-                    $estadoDescripcion = htmlspecialchars($incidencia['EST_descripcion']);
+                    $estadoDescripcion = htmlspecialchars($incidencia['ESTADO']);
                     $badgeClass = '';
                     switch ($estadoDescripcion) {
                       case 'ABIERTO':
@@ -274,10 +268,22 @@
                       <i class="feather icon-printer"></i>
                     </button>
 
+                    <!-- Botón de Eliminar -->
+                    <!-- <button type="button" class="eliminar-incidencia bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Eliminar incidencia">
+                      <i class="feather icon-trash-2"></i>
+                    </button> -->
+
                     <!-- Boton inactivar -->
-                    <div class="custom-control custom-switch cursor-pointer">
-                      <input type="checkbox" class="custom-control-input switch-incidencia" id="customswitch<?= $codigoIncidencia; ?>" data-id="<?= $codigoIncidencia; ?>" <?= $isActive ? 'checked' : ''; ?>>
-                      <label class="custom-control-label" for="customswitch<?= $codigoIncidencia; ?>"><?= $isActive ? '<i class="feather icon-trash"></i>' : '<i class="feather icon-trash-2"></i>'; ?></label>
+                    <div class="btn-group mr-2">
+                      <div class="flex justify-center space-x-2">
+                        <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                          <i class="feather mr-2 icon-trash-2"></i>
+                        </button>
+                        <div class="dropdown-menu">
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="inactivarIncidencia">Inactivar inciencia</div>
+                          <div class="dropdown-item hover:text-white cursor-pointer" id="activarIncidencia">Activar incidencia</div>
+                        </div>
+                      </div>
                     </div>
                   </td>
                 </tr>

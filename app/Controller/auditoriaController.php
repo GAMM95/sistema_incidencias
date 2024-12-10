@@ -55,7 +55,7 @@ class AuditoriaController
   }
 
   // Metodo para listar los registros de incidencias en la tabla auditoria
-  public function listarRegistrosIncidencias()
+  public function listarEventosIncidencias()
   {
     $resultadoAuditoriaIncidencias = $this->auditoriaModel->listarRegistrosIncidencias();
     return $resultadoAuditoriaIncidencias;

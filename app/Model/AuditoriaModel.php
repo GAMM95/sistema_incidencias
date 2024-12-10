@@ -38,7 +38,7 @@ class AuditoriaModel extends Conexion
   }
 
   // Método para registrar un evento de auditoría
-  public function registrarEvento($tabla, $operacion)
+  public function registrarEvento($tabla, $operacion, $referencia = null)
   {
     $conector = parent::getConexion();
     try {
@@ -51,14 +51,15 @@ class AuditoriaModel extends Conexion
         $usuario = isset($_SESSION['codigoUsuario']) ? $_SESSION['codigoUsuario'] : null;
 
         // Insertar en la tabla AUDITORIA
-        $sql = "INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo) 
-                    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), :usuario, :tabla, :operacion, :ipCliente, :nombreEquipo)";
+        $sql = "INSERT INTO AUDITORIA (AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo, AUD_referencia) 
+                    VALUES (GETDATE(), CONVERT(TIME, GETDATE()), :usuario, :tabla, :operacion, :ipCliente, :nombreEquipo, :referencia)";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':usuario', $usuario);
         $stmt->bindParam(':tabla', $tabla);
         $stmt->bindParam(':operacion', $operacion);
         $stmt->bindParam(':ipCliente', $ipCliente);
         $stmt->bindParam(':nombreEquipo', $nombreEquipo);
+        $stmt->bindParam(':referencia', $referencia);
         $stmt->execute();
         return true;
       } else {
@@ -188,9 +189,11 @@ class AuditoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo 
-        FROM vw_auditoria_registrar_incidencia
-        ORDER BY fechaFormateada DESC";
+        // $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo, AUD_operacion
+        // FROM vw_auditoria_registrar_incidencia
+        // ORDER BY fechaFormateada DESC";
+        $sql = "SELECT * FROM vw_eventos_incidencias
+                ORDER BY AUD_fecha DESC, AUD_hora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

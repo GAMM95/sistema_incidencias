@@ -46,7 +46,7 @@ class AreaModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('AREA', 'Registro de área');
+          $auditoria->registrarEvento('AREA', 'Registrar área');
           return true;
         } else {
           return false;
@@ -116,7 +116,7 @@ class AreaModel extends Conexion
         ]);
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('AREA', 'Actualización de área');
+        $auditoria->registrarEvento('AREA', 'Actualizar área', $codigoArea);
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -187,7 +187,7 @@ class AreaModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('AREA', 'Habilitar de área');
+          $auditoria->registrarEvento('AREA', 'Habilitar área', $codigoArea);
           return true;
         } else {
           return false;
@@ -216,7 +216,7 @@ class AreaModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('AREA', 'Deshabilitar de área');
+          $auditoria->registrarEvento('AREA', 'Deshabilitar área', $codigoArea);
           return true;
         } else {
           return false;

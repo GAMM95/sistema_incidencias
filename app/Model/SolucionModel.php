@@ -75,7 +75,7 @@ class SolucionModel extends Conexion
 
         // Registrar el evento en la auditoría
         $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('BIEN', 'Actualizar solución');
+        $auditoria->registrarEvento('BIEN', 'Actualizar solución', $codigoSolucion);
 
         return $stmt->rowCount();
       } else {
@@ -122,7 +122,7 @@ class SolucionModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('BIEN', 'Habilitar solución');
+          $auditoria->registrarEvento('BIEN', 'Habilitar solución', $codigoSolucion);
           return true;
         } else {
           return false;
@@ -151,7 +151,7 @@ class SolucionModel extends Conexion
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
           $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('BIEN', 'Deshabilitar solución');
+          $auditoria->registrarEvento('BIEN', 'Deshabilitar solución', $codigoSolucion);
           return true;
         } else {
           return false;

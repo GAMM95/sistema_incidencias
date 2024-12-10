@@ -76,6 +76,73 @@ class IncidenciaController
     }
   }
 
+
+  // Controlador para desactivar incidencia en caso de una incidencia falsa
+  public function desactivarIncidencia()
+  {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $codigoIncidencia = isset($_POST['numero_incidencia']) ? $_POST['numero_incidencia'] : '';
+
+      try {
+        $resultados = $this->incidenciaModel->desactivarIncidencia($codigoIncidencia);
+        if ($resultados) {
+          echo json_encode([
+            'success' => true,
+            'message' => 'Incidencia desactivada.'
+          ]);
+        } else {
+          echo json_encode([
+            'success' => false,
+            'message' => 'No se pudo desactivar la incidencia.'
+          ]);
+        }
+      } catch (Exception $e) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Error: ' . $e->getMessage()
+        ]);
+      }
+    } else {
+      echo json_encode([
+        'success' => false,
+        'message' => 'M&eacute;todo no permitido.'
+      ]);
+    }
+  }
+
+  // Controlador para desactivar incidencia en caso de una incidencia falsa
+  public function activarIncidencia()
+  {
+    if ($_SERVER["REQUEST_METHOD"] == "POST") {
+      $codigoIncidencia = isset($_POST['numero_incidencia']) ? $_POST['numero_incidencia'] : '';
+
+      try {
+        $resultados = $this->incidenciaModel->activarIncidencia($codigoIncidencia);
+        if ($resultados) {
+          echo json_encode([
+            'success' => true,
+            'message' => 'Incidencia activada.'
+          ]);
+        } else {
+          echo json_encode([
+            'success' => false,
+            'message' => 'No se pudo activar la incidencia.'
+          ]);
+        }
+      } catch (Exception $e) {
+        echo json_encode([
+          'success' => false,
+          'message' => 'Error: ' . $e->getMessage()
+        ]);
+      }
+    } else {
+      echo json_encode([
+        'success' => false,
+        'message' => 'M&eacute;todo no permitido.'
+      ]);
+    }
+  }
+
   // Metodo para eliminar la incidencia 
   public function eliminarIncidencia()
   {
@@ -121,14 +188,7 @@ class IncidenciaController
     }
   }
 
-  /**
-   * Método de controlador para registrar una incidencia - USUARIO.
-   * 
-   * Este método se ejecuta cuando un usuario envía un formulario para registrar una nueva
-   * incidencia. Recoge los datos del formulario, los valida, y luego llama al método del modelo
-   * correspondiente para insertar la incidencia en la base de datos. Si la inserción es exitosa,
-   * redirige al usuario a una página de confirmación con el número de incidencia registrado.
-   */
+  // Método de controlador para registrar una incidencia - USUARIO.
   public function registrarIncidenciaUsuario()
   {
     if ($_SERVER["REQUEST_METHOD"] == "POST") {
@@ -412,21 +472,21 @@ class IncidenciaController
     }
   }
 
-    // Metodo para filtrar incidencias por equipo para el reporte
-    public function filtrarIncidenciasEquipo($equipo = NULL, $fechaInicio = null, $fechaFin = null)
-    {
-      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-        // Obtener los valores de los parámetros GET o asignar null si no existen
-        $equipo = isset($_GET['codigoPatrimonialEquipo']) ? $_GET['codigoPatrimonialEquipo'] : null;
-        $fechaInicio = isset($_GET['fechaInicioIncidenciasEquipo']) ? $_GET['fechaInicioIncidenciasEquipo'] : null;
-        $fechaFin = isset($_GET['fechaFinIncidenciasEquipo']) ? $_GET['fechaFinIncidenciasEquipo'] : null;
-        error_log("Equipo: $equipo, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
-        // Llamar al método para consultar incidencias por área, estado y fecha
-        $resultado = $this->incidenciaModel->buscarIncidenciasEquipo($equipo, $fechaInicio, $fechaFin);
-        // Retornar el resultado de la consulta
-        return $resultado;
-      }
+  // Metodo para filtrar incidencias por equipo para el reporte
+  public function filtrarIncidenciasEquipo($equipo = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $equipo = isset($_GET['codigoPatrimonialEquipo']) ? $_GET['codigoPatrimonialEquipo'] : null;
+      $fechaInicio = isset($_GET['fechaInicioIncidenciasEquipo']) ? $_GET['fechaInicioIncidenciasEquipo'] : null;
+      $fechaFin = isset($_GET['fechaFinIncidenciasEquipo']) ? $_GET['fechaFinIncidenciasEquipo'] : null;
+      error_log("Equipo: $equipo, Fecha Inicio: $fechaInicio, Fecha Fin: $fechaFin");
+      // Llamar al método para consultar incidencias por área, estado y fecha
+      $resultado = $this->incidenciaModel->buscarIncidenciasEquipo($equipo, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $resultado;
     }
+  }
 
   // Metodo para listar incidencias totales para reporte
   public function listarIncidenciasTotales()
@@ -603,7 +663,7 @@ class IncidenciaController
       $cantidadIncidenciasAgosto = $this->incidenciaModel->contarIncidenciasAgosto($anio);
       $cantidadIncidenciasSetiembre = $this->incidenciaModel->contarIncidenciasSetiembre($anio);
       $cantidadIncidenciasOctubre = $this->incidenciaModel->contarIncidenciasOctubre($anio);
-      $cantidadIncidenciasNoviembre = $this->incidenciaModel->contarIncidenciasNoviembre($anio);      
+      $cantidadIncidenciasNoviembre = $this->incidenciaModel->contarIncidenciasNoviembre($anio);
       $cantidadIncidenciasDiciembre = $this->incidenciaModel->contarIncidenciasDiciembre($anio);
 
       return [

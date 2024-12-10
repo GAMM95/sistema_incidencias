@@ -258,6 +258,7 @@ CREATE TABLE AUDITORIA (
 	AUD_operacion VARCHAR(100) NOT NULL,
 	AUD_ip VARCHAR(50) NULL,
 	AUD_nombreEquipo VARCHAR(200) NULL,
+    AUD_referencia SMALLINT NULL,
 	CONSTRAINT pk_auditoria PRIMARY KEY (AUD_codigo)
 );
 GO
@@ -390,6 +391,69 @@ GO
 
 -- VISTA LISTAR INCIDENCIAS ADMINISTRADOR
 CREATE OR ALTER VIEW vista_incidencias_administrador AS
+-- SELECT 
+--   I.INC_numero,
+--   I.INC_numero_formato,
+--   (CONVERT(VARCHAR(10), I.INC_fecha, 103)) AS fechaIncidenciaFormateada,
+--   I.INC_codigoPatrimonial,
+--   B.BIE_nombre,
+--   I.INC_asunto,
+--   I.INC_documento,
+--   I.INC_descripcion,
+--   CAT.CAT_nombre,
+--   A.ARE_nombre,
+--   CASE
+--       WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+--       ELSE E.EST_descripcion
+--   END AS ESTADO,
+--   p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario
+-- FROM 
+--   INCIDENCIA I
+--   LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+--   INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+--   INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+--   INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+--   LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+--   LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+--   LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+--   LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
+--   LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+--   LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+--   LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+--   LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+--   LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+--   INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+-- WHERE 
+--     (I.EST_codigo IN (3) OR C.EST_codigo IN (3));
+-- GO
+
+SELECT 
+  I.INC_numero,
+  I.INC_numero_formato,
+  (CONVERT(VARCHAR(10), I.INC_fecha, 103)) AS fechaIncidenciaFormateada,
+  I.INC_codigoPatrimonial,
+  B.BIE_nombre,
+  I.INC_asunto,
+  I.INC_documento,
+  I.INC_descripcion,
+  CAT.CAT_nombre,
+  A.ARE_nombre,
+  E.EST_descripcion,
+  p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario
+FROM 
+  INCIDENCIA I
+  LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+  INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+  INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+  LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+  INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+WHERE 
+    I.EST_codigo IN (2, 3);
+GO
+
+-- VISTA PARA LISTAR INCIDENCIAS LISTAS PARA RECEPCIONAR
+CREATE OR ALTER VIEW vista_incidencias_recepcionar AS
 SELECT 
   I.INC_numero,
   I.INC_numero_formato,
@@ -1117,7 +1181,7 @@ INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
 INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
 LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
 INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
-WHERE I.EST_codigo NOT IN (4, 5) 
+WHERE I.EST_codigo NOT IN (2, 4, 5) 
 AND A.ARE_codigo <> 1;
 GO
 
@@ -1423,6 +1487,7 @@ INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
 WHERE AUD_operacion IN ('Iniciar sesión');
 GO
 
+
 CREATE OR ALTER VIEW vw_auditoria_registrar_incidencia AS
 SELECT  
 (CONVERT(VARCHAR(10), i.INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), i.INC_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
@@ -1436,6 +1501,7 @@ I.INC_numero,
 i.INC_numero_formato,
 a.AUD_usuario, 
 a.AUD_tabla, 
+a.AUD_operacion,
 a.AUD_ip, 
 a.AUD_nombreEquipo
 FROM INCIDENCIA i
@@ -1452,6 +1518,65 @@ INNER JOIN AREA AR ON AR.ARE_codigo = I.ARE_codigo
 WHERE a.row_num = 1;
 GO
 
+-- VISTA PARA LISTAR TODOS LOS EVENTOS DE LAS INCIDENCIAS
+CREATE OR ALTER VIEW vw_eventos_incidencias AS
+SELECT  
+    (CONVERT(VARCHAR(10), i.INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), i.INC_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
+    i.INC_fecha AS AUD_fecha, -- Fecha de la incidencia (registro)
+    i.INC_hora AS AUD_hora,   -- Hora de la incidencia (registro)
+    'INCIDENCIA' AS AUD_tabla,
+    i.INC_numero_formato,
+    i.INC_numero AS NumeroReferencia,
+    a.AUD_usuario,
+    r.ROL_nombre,
+    u.USU_nombre,
+    p.PER_nombres + ' ' + p.PER_apellidoPaterno + ' ' + p.PER_apellidoMaterno AS NombreCompleto,
+    a.AUD_operacion,
+    ar.ARE_nombre,  -- Nombre del área del usuario que registró la incidencia
+    a.AUD_ip,
+    a.AUD_nombreEquipo
+FROM INCIDENCIA i
+INNER JOIN (
+    SELECT 
+        AUD_codigo, AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo, 
+        ROW_NUMBER() OVER (PARTITION BY AUD_usuario ORDER BY AUD_fecha DESC, AUD_hora DESC) AS row_num
+    FROM AUDITORIA
+    WHERE AUD_operacion = 'Registrar incidencia'
+) a ON i.USU_codigo = a.AUD_usuario
+INNER JOIN USUARIO u ON u.USU_codigo = i.USU_codigo
+INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
+INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo
+INNER JOIN AREA ar ON ar.ARE_codigo = u.ARE_codigo -- Unión con la tabla de ÁREA basada en el área del usuario
+WHERE a.row_num = 1
+UNION ALL
+SELECT 
+    (CONVERT(VARCHAR(10), A.AUD_fecha, 103) + ' - ' + 
+     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), A.AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
+    A.AUD_fecha,
+    A.AUD_hora, 
+    A.AUD_tabla,
+    I.INC_numero_formato,
+    CASE 
+        WHEN A.AUD_tabla = 'INCIDENCIA' THEN I.INC_numero
+    END AS NumeroReferencia,
+    A.AUD_usuario,
+    R.ROL_nombre,
+    U.USU_nombre,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno + ' ' + P.PER_apellidoMaterno AS NombreCompleto,
+    A.AUD_operacion,
+    AR.ARE_nombre,
+    A.AUD_ip,
+    A.AUD_nombreEquipo
+FROM AUDITORIA A
+INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
+INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+LEFT JOIN INCIDENCIA I ON I.INC_numero = A.AUD_referencia AND A.AUD_tabla = 'INCIDENCIA'
+WHERE A.AUD_tabla = 'INCIDENCIA'
+AND (I.INC_numero_formato IS NOT NULL AND I.INC_numero_formato <> '');
+
+-- VISTA PARA LISTAR TODOS LOS EVENTOS DE RECEPCIONES
 CREATE OR ALTER VIEW vw_auditoria_registrar_recepcion AS
 SELECT  
 (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
@@ -2508,6 +2633,28 @@ BEGIN
 END;
 GO
 
+-- PROCEDIMIENTO ALMACENADO PARA HABILITAR INCIDENCIA
+CREATE OR ALTER PROCEDURE sp_habilitar_incidencia
+	@codigoIncidencia SMALLINT
+AS
+BEGIN
+	UPDATE INCIDENCIA SET EST_codigo = 3
+    WHERE (EST_codigo = 2 OR  EST_codigo = '')
+	AND  INC_numero = @codigoIncidencia;
+END;
+GO
+
+
+-- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR INCIDENCIA
+CREATE OR ALTER PROCEDURE sp_deshabilitar_incidencia
+	@codigoIncidencia SMALLINT
+AS
+BEGIN
+	UPDATE INCIDENCIA SET EST_codigo = 2 
+   WHERE (EST_codigo = 3 OR  EST_codigo = '')
+	AND  INC_numero = @codigoIncidencia;
+END;
+GO
 
 --PROCEDIMIENTO ALMACENADO PARA REGISTRAR SOLUCIONES
 CREATE OR ALTER PROCEDURE sp_registrar_solucion
