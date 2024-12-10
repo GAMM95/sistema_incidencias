@@ -76,7 +76,7 @@ if ($action === 'consultar_usuario') {
       $html .= '</td></tr>';
     }
   } else {
-    $html = '<tr><td colspan="8" class="text-center py-3">No  sds se encontraron incidencias pendientes de cierre.</td></tr>';
+    $html = '<tr><td colspan="15" class="text-center py-3">No  sds se encontraron incidencias pendientes de cierre.</td></tr>';
   }
 
   // Devolver el HTML de las filas

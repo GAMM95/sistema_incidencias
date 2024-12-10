@@ -696,8 +696,8 @@ CREATE OR ALTER VIEW vista_incidencias_totales_usuario AS
 SELECT
     I.INC_numero,
     I.INC_numero_formato,
-    (CONVERT(VARCHAR(10), INC_fecha, 103)) AS fechaIncidenciaFormateada,
-	A.ARE_codigo,
+    (CONVERT(VARCHAR(10), I.INC_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT(VARCHAR(7), I.INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,	A.ARE_codigo,
     A.ARE_nombre,
     CAT.CAT_nombre,
     I.INC_asunto,
@@ -1575,6 +1575,7 @@ INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
 LEFT JOIN INCIDENCIA I ON I.INC_numero = A.AUD_referencia AND A.AUD_tabla = 'INCIDENCIA'
 WHERE A.AUD_tabla = 'INCIDENCIA'
 AND (I.INC_numero_formato IS NOT NULL AND I.INC_numero_formato <> '');
+GO
 
 -- VISTA PARA LISTAR TODOS LOS EVENTOS DE RECEPCIONES
 CREATE OR ALTER VIEW vw_auditoria_registrar_recepcion AS
@@ -3921,38 +3922,44 @@ CREATE OR ALTER PROCEDURE sp_consultar_incidencias_usuario
   @fechaFin DATE
 AS
 BEGIN
-  SELECT 
+  SELECT
     I.INC_numero,
     I.INC_numero_formato,
-    (CONVERT(VARCHAR(10), INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
-    I.INC_codigoPatrimonial,
-	B.BIE_nombre,
-    I.INC_asunto,
-    I.INC_documento,
-    I.INC_descripcion,
-    (CONVERT(VARCHAR(10), R.REC_fecha, 103)) AS fechaRecepcionFormateada,
-    PRI.PRI_nombre,
-    O.CON_descripcion,
-	  (CONVERT(VARCHAR(10), C.CIE_fecha, 103)) AS fechaCierreFormateada,
-    CAT.CAT_nombre,
+    (CONVERT(VARCHAR(10), I.INC_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT(VARCHAR(7), I.INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
     A.ARE_nombre,
+    CAT.CAT_nombre,
+    I.INC_asunto,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_documento,
+    (CONVERT(VARCHAR(10), R.REC_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT(VARCHAR(7), R.REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+    PRI.PRI_nombre,
+    IMP.IMP_descripcion,
+    CONVERT(VARCHAR(10), C.CIE_fecha, 103) AS fechaCierreFormateada,
+    O.CON_descripcion,
+    U.USU_nombre,
+	p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario,
     CASE
       WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
       ELSE E.EST_descripcion
     END AS ESTADO,
-    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario
-  FROM INCIDENCIA I
+    -- Última modificación (fecha y hora más reciente)
+    MAX(COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha)) AS ultimaFecha,
+    MAX(COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora)) AS ultimaHora
+  FROM CIERRE C
+  LEFT JOIN MANTENIMIENTO MAN ON MAN.MAN_codigo = C.MAN_codigo
+  LEFT JOIN ASIGNACION ASI ON ASI.ASI_codigo = MAN.ASI_codigo
+  RIGHT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+  RIGHT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+  RIGHT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+  RIGHT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
   INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
   INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
   INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
   LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
-  LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-  LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
-  LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
-  LEFT JOIN CIERRE C ON R.REC_numero = C.MAN_codigo
   LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
-  LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
-  LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
   LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
   LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
   INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
@@ -3965,9 +3972,30 @@ BEGIN
     (@fechaFin IS NULL OR I.INC_fecha <= @fechaFin) AND
     (@area IS NULL OR A.ARE_codigo = @area)
     AND (I.EST_codigo IN (3, 4, 7) OR EC.EST_codigo IN (3, 4, 7))
-  ORDER BY 
-    SUBSTRING(I.INC_numero_formato, CHARINDEX('-', I.INC_numero_formato) + 1, 4) DESC,
-    I.INC_numero_formato DESC;
+	GROUP BY
+    I.INC_numero,
+    I.INC_numero_formato,
+    I.INC_fecha,
+    I.INC_hora,
+    A.ARE_nombre,
+    CAT.CAT_nombre,
+    I.INC_asunto,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_documento,
+    R.REC_fecha,
+    R.REC_hora,
+    PRI.PRI_nombre,
+    IMP.IMP_descripcion,
+    C.CIE_fecha,
+    O.CON_descripcion,
+    U.USU_nombre,
+	P.PER_nombres,
+	P.PER_apellidoPaterno,
+    C.CIE_numero,
+    EC.EST_descripcion,
+    E.EST_descripcion
+	ORDER BY ultimaFecha DESC, ultimaHora DESC;
 END
 GO
 

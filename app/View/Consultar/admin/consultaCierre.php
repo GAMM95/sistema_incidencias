@@ -6,7 +6,7 @@
         <div class="row align-items-center">
           <div class="col-md-12">
             <div class="page-header-title">
-              <h1 class="text-2xl font-bold mb-2">Consulta de Incidencias Cerradas</h1>
+              <h1 class="text-2xl font-bold mb-2">Consulta de incidencias cerradas</h1>
             </div>
             <ul class="breadcrumb">
               <li class="breadcrumb-item"><a href=""><i class="feather icon-clipboard"></i></a></li>
@@ -65,7 +65,7 @@
           <!-- Encabezado de la tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-lime-300">
             <tr>
-              <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
               <th scope="col" class="px-3 py-2 text-center">N&deg; INCIDENCIA</th>
               <th scope="col" class="px-3 py-2 text-center">Fecha de Cierre</th>
               <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>

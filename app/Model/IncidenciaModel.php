@@ -455,7 +455,8 @@ class IncidenciaModel extends Conexion
     $conector = $this->getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as total FROM vista_incidencias_administrador";
+        $sql = "SELECT COUNT(*) as total FROM vista_incidencias_administrador
+                where EST_descripcion NOT LIKE 'INACTIVO'";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

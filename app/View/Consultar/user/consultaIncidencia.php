@@ -53,6 +53,11 @@
         </div>
       </div>
 
+      <!-- TIPO DE BIEN -->
+      <div class="flex justify-center items-center text-center">
+        <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-3/4 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
+      </div>
+
       <!-- BOTONES DEL FORMULARIO -->
       <div class="flex justify-center space-x-2 mt-2">
         <button type="submit" id="buscar-incidencias" class="bg-blue-500 text-white font-bold py-2 px-3 rounded-md" value="consultar"> <i class="feather mr-2 icon-filter"></i>Filtrar</button>
@@ -65,12 +70,12 @@
 
     <!-- TABLA DE RESULTADOS DE LAS INCIDENCIAS -->
     <div class="relative shadow-md sm:rounded-lg">
-      <div class="max-w-full overflow-hidden">
+      <div class="max-w-full overflow-hidden shadow-md sm:rounded-lg">
         <table id="tablaIncidenciasUser" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
           <!-- Encabezado de la tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-lime-300">
             <tr>
-              <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
               <th scope="col" class="px-3 py-2 text-center hidden">N&deg;</th>
               <th scope="col" class="px-3 py-2 text-center">N&deg; INCIDENCIA</th>
               <th scope="col" class="px-3 py-2 text-center hidden">&Aacute;rea</th>
@@ -136,7 +141,7 @@
               <?php endforeach; ?>
             <?php else: ?>
               <tr>
-                <td colspan="8" class="text-center py-3">No se encontraron incidencias.</td>
+                <td colspan="15" class="text-center py-3">No se encontraron incidencias.</td>
               </tr>
             <?php endif; ?>
           </tbody>

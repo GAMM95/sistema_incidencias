@@ -68,7 +68,7 @@
           <!-- Encabezado de tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-lime-300">
             <tr>
-              <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
               <th scope="col" class="px-3 py-2 text-center">N&deg; INCIDENCIA</th>
               <th scope="col" class="px-3 py-2 text-center">Fecha entrada</th>
               <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>

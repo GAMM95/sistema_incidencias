@@ -95,8 +95,8 @@
 
         <!-- TIPO DE BIEN -->
         <div class="w-full sm:w-1/4 px-2 mb-2">
-          <label for="tipoBien" class="block mb-1 font-bold text-center text-xs">Tipo de bien:</label>
-          <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-full text-center text-xs rounded-md" disabled readonly>
+          <label for="tipoBien" class="block mb-1 font-bold text-center text-xs">Nombre del bien:</label>
+          <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-full text-center text-xs rounded-md" placeholder="Nombre del bien" disabled readonly>
         </div>
       </div>
 

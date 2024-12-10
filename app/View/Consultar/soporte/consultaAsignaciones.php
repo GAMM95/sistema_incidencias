@@ -64,7 +64,7 @@
           <!-- Encabezado de la tabla -->
           <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-lime-300">
             <tr>
-              <th scope="col" class="px-3 py-2 text-center">&iacute;tem</th>
+              <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
               <th scope="col" class="px-6 py-2 hidden">Asignaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 hidden">Recepci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Incidencia</th>
