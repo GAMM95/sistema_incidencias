@@ -4197,18 +4197,39 @@ END
 GO
 
 
---PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LOS REGISTROS DE INCIDENCIAS
-CREATE OR ALTER PROCEDURE sp_consultar_auditoria_registro_incidencia
+--TODO: PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LOS REGISTROS DE INCIDENCIAS
+-- CREATE OR ALTER PROCEDURE sp_consultar_auditoria_registro_incidencia
+--     @fechaInicio DATE = NULL,
+--     @fechaFin DATE = NULL
+-- AS
+-- BEGIN 
+--     SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo
+-- 	FROM vw_auditoria_registrar_incidencia
+--     WHERE (@fechaInicio IS NULL OR INC_fecha >= @fechaInicio)
+--       AND (@fechaFin IS NULL OR INC_fecha <= @fechaFin);
+-- END;
+-- GO
+
+CREATE OR ALTER PROCEDURE sp_consultar_auditoria_eventos_incidencias
     @fechaInicio DATE = NULL,
     @fechaFin DATE = NULL
 AS
 BEGIN 
-    SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo
-	FROM vw_auditoria_registrar_incidencia
-    WHERE (@fechaInicio IS NULL OR INC_fecha >= @fechaInicio)
-      AND (@fechaFin IS NULL OR INC_fecha <= @fechaFin);
+    SELECT 
+        fechaFormateada, 
+        NombreCompleto, 
+        INC_numero_formato, 
+        ARE_nombre, 
+        AUD_operacion,
+        AUD_ip, 
+        AUD_nombreEquipo
+    FROM vw_eventos_incidencias
+    WHERE (@fechaInicio IS NULL OR AUD_fecha >= @fechaInicio)
+      AND (@fechaFin IS NULL OR AUD_fecha <= @fechaFin)
+    ORDER BY AUD_fecha DESC, AUD_hora DESC;  -- Orden por fecha y hora de los eventos
 END;
 GO
+
 
 --PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LAS RECEPCIONES DE INCIDENCIAS
 CREATE OR ALTER PROCEDURE sp_consultar_auditoria_recepcion_incidencia

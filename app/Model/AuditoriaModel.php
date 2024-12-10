@@ -208,13 +208,13 @@ class AuditoriaModel extends Conexion
     }
   }
 
-  // Metodo para consultar registros de incidencias en la tabla de auditoria
+  // TODO: Metodo para consultar registros de incidencias en la tabla de auditoria
   public function consultarRegistrosIncidencias($fechaInicio = null, $fechaFin = null)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_consultar_auditoria_registro_incidencia :fechaInicio, :fechaFin";
+        $sql = "EXEC sp_consultar_auditoria_eventos_incidencias :fechaInicio, :fechaFin";
         // ORDER BY fechaFormateada DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':fechaInicio', $fechaInicio);

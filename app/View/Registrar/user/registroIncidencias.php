@@ -144,29 +144,12 @@
 
       <!-- Botones del formulario -->
       <div class="flex justify-center space-x-4">
-        <button type="submit" id="guardar-incidencia" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Guardar</button>
-        <button type="button" id="editar-incidencia" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Editar</button>
+        <button type="submit" id="guardar-incidencia" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed"><i class="feather mr-2 icon-save"></i>Registrar</button>
+        <button type="button" id="editar-incidencia" class="bn btn-info text-xs text-white font-bold py-2 px-3 rounded-md disabled:bg-gray-300 disabled:cursor-not-allowed" disabled><i class="feather mr-2 icon-edit"></i>Actualizar</button>
         <button type="button" id="nuevo-registro" class="bn btn-secondary text-xs text-white font-bold py-2 px-3 rounded-md"> <i class="feather mr-2 icon-plus-square"></i>Limpiar</button>
       </div>
       <!-- Fin de botones -->
     </form>
-
-    <!-- Paginacion de la tabla -->
-    <div class="mt-3 mb-2">
-      <!-- <?php if ($totalPages > 1) : // Mostrar el contenedor solo si hay más de una página 
-            ?>
-        <div class="flex justify-end items-center mt-1">
-          <?php if ($page > 1) : ?>
-            <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-l-md" onclick="changePageTablaListarIncidencias(<?php echo $page - 1; ?>)"><i class="feather mr-2 icon-chevrons-left"></i> Anterior</a>
-          <?php endif; ?>
-          <span class="px-2 py-1 bg-gray-400 text-gray-200"><?php echo $page; ?> de <?php echo $totalPages; ?></span>
-          <?php if ($page < $totalPages) : ?>
-            <a href="#" class="px-2 py-1 bg-gray-400 text-gray-200 hover:bg-gray-600 rounded-r-md" onclick="changePageTablaListarIncidencias(<?php echo $page + 1; ?>)"> Siguiente <i class="feather ml-2 icon-chevrons-right"></i></a>
-          <?php endif; ?>
-        </div> -->
-    <?php endif; ?>
-    </div>
-    <!-- fin de paginacion de la tabla -->
 
     <!-- Paginacion de la tabla -->
     <div id="noIncidencias" class="flex justify-between items-center mb-2">
@@ -240,7 +223,7 @@
                     <label class="badge <?= $badgeClass ?>"><?= $estadoDescripcion ?></label>
                   </td>
                   <td class='px-6 py-2 text-center'><?= $incidencia['Usuario']; ?></td>
-                  <td class="px-6 py-2 text-center flex space-x-2"> <!-- Columna de Acción con botones -->
+                  <td class="px-6 py-2 justify-center text-center flex space-x-2"> <!-- Columna de Acción con botones -->
                     <!-- Botón de Imprimir detalle de incidencia -->
                     <button type="button" id="imprimir-incidencia" class="bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Imprimir detalle de incidencia">
                       <i class="feather icon-printer"></i>

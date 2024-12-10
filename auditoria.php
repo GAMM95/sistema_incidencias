@@ -62,6 +62,7 @@ function obtenerColumnasParaAccion($action)
     case 'consultarEventosLogin':
       return ['fechaFormateada', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'listarRegistrosIncidencias':
+      return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_operacion', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'listarRegistrosRecepciones':
       return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     default:
