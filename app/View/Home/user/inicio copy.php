@@ -101,7 +101,7 @@
                 max="<?= date('Y-m-d'); ?>">
             </div>
             <!-- Fin de la fecha seleccionada -->
-
+             
             <!-- Botones alineados a la derecha -->
             <div class="btn-group card-option flex-shrink-0">
               <button type="button" class="btn " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -118,6 +118,16 @@
           </div>
 
           <!-- TABLA DE NUEVAS INCIDENCIAS -->
+          <?php
+          require_once './app/Model/IncidenciaModel.php';
+
+          // Obtener la fecha desde un formulario o definirla aquí
+          $fecha = isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d'); // Por defecto, usa la fecha actual si no se especifica ninguna
+
+          $incidenciaModel = new IncidenciaModel();
+          $incidencias = $incidenciaModel->listarIncidenciasUserFecha($area, $fecha);
+          ?>
+
           <div id="tabla-incidencias" class="card-body p-0">
             <div class="table-responsive overflow-y-auto max-h-96">
               <table class="table table-hover mb-0 text-xs">
@@ -132,16 +142,67 @@
                     <th class="text-center">Estado</th>
                   </tr>
                 </thead>
-                <!-- Fin de encabezado -->
 
                 <!-- Cuerpo -->
-                <tbody id="incidenciasBody">
+                <tbody>
+                  <?php foreach ($incidencias as $incidencia) : ?>
+                    <tr class="align-middle"> <!-- Añadido 'align-middle' para centrar verticalmente -->
+                      <!-- código de la incidencia -->
+                      <td class="text-center text-xs align-middle"><?= htmlspecialchars($incidencia['INC_numero_formato']); ?></td>
+                      <!-- Usuario y área -->
+                      <td>
+                        <div class="flex items-center">
+                          <img class="rounded-full w-10 h-10 mr-4" src="dist/assets/images/user/avatar.png" alt="User-Profile-Image">
+                          <div>
+                            <h6 class="text-xs"><?= htmlspecialchars($incidencia['Usuario']); ?></h6>
+                            <p class="text-muted text-xs"><?= htmlspecialchars($incidencia['ARE_nombre']); ?></p>
+                          </div>
+                        </div>
+                      </td>
+                      <!-- Fecha de la incidencia -->
+                      <td class="text-center text-xs align-middle"><?= htmlspecialchars($incidencia['fechaIncidenciaFormateada']); ?></td>
+                      <!-- Descripción de la incidencia -->
+                      <td class="text-center text-xs align-middle"><?= htmlspecialchars($incidencia['INC_asunto']); ?></td>
+                      <!-- Documento de la incidencia -->
+                      <td class="text-center text-xs align-middle"><?= htmlspecialchars($incidencia['INC_documento']); ?></td>
+                      <!-- Estado -->
+                      <td class="text-center text-xs align-middle">
+                        <?php
+                        $estado = htmlspecialchars($incidencia['ESTADO']);
+                        $badgeClass = '';
+
+                        switch ($estado) {
+                          case 'ABIERTO':
+                            $badgeClass = 'badge-light-danger';
+                            break;
+                          case 'RECEPCIONADO':
+                            $badgeClass = 'badge-light-success';
+                            break;
+                          case 'CERRADO':
+                            $badgeClass = 'badge-light-primary';
+                            break;
+                          default:
+                            $badgeClass = 'badge-light-secondary';
+                            break;
+                        }
+                        ?>
+                        <label class="badge <?= $badgeClass; ?>"><?= $estado; ?></label>
+                      </td>
+                    </tr>
+                  <?php endforeach; ?>
+
+                  <?php if (empty($incidencias)) : ?>
+                    <tr>
+                      <td colspan="6" class="text-center py-3">No hay incidencias para la fecha seleccionada.</td>
+                    </tr>
+                  <?php endif; ?>
                 </tbody>
-                <!-- Fin del cuerpo -->
+
               </table>
             </div>
           </div>
           <!-- Fin tabla de nuevas incidencias -->
+
         </div>
 
       </div>

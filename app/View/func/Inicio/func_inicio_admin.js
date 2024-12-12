@@ -1,3 +1,4 @@
+// Funcion de la grafica de barras de las incidencias
 $(function () {
   var options1 = {
     chart: {
@@ -44,6 +45,7 @@ $(function () {
   new ApexCharts(document.querySelector("#support-chart"), options1).render();
 });
 
+// Funcion de la grafica de areas para las recepciones
 $(function () {
   var options2 = {
     chart: {
@@ -90,12 +92,7 @@ $(function () {
   new ApexCharts(document.querySelector("#support-chart2"), options2).render();
 });
 
-// Establece el intervalo para recargar la página (30000 ms = 30 segundos)
-// setTimeout(function () {
-//   window.location.reload();
-// }, 30000); // 30000 ms = 30 segundos
-
-
+// Funcion para cargar las incidencias basado en la fecha seleccionada o la fecha por defecto
 document.addEventListener('DOMContentLoaded', function () {
   // Función para cargar las incidencias basado en la fecha seleccionada o la fecha por defecto
   function cargarIncidencias(fecha) {

@@ -413,3 +413,8 @@ $(document).ready(function () {
     });
   });
 });
+
+// Funcion para mostrar la notificacion toast
+function showToast() {
+  $('.toast-5s').toast('show');
+}

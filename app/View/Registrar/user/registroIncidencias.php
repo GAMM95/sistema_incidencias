@@ -86,16 +86,33 @@
         <!-- CODIGO PATRIMONIAL -->
         <div class="w-full sm:w-1/4 px-2 mb-2">
           <label for="codigoPatrimonial" class="block mb-1 font-bold text-xs">C&oacute;digo Patrimonial:</label>
-          <input type="text" id="codigoPatrimonial" name="codigoPatrimonial"
-            class="border p-2 w-full text-xs rounded-md" maxlength="12"
-            pattern="\d{1,12}" inputmode="numeric"
-            title="Ingrese solo dígitos"
-            placeholder="Ingrese código patrimonial">
+          <div class="flex items-center border rounded-md">
+            <input type="text" id="codigoPatrimonial" name="codigoPatrimonial"
+              class="p-2 text-xs w-full outline-none rounded-md"
+              maxlength="12" pattern="\d{1,12}" inputmode="numeric"
+              title="Ingrese solo dígitos" placeholder="Ingrese c&oacute;digo patrimonial">
+            <i class="feather icon-info mr-2 cursor-pointer text-gray-400" onclick="showToast()"></i>
+          </div>
+        </div>
+
+        <!-- Toast (posicionado fijo en la parte superior) -->
+        <div class="toast hide toast-5s" role="alert" aria-live="assertive" data-delay="6000" aria-atomic="true"
+          style="position: fixed; top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+          <div class="toast-header">
+            <strong class="mr-auto">Informaci&oacute;n</strong>
+            <button type="button" class="m-l-5 mb-1 mt-1 close" data-dismiss="toast" aria-label="Close">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="toast-body bg-white">
+            <p>El c&oacute;digo patrimonial es de <b>12 d&iacute;gitos, sin puntos ni separaciones</b>.<br><br>
+              <b>Ejemplo:</b> <i>740881870123</i></p>
+          </div>
         </div>
 
         <!-- TIPO DE BIEN -->
         <div class="w-full sm:w-1/4 px-2 mb-2">
-          <label for="tipoBien" class="block mb-1 font-bold text-center text-xs">Nombre del bien:</label>
+          <label for="tipoBien" class="block mb-1 font-bold text-center text-white text-xs">Nombre del bien:</label>
           <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-full text-center text-xs rounded-md" placeholder="Nombre del bien" disabled readonly>
         </div>
       </div>
@@ -127,20 +144,6 @@
           <input type="text" id="descripcion" name="descripcion" class="border p-2 w-full text-xs mb-3 rounded-md" placeholder="Ingrese descripci&oacute;n (opcional)">
         </div>
       </div>
-
-
-      <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
-      <script>
-        // Asignación de valores predefinidos al cargar la página
-        document.getElementById('fecha').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_fecha'] : $fecha_actual; ?>';
-        document.getElementById('hora').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_hora'] : $hora_actual; ?>';
-        document.getElementById('cbo_area').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['ARE_codigo'] : ''; ?>';
-        document.getElementById('codigo_patrimonial').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_codigo_patrimonial'] : ''; ?>';
-        document.getElementById('cbo_categoria').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['CAT_codigo'] : ''; ?>';
-        document.getElementById('asunto').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_asunto'] : ''; ?>';
-        document.getElementById('documento').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_documento'] : ''; ?>';
-        document.getElementById('descripcion').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_descripcion'] : ''; ?>';
-      </script>
 
       <!-- Botones del formulario -->
       <div class="flex justify-center space-x-4">

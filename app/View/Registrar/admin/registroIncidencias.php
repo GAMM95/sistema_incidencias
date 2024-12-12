@@ -78,22 +78,39 @@
         </div>
 
         <div class="mb-2 sm:w-1/3 flex items-center gap-4 pl-2 pr-2">
-          <!-- CODIGO PATROMONIAL -->
-          <div class="flex-grow sm:w-1/3">
-            <!-- <div class="w-full sm:w-1/3 px-2 mb-2"> -->
+          <!-- CODIGO PATRIMONIAL -->
+          <div class="flex-grow sm:w-1/3"> <!-- Ajustado a 1/2 para ocupar mitad de espacio -->
             <label for="codigoPatrimonial" class="block mb-1 font-bold text-xs">C&oacute;d. Patrimonial:</label>
-            <input type="text" id="codigoPatrimonial" name="codigoPatrimonial"
-              class="border p-2 w-full text-xs rounded-md" maxlength="12"
-              pattern="\d{1,12}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
-              title="Ingrese solo dígitos"
-              placeholder="Ingrese código">
+            <div class="flex items-center border rounded-md">
+              <input type="text" id="codigoPatrimonial" name="codigoPatrimonial"
+                class="p-2 text-xs w-full outline-none rounded-md"
+                maxlength="12" pattern="\d{1,12}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
+                title="Ingrese solo dígitos" placeholder="Ingrese código">
+              <i class="feather icon-info mr-2 cursor-pointer text-gray-400" onclick="showToast()"></i>
+            </div>
           </div>
 
           <!-- TIPO DE BIEN -->
-          <div class="flex-grow sm:w-2/3">
-            <!-- <div class="w-full sm:w-2/3 px-2 mb-2"> -->
-            <label for="tipoBien" class="block mb-1 font-bold text-center text-xs">Nombre del bien:</label>
-            <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-full text-center text-xs rounded-md" disabled readonly>
+          <div class="flex-grow sm:w-2/3"> <!-- Ajustado a 1/2 para ocupar mitad de espacio -->
+            <label for="tipoBien" class="block mb-1 font-bold text-center text-white text-xs">Nombre del bien:</label>
+            <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-full text-center text-xs rounded-md" placeholder="Nombre del bien" disabled readonly>
+          </div>
+
+        </div>
+
+        <!-- Toast (posicionado fijo en la parte superior) -->
+        <div class="toast hide toast-5s" role="alert" aria-live="assertive" data-delay="6000" aria-atomic="true"
+          style="position: fixed; top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+          <div class="toast-header">
+            <strong class="mr-auto">Informaci&oacute;n</strong>
+            <button type="button" class="m-l-5 mb-1 mt-1 close" data-dismiss="toast" aria-label="Close">
+              <span>&times;</span>
+            </button>
+          </div>
+          <div class="toast-body bg-white">
+            <p>El c&oacute;digo patrimonial es de <b>12 d&iacute;gitos, sin puntos ni separaciones</b>.<br><br>
+              <b>Ejemplo:</b> <i>740881870123</i>
+            </p>
           </div>
         </div>
       </div>
@@ -234,7 +251,7 @@
                 $isActive = ($estado === 'ABIERTO');
                 $codigoIncidencia = htmlspecialchars($incidencia['INC_numero']);
                 // Aplicar clase de texto rojo si el ARE_estado es 2
-                $incidenciaInactiva = ($estado ==='INACTIVO') ? 'text-red-600' : 'text-gray-900';
+                $incidenciaInactiva = ($estado === 'INACTIVO') ? 'text-red-600' : 'text-gray-900';
                 ?>
                 <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $codigoIncidencia; ?>">
                   <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'> <?= $incidencia['INC_numero']; ?></th>

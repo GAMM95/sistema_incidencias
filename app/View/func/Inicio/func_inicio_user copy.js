@@ -77,21 +77,17 @@ document.addEventListener('DOMContentLoaded', function () {
           var row = document.createElement('tr');
           row.innerHTML = `
             <td class="text-center text-xs align-middle">${incidencia.INC_numero_formato}</td>
-            <td class="w-1/4 max-w-[150px] break-words whitespace-normal">
+            <td>
               <div class="flex items-center">
                 <img class="rounded-full w-10 h-10 mr-4" src="dist/assets/images/user/avatar.png" alt="User-Profile-Image">
-                <div class="break-words whitespace-normal">
+                <div>
                   <h6 class="text-xs">${incidencia.Usuario}</h6>
                   <p class="text-muted text-xs">${incidencia.ARE_nombre}</p>
                 </div>
               </div>
             </td>
             <td class="text-center text-xs align-middle">${incidencia.fechaIncidenciaFormateada}</td>
-            <td class="text-center text-xs align-middle w-1/4 max-w-[200px] break-words whitespace-normal">
-              <div class="break-words whitespace-normal">
-                <p class="text-muted text-xs"> ${incidencia.INC_asunto}</p>
-              </div>
-            </td>
+            <td class="text-center text-xs align-middle">${incidencia.INC_asunto}</td>
             <td class="text-center text-xs align-middle">${incidencia.INC_documento}</td>
             <td class="text-center text-xs align-middle">
               <label class="badge ${getBadgeClass(incidencia.ESTADO)}">${incidencia.ESTADO}</label>
@@ -123,7 +119,7 @@ document.addEventListener('DOMContentLoaded', function () {
 
   // Llamada inicial con la fecha por defecto
   var fechaInput = document.getElementById('fechaInput');
-  var areaInput = document.getElementById('areaInput'); 
+  var areaInput = document.getElementById('areaInput'); // Asegúrate de tener este campo en tu HTML
   var fechaInicial = fechaInput ? fechaInput.value : '';
   var area = areaInput ? areaInput.value : 0;
 

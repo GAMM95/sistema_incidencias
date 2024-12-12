@@ -245,7 +245,6 @@
                 value="<?= isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d'); ?>"
                 max="<?= date('Y-m-d'); ?>">
             </div>
-
             <!-- Fin de la fecha seleccionada -->
 
             <!-- Botones alineados a la derecha -->
