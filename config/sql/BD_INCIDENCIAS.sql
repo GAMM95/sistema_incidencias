@@ -2709,7 +2709,7 @@ BEGIN
           AND USU_codigo = @USU_codigo
   )
   BEGIN
-      -- Generar el n�mero de incidencia formateado
+      -- Generar el numero de incidencia formateado
       SET @numero_formato = dbo.GenerarNumeroIncidencia();
 
       -- Insertar la nueva incidencia
