@@ -140,76 +140,11 @@ class AuditoriaModel extends Conexion
   //   }
   // }
 
-  // Metodo para listar los registros de incidencias en la tabla auditoria
-  public function listarRegistrosIncidencias()
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        // $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo, AUD_operacion
-        // FROM vw_auditoria_registrar_incidencia
-        // ORDER BY fechaFormateada DESC";
-        $sql = "SELECT * FROM vw_eventos_incidencias
-                ORDER BY AUD_fecha DESC, AUD_hora DESC";
-        $stmt = $conector->prepare($sql);
-        $stmt->execute();
-        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $resultado;
-      } else {
-        throw new Exception("Error de conexión a la base de datos.");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new Exception("Error al consultar registros de incidencias en la tabla de auditoria: " . $e->getMessage());
-      return null;
-    }
-  }
 
-  // TODO: Metodo para consultar registros de incidencias en la tabla de auditoria
-  public function consultarRegistrosIncidencias($fechaInicio = null, $fechaFin = null)
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        $sql = "EXEC sp_consultar_auditoria_eventos_incidencias :fechaInicio, :fechaFin";
-        // ORDER BY fechaFormateada DESC";
-        $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':fechaInicio', $fechaInicio);
-        $stmt->bindParam(':fechaFin', $fechaFin);
-        $stmt->execute();
-        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $resultado;
-      } else {
-        throw new Exception("Error de conexión a la base de datos.");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new Exception("Error al consultar registros de incidencias en la tabla de auditoria: " . $e->getMessage());
-      return null;
-    }
-  }
 
-  // Metodo para listar los registros de recepciones en la tabla de auditoria
-  public function listarRegistrosRecepciones()
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo FROM vw_auditoria_registrar_recepcion
-       ORDER BY fechaFormateada DESC";
-        $stmt = $conector->prepare($sql);
-        $stmt->execute();
-        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
-        return $resultado;
-      } else {
-        throw new Exception("Error de conexión a la base de datos.");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new Exception("Error al consultar registros de recepciones en la tabla de auditoria: " . $e->getMessage());
-      return null;
-    }
-  }
+
+
+
 
   // Metodo para consultar registros de recepciones en la tabla de auditoria
   public function consultarRegistrosRecepciones($fechaInicio = null, $fechaFin = null)

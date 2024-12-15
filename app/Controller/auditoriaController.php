@@ -32,32 +32,7 @@ class AuditoriaController
     return $resultadoEventosTotales;
   }
 
-  // Metodo para listar los registros de incidencias en la tabla auditoria
-  public function listarEventosIncidencias()
-  {
-    $resultadoAuditoriaIncidencias = $this->auditoriaModel->listarRegistrosIncidencias();
-    return $resultadoAuditoriaIncidencias;
-  }
 
-  // Metodo para consultar registros de incidencias en la tabla de auditoria
-  public function consultarRegistrosIncidencias($fechaInicio = null, $fechaFin = null)
-  {
-    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
-      // Obtener los valores de los parámetros GET o asignar null si no existen
-      $fechaInicio = isset($_GET['fechaInicio']) ? $_GET['fechaInicio'] : null;
-      $fechaFin = isset($_GET['fechaFin']) ? $_GET['fechaFin'] : null;
-
-      $resultadoAuditoriaIncidencias = $this->auditoriaModel->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
-      return $resultadoAuditoriaIncidencias;
-    }
-  }
-
-  // Metodo para listar los registros de recepciones en la tabla de auditoria
-  public function listarRegistrosRecepciones()
-  {
-    $resultadoAuditoriaRegistroRecepciones = $this->auditoriaModel->listarRegistrosRecepciones();
-    return $resultadoAuditoriaRegistroRecepciones;
-  }
 
   // Metodo para consultar registros de recepciones en la tabla de auditoria
   public function consultarRegistrosRecepciones($fechaInicio = null, $fechaFin = null)

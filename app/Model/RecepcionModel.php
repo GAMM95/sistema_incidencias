@@ -36,6 +36,27 @@ class RecepcionModel extends Conexion
     }
   }
 
+  // Metodo para obtener el ultimo codigo de recepcion registrado
+  private function obtenerUltimoCodigoRecepcion()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT MAX(REC_numero) AS ultimo_codigo FROM RECEPCION";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['ultimo_codigo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener el ultimo codigo de recepcion registrado: " . $e->getMessage());
+      return null;
+    }
+  }
+
   // Metodo para insertar Recepcion
   public function insertarRecepcion($fecha, $hora, $incidencia, $prioridad, $impacto, $usuario)
   {
@@ -52,8 +73,10 @@ class RecepcionModel extends Conexion
         $stmt->bindParam(':usuario', $usuario);
         $stmt->execute();
 
+        // Obtener el ultimo codigo de recepcion registrado
+        $numRecepcion = $this->obtenerUltimoCodigoRecepcion();
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('RECEPCION', 'Recepcionar incidencia');
+        $this->auditoria->registrarEvento('RECEPCION', 'Recepcionar incidencia', $numRecepcion);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -277,6 +300,28 @@ class RecepcionModel extends Conexion
       }
     } catch (PDOException $e) {
       echo "Error al contar recepciones del ultimo mes para el administrador: " . $e->getMessage();
+      return null;
+    }
+  }
+
+  // Metodo para listar los registros de recepciones en la tabla de auditoria
+  public function listarEventosRecepciones()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo FROM vw_auditoria_registrar_recepcion
+         ORDER BY fechaFormateada DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al listar eventos de recepciones en la tabla de auditoria: " . $e->getMessage());
       return null;
     }
   }

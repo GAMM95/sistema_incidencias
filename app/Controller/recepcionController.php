@@ -198,4 +198,11 @@ class RecepcionController
       echo "Error al listar incidencias registradas para paginacion: " . $e->getMessage();
     }
   }
+
+  // Metodo para listar los eventos de recepciones en la tabla de auditoria
+  public function listarEventosRecepciones()
+  {
+    $resultadoAuditoriaRegistroRecepciones = $this->recepcionModel->listarEventosRecepciones();
+    return $resultadoAuditoriaRegistroRecepciones;
+  }
 }

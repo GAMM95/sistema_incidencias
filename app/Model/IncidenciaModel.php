@@ -5,9 +5,16 @@ require_once 'app/Model/AuditoriaModel.php';
 class IncidenciaModel extends Conexion
 {
 
+  private $auditoria;
+
   public function __construct()
   {
     parent::__construct();
+    $conector = parent::getConexion();
+    // Inicializar la instancia de AuditoriaModel
+    if ($conector != null) {
+      $this->auditoria = new AuditoriaModel($conector);
+    }
   }
 
   // Metodo para obtener incidencias por ID
@@ -52,6 +59,26 @@ class IncidenciaModel extends Conexion
     }
   }
 
+  // Metodo para obtener el ultimo codigo de incidencia registrado
+  private function obtenerUltimoCodigoIncidencia()
+  {
+    try {
+      $conector = $this->getConexion();
+      if ($conector != null) {
+        $sql = "SELECT MAX(INC_numero) AS ultimoCodigo FROM INCIDENCIA";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['ultimoCodigo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener el último código de incidencia: " . $e->getMessage());
+    }
+  }
+
+
   // Método para insertar una nueva incidencia en la base de datos - ADMINISTRADOR / USUARIO.
   public function insertarIncidencia($INC_fecha, $INC_hora, $INC_asunto, $INC_descripcion, $INC_documento, $INC_codigoPatrimonial, $CAT_codigo, $ARE_codigo, $USU_codigo)
   {
@@ -69,11 +96,13 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':categoria', $CAT_codigo);
         $stmt->bindParam(':area', $ARE_codigo);
         $stmt->bindParam(':usuario', $USU_codigo);
-        $success = $stmt->execute(); // Ejecutar la consulta
+        $success = $stmt->execute();
 
-        // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Registrar incidencia');
+        // Obtener el ID de la incidencia recién insertada
+        $incidenciaID = $this->obtenerUltimoCodigoIncidencia();
+
+        // Registrar el evento en la auditoría¿
+        $this->auditoria->registrarEvento('INCIDENCIA', 'Registrar incidencia', $incidenciaID);
         return $success;
       }
       return false;
@@ -100,8 +129,7 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':descripcion', $descripcion);
         $stmt->execute();
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia', $num_incidencia);
+        $this->auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia', $num_incidencia);
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -128,9 +156,9 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':documento', $documento);
         $stmt->bindParam(':descripcion', $descripcion);
         $stmt->execute(); // Ejecutar el procedimiento almacenado
+
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia', $num_incidencia);
+        $this->auditoria->registrarEvento('INCIDENCIA', 'Actualizar incidencia', $num_incidencia);
         // Confirmar que se ha actualizado al menos una fila
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -1323,4 +1351,51 @@ class IncidenciaModel extends Conexion
       return null;
     }
   }
+
+  // Metodo para listar los registros de incidencias en la tabla auditoria
+  public function listarEventosIncidencias()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_eventos_incidencias
+                  ORDER BY AUD_fecha DESC, AUD_hora DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al consultar registros de incidencias en la tabla de auditoria: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para consultar eventos incidencias - auditoria
+  public function buscarEventosIncidencias($usuario, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_eventos_incidencias :usuario, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al consultar eventos de incidencias en la tabla de auditoria: " . $e->getMessage());
+      return null;
+    }
+  }
+
 }

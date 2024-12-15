@@ -1492,61 +1492,38 @@ GO
 
 -- VISTA PARA LISTAR TODOS LOS EVENTOS DE LAS INCIDENCIAS
 CREATE OR ALTER VIEW vw_eventos_incidencias AS
-SELECT  
-    (CONVERT(VARCHAR(10), i.INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), i.INC_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    i.INC_fecha AS AUD_fecha, -- Fecha de la incidencia (registro)
-    i.INC_hora AS AUD_hora,   -- Hora de la incidencia (registro)
-    'INCIDENCIA' AS AUD_tabla,
-    i.INC_numero_formato,
-    i.INC_numero AS NumeroReferencia,
-    a.AUD_usuario,
-    r.ROL_nombre,
-    u.USU_nombre,
-    p.PER_nombres + ' ' + p.PER_apellidoPaterno + ' ' + p.PER_apellidoMaterno AS NombreCompleto,
-    a.AUD_operacion,
-    ar.ARE_nombre,  -- Nombre del área del usuario que registró la incidencia
-    a.AUD_ip,
-    a.AUD_nombreEquipo
-FROM INCIDENCIA i
-INNER JOIN (
-    SELECT 
-        AUD_codigo, AUD_fecha, AUD_hora, AUD_usuario, AUD_tabla, AUD_operacion, AUD_ip, AUD_nombreEquipo, 
-        ROW_NUMBER() OVER (PARTITION BY AUD_usuario ORDER BY AUD_fecha DESC, AUD_hora DESC) AS row_num
-    FROM AUDITORIA
-    WHERE AUD_operacion = 'Registrar incidencia'
-) a ON i.USU_codigo = a.AUD_usuario
-INNER JOIN USUARIO u ON u.USU_codigo = i.USU_codigo
-INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo
-INNER JOIN AREA ar ON ar.ARE_codigo = u.ARE_codigo -- Unión con la tabla de ÁREA basada en el área del usuario
-WHERE a.row_num = 1
-UNION ALL
-SELECT 
-    (CONVERT(VARCHAR(10), A.AUD_fecha, 103) + ' - ' + 
-     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), A.AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    A.AUD_fecha,
-    A.AUD_hora, 
-    A.AUD_tabla,
-    I.INC_numero_formato,
-    CASE 
-        WHEN A.AUD_tabla = 'INCIDENCIA' THEN I.INC_numero
-    END AS NumeroReferencia,
-    A.AUD_usuario,
-    R.ROL_nombre,
-    U.USU_nombre,
-    P.PER_nombres + ' ' + P.PER_apellidoPaterno + ' ' + P.PER_apellidoMaterno AS NombreCompleto,
-    A.AUD_operacion,
-    AR.ARE_nombre,
-    A.AUD_ip,
-    A.AUD_nombreEquipo
-FROM AUDITORIA A
-INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
-INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
-LEFT JOIN INCIDENCIA I ON I.INC_numero = A.AUD_referencia AND A.AUD_tabla = 'INCIDENCIA'
-WHERE A.AUD_tabla = 'INCIDENCIA'
-AND (I.INC_numero_formato IS NOT NULL AND I.INC_numero_formato <> '');
+SELECT
+  (
+    CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  A.AUD_tabla,
+  I.INC_numero_formato AS referencia,
+CASE
+    
+    WHEN A.AUD_tabla = 'INCIDENCIA' THEN
+    I.INC_numero 
+  END AS NumeroReferencia,
+  A.AUD_usuario,
+  R.ROL_nombre,
+  U.USU_nombre,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno + ' ' + P.PER_apellidoMaterno AS NombreCompleto,
+  A.AUD_operacion,
+  AR.ARE_nombre,
+  A.AUD_ip,
+  A.AUD_nombreEquipo 
+FROM
+  AUDITORIA A
+  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+  LEFT JOIN INCIDENCIA I ON I.INC_numero = A.AUD_referencia 
+  AND A.AUD_tabla = 'INCIDENCIA' 
+WHERE
+  A.AUD_tabla = 'INCIDENCIA' 
+  AND ( I.INC_numero_formato IS NOT NULL AND I.INC_numero_formato <> '' );
 GO
 
 -- VISTA PARA LISTAR TODOS LOS EVENTOS DE RECEPCIONES
@@ -4381,24 +4358,33 @@ GO
 -- END;
 -- GO
 
-CREATE OR ALTER PROCEDURE sp_consultar_auditoria_eventos_incidencias
-    @fechaInicio DATE = NULL,
-    @fechaFin DATE = NULL
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE INCIDENCIAS
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_incidencias
+  @usuario INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
 AS
-BEGIN 
-    SELECT 
-        fechaFormateada, 
-        NombreCompleto, 
-        INC_numero_formato, 
-        ARE_nombre, 
-        AUD_operacion,
-        AUD_ip, 
-        AUD_nombreEquipo
-    FROM vw_eventos_incidencias
-    WHERE (@fechaInicio IS NULL OR AUD_fecha >= @fechaInicio)
-      AND (@fechaFin IS NULL OR AUD_fecha <= @fechaFin)
-    ORDER BY AUD_fecha DESC, AUD_hora DESC;  -- Orden por fecha y hora de los eventos
-END;
+BEGIN
+  SELECT
+    fechaFormateada,
+    AUD_fecha,
+    AUD_hora,
+    NombreCompleto,
+    referencia,
+    ARE_nombre,
+    AUD_operacion,
+    AUD_ip,
+    AUD_nombreEquipo 
+  FROM
+    vw_eventos_incidencias 
+  WHERE
+    ( @fechaInicio IS NULL OR AUD_fecha >= @fechaInicio ) 
+    AND ( @fechaFin IS NULL OR AUD_fecha <= @fechaFin ) 
+    AND ( @usuario IS NULL OR AUD_usuario = @usuario ) 
+  ORDER BY
+    AUD_fecha DESC,
+    AUD_hora DESC;
+END
 GO
 
 

@@ -645,7 +645,27 @@ class IncidenciaController
     }
   }
 
+  // Metodo para listar los registros de incidencias en la tabla auditoria
+  public function listarEventosIncidencias()
+  {
+    $resultadoAuditoriaIncidencias = $this->incidenciaModel->listarEventosIncidencias();
+    return $resultadoAuditoriaIncidencias;
+  }
 
+
+  // Metodo para consultar eventos de incidencias - auditoria
+  public function consultarEventosIncidencias($usuario = null, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $usuario = isset($_GET['usuarioEventoIncidencias']) ? (int) $_GET['usuarioEventoIncidencias'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosIncidencias']) ? $_GET['fechaInicioEventosIncidencias'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosIncidencias']) ? $_GET['fechaFinEventosIncidencias'] : null;
+      // Llamar al método para consultar incidencias por área, código patrimonial y fecha
+      $consultaEventosTotales = $this->incidenciaModel->buscarEventosIncidencias($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
 
   // Metodo para mostrar las incidencias por cada mes
   public function mostrarCantidadIncidenciasMes()

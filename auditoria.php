@@ -7,6 +7,17 @@ if (!isset($_SESSION['usuario'])) {
   exit();
 }
 
+require_once 'app/Controller/incidenciaController.php';
+require_once 'app/Controller/recepcionController.php';
+require_once 'app/Controller/asignacionController.php';
+require_once 'app/Controller/mantenimientoController.php';
+require_once 'app/Controller/cierreController.php';
+$incidenciaController = new IncidenciaController();
+$recepcionController = new RecepcionController();
+$asignacionController = new AsignacionController();
+$mantenimientoController = new MantenimientoController();
+$cierreController = new CierreController();
+
 require_once 'app/Controller/auditoriaController.php';
 require_once 'app/Controller/usuarioController.php';
 require_once 'app/Controller/personaController.php';
@@ -14,7 +25,6 @@ require_once 'app/Controller/areaController.php';
 require_once 'app/Controller/bienController.php';
 require_once 'app/Controller/categoriaController.php';
 require_once 'app/Controller/solucionController.php';
-
 $auditoriaController = new AuditoriaController();
 $usuarioController = new UsuarioController();
 $personaController = new PersonaController();
@@ -57,10 +67,12 @@ function obtenerRegistros($action, $controller, $usuario, $fechaInicio, $fechaFi
       return $controller->consultarEventosTotales($usuario, $fechaInicio, $fechaFin);
     case 'consultarEventosLogin':
       return $controller->consultarEventosLogin($usuario, $fechaInicio, $fechaFin);
-    case 'listarRegistrosIncidencias':
-      return $controller->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
-    case 'listarRegistrosRecepciones':
-      return $controller->consultarRegistrosRecepciones($fechaInicio, $fechaFin);
+    case 'consultarEventosIncidencias':
+      return $controller->consultarEventosIncidencias($usuario, $fechaInicio, $fechaFin);
+      break;
+    case 'consultarEventosIncidencias':
+      return $controller->consultarEventosIncidencias($usuario, $fechaInicio, $fechaFin);
+      break;
     case 'consultarEventosUsuarios':
       return $controller->consultarEventosUsuarios($usuario, $fechaInicio, $fechaFin);
     case 'consultarEventosPersonas':
@@ -86,8 +98,8 @@ function obtenerColumnasParaAccion($action)
       return ['fechaFormateada', 'AUD_operacion', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosLogin':
       return ['fechaFormateada', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
-    case 'listarRegistrosIncidencias':
-      return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_operacion', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosIncidencias':
+      return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'listarRegistrosRecepciones':
       return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosUsuarios':
@@ -122,6 +134,22 @@ if ($action) {
     }
   } else if ($action === 'consultarEventosLogin') {
     $resultado = obtenerRegistros($action, $usuarioController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosIncidencias') {
+    $resultado = obtenerRegistros($action, $incidenciaController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosRecepciones') {
+    $resultado = obtenerRegistros($action, $recepcionController, $usuario, $fechaInicio, $fechaFin);
     $columnas = obtenerColumnasParaAccion($action);
     if ($resultado) {
       echo generarTabla($resultado, 1, $columnas);
@@ -184,8 +212,8 @@ if ($action) {
 $resultadoEventosTotales = $auditoriaController->listarEventosTotales();
 $resultadoAuditoriaLogin = $usuarioController->listarEventosLogin();
 
-$resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarEventosIncidencias();
-$resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
+$resultadoEventosIncidencias = $incidenciaController->listarEventosIncidencias();
+$resultadoEventosRecepciones = $recepcionController->listarEventosRecepciones();
 $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
 
 $resultadoAuditoriaEventosUsuarios = $usuarioController->listarEventosUsuarios();
@@ -195,7 +223,6 @@ $resultadoAuditoriaEventosBienes = $bienController->listarEventosBienes();
 $resultadoAuditoriaEventosCategorias = $categoriaController->listarEventosCategorias();
 $resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSoluciones();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="es">
@@ -247,8 +274,8 @@ $resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSolucio
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/func_auditoria_eventos_totales.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosLogin/func_auditoria_eventos_login.js"></script>
 
-  <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_incidencia.js"></script>
-  <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_recepcion.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Incidencias/func_auditoria_eventos_incidencias.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Incidencias/func_auditoria_eventos_recepciones.js"></script>
 
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Usuarios/func_auditoria_eventos_usuarios.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/func_auditoria_eventos_personas.js"></script>
