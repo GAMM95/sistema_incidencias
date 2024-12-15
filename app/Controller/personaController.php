@@ -140,4 +140,27 @@ class PersonaController
       ]);
     }
   }
+
+  // Metodo para listar eventos de personas
+  public function listarEventosPersonas()
+  {
+    $resultadoAuditoriaEventosPersonas = $this->personaModel->listarEventosPersonas();
+    return $resultadoAuditoriaEventosPersonas;
+  }
+
+  // Metodo para consultar todos los eventos de personas para auditoría
+  public function consultarEventosPersonas($usuario = NULL, $operacion = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioEventoPersona']) ? (int) $_GET['usuarioEventoPersona'] : null;
+      $operacion = isset($_GET['operacionPersona']) ? (int) $_GET['operacionPersona'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosPersonas']) ? $_GET['fechaInicioEventosPersonas'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosPersonas']) ? $_GET['fechaFinEventosPersonas'] : null;
+      // Llamar al método para consultar incidencias por área, código patrimonial y fecha
+      $consultaEventosTotales = $this->personaModel->buscarEventosPersonas($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
 }

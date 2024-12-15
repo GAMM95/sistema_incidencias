@@ -5,9 +5,16 @@ require_once 'app/Model/AuditoriaModel.php';
 class BienModel extends Conexion
 {
 
+  private $auditoria;
+
   public function __construct()
   {
     parent::__construct();
+    $conector = parent::getConexion();
+    // Inicializar la instancia de AuditoriaModel
+    if ($conector != null) {
+      $this->auditoria = new AuditoriaModel($conector);
+    }
   }
 
   // Metodo para obtener areas por el ID
@@ -30,7 +37,7 @@ class BienModel extends Conexion
       return null;
     }
   }
- 
+
   // Metodo para validar existencia de codigo de bien
   public function validarBienExistente($codigoIdentificador)
   {
@@ -55,6 +62,25 @@ class BienModel extends Conexion
     }
   }
 
+  // Metodo para obtener el ultimo codigo registrado de bien
+  private function obtenerUltimoCodigoBien()
+  {
+    try {
+      $conector = $this->getConexion();
+      if ($conector != null) {
+        $sql = "SELECT MAX(BIE_codigo) AS ultimoCodigo FROM BIEN";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['ultimoCodigo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener el último código de bien: " . $e->getMessage());
+    }
+  }
+
   // Metodo para insertar el tipo de bien
   public function insertarTipoBien($codigoIdentificador, $nombreBien)
   {
@@ -67,11 +93,13 @@ class BienModel extends Conexion
         $stmt->bindParam(':codigoIdentificador', $codigoIdentificador);
         $stmt->bindParam(':nombreBien', $nombreBien);
         $stmt->execute();
+        // Obtener el ID del bien recién insertado
+        $bienId = $this->obtenerUltimoCodigoBien();
+
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('BIEN', 'Registrar bien');
+          $this->auditoria->registrarEvento('BIEN', 'Registrar bien', $bienId);
           return true;
         } else {
           return false;
@@ -98,8 +126,7 @@ class BienModel extends Conexion
         $stmt->execute([$codigoIdentificador, $nombreTipoBien, $codigoBien]);
 
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('BIEN', 'Actualizar bien', $codigoBien);
+        $this->auditoria->registrarEvento('BIEN', 'Actualizar bien', $codigoBien);
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -110,26 +137,6 @@ class BienModel extends Conexion
       return null;
     }
   }
-
-  // Metodo para eliminar categoria
-  // public function eliminarBien($codigoBien)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       $sql = "DELETE FROM BIEN WHERE BIE_codigo = ?";
-  //       $stmt = $conector->prepare($sql);
-  //       $stmt->execute([$codigoBien]);
-  //       return $stmt->rowCount();
-  //     } else {
-  //       throw new Exception("Error de conexion a la base de datos");
-  //       return null;
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new PDOException("Error al eliminar el bien: " . $e->getMessage());
-  //     return null;
-  //   }
-  // }
 
   // Metodo para listar los bienes
   public function listarBienes()
@@ -165,8 +172,7 @@ class BienModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('BIEN', 'Habilitar bien', $codigoBien);
+          $this->auditoria->registrarEvento('BIEN', 'Habilitar bien', $codigoBien);
           return true;
         } else {
           return false;
@@ -194,8 +200,7 @@ class BienModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('BIEN', 'Deshabilitar bien', $codigoBien);
+          $this->auditoria->registrarEvento('BIEN', 'Deshabilitar bien', $codigoBien);
           return true;
         } else {
           return false;
@@ -206,6 +211,50 @@ class BienModel extends Conexion
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al deshabilitar bien: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para listar eventos de bienes
+  public function listarEventosBienes()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_eventos_bienes
+          ORDER BY AUD_fecha DESC, AUD_hora DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al listar eventos de bienes en la tabla de auditoria: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para consultar eventos bienes - auditoria
+  public function buscarEventosBienes($usuario, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_eventos_bienes :usuario, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al consultar eventos bienes en la tabla de auditoria: " . $e->getMessage());
+      return null;
     }
   }
 }

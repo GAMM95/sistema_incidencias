@@ -8,7 +8,20 @@ if (!isset($_SESSION['usuario'])) {
 }
 
 require_once 'app/Controller/auditoriaController.php';
+require_once 'app/Controller/usuarioController.php';
+require_once 'app/Controller/personaController.php';
+require_once 'app/Controller/areaController.php';
+require_once 'app/Controller/bienController.php';
+require_once 'app/Controller/categoriaController.php';
+require_once 'app/Controller/solucionController.php';
+
 $auditoriaController = new AuditoriaController();
+$usuarioController = new UsuarioController();
+$personaController = new PersonaController();
+$areaController = new AreaController();
+$bienController = new BienController();
+$categoriaController = new CategoriaController();
+$solucionController = new SolucionController();
 
 $rol = $_SESSION['rol'];
 $usuario = $_GET['codigoUsuario'] ?? '';  // Usuario para filtrar si es necesario
@@ -48,6 +61,18 @@ function obtenerRegistros($action, $controller, $usuario, $fechaInicio, $fechaFi
       return $controller->consultarRegistrosIncidencias($fechaInicio, $fechaFin);
     case 'listarRegistrosRecepciones':
       return $controller->consultarRegistrosRecepciones($fechaInicio, $fechaFin);
+    case 'consultarEventosUsuarios':
+      return $controller->consultarEventosUsuarios($usuario, $fechaInicio, $fechaFin);
+    case 'consultarEventosPersonas':
+      return $controller->consultarEventosPersonas($usuario, $fechaInicio, $fechaFin);
+    case 'consultarEventosAreas':
+      return $controller->consultarEventosAreas($usuario, $fechaInicio, $fechaFin);
+    case 'consultarEventosBienes':
+      return $controller->consultarEventosBienes($usuario, $fechaInicio, $fechaFin);
+    case 'consultarEventosCategorias':
+      return $controller->consultarEventosCategorias($usuario, $fechaInicio, $fechaFin);
+    case 'consultarEventosSoluciones':
+      return $controller->consultarEventosSoluciones($usuario, $fechaInicio, $fechaFin);
     default:
       return [];
   }
@@ -65,6 +90,18 @@ function obtenerColumnasParaAccion($action)
       return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_operacion', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'listarRegistrosRecepciones':
       return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosUsuarios':
+      return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'UsuarioReferencia', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosPersonas':
+      return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'UsuarioReferencia', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosAreas':
+      return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosBienes':
+      return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosCategorias':
+      return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosSoluciones':
+      return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
     default:
       return [];
   }
@@ -75,21 +112,88 @@ if ($action) {
   error_log("Fecha Inicio: " . $fechaInicio);
   error_log("Fecha Fin: " . $fechaFin);
 
-  // Pasar correctamente el parámetro $usuario en la función obtenerRegistros
-  $resultado = obtenerRegistros($action, $auditoriaController, $usuario, $fechaInicio, $fechaFin);
-  $columnas = obtenerColumnasParaAccion($action);
-
-  echo generarTabla($resultado, 1, $columnas);
+  if (($action === 'consultarEventosTotales')) {
+    $resultado = obtenerRegistros($action, $auditoriaController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosLogin') {
+    $resultado = obtenerRegistros($action, $usuarioController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosUsuarios') {
+    $resultado = obtenerRegistros($action, $usuarioController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosPersonas') {
+    $resultado = obtenerRegistros($action, $personaController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosAreas') {
+    $resultado = obtenerRegistros($action, $areaController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosBienes') {
+    $resultado = obtenerRegistros($action, $bienController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosCategorias') {
+    $resultado = obtenerRegistros($action, $categoriaController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosSoluciones') {
+    $resultado = obtenerRegistros($action, $solucionController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  }
   exit();
 }
 
 // Acción por defecto: mostrar todas las tablas
 $resultadoEventosTotales = $auditoriaController->listarEventosTotales();
-$resultadoAuditoriaLogin = $auditoriaController->listarEventosLogin();
-// TODO: Listar Registros de Incidencias
+$resultadoAuditoriaLogin = $usuarioController->listarEventosLogin();
+
 $resultadoAuditoriaRegistroIncidencias = $auditoriaController->listarEventosIncidencias();
 $resultadoAuditoriaRegistroRecepciones = $auditoriaController->listarRegistrosRecepciones();
 $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
+
+$resultadoAuditoriaEventosUsuarios = $usuarioController->listarEventosUsuarios();
+$resultadoAuditoriaEventosPersonas = $personaController->listarEventosPersonas();
+$resultadoAuditoriaEventosAreas = $areaController->listarEventosAreas();
+$resultadoAuditoriaEventosBienes = $bienController->listarEventosBienes();
+$resultadoAuditoriaEventosCategorias = $categoriaController->listarEventosCategorias();
+$resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSoluciones();
 ?>
 
 
@@ -143,9 +247,15 @@ $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosA
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/func_auditoria_eventos_totales.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosLogin/func_auditoria_eventos_login.js"></script>
 
-
   <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_incidencia.js"></script>
   <script src="./app/View/func/ReportesAuditoria/func_auditoria_registro_recepcion.js"></script>
+
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Usuarios/func_auditoria_eventos_usuarios.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/func_auditoria_eventos_personas.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Areas/func_auditoria_eventos_areas.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Bienes/func_auditoria_eventos_bienes.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Categorias/func_auditoria_eventos_categorias.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Soluciones/func_auditoria_eventos_soluciones.js"></script>
 
   <!-- Reportes de eventos totales -->
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/Reports/reporteEventosTotales.js"></script>
@@ -160,7 +270,9 @@ $resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosA
   <script src="./app/View/func/ReportesAuditoria/EventosLogin/Reports/reporteEventosLoginUsuarioFecha.js"></script>
 
   <!-- Reportes de eventos de incidencias -->
-  <!-- Reporte de incidencias -->
+
+  <!-- Reporte de mantenedores -->
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Usuarios/Reports/reporteEventosUsuarios.js"></script>
 
 
 

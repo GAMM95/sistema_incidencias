@@ -212,4 +212,26 @@ class AreaController
       ]);
     }
   }
+
+  // Metodo para listar eventos de areas
+  public function listarEventosAreas()
+  {
+    $resultadoAuditoriaEventosAreas = $this->areaModel->listarEventosAreas();
+    return $resultadoAuditoriaEventosAreas;
+  }
+
+  // Metodo para consultar todos los eventos de areas para auditoría
+  public function consultarEventosAreas($usuario = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioEventoAreas']) ? (int) $_GET['usuarioEventoAreas'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosAreas']) ? $_GET['fechaInicioEventosAreas'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosAreas']) ? $_GET['fechaFinEventosAreas'] : null;
+      // Llamar al método para consultar incidencias por área, código patrimonial y fecha
+      $consultaEventosTotales = $this->areaModel->buscarEventosAreas($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
 }

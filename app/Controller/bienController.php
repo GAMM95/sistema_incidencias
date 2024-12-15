@@ -191,4 +191,26 @@ class BienController
       ]);
     }
   }
+
+  // Metodo para listar eventos de bienes
+  public function listarEventosBienes()
+  {
+    $resultadoAuditoriaEventosBienes = $this->bienModel->listarEventosBienes();
+    return $resultadoAuditoriaEventosBienes;
+  }
+
+  // Metodo para consultar todos los eventos de bienes para auditoría
+  public function consultarEventosBienes($usuario = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioEventoBienes']) ? (int) $_GET['usuarioEventoBienes'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosBienes']) ? $_GET['fechaInicioEventosBienes'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosBienes']) ? $_GET['fechaFinEventosBienes'] : null;
+      // Llamar al método para consultar incidencias por área, código patrimonial y fecha
+      $consultaEventosTotales = $this->bienModel->buscarEventosBienes($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
 }

@@ -301,7 +301,7 @@
               <?php endforeach; ?>
             <?php else: ?>
               <tr>
-                <td colspan="8" class="text-center py-3">No se han registrado nuevas incidencias</td>
+                <td colspan="9" class="text-center py-3">No se han registrado nuevas incidencias</td>
               </tr>
             <?php endif; ?>
           </tbody>

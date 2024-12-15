@@ -11,11 +11,16 @@ class UsuarioEvento extends Conexion
   public function getUsuarioEvento()
   {
     $conector = parent::getConexion();
-    $query = "SELECT u.USU_codigo, p.PER_codigo, 
-            (PER_nombres + ' ' + PER_apellidoPaterno) AS persona 
-            FROM PERSONA p
-            INNER JOIN USUARIO u ON u.PER_codigo = p.PER_codigo
-            ORDER BY persona ASC";
+    $query = "SELECT
+              USU_codigo,
+              p.PER_codigo,
+              ( PER_nombres + ' ' + PER_apellidoPaterno ) AS usuario 
+            FROM
+              USUARIO u
+              INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo 
+            WHERE
+              ROL_codigo IN (1,2)
+            ORDER BY usuario ASC";
     $stmt = $conector->prepare($query);
     $stmt->execute();
     $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

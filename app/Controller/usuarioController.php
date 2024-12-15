@@ -285,7 +285,7 @@ class UsuarioController
           ]);
           exit();
         }
-        
+
         // Cambiar la contraseña del usuario
         $cambiarContraseña = $this->usuarioModel->cambiarContraseña($codigoUsuario, $passwordActual, $passwordNuevo, $passwordConfirm);
 
@@ -362,5 +362,50 @@ class UsuarioController
         'message' => 'M&eacute;todo no permitido.'
       ]);
     }
+  }
+
+  // Metodo para listar los registros de inicio de sesion en la tabla auditoria
+  public function listarEventosLogin()
+  {
+    $resultadoAuditoriaLogin = $this->usuarioModel->listarEventosLogin();
+    return $resultadoAuditoriaLogin;
+  }
+
+  // Metodo para consultar los eventos de logeo de los usuarios
+  public function consultarEventosLogin($usuario = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioEventosLogin']) ? (int) $_GET['usuarioEventosLogin'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosLogin']) ? $_GET['fechaInicioEventosLogin'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosLogin']) ? $_GET['fechaFinEventosLogin'] : null;
+      // Llamar al método para consultar incidencias por área, código patrimonial y fecha
+      $consultaEventosLogin = $this->usuarioModel->buscarEventosLogin($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosLogin;
+    }
+  }
+
+
+  // Metodo para consultar todos los eventos de usuarios para auditoría
+  public function consultarEventosUsuarios($usuario = NULL, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      // Obtener los valores de los parámetros GET o asignar null si no existen
+      $usuario = isset($_GET['usuarioEvento']) ? (int) $_GET['usuarioEvento'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosUsuarios']) ? $_GET['fechaInicioEventosUsuarios'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosUsuarios']) ? $_GET['fechaFinEventosUsuarios'] : null;
+      // Llamar al método para consultar incidencias por área, código patrimonial y fecha
+      $consultaEventosTotales = $this->usuarioModel->buscarEventosUsuarios($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
+
+  // Metodo para listar eventos de usuarios
+  public function listarEventosUsuarios()
+  {
+    $resultadoAuditoriaEventosUsuarios = $this->usuarioModel->listarEventosUsuarios();
+    return $resultadoAuditoriaEventosUsuarios;
   }
 }

@@ -807,6 +807,8 @@ FROM
     INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo;
 GO
 
+
+
 --Vista para listar incidencias finalizadas
 CREATE OR ALTER VIEW vista_mantenimiento AS
 SELECT 
@@ -1406,49 +1408,55 @@ GO
 
 -- Vista para listar todos los eventos de auditoria
 CREATE OR ALTER VIEW vw_eventos_totales AS
-SELECT 
-    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
-     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    A.AUD_fecha,  -- Campo de fecha original
-    A.AUD_hora,   -- Campo de hora original
-    A.AUD_tabla,
-    A.AUD_usuario,
-	R.ROL_nombre,
-	U.USU_nombre,
-    PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
-    A.AUD_operacion,
-	AR.ARE_nombre,
-    A.AUD_ip,
-    A.AUD_nombreEquipo
-FROM AUDITORIA A
-INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
-INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo;
+SELECT
+  (
+    CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+  ) AS fechaFormateada,
+  A.AUD_fecha, -- Campo de fecha original
+  A.AUD_hora,  -- Campo de hora original
+  A.AUD_tabla,
+  A.AUD_usuario,
+  R.ROL_nombre,
+  U.USU_nombre,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno + ' ' + P.PER_apellidoMaterno AS NombreCompleto,
+  A.AUD_operacion,
+  AR.ARE_nombre,
+  A.AUD_ip,
+  A.AUD_nombreEquipo 
+FROM
+  AUDITORIA A
+  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario  
+  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo 
+  INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo;
 GO
+
 
 --Vista para ver los incios de sesion
 CREATE OR ALTER VIEW vw_auditoria_login AS
-SELECT 
-    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
-     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    A.AUD_fecha,  -- Campo de fecha original
-    A.AUD_hora,   -- Campo de hora original
-    A.AUD_tabla,
-    A.AUD_usuario,
-	R.ROL_nombre,
-	U.USU_nombre,
-    PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
-    A.AUD_operacion,
-	AR.ARE_nombre,
-    A.AUD_ip,
-    A.AUD_nombreEquipo
-FROM AUDITORIA A
-INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
-INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
-WHERE AUD_operacion IN ('Iniciar sesión');
+SELECT
+  (
+    CONVERT ( VARCHAR ( 10 ), AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+  ) AS fechaFormateada,
+  A.AUD_fecha,-- Campo de fecha original
+  A.AUD_hora,-- Campo de hora original
+  A.AUD_tabla,
+  A.AUD_usuario,
+  R.ROL_nombre,
+  U.USU_nombre,
+  PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
+  A.AUD_operacion,
+  AR.ARE_nombre,
+  A.AUD_ip,
+  A.AUD_nombreEquipo 
+FROM
+  AUDITORIA A
+  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+WHERE
+  AUD_operacion IN ( 'Iniciar sesión' );
 GO
 
 
@@ -1572,6 +1580,161 @@ INNER JOIN AREA AR ON AR.ARE_codigo = I.ARE_codigo
 LEFT JOIN USUARIO uR ON uR.USU_codigo = REC.USU_codigo 
 LEFT JOIN PERSONA pR ON pR.PER_codigo = uR.PER_codigo 
 WHERE a.row_num = 1;
+GO
+
+-- Vista para listar todos los eventos de personas
+CREATE OR ALTER VIEW vw_eventos_personas AS
+SELECT
+  (
+    CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+  A.AUD_referencia,
+  CASE-- Si la operación es "Actualizar perfil", tomamos la referencia del código de usuario 
+    WHEN A.AUD_operacion = 'Actualizar perfil' THEN
+    (
+      SELECT
+        PE2.PER_nombres + ' ' + PE2.PER_apellidoPaterno + ' ' + PE2.PER_apellidoMaterno 
+      FROM
+        USUARIO U2
+        LEFT JOIN PERSONA PE2 ON PE2.PER_codigo = U2.PER_codigo 
+      WHERE
+        U2.USU_codigo = A.AUD_referencia 
+    ) -- Si no es "Actualizar perfil", tomamos la referencia del código de persona
+    ELSE PE.PER_nombres + ' ' + PE.PER_apellidoPaterno + ' ' + PE.PER_apellidoMaterno 
+  END AS UsuarioReferencia,
+  A.AUD_operacion,
+  A.AUD_ip,
+  A.AUD_nombreEquipo 
+FROM
+  AUDITORIA A 
+  LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo 
+  LEFT JOIN PERSONA PE ON PE.PER_codigo = A.AUD_referencia 
+WHERE
+  A.AUD_tabla = 'PERSONA';
+GO
+
+-- Vista para listar eventos de usuarios
+CREATE OR ALTER VIEW vw_eventos_usuarios AS 
+SELECT
+  (CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  A.AUD_usuario,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+  A.AUD_referencia,
+  PE.PER_nombres + ' ' + PE.PER_apellidoPaterno + ' ' + PE.PER_apellidoMaterno AS UsuarioReferencia,
+  A.AUD_operacion,
+  A.AUD_ip,
+  A.AUD_nombreEquipo 
+FROM
+  AUDITORIA A
+  LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  LEFT JOIN USUARIO UA ON UA.USU_codigo = A.AUD_referencia
+  LEFT JOIN PERSONA PE ON PE.PER_codigo = UA.PER_codigo 
+WHERE
+  A.AUD_tabla = 'USUARIO' 
+  AND A.AUD_operacion NOT IN ( 'Iniciar sesión' );
+GO
+
+-- Vista para listar eventos de areas
+CREATE OR ALTER VIEW vw_eventos_areas AS
+SELECT
+  (
+    CONVERT (VARCHAR(10), A.AUD_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT (VARCHAR(7), A.AUD_hora, 0), 7), 6, 0, ' ')
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento, 
+  A.AUD_referencia, 
+  AR.ARE_nombre AS referencia, 
+  A.AUD_operacion,
+  A.AUD_ip,
+  A.AUD_nombreEquipo
+FROM
+  AUDITORIA A
+  LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  LEFT JOIN AREA AR ON AR.ARE_codigo = A.AUD_referencia
+WHERE
+  A.AUD_tabla = 'AREA';
+GO
+
+-- Vista para listar eventos de bienes
+CREATE OR ALTER VIEW vw_eventos_bienes AS
+SELECT
+  (
+    CONVERT (VARCHAR(10), A.AUD_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT (VARCHAR(7), A.AUD_hora, 0), 7), 6, 0, ' ')
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento, 
+  A.AUD_referencia, 
+  B.BIE_codigoIdentificador + ' - ' + B.BIE_nombre AS referencia, 
+  A.AUD_operacion,
+  A.AUD_ip,
+  A.AUD_nombreEquipo
+FROM
+  AUDITORIA A
+  LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  LEFT JOIN BIEN b ON b.BIE_codigo = A.AUD_referencia 
+WHERE
+  A.AUD_tabla = 'BIEN';
+GO
+
+-- Vista para listar eventos de categorias
+CREATE OR ALTER VIEW vw_eventos_categorias AS
+SELECT
+  (
+    CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+  A.AUD_referencia,
+  C.CAT_nombre AS referencia,
+  A.AUD_operacion,
+  A.AUD_ip,
+  A.AUD_nombreEquipo 
+FROM
+  AUDITORIA A
+  LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  LEFT JOIN CATEGORIA C ON C.CAT_codigo = A.AUD_referencia 
+WHERE
+  A.AUD_tabla = 'CATEGORIA';
+GO
+
+-- Vista para listar eventos de soluciones
+CREATE OR ALTER VIEW vw_eventos_soluciones AS
+SELECT
+  (
+    CONVERT (VARCHAR(10), A.AUD_fecha, 103) + ' - ' + 
+    STUFF(RIGHT('0' + CONVERT (VARCHAR(7), A.AUD_hora, 0), 7), 6, 0, ' ')
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento, 
+  A.AUD_referencia, 
+  S.SOL_descripcion AS referencia, 
+  A.AUD_operacion,
+  A.AUD_ip,
+  A.AUD_nombreEquipo
+FROM
+  AUDITORIA A
+  LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  LEFT JOIN SOLUCION S ON S.SOL_codigo = A.AUD_referencia 
+WHERE
+  A.AUD_tabla = 'SOLUCION';
 GO
 
 -------------------------------------------------------------------------------------------------------
@@ -2468,18 +2631,21 @@ GO
 
 --PROCEDIMIENTO ALMACENADO PARA REGISTRAR PERSONA
 CREATE OR ALTER PROCEDURE sp_registrar_persona (
-	@PER_dni CHAR(8),
-	@PER_nombres VARCHAR(20),
-	@PER_apellidoPaterno VARCHAR(15),
-	@PER_apellidoMaterno VARCHAR(15),
-	@PER_celular CHAR(9),
-	@PER_email VARCHAR(45)
+    @PER_dni CHAR(8),
+    @PER_nombres VARCHAR(20),
+    @PER_apellidoPaterno VARCHAR(15),
+    @PER_apellidoMaterno VARCHAR(15),
+    @PER_celular CHAR(9),
+    @PER_email VARCHAR(45)
 )
 AS
 BEGIN
-	--Insertar la nueva persona
-	INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_celular, PER_email)
-	VALUES (@PER_dni, @PER_nombres, @PER_apellidoPaterno, @PER_apellidoMaterno, @PER_celular, @PER_email);
+    -- Insertar la nueva persona
+    INSERT INTO PERSONA (PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno, PER_celular, PER_email)
+    VALUES (@PER_dni, @PER_nombres, @PER_apellidoPaterno, @PER_apellidoMaterno, @PER_celular, @PER_email);
+    
+    -- Retornar el ID de la persona recién insertada
+    SELECT SCOPE_IDENTITY() AS PER_codigo;
 END
 GO
 
@@ -4128,30 +4294,36 @@ CREATE OR ALTER PROCEDURE sp_consultar_eventos_totales
   @fechaFin DATE = NULL
 AS
 BEGIN
-  SELECT 
-    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
-     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    A.AUD_fecha,  -- Campo de fecha original
-    A.AUD_hora,   -- Campo de hora original
-    A.AUD_tabla,
-    A.AUD_usuario,
-    R.ROL_nombre,
-    U.USU_nombre,
-    PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
-    A.AUD_operacion,
-    AR.ARE_nombre,
-    A.AUD_ip,
-    A.AUD_nombreEquipo
-  FROM AUDITORIA A
-  INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
-  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-  INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
-  WHERE (@fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio)
-    AND (@fechaFin IS NULL OR A.AUD_fecha <= @fechaFin)
-    AND (@usuario IS NULL OR A.AUD_usuario = @usuario)
-  ORDER BY AUD_fecha DESC, AUD_hora DESC;
-END
+    SELECT
+      (
+        CONVERT ( VARCHAR ( 10 ), AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+      ) AS fechaFormateada,
+      A.AUD_fecha,
+      A.AUD_hora,
+      A.AUD_tabla,
+      A.AUD_usuario,
+      R.ROL_nombre,
+      U.USU_nombre,
+      PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
+      A.AUD_operacion,
+      AR.ARE_nombre,
+      A.AUD_ip,
+      A.AUD_nombreEquipo 
+    FROM
+      AUDITORIA A
+      INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+      INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+      INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+      INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo 
+    WHERE
+      ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+      AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+      AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    ORDER BY
+      AUD_fecha DESC,
+      AUD_hora DESC;
+    
+  END 
 GO
 
 --PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LOS INICIOS DE SESION
@@ -4161,32 +4333,39 @@ CREATE OR ALTER PROCEDURE sp_consultar_eventos_login
   @fechaFin DATE = NULL
 AS
 BEGIN
-  SELECT 
-    (CONVERT(VARCHAR(10), AUD_fecha, 103) + ' - ' + 
-     STUFF(RIGHT('0' + CONVERT(VARCHAR(7), AUD_hora, 0), 7), 6, 0, ' ')) AS fechaFormateada,
-    A.AUD_fecha,  -- Campo de fecha original
-    A.AUD_hora,   -- Campo de hora original
-    A.AUD_tabla,
-    A.AUD_usuario,
-    R.ROL_nombre,
-    U.USU_nombre,
-    PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
-    A.AUD_operacion,
-    AR.ARE_nombre,
-    A.AUD_ip,
-    A.AUD_nombreEquipo
-  FROM AUDITORIA A
-  INNER JOIN PERSONA P ON P.PER_codigo = A.AUD_usuario
-  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-  INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
-  WHERE A.AUD_operacion like 'Iniciar sesión'
-    AND (@fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio)
-    AND (@fechaFin IS NULL OR A.AUD_fecha <= @fechaFin)
-    AND (@usuario IS NULL OR A.AUD_usuario = @usuario)
-  ORDER BY AUD_fecha DESC, AUD_hora DESC;
-END
+    SELECT
+      (
+        CONVERT ( VARCHAR ( 10 ), AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+      ) AS fechaFormateada,
+      A.AUD_fecha,
+      A.AUD_hora,
+      A.AUD_tabla,
+      A.AUD_usuario,
+      R.ROL_nombre,
+      U.USU_nombre,
+      PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
+      A.AUD_operacion,
+      AR.ARE_nombre,
+      A.AUD_ip,
+      A.AUD_nombreEquipo 
+    FROM
+      AUDITORIA A
+      INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+      INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+      INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
+      INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo 
+    WHERE
+      A.AUD_operacion LIKE 'Iniciar sesión' 
+      AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+      AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+      AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    ORDER BY
+      AUD_fecha DESC,
+      AUD_hora DESC;
+    
+  END 
 GO
+
 
 
 --TODO: PROCEDIMIENTO ALMANCENADO PARA CONSULTAR LOS REGISTROS DE INCIDENCIAS
@@ -4232,7 +4411,7 @@ BEGIN
     SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo
 	FROM vw_auditoria_registrar_recepcion
     WHERE (@fechaInicio IS NULL OR REC_fecha >= @fechaInicio)
-      AND (@fechaFin IS NULL OR REC_fecha <= @fechaFin);
+    AND (@fechaFin IS NULL OR REC_fecha <= @fechaFin);
 END;
 GO
 
@@ -4262,4 +4441,237 @@ WHERE INC_FECHA >= DATEFROMPARTS(@año, @mes, 1)
             WHEN @mes = 12 THEN 1 
             ELSE @mes + 1 
         END, 1);
-    
+
+
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE USUARIOS
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_usuarios
+  @usuario INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+    SELECT
+      (
+        CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+      ) AS fechaFormateada,
+      A.AUD_fecha,
+      A.AUD_hora,
+      A.AUD_usuario,
+      P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+      A.AUD_referencia,
+      PE.PER_nombres + ' ' + PE.PER_apellidoPaterno + ' ' + PE.PER_apellidoMaterno AS UsuarioReferencia,
+      A.AUD_operacion,
+      A.AUD_ip,
+      A.AUD_nombreEquipo 
+    FROM
+      AUDITORIA A
+      LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+      LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+      LEFT JOIN USUARIO UA ON UA.USU_codigo = A.AUD_referencia
+      LEFT JOIN PERSONA PE ON PE.PER_codigo = UA.PER_codigo 
+    WHERE
+      A.AUD_tabla = 'USUARIO' 
+      AND A.AUD_operacion NOT IN ( 'Iniciar sesión' ) 
+      AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+      AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+      AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    ORDER BY
+      AUD_fecha DESC,
+      AUD_hora DESC;
+  END
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE PERSONAS
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_personas
+  @usuario INT = NULL,
+  @operacion NVARCHAR(100) = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+    SELECT
+      (
+        CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+      ) AS fechaFormateada,
+      A.AUD_fecha,
+      A.AUD_hora,
+      P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+      A.AUD_referencia,
+      CASE-- Si la operación es "Actualizar perfil", tomamos la referencia del código de usuario
+        
+        WHEN A.AUD_operacion = 'Actualizar perfil' THEN
+        (
+          SELECT
+            PE2.PER_nombres + ' ' + PE2.PER_apellidoPaterno + ' ' + PE2.PER_apellidoMaterno 
+          FROM
+            USUARIO U2
+            LEFT JOIN PERSONA PE2 ON PE2.PER_codigo = U2.PER_codigo 
+          WHERE
+            U2.USU_codigo = A.AUD_referencia 
+        ) -- Si no es "Actualizar perfil", tomamos la referencia del código de persona
+        ELSE PE.PER_nombres + ' ' + PE.PER_apellidoPaterno + ' ' + PE.PER_apellidoMaterno 
+      END AS UsuarioReferencia,
+      A.AUD_operacion,
+      A.AUD_ip,
+      A.AUD_nombreEquipo 
+    FROM
+      AUDITORIA A
+      LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+      LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+      LEFT JOIN PERSONA PE ON PE.PER_codigo = A.AUD_referencia 
+    WHERE
+      A.AUD_tabla = 'PERSONA' 
+      AND ( @operacion IS NULL OR A.AUD_operacion LIKE @operacion + '%' ) 
+      AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+      AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+      AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    ORDER BY
+      AUD_fecha DESC,
+      AUD_hora DESC;
+ END 
+ GO
+
+-- PROCEDIMIENTO ALMACENADO PARA CONMSULTAR EVENTOS DE AREAS
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_areas
+  @usuario INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT
+    (
+      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+    ) AS fechaFormateada,
+    A.AUD_fecha,
+    A.AUD_hora,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+    A.AUD_referencia,
+    AR.ARE_nombre AS referencia,
+    A.AUD_operacion,
+    A.AUD_ip,
+    A.AUD_nombreEquipo 
+  FROM
+    AUDITORIA A
+    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+    LEFT JOIN AREA AR ON AR.ARE_codigo = A.AUD_referencia 
+  WHERE
+    A.AUD_tabla = 'AREA' 
+    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+  ORDER BY
+    AUD_fecha DESC,
+    AUD_hora DESC;
+END
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE BIENES
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_bienes
+  @usuario INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT
+    (
+      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+    ) AS fechaFormateada,
+    A.AUD_fecha,
+    A.AUD_hora,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+    A.AUD_referencia,
+    B.BIE_codigoIdentificador + ' - ' + B.BIE_nombre AS referencia,
+    A.AUD_operacion,
+    A.AUD_ip,
+    A.AUD_nombreEquipo 
+  FROM
+    AUDITORIA A
+    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+    LEFT JOIN BIEN b ON b.BIE_codigo = A.AUD_referencia 
+  WHERE
+    A.AUD_tabla = 'BIEN' 
+    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+  ORDER BY
+    AUD_fecha DESC,
+    AUD_hora DESC;
+  END
+ GO
+
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE CATEGORIAS
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_categorias
+  @usuario INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT
+    (
+      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+    ) AS fechaFormateada,
+    A.AUD_fecha,
+    A.AUD_hora,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+    A.AUD_referencia,
+    C.CAT_nombre AS referencia,
+    A.AUD_operacion,
+    A.AUD_ip,
+    A.AUD_nombreEquipo 
+  FROM
+    AUDITORIA A
+    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+    LEFT JOIN CATEGORIA C ON C.CAT_codigo = A.AUD_referencia 
+  WHERE
+    A.AUD_tabla = 'CATEGORIA' 
+    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+  ORDER BY
+    AUD_fecha DESC,
+    AUD_hora DESC;
+  END 
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE SOLUCIONES
+CREATE OR ALTER PROCEDURE sp_consultar_eventos_soluciones
+  @usuario INT = NULL,
+  @fechaInicio DATE = NULL,
+  @fechaFin DATE = NULL
+AS
+BEGIN
+  SELECT
+    (
+      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
+    ) AS fechaFormateada,
+    A.AUD_fecha,
+    A.AUD_hora,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
+    A.AUD_referencia,
+    S.SOL_descripcion AS referencia,
+    A.AUD_operacion,
+    A.AUD_ip,
+    A.AUD_nombreEquipo 
+  FROM
+    AUDITORIA A
+    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+    LEFT JOIN SOLUCION S ON S.SOL_codigo = A.AUD_referencia 
+  WHERE
+    A.AUD_tabla = 'SOLUCION' 
+    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
+    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
+    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+  ORDER BY
+    AUD_fecha DESC,
+    AUD_hora DESC;
+  
+  END
+GO
+
+
+PRINT 'BASE DE DATOS GENERADO';
+GO

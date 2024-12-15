@@ -5,9 +5,16 @@ require_once 'app/Model/AuditoriaModel.php';
 class AreaModel extends Conexion
 {
 
+  private $auditoria;
+
   public function __construct()
   {
     parent::__construct();
+    $conector = parent::getConexion();
+    // Inicializar la instancia de AuditoriaModel
+    if ($conector != null) {
+      $this->auditoria = new AuditoriaModel($conector);
+    }
   }
 
   // Método para validar la existencia de una area
@@ -42,11 +49,13 @@ class AreaModel extends Conexion
         $stmt->bindParam(':nombreArea', $nombreArea);
         $stmt->execute();
 
+        // Obtener el ID del area recién insertada
+        $areaId = $this->obtenerUltimoCodigoArea();
+
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('AREA', 'Registrar área');
+          $this->auditoria->registrarEvento('AREA', 'Registrar área', $areaId);
           return true;
         } else {
           return false;
@@ -59,6 +68,26 @@ class AreaModel extends Conexion
       throw new PDOException(("Error al insertar area: " . $e->getMessage()));
     }
   }
+
+  // Metodo para obtener el ultimo codigo registrado de área
+  private function obtenerUltimoCodigoArea()
+  {
+    try {
+      $conector = $this->getConexion();
+      if ($conector != null) {
+        $sql = "SELECT MAX(ARE_codigo) AS ultimoCodigo FROM AREA";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['ultimoCodigo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener el último código de área: " . $e->getMessage());
+    }
+  }
+
 
   // Metodo para listar areas
   public function listarArea()
@@ -115,8 +144,7 @@ class AreaModel extends Conexion
           $codigoArea
         ]);
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('AREA', 'Actualizar área', $codigoArea);
+        $this->auditoria->registrarEvento('AREA', 'Actualizar área', $codigoArea);
         return $stmt->rowCount();
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -186,8 +214,7 @@ class AreaModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('AREA', 'Habilitar área', $codigoArea);
+          $this->auditoria->registrarEvento('AREA', 'Habilitar área', $codigoArea);
           return true;
         } else {
           return false;
@@ -215,8 +242,7 @@ class AreaModel extends Conexion
         // Confirmar que se ha actualizado al menos una fila
         if ($stmt->rowCount() > 0) {
           // Registrar el evento en la auditoría
-          $auditoria = new AuditoriaModel($conector);
-          $auditoria->registrarEvento('AREA', 'Deshabilitar área', $codigoArea);
+          $this->auditoria->registrarEvento('AREA', 'Deshabilitar área', $codigoArea);
           return true;
         } else {
           return false;
@@ -227,6 +253,50 @@ class AreaModel extends Conexion
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al deshabilitar area: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para listar eventos de areas
+  public function listarEventosAreas()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_eventos_areas
+              ORDER BY AUD_fecha DESC, AUD_hora DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al listar eventos de areas en la tabla de auditoria: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para consultar eventos areas - auditoria
+  public function buscarEventosAreas($usuario, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_eventos_areas :usuario, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al consultar eventos areas en la tabla de auditoria: " . $e->getMessage());
+      return null;
     }
   }
 }

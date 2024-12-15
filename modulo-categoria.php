@@ -16,7 +16,7 @@ $categoriaController = new CategoriaController();
 $categoriaModel = new CategoriaModel();
 
 // Listar tabla de categorias registradas
-$resultado = $categoriaModel->listarCategorias();
+$resultado = $categoriaController->listarCategorias();
 
 if ($CodCategoria != '') {
   $CategoriaRegistrada = $categoriaModel->obtenerCategoriaPorId($CodCategoria);
