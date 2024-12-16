@@ -1661,6 +1661,70 @@ WHERE
   A.AUD_tabla = 'RECEPCION';
 GO
 
+-- VISTA PARA LISTAR EVENTOS DE ASIGNACIONES
+CREATE OR ALTER VIEW vw_eventos_asignaciones AS
+SELECT
+  (
+    CONVERT(VARCHAR(10), A.AUD_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), A.AUD_hora, 0), 7), 6, 0, ' ')
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  A.AUD_tabla,
+  R.REC_numero,
+  I.INC_numero,
+  I.INC_numero_formato AS referencia,
+  A.AUD_usuario,
+  U.USU_nombre,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno + ' ' + P.PER_apellidoMaterno AS NombreCompleto,
+  A.AUD_operacion,
+  AR.ARE_nombre,
+  A.AUD_ip,
+  A.AUD_nombreEquipo
+FROM
+  AUDITORIA A
+  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+  LEFT JOIN ASIGNACION ASI ON ASI.ASI_codigo = A.AUD_referencia
+  LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+  LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+WHERE
+  A.AUD_tabla = 'ASIGNACION';
+GO
+
+-- VISTA PARA LISTAR EVENTOS DE MANTENIMIENTO
+CREATE OR ALTER VIEW vw_eventos_mantenimiento AS
+SELECT
+  (
+    CONVERT(VARCHAR(10), A.AUD_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), A.AUD_hora, 0), 7), 6, 0, ' ')
+  ) AS fechaFormateada,
+  A.AUD_fecha,
+  A.AUD_hora,
+  A.AUD_tabla,
+  I.INC_numero, 
+  I.INC_numero_formato AS referencia,
+  U.USU_nombre,
+  P.PER_nombres + ' ' + P.PER_apellidoPaterno + ' ' + P.PER_apellidoMaterno AS NombreCompleto,
+  A.AUD_operacion,
+  AR.ARE_nombre,
+  A.AUD_ip,
+  A.AUD_nombreEquipo
+FROM
+  AUDITORIA A
+  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
+  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
+  LEFT JOIN MANTENIMIENTO M ON M.MAN_codigo = A.AUD_referencia
+  LEFT JOIN ASIGNACION ASI ON ASI.ASI_codigo = M.ASI_codigo
+  LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+  LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+WHERE
+  A.AUD_tabla = 'MANTENIMIENTO';
+GO
+
+-- VISTA PARA LISTAR EVENTOS DE CIERRES
+
+
 -- Vista para listar todos los eventos de personas
 CREATE OR ALTER VIEW vw_eventos_personas AS
 SELECT
@@ -4425,7 +4489,7 @@ WHERE INC_FECHA >= DATEFROMPARTS(@año, @mes, 1)
             WHEN @mes = 12 THEN 1 
             ELSE @mes + 1 
         END, 1);
-
+GO
 
 -- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE USUARIOS
 CREATE OR ALTER PROCEDURE sp_consultar_eventos_usuarios

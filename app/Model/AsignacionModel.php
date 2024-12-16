@@ -300,4 +300,24 @@ class AsignacionModel extends Conexion
       throw new Exception("Error al obtener las asignaciones filtradas: " . $e->getMessage());
     }
   }
+
+  // Metodo para listar eventos de asignaciones
+  public function listarEventosAsignaciones()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT * FROM vw_eventos_asignaciones
+                ORDER BY AUD_fecha DESC, AUD_hora DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $result;
+      } else {
+        throw new Exception("Error de conexión a la base de datos");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al listar eventos de asignaciones: " . $e->getMessage());
+    }
+  }
 }

@@ -500,34 +500,58 @@
                         <!-- Fin de contenido de la segunda pestaña -->
 
                         <!-- Contenido de la tercera pestaña -->
-                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                          <form id="formAuditoriaAsignaciones" action="auditoria.php?action=listarRegistrosAsignaciones" method="GET" class="bg-white w-full text-xs ">
+                        <div class="tab-pane fade" id="v-pills-asignaciones" role="tabpanel" aria-labelledby="v-pills-asignaciones-tab">
+                          <form id="formAuditoriaAsignaciones" action="auditoria.php?action=listarEventosAsignaciones" method="GET" class="bg-white w-full text-xs ">
                             <div class="flex justify-center items-center">
+                              <!-- Nombre de usuario de evento -->
+                              <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                                <label for="usuarioEventoAsignaciones" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
+                                <select id="usuarioEventoAsignaciones" name="usuarioEventoAsignaciones" class="border p-2 w-full text-xs cursor-pointer">
+                                </select>
+                                <input type="hidden" id="codigoUsuarioEventoAsignaciones" name="codigoUsuarioEventoAsignaciones" readonly>
+                                <input type="hidden" id="nombreUsuarioEventoAsignaciones" name="nombreUsuarioEventoAsignaciones" readonly>
+                              </div>
+
                               <!-- Fecha de inicio -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaInicio_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                                <input type="date" id="fechaInicio_auditoria_asignaciones" name="fechaInicio_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaInicioEventosAsignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicioEventosAsignaciones" name="fechaInicioEventosAsignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de inicio -->
 
                               <!-- Fecha de fin -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaFin_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                                <input type="date" id="fechaFin_auditoria_asignaciones" name="fechaFin_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaFinEventosAsignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                                <input type="date" id="fechaFinEventosAsignaciones" name="fechaFinEventosAsignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de fin -->
 
                               <!-- Botones alineados horizontalmente -->
                               <div class="ml-5 flex space-x-2">
                                 <!-- Botón de buscar -->
-                                <button type="submit" id="filtrarListaAuditoriaAsignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-red-400 rounded-md flex justify-center items-center">
-                                  <i class="feather icon-search"></i>
+                                <button type="submit" id="filtrarListaAuditoriaAsignaciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-teal-500 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-filter"></i>
                                 </button>
 
                                 <!-- Botón de nueva consulta -->
-                                <button type="button" id="limpiarCampos_auditoria_asignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                                <button type="button" id="limpiarCamposEventosAsignaciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
                                   <i class="feather icon-refresh-cw"></i>
                                 </button>
+
+                                <!-- Boton generar reporte -->
+                                <div class="btn-group">
+                                  <div class="flex justify-center space-x-2">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="feather mr-2 icon-file"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                               <!-- Fin de botones alineados horizontalmente -->
                             </div>
@@ -535,15 +559,14 @@
                             <!-- Inicio de tabla de registros de asignaciones -->
                             <div class="relative sm:rounded-lg mt-2">
                               <div class="max-w-full overflow-hidden sm:rounded-lg">
-                                <table id="tablaAsignaciones" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                <table id="tablaEventosAsignaciones" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                   <!-- Encabezado de la tabla -->
-                                  <thead class="text-xs text-gray-700 uppercase bg-purple-300">
+                                  <thead class="text-xs text-gray-700 uppercase bg-teal-200">
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de registro</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Usuario asignador</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario evento</th>
                                       <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                                      <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
                                     </tr>
@@ -552,23 +575,22 @@
 
                                   <!-- Cuerpo de la tabla -->
                                   <tbody>
-                                    <?php if (!empty($resultadoAuditoriaRegistroAsignaciones)): ?>
+                                    <?php if (!empty($resultadoEventosAsignaciones)): ?>
                                       <?php $item = 1; // Iniciar contador para el ítem 
                                       ?>
-                                      <?php foreach ($resultadoAuditoriaRegistroAsignaciones as $asignacion): ?>
+                                      <?php foreach ($resultadoEventosAsignaciones as $asignacion): ?>
                                         <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
                                           <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['fechaFormateada']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['NombreCompleto']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['INC_numero_formato']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['ARE_nombre']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['referencia']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_ip']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_nombreEquipo']) ?></td>
                                         </tr>
                                       <?php endforeach; ?>
                                     <?php else: ?>
                                       <tr>
-                                        <td colspan="7" class="text-center py-3">No se encontraron incidencias asignadas.</td>
+                                        <td colspan="7" class="text-center py-3">No se encontraron incidencias en mantenimiento.</td>
                                       </tr>
                                     <?php endif; ?>
                                   </tbody>
@@ -581,51 +603,75 @@
                         </div>
                         <!-- Fin de contenido de la tercera pestaña -->
 
-                        <!-- TODO: Contenido de la cuarta pestaña -->
-                        <div class="tab-pane fade" id="v-pills-messages" role="tabpanel" aria-labelledby="v-pills-messages-tab">
-                          <form id="formAuditoriaMantenimiento" action="auditoria.php?action=listarRegistrosAsignaciones" method="GET" class="bg-white w-full text-xs ">
+                        <!-- Contenido de la cuarta pestaña -->
+                        <div class="tab-pane fade" id="v-pills-mantenimiento" role="tabpanel" aria-labelledby="v-pills-mantenimiento-tab">
+                          <form id="formAuditoriaMantenimiento" action="auditoria.php?action=consultarEventosMantenimiento" method="GET" class="bg-white w-full text-xs ">
                             <div class="flex justify-center items-center">
+                              <!-- Nombre de usuario de evento -->
+                              <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                                <label for="usuarioEventoMantenimiento" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
+                                <select id="usuarioEventoMantenimiento" name="usuarioEventoMantenimiento" class="border p-2 w-full text-xs cursor-pointer">
+                                </select>
+                                <input type="hidden" id="codigoUsuarioEventoMantenimiento" name="codigoUsuarioEventoMantenimiento" readonly>
+                                <input type="hidden" id="nombreUsuarioEventoMantenimiento" name="nombreUsuarioEventoMantenimiento" readonly>
+                              </div>
+
                               <!-- Fecha de inicio -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaInicio_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                                <input type="date" id="fechaInicio_auditoria_asignaciones" name="fechaInicio_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaInicioEventosMantenimiento" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicioEventosMantenimiento" name="fechaInicioEventosMantenimiento" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de inicio -->
 
                               <!-- Fecha de fin -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaFin_auditoria_asignaciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                                <input type="date" id="fechaFin_auditoria_asignaciones" name="fechaFin_auditoria_asignaciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaFinEventosMantenimiento" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                                <input type="date" id="fechaFinEventosMantenimiento" name="fechaFinEventosMantenimiento" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de fin -->
 
                               <!-- Botones alineados horizontalmente -->
                               <div class="ml-5 flex space-x-2">
                                 <!-- Botón de buscar -->
-                                <button type="submit" id="filtrarListaAuditoriaAsignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-red-400 rounded-md flex justify-center items-center">
+                                <button type="submit" id="filtrarListaAuditoriaMantenimiento" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-teal-500 rounded-md flex justify-center items-center">
                                   <i class="feather icon-search"></i>
                                 </button>
 
                                 <!-- Botón de nueva consulta -->
-                                <button type="button" id="limpiarCampos_auditoria_asignaciones" class="h-8 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                                <button type="button" id="limpiarCamposEventosMantenimiento" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-400 rounded-md flex justify-center items-center">
                                   <i class="feather icon-refresh-cw"></i>
                                 </button>
+
+                                <!-- Boton generar reporte -->
+                                <div class="btn-group">
+                                  <div class="flex justify-center space-x-2">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="feather mr-2 icon-file"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                    </div>
+                                  </div>
+                                </div>
                               </div>
                               <!-- Fin de botones alineados horizontalmente -->
                             </div>
 
-                            <!-- Inicio de tabla de registros de asignaciones -->
+                            <!-- Inicio de tabla de registros de mantenimiento -->
                             <div class="relative sm:rounded-lg mt-2">
                               <div class="max-w-full overflow-hidden sm:rounded-lg">
-                                <table id="tablaAsignaciones" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                <table id="tablaEventosMantenimiento" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                   <!-- Encabezado de la tabla -->
                                   <thead class="text-xs text-gray-700 uppercase bg-purple-300">
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora de registro</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Usuario asignador</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario evento</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
                                       <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                                      <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
                                     </tr>
@@ -634,18 +680,18 @@
 
                                   <!-- Cuerpo de la tabla -->
                                   <tbody>
-                                    <?php if (!empty($resultadoAuditoriaRegistroAsignaciones)): ?>
+                                    <?php if (!empty($resultadoEventosMantenimiento)): ?>
                                       <?php $item = 1; // Iniciar contador para el ítem 
                                       ?>
-                                      <?php foreach ($resultadoAuditoriaRegistroAsignaciones as $asignacion): ?>
+                                      <?php foreach ($resultadoEventosMantenimiento as $mantenimiento): ?>
                                         <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
                                           <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['fechaFormateada']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['NombreCompleto']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['INC_numero_formato']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['ARE_nombre']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_ip']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_nombreEquipo']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($mantenimiento['fechaFormateada']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($mantenimiento['NombreCompleto']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($mantenimiento['AUD_operacion']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($mantenimiento['referencia']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($mantenimiento['AUD_ip']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($mantenimiento['AUD_nombreEquipo']) ?></td>
                                         </tr>
                                       <?php endforeach; ?>
                                     <?php else: ?>
@@ -662,6 +708,110 @@
                           </form>
                         </div>
                         <!-- Fin de contenido de la cuarta pestaña -->
+
+                        <!-- Contenido de la quinta pestaña -->
+                        <div class="tab-pane fade" id="v-pills-cierres" role="tabpanel" aria-labelledby="v-pills-cierres-tab">
+                          <form id="formAuditoriaCierres" action="auditoria.php?action=consultarEventosCierres" method="GET" class="bg-white w-full text-xs ">  
+                            <div class="flex justify-center items-center">
+                              <!-- Nombre de usuario de evento -->
+                              <div class="w-full px-2 mb-2" style="max-width: 250px;">
+                                <label for="usuarioEventoCierres" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
+                                <select id="usuarioEventoCierres" name="usuarioEventoCierres" class="border p-2 w-full text-xs cursor-pointer">
+                                </select>
+                                <input type="hidden" id="codigoUsuarioEventocierres" name="codigoUsuarioEventocierres" readonly>
+                                <input type="hidden" id="nombreUsuarioEventocierres" name="nombreUsuarioEventocierres" readonly>
+                              </div>
+
+                              <!-- Fecha de inicio -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaInicioEventosCierres" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicioEventosCierres" name="fechaInicioEventosCierres" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+                              <!-- Fin de fecha de inicio -->
+
+                              <!-- Fecha de fin -->
+                              <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
+                                <label for="fechaFinEventosCierres" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label> 
+                                <input type="date" id="fechaFinEventosCierres" name="fechaFinEventosCierres" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                              </div>
+                              <!-- Fin de fecha de fin -->
+
+                              <!-- Botones alineados horizontalmente -->
+                              <div class="ml-5 flex space-x-2">
+                                <!-- Botón de buscar -->
+                                <button type="submit" id="filtrarListaAuditoriaCierres" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-teal-500 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-search"></i>
+                                </button>
+
+                                <!-- Botón de nueva consulta -->
+                                <button type="button" id="limpiarCamposEventosCierres" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-400 rounded-md flex justify-center items-center">
+                                  <i class="feather icon-refresh-cw"></i>
+                                </button>
+
+                                <!-- Boton generar reporte -->
+                                <div class="btn-group">
+                                  <div class="flex justify-center space-x-2">
+                                    <button type="button" class="btn btn-secondary dropdown-toggle h-10 py-2 px-3 rounded-md flex justify-center items-center" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                      <i class="feather mr-2 icon-file"></i>
+                                    </button>
+                                    <div class="dropdown-menu">
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                    </div>
+                                  </div>
+                                </div>
+                              </div>
+                              <!-- Fin de botones alineados horizontalmente -->
+                            </div>
+
+                            <!-- Inicio de tabla de registros de cierres -->
+                            <div class="relative sm:rounded-lg mt-2">
+                              <div class="max-w-full overflow-hidden sm:rounded-lg">
+                                <table id="tablaEventosCierres" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
+                                  <!-- Encabezado de la tabla -->
+                                  <thead class="text-xs text-gray-700 uppercase bg-purple-300">
+                                    <tr>
+                                      <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario evento</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">IP</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
+                                    </tr>
+                                  </thead>
+                                  <!-- Fin de encabezado de la tabla -->
+
+                                  <!-- Cuerpo de la tabla -->
+                                  <tbody>
+                                    <?php if (!empty($resultadoEventosCierres)): ?>
+                                      <?php $item = 1; // Iniciar contador para el ítem 
+                                      ?>
+                                      <?php foreach ($resultadoEventosCierres as $cierres): ?>
+                                        <tr class="hover:bg-green-100 hover:scale-[101%] transition-all border-b">
+                                          <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['fechaFormateada']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['NombreCompleto']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['INC_numero_formato']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['AUD_ip']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['AUD_nombreEquipo']) ?></td>
+                                        </tr>
+                                      <?php endforeach; ?>
+                                    <?php else: ?>
+                                      <tr>
+                                        <td colspan="7" class="text-center py-3">No se encontraron incidencias cerradas.</td>
+                                      </tr>
+                                    <?php endif; ?>
+                                  </tbody>
+                                  <!-- Fin de cuerpo de tabla -->
+                                </table>
+                              </div>
+                            </div>
+                            <!-- Fin de tabla de registros de recepciones -->
+                          </form>
+                        </div>
+                        <!-- Fin de contenido de la quinta pestaña -->
                       </div>
                     </div>
                     <!-- Fin de contenido de las pestañas -->

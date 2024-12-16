@@ -189,4 +189,11 @@ class AsignacionController
       return $resultado;
     }
   }
+
+  // Metodo para listar los registros de asignaciones en la tabla auditoria
+  public function listarEventosAsignaciones()
+  {
+    $resultadoAuditoriaRegistroAsignaciones = $this->asignacionModel->listarEventosAsignaciones();
+    return $resultadoAuditoriaRegistroAsignaciones;
+  }
 }

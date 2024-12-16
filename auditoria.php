@@ -73,6 +73,9 @@ function obtenerRegistros($action, $controller, $usuario, $fechaInicio, $fechaFi
     case 'consultarEventosRecepciones':
       return $controller->consultarEventosRecepciones($usuario, $fechaInicio, $fechaFin);
       break;
+    case 'consultarEventosAsignaciones':
+      return $controller->consultarEventosAsignaciones($usuario, $fechaInicio, $fechaFin);
+      break;
     case 'consultarEventosUsuarios':
       return $controller->consultarEventosUsuarios($usuario, $fechaInicio, $fechaFin);
     case 'consultarEventosPersonas':
@@ -101,6 +104,8 @@ function obtenerColumnasParaAccion($action)
     case 'consultarEventosIncidencias':
       return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosRecepciones':
+      return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosAsignaciones':
       return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosUsuarios':
       return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'UsuarioReferencia', 'AUD_ip', 'AUD_nombreEquipo'];
@@ -152,6 +157,14 @@ if ($action) {
     }
   } else if ($action === 'consultarEventosRecepciones') {
     $resultado = obtenerRegistros($action, $recepcionController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosAsignaciones') {
+    $resultado = obtenerRegistros($action, $asignacionController, $usuario, $fechaInicio, $fechaFin);
     $columnas = obtenerColumnasParaAccion($action);
     if ($resultado) {
       echo generarTabla($resultado, 1, $columnas);
@@ -217,7 +230,9 @@ $resultadoAuditoriaLogin = $usuarioController->listarEventosLogin();
 
 $resultadoEventosIncidencias = $incidenciaController->listarEventosIncidencias();
 $resultadoEventosRecepciones = $recepcionController->listarEventosRecepciones();
-$resultadoAuditoriaRegistroAsignaciones = $auditoriaController->listarRegistrosAsignaciones();
+$resultadoEventosAsignaciones = $asignacionController->listarEventosAsignaciones();
+$resultadoEventosMantenimiento = $mantenimientoController->listarEventosMantenimiento();
+// $resultadoEventosCierres = $cierreController->listarEventosCierres();
 
 $resultadoAuditoriaEventosUsuarios = $usuarioController->listarEventosUsuarios();
 $resultadoAuditoriaEventosPersonas = $personaController->listarEventosPersonas();

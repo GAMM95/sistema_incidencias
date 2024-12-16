@@ -131,4 +131,11 @@ class MantenimientoController
       return $resultado;
     }
   }
+
+  // Metodo para listar los registros de mantenimiento en la tabla auditoria
+  public function listarEventosMantenimiento()
+  {
+    $resultado = $this->mantenimientoModel->listarEventosMantenimiento();
+    return $resultado;
+  }
 }
