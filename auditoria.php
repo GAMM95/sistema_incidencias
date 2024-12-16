@@ -70,8 +70,8 @@ function obtenerRegistros($action, $controller, $usuario, $fechaInicio, $fechaFi
     case 'consultarEventosIncidencias':
       return $controller->consultarEventosIncidencias($usuario, $fechaInicio, $fechaFin);
       break;
-    case 'consultarEventosIncidencias':
-      return $controller->consultarEventosIncidencias($usuario, $fechaInicio, $fechaFin);
+    case 'consultarEventosRecepciones':
+      return $controller->consultarEventosRecepciones($usuario, $fechaInicio, $fechaFin);
       break;
     case 'consultarEventosUsuarios':
       return $controller->consultarEventosUsuarios($usuario, $fechaInicio, $fechaFin);
@@ -100,8 +100,8 @@ function obtenerColumnasParaAccion($action)
       return ['fechaFormateada', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosIncidencias':
       return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
-    case 'listarRegistrosRecepciones':
-      return ['fechaFormateada', 'NombreCompleto', 'INC_numero_formato', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
+    case 'consultarEventosRecepciones':
+      return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosUsuarios':
       return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'UsuarioReferencia', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosPersonas':
@@ -123,7 +123,7 @@ function obtenerColumnasParaAccion($action)
 if ($action) {
   error_log("Fecha Inicio: " . $fechaInicio);
   error_log("Fecha Fin: " . $fechaFin);
-
+  // Eventos totales
   if (($action === 'consultarEventosTotales')) {
     $resultado = obtenerRegistros($action, $auditoriaController, $usuario, $fechaInicio, $fechaFin);
     $columnas = obtenerColumnasParaAccion($action);
@@ -132,6 +132,7 @@ if ($action) {
     } else {
       error_log("No se encontraron registros.");
     }
+    // Eventos de logeo
   } else if ($action === 'consultarEventosLogin') {
     $resultado = obtenerRegistros($action, $usuarioController, $usuario, $fechaInicio, $fechaFin);
     $columnas = obtenerColumnasParaAccion($action);
@@ -140,6 +141,7 @@ if ($action) {
     } else {
       error_log("No se encontraron registros.");
     }
+    // Eventos de incidencias
   } else if ($action === 'consultarEventosIncidencias') {
     $resultado = obtenerRegistros($action, $incidenciaController, $usuario, $fechaInicio, $fechaFin);
     $columnas = obtenerColumnasParaAccion($action);
@@ -156,6 +158,7 @@ if ($action) {
     } else {
       error_log("No se encontraron registros.");
     }
+    // Eventos de mantenedores
   } else if ($action === 'consultarEventosUsuarios') {
     $resultado = obtenerRegistros($action, $usuarioController, $usuario, $fechaInicio, $fechaFin);
     $columnas = obtenerColumnasParaAccion($action);
@@ -275,7 +278,10 @@ $resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSolucio
   <script src="./app/View/func/ReportesAuditoria/EventosLogin/func_auditoria_eventos_login.js"></script>
 
   <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Incidencias/func_auditoria_eventos_incidencias.js"></script>
-  <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Incidencias/func_auditoria_eventos_recepciones.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Recepciones/func_auditoria_eventos_recepciones.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Asignaciones/func_auditoria_eventos_asignaciones.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Mantenimiento/func_auditoria_eventos_mantenimiento.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosIncidencias/Cierres/func_auditoria_eventos_cierres.js"></script>
 
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Usuarios/func_auditoria_eventos_usuarios.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/func_auditoria_eventos_personas.js"></script>

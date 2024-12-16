@@ -401,33 +401,33 @@
                                 <label for="usuarioEventoRecepciones" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
                                 <select id="usuarioEventoRecepciones" name="usuarioEventoRecepciones" class="border p-2 w-full text-xs cursor-pointer">
                                 </select>
-                                <input type="hidden" id="codigoUsuarioEventoIncidencias" name="codigoUsuarioEventoIncidencias" readonly>
-                                <input type="hidden" id="nombreUsuarioEventoIncidencias" name="nombreUsuarioEventoIncidencias" readonly>
+                                <input type="hidden" id="codigoUsuarioEventoRecepciones" name="codigoUsuarioEventoRecepciones" readonly>
+                                <input type="hidden" id="nombreUsuarioEventoRecepciones" name="nombreUsuarioEventoRecepciones" readonly>
                               </div>
 
                               <!-- Fecha de inicio -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaInicioEventosIncidencias" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                                <input type="date" id="fechaInicioEventosIncidencias" name="fechaInicioEventosIncidencias" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaInicioEventosRecepciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicioEventosRecepciones" name="fechaInicioEventosRecepciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de inicio -->
 
                               <!-- Fecha de fin -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaFinEventosIncidencias" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                                <input type="date" id="fechaFinEventosIncidencias" name="fechaFinEventosIncidencias" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaFinEventosRecepciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                                <input type="date" id="fechaFinEventosRecepciones" name="fechaFinEventosRecepciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de fin -->
 
                               <!-- Botones alineados horizontalmente -->
                               <div class="ml-5 flex space-x-2">
                                 <!-- Botón de buscar -->
-                                <button type="submit" id="filtrarListaAuditoriaIncidencias" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-teal-500 rounded-md flex justify-center items-center">
+                                <button type="submit" id="filtrarListaAuditoriaRecepciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-teal-500 rounded-md flex justify-center items-center">
                                   <i class="feather icon-filter"></i>
                                 </button>
 
                                 <!-- Botón de nueva consulta -->
-                                <button type="button" id="limpiarCamposEventosIncidencias" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-400 rounded-md flex justify-center items-center">
+                                <button type="button" id="limpiarCamposEventosRecepciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-400 rounded-md flex justify-center items-center">
                                   <i class="feather icon-refresh-cw"></i>
                                 </button>
 
@@ -461,7 +461,6 @@
                                       <th scope="col" class="px-3 py-2 text-center">Usuario Evento</th>
                                       <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
                                       <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
-                                      <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
                                     </tr>
@@ -480,7 +479,6 @@
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepciones['NombreCompleto']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepciones['AUD_operacion']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepciones['referencia']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepciones['ARE_nombre']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepciones['AUD_ip']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($recepciones['AUD_nombreEquipo']) ?></td>
                                         </tr>

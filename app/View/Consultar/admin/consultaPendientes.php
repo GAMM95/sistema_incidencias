@@ -98,7 +98,7 @@
                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($incidencia['INC_documento']) ?></td>
                   <td class="px-3 py-2 text-center text-xs align-middle">
                     <?php
-                    $estadoDescripcion = htmlspecialchars($incidencia['ESTADO']);
+                    $estadoDescripcion = htmlspecialchars($incidencia['Estado']);
                     $badgeClass = '';
                     switch ($estadoDescripcion) {
                       case 'ABIERTO':

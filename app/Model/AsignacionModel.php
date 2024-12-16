@@ -39,6 +39,27 @@ class AsignacionModel extends Conexion
     }
   }
 
+  // Metodo para obtener el ultimo codigo de asignacion registrado
+  private function obtenerUltimoCodigoAsignacion()
+  {
+    try {
+      $conector = $this->getConexion();
+      if ($conector != null) {
+        $sql = "SELECT MAX(ASI_codigo) AS ultimoCodigo FROM ASIGNACION";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['ultimoCodigo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al obtener el último código de asignación registrado: " . $e->getMessage());
+      return null;
+    }
+  }
+
   // Metodo para registrar asignaciones
   public function insertarAsignacion($fecha, $hora, $usuario, $recepcion)
   {
@@ -53,8 +74,11 @@ class AsignacionModel extends Conexion
         $stmt->bindParam(':recepcion', $recepcion);
         $stmt->execute();
 
+        // Obtener el último codigo de asignación registrado
+        $numAsignacion = $this->obtenerUltimoCodigoAsignacion();
+
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('ASIGNACION', 'Asignar incidencia');
+        $this->auditoria->registrarEvento('ASIGNACION', 'Asignar incidencia', $numAsignacion);
 
         return $stmt->rowCount() > 0 ? true : false;
       } else {

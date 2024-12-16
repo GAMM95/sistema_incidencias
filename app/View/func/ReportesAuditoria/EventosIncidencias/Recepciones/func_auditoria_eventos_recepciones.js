@@ -16,7 +16,7 @@ $(document).ready(function () {
       select.empty();
       select.append('<option value="" selected disabled>Seleccione un usuario</option>');
       $.each(data, function (index, value) {
-        select.append('<option value="' + value.USU_codigo + '">' + value.persona + '</option>');
+        select.append('<option value="' + value.USU_codigo + '">' + value.usuario + '</option>');
       });
     },
     error: function (error) {
@@ -29,8 +29,8 @@ $(document).ready(function () {
     var selectedOption = $(this).find('option:selected');
     var codigoUsuario = selectedOption.val();
     var nombreUsuario = selectedOption.text();
-    $('#codigoUsuarioEventoIncidencias').val(codigoUsuario);
-    $('#nombreUsuarioEventoIncidencias').val(nombreUsuario);
+    $('#codigoUsuarioEventoRecepciones').val(codigoUsuario);
+    $('#nombreUsuarioEventoRecepciones').val(nombreUsuario);
   });
 
   // Buscador para el combo usuario
@@ -46,23 +46,23 @@ $(document).ready(function () {
   });
 
   // Función para realizar la consulta sin filtros (nueva consulta)
-  function nuevaConsultaEventosIncidencias() {
+  function nuevaConsultaEventosRecepciones() {
     // Limpiar los campos de fecha y el input de persona (resetea el formulario)
-    $('#fechaInicioEventosIncidencias').val('');
-    $('#fechaFinEventosIncidencias').val('');
-    $('#usuarioEventoIncidencias').val(null).trigger('change');  // Reset del select2 con trigger
+    $('#fechaInicioEventosRecepciones').val('');
+    $('#fechaFinEventosRecepciones').val('');
+    $('#usuarioEventoRecepciones').val(null).trigger('change');  // Reset del select2 con trigger
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
-      url: 'auditoria.php?action=consultarEventosIncidencias',
+      url: 'auditoria.php?action=consultarEventosRecepciones',
       type: 'GET',
       dataType: 'html', // Esperamos HTML para renderizar la tabla
       success: function (response) {
         console.log("Resultados de nueva consulta (sin filtros):", response);
         // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaEventosIncidencias tbody').empty();
+        $('#tablaEventosRecepciones tbody').empty();
         // Actualiza el contenido de la tabla con la respuesta
-        $('#tablaEventosIncidencias tbody').html(response);
+        $('#tablaEventosRecepciones tbody').html(response);
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
@@ -71,14 +71,14 @@ $(document).ready(function () {
   }
 
   // Evento para el botón de limpiar campos
-  $('#limpiarCamposEventosIncidencias').on('click', nuevaConsultaEventosIncidencias);
+  $('#limpiarCamposEventosRecepciones').on('click', nuevaConsultaEventosRecepciones);
 
   // Validación y envío del formulario
-  $('#formAuditoriaIncidencias').submit(function (event) {
+  $('#formAuditoriaRecepciones').submit(function (event) {
     event.preventDefault(); // Evita el envío del formulario por defecto
 
     // Verifica si los campos y las fechas son válidos
-    if (!validarCamposEventosIncidencias() || !validarFechasEventosIncidencias()) {
+    if (!validarCamposEventosRecepciones() || !validarFechasEventosRecepciones()) {
       return; // Detiene el envío si los campos o las fechas no son válidos
     }
 
@@ -95,13 +95,13 @@ $(document).ready(function () {
 
     // Realiza la solicitud AJAX
     $.ajax({
-      url: 'auditoria.php?action=consultarEventosIncidencias',
+      url: 'auditoria.php?action=consultarEventosRecepciones',
       type: 'GET',
       data: dataObject,
       success: function (response) {
         console.log("Resultados filtrados:", response);
-        $('#tablaEventosIncidencias tbody').empty(); // Limpia el contenido actual de la tabla antes de agregar nuevos datos
-        $('#tablaEventosIncidencias tbody').html(response); // Actualiza el contenido de la tabla con la respuesta
+        $('#tablaEventosRecepciones tbody').empty(); // Limpia el contenido actual de la tabla antes de agregar nuevos datos
+        $('#tablaEventosRecepciones tbody').html(response); // Actualiza el contenido de la tabla con la respuesta
       },
       error: function (xhr, status, error) {
         console.error('Error en la consulta AJAX:', error);
@@ -109,13 +109,13 @@ $(document).ready(function () {
     });
 
     // Función para validar los campos de usuario y fechas
-    function validarCamposEventosIncidencias() {
+    function validarCamposEventosRecepciones() {
       var valido = false;
       var mensajeError = '';
 
       var faltaUsuario = ($('#usuarioEventoRecepciones').val() !== null && $('#usuarioEventoRecepciones').val().trim() !== '');
-      var fechaInicioSeleccionada = ($('#fechaInicioEventosIncidencias').val() !== null && $('#fechaInicioEventosIncidencias').val().trim() !== '');
-      var fechaFinSeleccionada = ($('#fechaFinEventosIncidencias').val() !== null && $('#fechaFinEventosIncidencias').val().trim() !== '');
+      var fechaInicioSeleccionada = ($('#fechaInicioEventosRecepciones').val() !== null && $('#fechaInicioEventosRecepciones').val().trim() !== '');
+      var fechaFinSeleccionada = ($('#fechaFinEventosRecepciones').val() !== null && $('#fechaFinEventosRecepciones').val().trim() !== '');
 
       // Verificar si al menos un campo está lleno
       if (faltaUsuario || fechaInicioSeleccionada || fechaFinSeleccionada) {
@@ -133,9 +133,9 @@ $(document).ready(function () {
   });
 
   // Función para validar fechas
-  function validarFechasEventosIncidencias() {
-    const fechaInicio = new Date($('#fechaInicioEventosIncidencias').val());
-    const fechaFin = new Date($('#fechaFinEventosIncidencias').val());
+  function validarFechasEventosRecepciones() {
+    const fechaInicio = new Date($('#fechaInicioEventosRecepciones').val());
+    const fechaFin = new Date($('#fechaFinEventosRecepciones').val());
     const fechaHoy = new Date();
 
     let valido = true;
@@ -164,7 +164,7 @@ $(document).ready(function () {
   }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicioEventosIncidencias, #fechaFinEventosIncidencias').on('change', function () {
-    validarFechasEventosIncidencias();
+  $('#fechaInicioEventosRecepciones, #fechaFinEventosRecepciones').on('change', function () {
+    validarFechasEventosRecepciones();
   });
 });

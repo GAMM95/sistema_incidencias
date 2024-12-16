@@ -188,9 +188,9 @@
           </div>
           <!-- Botón al costado del select -->
           <a href="modulo-solucion.php"
-            class="ml-2 bn btn-warning text-xs text-white font-bold py-2 px-3 rounded-md flex items-center hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
+            class="ml-2 bn btn-warning text-xs text-white font-bold h-9 py-2 px-3 rounded-md flex items-center hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
             title="Agregar nueva soluci&oacute;n"
-            aria-label="Agregar nueva solución">
+            aria-label="Agregar nueva soluci&oacute;n">
             <i class="feather icon-plus"></i>
           </a>
 
@@ -230,7 +230,7 @@
       <!-- Fin de segunda fila de formulario -->
 
       <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
-      <script>
+      <!-- <script>
         document.getElementById('recepcion').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_codigo'] : ''; ?>';
         document.getElementById('fecha').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['CIE_fecha'] : $fecha_actual; ?>';
         document.getElementById('hora').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_hora'] : $hora_actual; ?>';
@@ -241,7 +241,7 @@
         document.getElementById('documento').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_documento'] : ''; ?>';
         document.getElementById('diagnostico').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_diagnostico'] : ''; ?>';
         document.getElementById('recomendaciones').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_recomendaciones'] : ''; ?>';
-      </script>
+      </script> -->
 
       <!-- Botones del formulario -->
       <div class="flex justify-center space-x-4">
@@ -299,7 +299,7 @@
               <td class='px-6 py-2 text-center hidden'><?= $incidencia['CIE_recomendaciones']; ?></td>
               <td class='px-6 py-2 text-center'><?= $incidencia['Usuario']; ?></td>
               <td class='px-6 py-2 text-center'><?= $incidencia['SOL_descripcion']; ?></td>
-              <td class="px-6 py-2 text-center justify-middle flex space-x-2"> <!-- Columna de Acción con botones -->
+              <td class="px-6 py-2 justify-center text-center justify-middle flex space-x-2"> <!-- Columna de Acción con botones -->
                 <!-- Botón de Imprimir detalla de incidencia -->
                 <button type="button" id="imprimir-cierre" class="bn btn-warning text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center" title="Imprimir detalle de cierre">
                   <i class="feather icon-printer"></i>

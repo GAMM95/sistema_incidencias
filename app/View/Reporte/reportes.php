@@ -239,7 +239,7 @@
                                   <td class="px-3 py-2 text-center"><?= htmlspecialchars($pendientes['PRI_nombre']) ?></td>
                                   <td class="px-3 py-2 text-center text-xs align-middle">
                                     <?php
-                                    $estadoDescripcion = htmlspecialchars($pendientes['ESTADO']);
+                                    $estadoDescripcion = htmlspecialchars($pendientes['Estado']);
                                     $badgeClass = '';
                                     switch ($estadoDescripcion) {
                                       case 'ABIERTO':

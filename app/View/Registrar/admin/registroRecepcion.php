@@ -168,14 +168,14 @@
         </div>
 
         <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX -->
-        <script>
+        <!-- <script>
           document.getElementById('incidencia').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['INC_numero'] : ''; ?>';
           document.getElementById('num_recepcion').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_numero'] : ''; ?>';
           document.getElementById('hora').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_hora'] : $hora_actual; ?>';
           document.getElementById('fecha').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_fecha'] : $fecha_actual; ?>';
           document.getElementById('prioridad').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['PRI_codigo'] : ''; ?>';
           document.getElementById('impacto').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['IMP_codigo'] : ''; ?>';
-        </script>
+        </script> -->
 
         <!-- Botones de formulario -->
         <div class="flex justify-center items-center space-x-4 mt-3 ml-5">
@@ -241,7 +241,7 @@
                   <td class='px-6 py-2 text-center'><?= $recepcion['PRI_nombre']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['IMP_descripcion']; ?></td>
                   <td class='px-6 py-2 text-center'><?= $recepcion['UsuarioRecepcion']; ?></td>
-                  <td class="px-6 py-2 text-center flex space-x-2">
+                  <td class="px-6 py-2 justify-center text-center flex space-x-2">
                     <button type="button" class="eliminar-recepcion bn btn-danger text-xs text-white font-bold py-2 px-3 rounded-md flex items-center justify-center" title="Eliminar recepci&oacute;n">
                       <i class="feather icon-trash-2"></i>
                     </button>

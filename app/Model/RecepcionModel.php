@@ -165,9 +165,7 @@ class RecepcionModel extends Conexion
     if ($conector != null) {
       try {
         $sql = "SELECT * FROM vista_recepciones
-            ORDER BY 
-            SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
-            INC_numero_formato DESC
+            ORDER BY fechaRecepcionFormateada DESC
             OFFSET :start ROWS
             FETCH NEXT :limit ROWS ONLY";
         $stmt = $conector->prepare($sql);
@@ -192,7 +190,7 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_reporte_pendientes_cierre
+        $sql = "SELECT * FROM vw_incidencias_pendientes
         ORDER BY 
             ultimaFecha DESC, --Ordenar por la última fecha
             ultimaHora DESC";
@@ -310,8 +308,8 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT fechaFormateada, NombreCompleto, INC_numero_formato, ARE_nombre, AUD_ip, AUD_nombreEquipo FROM vw_auditoria_registrar_recepcion
-         ORDER BY fechaFormateada DESC";
+        $sql = "SELECT * FROM vw_eventos_recepciones
+                ORDER BY AUD_fecha DESC, AUD_hora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
