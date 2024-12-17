@@ -11,10 +11,8 @@ class ReportePendientesCierre extends Conexion
   public function getReportePendientesCierre()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT * FROM vw_reporte_pendientes_cierre
-            ORDER BY 
-            ultimaFecha DESC, --Ordenar por la última fecha
-            ultimaHora DESC"; //Ordenar por la última hora
+    $sql = "SELECT * FROM vw_incidencias_pendientes
+            ORDER BY INC_numero DESC"; //Ordenar por la última hora
     $stmt = $conector->prepare($sql);
     $stmt->execute();
     $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

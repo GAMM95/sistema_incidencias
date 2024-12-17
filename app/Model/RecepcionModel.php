@@ -164,8 +164,8 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     if ($conector != null) {
       try {
-        $sql = "SELECT * FROM vista_recepciones
-            ORDER BY fechaRecepcionFormateada DESC
+        $sql = "SELECT * FROM vw_incidencias_recepcionadas
+            ORDER BY INC_numero DESC
             OFFSET :start ROWS
             FETCH NEXT :limit ROWS ONLY";
         $stmt = $conector->prepare($sql);

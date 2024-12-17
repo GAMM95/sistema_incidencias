@@ -99,7 +99,7 @@ $('#reportePendientesCierre').click(function () {
             reporte.BIE_nombre,
             reporte.ARE_nombre,
             reporte.PRI_nombre,
-            reporte.ESTADO
+            reporte.Estado,
           ]),
           styles: {
             fontSize: 7.5,

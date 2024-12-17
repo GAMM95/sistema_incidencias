@@ -640,102 +640,85 @@ GO
 -- Vista para listar incidencias pendientes de cierre
 CREATE OR ALTER VIEW vw_incidencias_pendientes AS
 WITH IncidenciasOrdenadas AS (
-  SELECT
-    I.INC_numero,
-    I.INC_numero_formato,
-    (
-      CONVERT ( VARCHAR ( 10 ), INC_fecha, 103 ) + ' - ' + 
-      STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), INC_hora, 0 ), 7 ), 6, 0, ' ' )
-    ) AS fechaIncidenciaFormateada,
-    A.ARE_nombre,
-    CAT.CAT_nombre,
-    REC_fecha,
-    I.INC_asunto,
-    I.INC_codigoPatrimonial,
-    B.BIE_nombre,
-    I.INC_documento,
-    (
-      CONVERT ( VARCHAR ( 10 ), REC_fecha, 103 ) + ' - ' + 
-      STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), REC_hora, 0 ), 7 ), 6, 0, ' ' )
-    ) AS fechaRecepcionFormateada,
-    
-    -- Si el estado es "ABIERTO", mostramos NULL en PRI_nombre e IMP_descripcion
-    CASE
-      WHEN E.EST_descripcion = 'ABIERTO' THEN NULL
-      ELSE PRI.PRI_nombre
-    END AS PRI_nombre,
-    
-    CASE
-      WHEN E.EST_descripcion = 'ABIERTO' THEN NULL
-      ELSE IMP.IMP_descripcion
-    END AS IMP_descripcion,
-    
-    ( CONVERT ( VARCHAR ( 10 ), CIE_fecha, 103 ) ) AS fechaCierreFormateada,
-    O.CON_descripcion,
-    U.USU_nombre,
-    
-    -- Estado y EST_codigo agregados
-    CASE
-      WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
-      ELSE E.EST_descripcion
-    END AS Estado,
-    
-    -- Aquí ya seleccionas el EST_codigo
-    CASE
-      WHEN C.CIE_numero IS NOT NULL THEN EC.EST_codigo
-      ELSE E.EST_codigo
-    END AS EST_codigo,
-    
-    COALESCE( C.CIE_fecha, R.REC_fecha, I.INC_fecha ) AS ultimaFecha,
-    COALESCE( C.CIE_hora, R.REC_hora, I.INC_hora ) AS ultimaHora,
-    
-    ROW_NUMBER() OVER (
-      PARTITION BY I.INC_numero
-      ORDER BY COALESCE( C.CIE_fecha, R.REC_fecha, I.INC_fecha ) DESC,
-               COALESCE( C.CIE_hora, R.REC_hora, I.INC_hora ) DESC
-    ) AS rn
-    
-  FROM CIERRE C
-  LEFT JOIN MANTENIMIENTO MAN ON MAN.MAN_codigo = C.MAN_codigo
-  LEFT JOIN ASIGNACION ASI ON ASI.ASI_codigo = MAN.ASI_codigo
-  RIGHT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
-  RIGHT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
-  RIGHT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
-  RIGHT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
-  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
-  INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
-  INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-  LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
-  LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
-  LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
-  LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
-  WHERE I.EST_codigo IN ( 4) OR C.EST_codigo IN (4)
+    SELECT
+        I.INC_numero,
+        I.INC_numero_formato,
+        I.INC_fecha,
+        REC_fecha,
+        (CONVERT(VARCHAR(10), INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
+        A.ARE_nombre,
+        CAT.CAT_nombre,
+        I.INC_asunto,
+        I.INC_codigoPatrimonial,
+        B.BIE_nombre,
+        I.INC_documento,
+        (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+        -- Si el estado es "ABIERTO", mostramos NULL en PRI_nombre e IMP_descripcion
+        CASE
+            WHEN E.EST_descripcion = 'ABIERTO' THEN NULL
+            ELSE PRI.PRI_nombre
+        END AS PRI_nombre,
+        CASE
+            WHEN E.EST_descripcion = 'ABIERTO' THEN NULL
+            ELSE IMP.IMP_descripcion
+        END AS IMP_descripcion,
+        (CONVERT(VARCHAR(10), CIE_fecha, 103)) AS fechaCierreFormateada,
+        O.CON_descripcion,
+        U.USU_nombre,
+        CASE
+            WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+            ELSE E.EST_descripcion
+        END AS Estado,
+        -- Aquí agregamos EST_codigo
+        CASE
+            WHEN C.CIE_numero IS NOT NULL THEN EC.EST_codigo
+            ELSE E.EST_codigo
+        END AS EST_codigo,
+        COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha) AS ultimaFecha,
+        COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora) AS ultimaHora,
+        ROW_NUMBER() OVER (PARTITION BY I.INC_numero ORDER BY COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha) DESC, COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora) DESC) AS rn
+    FROM CIERRE C
+    LEFT JOIN MANTENIMIENTO MAN ON MAN.MAN_codigo = C.MAN_codigo
+    LEFT JOIN ASIGNACION ASI ON ASI.ASI_codigo = MAN.ASI_codigo
+    RIGHT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+    RIGHT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+    RIGHT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+    RIGHT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+    INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+    INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+    LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+    WHERE (I.EST_codigo IN (3, 4) OR C.EST_codigo IN (3, 4))
 )
-
-SELECT
-  INC_numero,
-  INC_numero_formato,
-  fechaIncidenciaFormateada,
-  ARE_nombre,
-  CAT_nombre,
-  REC_fecha,
-  INC_asunto,
-  INC_codigoPatrimonial,
-  BIE_nombre,
-  INC_documento,
-  fechaRecepcionFormateada,
-  PRI_nombre,
-  IMP_descripcion,
-  fechaCierreFormateada,
-  CON_descripcion,
-  USU_nombre,
-  Estado,
-  EST_codigo, -- Agregado aquí en el SELECT final
-  ultimaFecha,
-  ultimaHora
+-- Seleccionamos solo el registro más reciente (rn = 1)
+SELECT 
+    INC_numero,
+    INC_numero_formato,
+    fechaIncidenciaFormateada,
+    INC_fecha,
+    REC_fecha,
+    ARE_nombre,
+    CAT_nombre,
+    INC_asunto,
+    INC_codigoPatrimonial,
+    BIE_nombre,
+    INC_documento,
+    fechaRecepcionFormateada,
+    PRI_nombre,
+    IMP_descripcion,
+    fechaCierreFormateada,
+    CON_descripcion,
+    USU_nombre,
+    Estado,
+    EST_codigo, -- Aquí mostramos el EST_codigo
+    ultimaFecha,
+    ultimaHora
 FROM IncidenciasOrdenadas
-WHERE rn = 1 
-  AND Estado != 'CERRADO';
+WHERE rn = 1
+  AND EST_codigo IN (3, 4);  -- Solo mostrar los estados con EST_codigo 3 (ABIERTO) y 4 (RECEPCIONADO)
 GO
 
 --Vista para listar las nuevas incidencias para el usuario
@@ -3553,7 +3536,6 @@ BEGIN
 END
 GO
 
-
 -- PROCEDIMIENTO ALMANCENADO PARA CONSULTAR INCIDENCIAS - ADMINISTRADOR
 CREATE OR ALTER PROCEDURE sp_consultar_incidencias_pendientes
   @area INT,
@@ -4482,22 +4464,22 @@ GO
 --GO
 
 
-DECLARE @año INT = 2024; -- Ingresar el año deseado
-DECLARE @mes INT = 11;    -- Ingresar el mes deseado
+--DECLARE @año INT = 2024; -- Ingresar el año deseado
+--DECLARE @mes INT = 11;    -- Ingresar el mes deseado
 
-SELECT COUNT(*) AS incidencias_mes_año
-FROM INCIDENCIA
-WHERE INC_FECHA >= DATEFROMPARTS(@año, @mes, 1)
-  AND INC_FECHA < DATEFROMPARTS(
-        CASE 
-            WHEN @mes = 12 THEN @año + 1 
-            ELSE @año 
-        END,
-        CASE 
-            WHEN @mes = 12 THEN 1 
-            ELSE @mes + 1 
-        END, 1);
-GO
+--SELECT COUNT(*) AS incidencias_mes_año
+--FROM INCIDENCIA
+--WHERE INC_FECHA >= DATEFROMPARTS(@año, @mes, 1)
+--  AND INC_FECHA < DATEFROMPARTS(
+--        CASE 
+--            WHEN @mes = 12 THEN @año + 1 
+--            ELSE @año 
+--        END,
+--        CASE 
+--            WHEN @mes = 12 THEN 1 
+--            ELSE @mes + 1 
+--        END, 1);
+--GO
 
 -- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE USUARIOS
 CREATE OR ALTER PROCEDURE sp_consultar_eventos_usuarios
@@ -4731,3 +4713,45 @@ GO
 
 PRINT 'BASE DE DATOS GENERADO';
 GO
+
+
+
+CREATE OR ALTER VIEW vw_incidencias_recepcionadas AS
+WITH UltimaRecepcion AS (
+  SELECT
+    I.INC_numero,
+    I.INC_numero_formato,
+    (
+      CONVERT ( VARCHAR ( 10 ), I.INC_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), I.INC_hora, 0 ), 7 ), 6, 0, ' ' ) 
+    ) AS fechaIncidenciaFormateada,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_descripcion,
+    CAT.CAT_nombre,
+    A.ARE_nombre,
+    E.EST_descripcion AS ESTADO,
+    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario,
+    ROW_NUMBER ( ) OVER ( PARTITION BY I.INC_numero ORDER BY R.REC_fecha DESC, R.REC_hora DESC ) AS rn 
+  FROM
+    INCIDENCIA I
+    LEFT JOIN BIEN B ON LEFT( I.INC_codigoPatrimonial, 8 ) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+    INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+    LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+    LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+    LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+    LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+    INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo 
+  WHERE
+    I.EST_codigo IN ( 4 ) 
+) -- Filtramos para obtener solo la recepción más reciente de cada incidencia
+SELECT
+  * 
+FROM
+  UltimaRecepcion 
+WHERE
+  rn = 1

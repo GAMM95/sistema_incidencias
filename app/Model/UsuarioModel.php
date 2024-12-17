@@ -234,7 +234,6 @@ class UsuarioModel extends Conexion
         $stmt->execute();
 
         // Recuperar el código del usuario recién insertado
-        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
         $usuarioId = $this->obtenerUltimoCodigoUsuario();
 
         // Registrar el evento en la auditoría
