@@ -260,7 +260,7 @@ class IncidenciaModel extends Conexion
     try {
       if ($conector != null) {
         $sql = "SELECT * FROM vw_incidencias_totales_administrador
-          ORDER BY ultimaFecha DESC, ultimaHora DESC";
+          ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

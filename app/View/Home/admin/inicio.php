@@ -79,11 +79,11 @@
             <div class="row text-center">
               <div class="col">
                 <h4 class="m-0 text-white font-bold"><?php echo $cantidades['pendientes_mes_actual']; ?></h4>
-                <span>Incidencias Nuevas</span>
+                <span>Nuevas Incidencias</span>
               </div>
               <div class="col">
                 <h4 class="m-0 text-white font-bold"><?php echo $cantidades['recepciones_mes_actual']; ?></h4>
-                <span>Incidencias Pendientes</span>
+                <span>Pendientes de cierre</span>
               </div>
               <div class="col">
                 <h4 class="m-0 text-white font-bold"><?php echo $cantidades['cierres_mes_actual']; ?></h4>

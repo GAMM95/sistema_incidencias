@@ -561,11 +561,14 @@ GO
 
 
 
-CREATE VIEW vw_incidencias_totales_administrador AS
+
+
+CREATE OR ALTER VIEW vw_incidencias_totales_administrador AS
 WITH IncidenciasOrdenadas AS (
     SELECT
         I.INC_numero,
         I.INC_numero_formato,
+        I.INC_fecha,
         (CONVERT(VARCHAR(10), INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
         A.ARE_nombre,
         CAT.CAT_nombre,
@@ -614,6 +617,7 @@ SELECT
     INC_numero,
     INC_numero_formato,
     fechaIncidenciaFormateada,
+    INC_fecha,
     ARE_nombre,
     CAT_nombre,
     INC_asunto,
@@ -645,6 +649,7 @@ WITH IncidenciasOrdenadas AS (
     ) AS fechaIncidenciaFormateada,
     A.ARE_nombre,
     CAT.CAT_nombre,
+    REC_fecha,
     I.INC_asunto,
     I.INC_codigoPatrimonial,
     B.BIE_nombre,
@@ -704,7 +709,7 @@ WITH IncidenciasOrdenadas AS (
   LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
   LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
   LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
-  WHERE I.EST_codigo IN (3, 4) OR C.EST_codigo IN (3, 4)
+  WHERE I.EST_codigo IN ( 4) OR C.EST_codigo IN (4)
 )
 
 SELECT
@@ -713,6 +718,7 @@ SELECT
   fechaIncidenciaFormateada,
   ARE_nombre,
   CAT_nombre,
+  REC_fecha,
   INC_asunto,
   INC_codigoPatrimonial,
   BIE_nombre,
@@ -3523,6 +3529,7 @@ BEGIN
   SELECT
     INC_numero,
     INC_numero_formato,
+    INC_fecha,
     fechaIncidenciaFormateada,
     ARE_nombre,
     CAT_nombre,
@@ -3540,11 +3547,12 @@ BEGIN
     ultimaFecha,
     ultimaHora
   FROM vw_incidencias_totales_administrador
-  WHERE (@fechaInicio IS NULL OR ultimaFecha >= @fechaInicio)
-    AND (@fechaFin IS NULL OR ultimaFecha <= @fechaFin)
-  ORDER BY ultimaFecha DESC, ultimaHora DESC;
+  WHERE (@fechaInicio IS NULL OR INC_fecha >= @fechaInicio)
+    AND (@fechaFin IS NULL OR INC_fecha <= @fechaFin)
+  ORDER BY INC_numero_formato DESC;
 END
 GO
+
 
 -- PROCEDIMIENTO ALMANCENADO PARA CONSULTAR INCIDENCIAS - ADMINISTRADOR
 CREATE OR ALTER PROCEDURE sp_consultar_incidencias_pendientes

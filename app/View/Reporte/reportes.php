@@ -104,7 +104,7 @@
                             </button>
                             <div class="dropdown-menu">
                               <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasTotales">Todos las incidencias</div>
-                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasTotalesFecha">Incidencias por fechas</div>
+                              <div class="dropdown-item hover:text-white cursor-pointer" id="reporteIncidenciasTotalesFecha">Reporte por fechas</div>
                             </div>
                           </div>
                         </div>

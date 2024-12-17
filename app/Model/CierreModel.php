@@ -1,11 +1,21 @@
 <?php
 require_once 'config/conexion.php';
+require_once 'app/Model/AuditoriaModel.php';
 
 class CierreModel extends Conexion
 {
+  private $auditoria;
+
   public function __construct()
   {
     parent::__construct();
+    $conector = parent::getConexion();
+    // Inicializar la instancia de AuditoriaModel
+    if ($conector != null) {
+      $this->auditoria = new AuditoriaModel($conector);
+    } else {
+      throw new Exception("Error de conexión a la base de datos");
+    }
   }
 
   // Metodo para obtener cierres por ID
@@ -22,6 +32,25 @@ class CierreModel extends Conexion
     } catch (PDOException $e) {
       echo "Error al obtener los registros de los cierres: " . $e->getMessage();
       return null;
+    }
+  }
+
+  // Metodo para obtener el ultimo codigo registrado de cierre
+  private function obtenerUltimoCodigoRegistrado()
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT TOP 1 CIE_numero FROM CIERRE ORDER BY CIE_numero DESC";
+        $stmt = $conector->prepare($sql);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll();
+        return $resultado[0]['codigo'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos");
+      }
+    } catch (Exception $e) {
+      echo $e->getMessage();
     }
   }
 
@@ -44,9 +73,12 @@ class CierreModel extends Conexion
         $stmt->bindParam(':solucion', $solucion);
         $stmt->execute();
 
+        // Obtener el ultimo codigo registrado de cierre
+        $numCierre = $this->obtenerUltimoCodigoRegistrado();
+
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Cerrar incidencia',);
+        $this->auditoria->registrarEvento('INCIDENCIA', 'Cerrar incidencia', $numCierre);
+
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexión a la base de datos.");
@@ -69,8 +101,7 @@ class CierreModel extends Conexion
         $stmt->bindParam(':codigoCierre', $codigoCierre);
         $stmt->execute();
         // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Eliminar cierre', $codigoCierre);
+        $this->auditoria->registrarEvento('INCIDENCIA', 'Eliminar cierre', $codigoCierre);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -96,9 +127,9 @@ class CierreModel extends Conexion
       $stmt->bindParam(':diagnostico', $diagnostico);
       $stmt->bindParam(':recomendaciones', $recomendaciones);
       $stmt->execute(); // Ejecutar el procedimiento almacenado
+
       // Registrar el evento en la auditoría
-      $auditoria = new AuditoriaModel($conector);
-      $auditoria->registrarEvento('INCIDENCIA', 'Actualizar cierre', $cierre);
+      $this->auditoria->registrarEvento('INCIDENCIA', 'Actualizar cierre', $cierre);
       // Confirmar que se ha actualizado al menos una fila
       return $stmt->rowCount() > 0 ? true : false;
     } else {
