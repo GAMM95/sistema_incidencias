@@ -1,8 +1,5 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $asignacionRegistrada;
-    ?>
 
     <!-- Iinicio de breadcrumb -->
     <div class="page-header">

@@ -18,7 +18,6 @@ $(document).ready(function () {
     }
   });
 
-
   // Manejador de eventos para la tecla Escape
   $(document).keydown(function (event) {
     // Verificar si la tecla presionada es ESC
@@ -417,4 +416,10 @@ $(document).ready(function () {
 // Funcion para mostrar la notificacion toast
 function showToast() {
   $('.toast-5s').toast('show');
+}
+
+// Funcion para Capitalizar la primera letra de un input
+function capitalizeInput(element) {
+  let value = element.value.toLowerCase(); // Convertir todo a minúsculas primero
+  element.value = value.charAt(0).toUpperCase() + value.slice(1); // Convertir solo la primera letra a mayúscula
 }

@@ -1,10 +1,7 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $incidenciaRegistrada;
-    ?>
 
-    <!-- Miga de pan -->
+    <!-- Inicio de breadcrumb-->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -21,7 +18,7 @@
         </div>
       </div>
     </div>
-    <!-- Fin de miga de pan -->
+    <!-- Fin de breadcrumb -->
 
     <!-- Formulario de registro -->
     <form id="formIncidencia" action="registro-incidencia.php?action=registrar" method="POST" class="card table-card  bg-white shadow-md p-6 w-full text-xs mb-2">
@@ -121,7 +118,7 @@
         <!-- ASUNTO DE LA INCIDENCIA -->
         <div class="w-full sm:w-2/3 px-2 mb-2">
           <label for="asunto" class="block mb-1 font-bold text-xs">Asunto: *</label>
-          <input type="text" id="asunto" name="asunto" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese asunto">
+          <input type="text" id="asunto" name="asunto" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese asunto" oninput="capitalizeInput(this)">
         </div>
 
         <!-- DOCUMENTO DE LA INCIDENCIA -->
@@ -141,22 +138,9 @@
         <!-- DESCRIPCION DE LA INCIDENCIA -->
         <div class="w-full md:w-1/1 px-2 mb-2">
           <label for="descripcion" class="block mb-1 font-bold text-xs">Descripci&oacute;n:</label>
-          <input type="text" id="descripcion" name="descripcion" class="border p-2 w-full text-xs mb-3 rounded-md" placeholder="Ingrese descripci&oacute;n (opcional)">
+          <input type="text" id="descripcion" name="descripcion" class="border p-2 w-full text-xs mb-3 rounded-md" placeholder="Ingrese descripci&oacute;n (opcional)" oninput="capitalizeInput(this)">
         </div>
       </div>
-      <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
-      <script>
-        // Asignación de valores predefinidos al cargar la página
-        document.getElementById('numero_incidencia').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_incidencia'] : $fecha_actual; ?>';
-        document.getElementById('fecha_incidencia').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_fecha'] : $fecha_actual; ?>';
-        document.getElementById('hora').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_hora'] : $hora_actual; ?>';
-        document.getElementById('cbo_area').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['ARE_codigo'] : ''; ?>';
-        document.getElementById('codigo_patrimonial').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_codigo_patrimonial'] : ''; ?>';
-        document.getElementById('cbo_categoria').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['CAT_codigo'] : ''; ?>';
-        document.getElementById('asunto').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_asunto'] : ''; ?>';
-        document.getElementById('documento').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_documento'] : ''; ?>';
-        document.getElementById('descripcion').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['INC_descripcion'] : ''; ?>';
-      </script>
 
       <!-- Botones del formulario -->
       <div class="flex justify-center space-x-4">

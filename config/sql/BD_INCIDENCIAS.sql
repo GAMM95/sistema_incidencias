@@ -4715,24 +4715,27 @@ PRINT 'BASE DE DATOS GENERADO';
 GO
 
 
-
+-- Vista para listar incidencias recepcionadas
 CREATE OR ALTER VIEW vw_incidencias_recepcionadas AS
 WITH UltimaRecepcion AS (
   SELECT
     I.INC_numero,
     I.INC_numero_formato,
+    R.REC_numero,
     (
       CONVERT ( VARCHAR ( 10 ), I.INC_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), I.INC_hora, 0 ), 7 ), 6, 0, ' ' ) 
-    ) AS fechaIncidenciaFormateada,
+    ) AS fechaRecepcionFormateada,
     I.INC_codigoPatrimonial,
     B.BIE_nombre,
     I.INC_asunto,
     I.INC_documento,
     I.INC_descripcion,
     CAT.CAT_nombre,
+    PRI_nombre,
+    IMP_descripcion,
     A.ARE_nombre,
     E.EST_descripcion AS ESTADO,
-    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario,
+    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS UsuarioRecepcion,
     ROW_NUMBER ( ) OVER ( PARTITION BY I.INC_numero ORDER BY R.REC_fecha DESC, R.REC_hora DESC ) AS rn 
   FROM
     INCIDENCIA I
@@ -4748,10 +4751,6 @@ WITH UltimaRecepcion AS (
     INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo 
   WHERE
     I.EST_codigo IN ( 4 ) 
-) -- Filtramos para obtener solo la recepción más reciente de cada incidencia
-SELECT
-  * 
-FROM
-  UltimaRecepcion 
-WHERE
-  rn = 1
+) 
+SELECT * FROM UltimaRecepcion 
+WHERE rn = 1

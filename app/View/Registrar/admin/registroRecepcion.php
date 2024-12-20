@@ -1,8 +1,5 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $recepcionRegistrada;
-    ?>
 
     <!-- Miga de pan -->
     <div class="page-header">
@@ -166,16 +163,6 @@
             </select>
           </div>
         </div>
-
-        <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX -->
-        <!-- <script>
-          document.getElementById('incidencia').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['INC_numero'] : ''; ?>';
-          document.getElementById('num_recepcion').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_numero'] : ''; ?>';
-          document.getElementById('hora').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_hora'] : $hora_actual; ?>';
-          document.getElementById('fecha').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['REC_fecha'] : $fecha_actual; ?>';
-          document.getElementById('prioridad').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['PRI_codigo'] : ''; ?>';
-          document.getElementById('impacto').value = '<?php echo $recepcionRegistrada ? $recepcionRegistrada['IMP_codigo'] : ''; ?>';
-        </script> -->
 
         <!-- Botones de formulario -->
         <div class="flex justify-center items-center space-x-4 mt-3 ml-5">
