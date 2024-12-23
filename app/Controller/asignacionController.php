@@ -78,7 +78,6 @@ class AsignacionController
       }
 
       try {
-        // Verificar el estado de la incidencia
         $estado = $this->asignacionModel->obtenerAsignacionesPorId($numeroAsignacion);
 
         // Suponiendo que el estado "4" permite la actualización

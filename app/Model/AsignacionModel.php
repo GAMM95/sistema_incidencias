@@ -117,8 +117,7 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_mantenimiento
-            WHERE EST_descripcion IN ('EN ESPERA','RESUELTO')
+        $sql = "SELECT * FROM vw_incidencias_asignadas
             ORDER BY ASI_codigo DESC
             OFFSET :start ROWS
             FETCH NEXT :limit ROWS ONLY";

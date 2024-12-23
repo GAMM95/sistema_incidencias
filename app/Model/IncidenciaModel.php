@@ -385,41 +385,8 @@ class IncidenciaModel extends Conexion
     try {
       if ($conector != null) {
         // $sql = "SELECT * FROM vista_incidencias_recepcionar
-        $sql = "WITH UltimaRecepcion AS (
-            SELECT 
-              I.INC_numero,
-              I.INC_numero_formato,
-              (CONVERT(VARCHAR(10), I.INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), I.INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
-              I.INC_codigoPatrimonial,
-              B.BIE_nombre,
-              I.INC_asunto,
-              I.INC_documento,
-              I.INC_descripcion,
-              CAT.CAT_nombre,
-              A.ARE_nombre,
-              E.EST_descripcion AS ESTADO,
-              p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario,
-              ROW_NUMBER() OVER (PARTITION BY I.INC_numero ORDER BY R.REC_fecha DESC, R.REC_hora DESC) AS rn
-            FROM 
-              INCIDENCIA I
-              LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
-              INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
-              INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
-              INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-              LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-              LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
-              LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
-              LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
-              INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
-            WHERE 
-              I.EST_codigo IN (3)
-          )
-          -- Filtramos para obtener solo la recepción más reciente de cada incidencia
-          SELECT *
-          FROM UltimaRecepcion
-          WHERE rn = 1
+        $sql = "SELECT * FROM vw_incidencias_registradas
           ORDER BY 
-          -- Extraer el año de INC_numero_formato y ordenar por año de forma descendente
           SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
           INC_numero_formato DESC
           OFFSET :start ROWS

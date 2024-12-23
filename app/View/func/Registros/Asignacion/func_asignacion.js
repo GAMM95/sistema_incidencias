@@ -268,14 +268,14 @@ $(document).on('click', '.pagination-link', function (e) {
 // Ocultar tabla y buscador superior si no hay registros
 document.addEventListener("DOMContentLoaded", function () {
   const tablaContainer = document.getElementById("tablaContainer");
-  const noIncidencias = document.getElementById("noIncidencias");
+  const noRecepciones = document.getElementById("noRecepciones");
 
-  if (parseInt(document.getElementById("incidenciaCount").value) === 0) {
+  if (parseInt(document.getElementById("recepcionCount").value) === 0) {
     tablaContainer.classList.add("hidden");
-    noIncidencias.classList.add("hidden");
+    noRecepciones.classList.add("hidden");
   } else {
     tablaContainer.classList.remove("hidden");
-    noIncidencias.classList.remove("hidden");
+    noRecepciones.classList.remove("hidden");
   }
 });
 
@@ -344,10 +344,10 @@ document.addEventListener("DOMContentLoaded", function () {
     // if (<? php echo count($incidencias); ?> === 0) {
 
     tablaContainer.classList.add("hidden");
-    noIncidencias.classList.add("hidden");
+    noRecepciones.classList.add("hidden");
   } else {
     tablaContainer.classList.remove("hidden");
-    noIncidencias.classList.remove("hidden");
+    noRecepciones.classList.remove("hidden");
   }
 });
 

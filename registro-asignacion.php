@@ -40,12 +40,12 @@ $totalAsignaciones = $asignacionModel->contarAsignaciones();
 $totalPagesAsignaciones = ceil($totalAsignaciones / $limite2);
 $resultadoAsignaciones = $asignacionModel->listarAsignaciones($inicio2, $limite2);
 
-if ($ASI_codigo != '') {
-  global $asignacionRegistrada;
-  $asignacionRegistrada = $asignacionModel->obtenerAsignacionesPorId($ASI_codigo);
-} else {
-  $asignacionRegistrada = null;
-}
+// if ($ASI_codigo != '') {
+//   global $asignacionRegistrada;
+//   $asignacionRegistrada = $asignacionModel->obtenerAsignacionesPorId($ASI_codigo);
+// } else {
+//   $asignacionRegistrada = null;
+// }
 
 switch ($action) {
   case 'registrar':

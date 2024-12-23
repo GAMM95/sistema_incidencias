@@ -132,7 +132,7 @@ CREATE TABLE BIEN (
     BIE_codigo SMALLINT IDENTITY(1,1),
     BIE_codigoIdentificador VARCHAR(12) NULL,
     BIE_nombre VARCHAR(100) NULL,
-	EST_codigo SMALLINT NOT NULL,
+	  EST_codigo SMALLINT NOT NULL,
     CONSTRAINT pk_bien PRIMARY KEY (BIE_codigo),
     CONSTRAINT uk_codigoIdentificador UNIQUE (BIE_codigoIdentificador)
 );
@@ -560,7 +560,40 @@ GO
 -- GO
 
 
-
+CREATE OR ALTER VIEW vw_incidencias_registradas AS
+WITH UltimaRecepcion AS (
+  SELECT
+    I.INC_numero,
+    I.INC_numero_formato,
+    (
+      CONVERT ( VARCHAR ( 10 ), I.INC_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), I.INC_hora, 0 ), 7 ), 6, 0, ' ' ) 
+    ) AS fechaIncidenciaFormateada,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_descripcion,
+    CAT.CAT_nombre,
+    A.ARE_nombre,
+    E.EST_descripcion AS ESTADO,
+    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario,
+    ROW_NUMBER ( ) OVER ( PARTITION BY I.INC_numero ORDER BY R.REC_fecha DESC, R.REC_hora DESC ) AS rn 
+  FROM
+    INCIDENCIA I
+    LEFT JOIN BIEN B ON LEFT( I.INC_codigoPatrimonial, 8 ) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+    INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+    LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+    LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+    LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+    INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo 
+  WHERE
+    I.EST_codigo IN ( 3 ) 
+) -- Filtramos para obtener solo la recepción más reciente de cada incidencia
+SELECT * FROM UltimaRecepcion 
+WHERE rn = 1
 
 
 CREATE OR ALTER VIEW vw_incidencias_totales_administrador AS
@@ -869,39 +902,8 @@ INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
 WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5));
 GO
 
---Vista para listar asignaciones
-CREATE OR ALTER VIEW vista_asignaciones AS
-SELECT 
-    ASI.ASI_codigo,
-    R.REC_numero,
-    I.INC_numero_formato,
-    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
-    A.ARE_nombre,
-    I.INC_asunto,
-    I.INC_codigoPatrimonial,
-    B.BIE_nombre,
-    U.USU_codigo,
-    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioAsignado,
-    pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
-    E.EST_descripcion,
-    E.EST_codigo
-FROM 
-    ASIGNACION ASI
-    INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
-    LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
-    LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
-    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
-    INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
-    LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
-    LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
-    LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
-    INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo;
-GO
-
-
-
---Vista para listar incidencias finalizadas
-CREATE OR ALTER VIEW vista_mantenimiento AS
+-- Vista para listar las incidencias asignadas solo las que no estan finalizadas
+CREATE OR ALTER VIEW vw_incidencias_asignadas AS
 SELECT 
 	I.INC_numero,
     ASI.ASI_codigo,
@@ -937,10 +939,80 @@ FROM
 	LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
 	LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
 	LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+  WHERE E.EST_codigo = 5
 GO
 
+
+--Vista para listar asignaciones
+CREATE OR ALTER VIEW vista_asignaciones AS
+SELECT 
+    ASI.ASI_codigo,
+    R.REC_numero,
+    I.INC_numero_formato,
+    (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
+    A.ARE_nombre,
+    I.INC_asunto,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    U.USU_codigo,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioAsignado,
+    pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
+    E.EST_descripcion,
+    E.EST_codigo
+FROM 
+    ASIGNACION ASI
+    INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+    LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+    LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+    LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+    LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+    INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo;
+GO
+
+-- --Vista para listar incidencias finalizadas
+-- CREATE OR ALTER VIEW vista_mantenimiento AS
+-- SELECT 
+-- 	I.INC_numero,
+--     ASI.ASI_codigo,
+-- 	R.REC_numero,
+--     I.INC_numero_formato,
+-- 	M.MAN_codigo,
+--     (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+--     (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,    
+--     (CONVERT(VARCHAR(10), M.MAN_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), M.MAN_hora, 0), 7), 6, 0, ' ')) AS fechaMantenimientoFormateada,
+--     A.ARE_nombre,
+--     I.INC_asunto,
+-- 	I.INC_documento,
+--     I.INC_codigoPatrimonial,
+--     B.BIE_nombre,
+--     U.USU_codigo,
+--     P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioSoporte,
+--     pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
+-- 	CASE
+--         WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+--         ELSE E.EST_descripcion
+--     END AS EST_descripcion
+-- FROM 
+--     ASIGNACION ASI
+--     INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+--     LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+--     LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+--     LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+--     INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+--     LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+--     LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+--     LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+--     INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+-- 	LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+-- 	LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
+-- 	LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+-- GO
+
 -- Vista para listar mantenimientos con tiempo de mantenimiento
-CREATE OR ALTER VIEW vista_incidencias_matenimiento AS
+CREATE OR ALTER VIEW vw_incidencias_mantenimiento AS
 SELECT 
     I.INC_numero,
     ASI.ASI_codigo,
@@ -1042,6 +1114,7 @@ SELECT
         WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
         ELSE E.EST_descripcion
     END AS Estado,
+    E.EST_codigo ,
 	 -- Última modificación (fecha y hora más reciente)
     MAX(COALESCE(C.CIE_fecha, M.MAN_fecha, ASI.ASI_fecha, R.REC_fecha, I.INC_fecha)) AS ultimaFecha,
     MAX(COALESCE(C.CIE_hora, M.MAN_hora, ASI.ASI_hora, R.REC_hora, I.INC_hora)) AS ultimaHora
@@ -1082,8 +1155,156 @@ GROUP BY
     pA.PER_apellidoPaterno, 
     C.CIE_numero, 
     EC.EST_descripcion, 
-    E.EST_descripcion
+    E.EST_descripcion,
+    E.EST_codigo 
 GO
+
+
+
+-- CREATE OR ALTER VIEW vista_incidencias_matenimiento AS
+-- SELECT 
+--     I.INC_numero,
+--     ASI.ASI_codigo,
+--     I.INC_numero_formato,
+--     M.MAN_codigo,
+--     (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
+--     (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,    
+--     (CONVERT(VARCHAR(10), M.MAN_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), M.MAN_hora, 0), 7), 6, 0, ' ')) AS fechaMantenimientoFormateada,
+    
+--     -- Cálculo del tiempo de mantenimiento en segundos
+--     DATEDIFF(SECOND, 
+--         CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--         CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--     ) AS tiempoMantenimientoSegundos,
+
+--     -- Mostrar solo días, horas, minutos y segundos según sea necesario
+--     CASE
+--         -- Si tiene días, mostrar días, horas, minutos
+--         WHEN DATEDIFF(SECOND, 
+--                 CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                 CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--             ) >= 86400 
+--         THEN
+--             CAST(DATEDIFF(SECOND, 
+--                 CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                 CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--             ) / 86400 AS VARCHAR) + ' días ' +
+--             CAST((DATEDIFF(SECOND, 
+--                 CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                 CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--             ) % 86400) / 3600 AS VARCHAR) + 
+--             CASE 
+--                 WHEN (DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                             CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--                     ) % 86400) / 3600 = 1 THEN ' hora '
+--                 ELSE ' horas ' 
+--             END +
+--             CAST(((DATEDIFF(SECOND, 
+--                 CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                 CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--             ) % 86400) % 3600) / 60 AS VARCHAR) + 
+--             CASE 
+--                 WHEN ((DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                             CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--                     ) % 86400) % 3600) / 60 = 1 THEN ' minuto '
+--                 ELSE ' minutos '
+--             END
+
+--         -- Si tiene horas pero no días, mostrar horas y minutos
+--         WHEN DATEDIFF(SECOND, 
+--                 CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                 CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--             ) >= 3600 
+--         THEN
+--             CAST((DATEDIFF(SECOND, 
+--                 CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                 CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--             ) % 86400) / 3600 AS VARCHAR) + 
+--             CASE 
+--                 WHEN (DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                             CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--                     ) % 86400) / 3600 = 1 THEN ' hora '
+--                 ELSE ' horas '
+--             END +
+--             CAST(((DATEDIFF(SECOND, 
+--                 CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                 CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--             ) % 86400) % 3600) / 60 AS VARCHAR) + 
+--             CASE 
+--                 WHEN ((DATEDIFF(SECOND, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                             CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+--                     ) % 86400) % 3600) / 60 = 1 THEN ' minuto '
+--                 ELSE ' minutos '
+--             END
+
+--        -- Si tiene menos de una hora, mostrar solo minutos
+-- 			ELSE
+-- 				CAST(DATEDIFF(MINUTE, 
+-- 					CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+-- 					CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)
+-- 				) AS VARCHAR) + 
+--                 CASE 
+--                     WHEN DATEDIFF(MINUTE, CAST(CONVERT(VARCHAR(10), ASI.ASI_fecha, 120) + ' ' + CONVERT(VARCHAR(8), ASI.ASI_hora, 108) AS DATETIME), 
+--                                   CAST(CONVERT(VARCHAR(10), M.MAN_fecha, 120) + ' ' + CONVERT(VARCHAR(8), M.MAN_hora, 108) AS DATETIME)) = 1 
+--                     THEN ' minuto '
+--                     ELSE ' minutos '
+--                 END
+--     END AS tiempoMantenimientoFormateado, 
+--     M.MAN_fecha,
+--     A.ARE_nombre,
+--     I.INC_asunto,
+--     I.INC_documento,
+--     I.INC_codigoPatrimonial,
+--     B.BIE_nombre,
+--     U.USU_codigo,
+--     P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioSoporte,
+--     pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
+-- 	CASE
+--         WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
+--         ELSE E.EST_descripcion
+--     END AS Estado,
+-- 	 -- Última modificación (fecha y hora más reciente)
+--     MAX(COALESCE(C.CIE_fecha, M.MAN_fecha, ASI.ASI_fecha, R.REC_fecha, I.INC_fecha)) AS ultimaFecha,
+--     MAX(COALESCE(C.CIE_hora, M.MAN_hora, ASI.ASI_hora, R.REC_hora, I.INC_hora)) AS ultimaHora
+-- FROM 
+--     ASIGNACION ASI
+--     INNER JOIN ESTADO E ON E.EST_codigo = ASI.EST_codigo
+--     LEFT JOIN RECEPCION R ON R.REC_numero = ASI.REC_numero
+--     LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+--     LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+--     INNER JOIN AREA A ON A.ARE_codigo = I.ARE_codigo
+--     LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+--     LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+--     LEFT JOIN USUARIO U ON U.USU_codigo = ASI.USU_codigo
+--     INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+--     LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = ASI.ASI_codigo
+-- 	LEFT JOIN CIERRE C ON C.MAN_codigo = M.MAN_codigo
+-- 	LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+-- GROUP BY 
+--     I.INC_numero, 
+--     ASI.ASI_codigo, 
+--     I.INC_numero_formato, 
+--     M.MAN_codigo, 
+--     REC_fecha, 
+--     REC_hora, 
+--     ASI.ASI_fecha, 
+--     ASI.ASI_hora, 
+--     M.MAN_fecha, 
+--     M.MAN_hora,
+--     A.ARE_nombre, 
+--     I.INC_asunto, 
+--     I.INC_documento, 
+--     I.INC_codigoPatrimonial, 
+--     B.BIE_nombre, 
+--     U.USU_codigo, 
+--     P.PER_nombres, 
+--     P.PER_apellidoPaterno, 
+--     pA.PER_nombres, 
+--     pA.PER_apellidoPaterno, 
+--     C.CIE_numero, 
+--     EC.EST_descripcion, 
+--     E.EST_descripcion
+-- GO
 
 -- Vista para listar cierres
 CREATE OR ALTER VIEW vista_cierres AS
@@ -1406,6 +1627,86 @@ SELECT
       INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
       WHERE (I.EST_codigo IN (3, 4, 5) OR C.EST_codigo IN (3, 4, 5));
 GO
+
+-- Vista para listar incidencias recepcionadas
+CREATE OR ALTER VIEW vw_recepciones AS
+WITH UltimaRecepcion AS (
+  SELECT
+    I.INC_numero,
+    I.INC_numero_formato,
+    R.REC_numero,
+    (
+      CONVERT ( VARCHAR ( 10 ), I.INC_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), I.INC_hora, 0 ), 7 ), 6, 0, ' ' ) 
+    ) AS fechaRecepcionFormateada,
+    I.INC_codigoPatrimonial,
+    B.BIE_nombre,
+    I.INC_asunto,
+    I.INC_documento,
+    I.INC_descripcion,
+    CAT.CAT_nombre,
+    PRI.PRI_nombre,
+    IMP.IMP_descripcion,
+    A.ARE_nombre,
+    E.EST_descripcion AS ESTADO,
+    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS UsuarioRecepcion,
+    ROW_NUMBER() OVER (PARTITION BY I.INC_numero ORDER BY R.REC_fecha DESC, R.REC_hora DESC) AS rn 
+  FROM
+    INCIDENCIA I
+    LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
+    INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+    INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+    LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
+    LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+    LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+    LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+    INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo 
+  WHERE
+    I.EST_codigo = 4  -- Estado de "Recepcionado"
+    AND (R.EST_codigo IS NULL OR R.EST_codigo NOT IN (5, 6, 7)) 
+)
+SELECT * 
+FROM UltimaRecepcion 
+WHERE rn = 1;
+
+-- Vista para listar las ultimas incidencias recepcionadas, solo en estado 4 (RECEPCIONADO)
+CREATE OR ALTER VIEW vw_incidencias_recepcionadas AS
+WITH UltimaRecepcion AS (
+SELECT
+  I.INC_numero,
+  I.INC_numero_formato,
+  R.REC_numero,
+  (
+    CONVERT ( VARCHAR ( 10 ), I.INC_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), I.INC_hora, 0 ), 7 ), 6, 0, ' ' ) 
+  ) AS fechaRecepcionFormateada,
+  A.ARE_nombre,
+  I.INC_codigoPatrimonial,
+  B.BIE_nombre,
+  I.INC_asunto,
+  CAT.CAT_nombre,
+  PRI.PRI_nombre,
+  IMP.IMP_descripcion,
+  p.PER_nombres + ' ' + p.PER_apellidoPaterno AS UsuarioRecepcion,
+  E.EST_descripcion AS ESTADO,
+  R.EST_codigo ,
+  ROW_NUMBER() OVER (PARTITION BY I.INC_numero ORDER BY R.REC_fecha DESC, R.REC_hora DESC) AS rn 
+FROM
+  RECEPCION R
+  INNER JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+  LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+  INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
+  INNER JOIN ESTADO E ON E.EST_codigo = R.EST_codigo
+  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+  LEFT JOIN BIEN B ON LEFT( I.INC_codigoPatrimonial, 8 ) = B.BIE_codigoIdentificador
+  INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+  LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+  LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
+  WHERE
+    R.EST_codigo = 4  -- Only include "Recepcionado" state
+    )
+SELECT * 
+FROM UltimaRecepcion 
+WHERE rn = 1;
 
 --Vista para reporte de incidencias pendientes de cierre
 CREATE OR ALTER VIEW vw_reporte_pendientes_cierre AS
@@ -3214,7 +3515,6 @@ CREATE OR ALTER PROCEDURE sp_registrar_asignacion
 AS 
 BEGIN
     SET NOCOUNT ON;
-
     BEGIN TRY 
         -- Iniciar la transacción
         BEGIN TRANSACTION;
@@ -3233,22 +3533,35 @@ BEGIN
             -- Insertar la nueva asignación
             INSERT INTO ASIGNACION (ASI_fecha, ASI_hora, USU_codigo, REC_numero, EST_codigo)
             VALUES (@ASI_fecha, @ASI_hora, @USU_codigo, @REC_numero, 5); -- ESTADO "EN ESPERA"
+            
+             -- Actualizar el estado de la recepcion a 'en espera' (estado 5)
+            UPDATE RECEPCION 
+            SET EST_codigo = 5
+            WHERE REC_numero = @REC_numero;
         END;
 
-        -- Confirmar la transacción
+        ELSE
+        BEGIN
+            -- Si ya existe una asignacion, solo actualizamos el estado de la asignacion
+            UPDATE ASIGNACION 
+            SET EST_codigo = 5
+            WHERE 
+                 ASI_fecha = @ASI_fecha 
+                AND ASI_hora = @ASI_hora 
+                AND USU_codigo = @USU_codigo 
+                AND REC_numero = @REC_numero;
+
+            -- Actualizar el estado de la recepcion a 'en espera' (estado 5) si aún no está en ese estado
+            UPDATE RECEPCION 
+            SET EST_codigo = 5
+            WHERE REC_numero = @REC_numero;
+        END
+
         COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        -- Hacer rollback en caso de error
-        IF @@TRANCOUNT > 0
-            ROLLBACK TRANSACTION;
-
-        -- Devolver el mensaje de error
-        DECLARE @ErrorMessage NVARCHAR(4000) = ERROR_MESSAGE();
-        DECLARE @ErrorSeverity INT = ERROR_SEVERITY();
-        DECLARE @ErrorState INT = ERROR_STATE();
-
-        RAISERROR(@ErrorMessage, @ErrorSeverity, @ErrorState);
+    END TRY 
+    BEGIN CATCH 
+        ROLLBACK TRANSACTION;
+        THROW;
     END CATCH
 END;
 GO
@@ -4713,44 +5026,3 @@ GO
 
 PRINT 'BASE DE DATOS GENERADO';
 GO
-
-
--- Vista para listar incidencias recepcionadas
-CREATE OR ALTER VIEW vw_incidencias_recepcionadas AS
-WITH UltimaRecepcion AS (
-  SELECT
-    I.INC_numero,
-    I.INC_numero_formato,
-    R.REC_numero,
-    (
-      CONVERT ( VARCHAR ( 10 ), I.INC_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), I.INC_hora, 0 ), 7 ), 6, 0, ' ' ) 
-    ) AS fechaRecepcionFormateada,
-    I.INC_codigoPatrimonial,
-    B.BIE_nombre,
-    I.INC_asunto,
-    I.INC_documento,
-    I.INC_descripcion,
-    CAT.CAT_nombre,
-    PRI_nombre,
-    IMP_descripcion,
-    A.ARE_nombre,
-    E.EST_descripcion AS ESTADO,
-    p.PER_nombres + ' ' + p.PER_apellidoPaterno AS UsuarioRecepcion,
-    ROW_NUMBER ( ) OVER ( PARTITION BY I.INC_numero ORDER BY R.REC_fecha DESC, R.REC_hora DESC ) AS rn 
-  FROM
-    INCIDENCIA I
-    LEFT JOIN BIEN B ON LEFT( I.INC_codigoPatrimonial, 8 ) = B.BIE_codigoIdentificador
-    INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
-    INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
-    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-    LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-    LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
-    LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
-    LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
-    LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
-    INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo 
-  WHERE
-    I.EST_codigo IN ( 4 ) 
-) 
-SELECT * FROM UltimaRecepcion 
-WHERE rn = 1
