@@ -594,7 +594,7 @@ WITH UltimaRecepcion AS (
 ) -- Filtramos para obtener solo la recepción más reciente de cada incidencia
 SELECT * FROM UltimaRecepcion 
 WHERE rn = 1
-
+GO
 
 CREATE OR ALTER VIEW vw_incidencias_totales_administrador AS
 WITH IncidenciasOrdenadas AS (
@@ -942,7 +942,6 @@ FROM
   WHERE E.EST_codigo = 5
 GO
 
-
 --Vista para listar asignaciones
 CREATE OR ALTER VIEW vista_asignaciones AS
 SELECT 
@@ -1108,6 +1107,7 @@ SELECT
     I.INC_codigoPatrimonial,
     B.BIE_nombre,
     U.USU_codigo,
+    E.EST_descripcion,
     P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioSoporte,
     pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
 	CASE
@@ -1668,6 +1668,7 @@ WITH UltimaRecepcion AS (
 SELECT * 
 FROM UltimaRecepcion 
 WHERE rn = 1;
+GO
 
 -- Vista para listar las ultimas incidencias recepcionadas, solo en estado 4 (RECEPCIONADO)
 CREATE OR ALTER VIEW vw_incidencias_recepcionadas AS
@@ -1707,6 +1708,7 @@ FROM
 SELECT * 
 FROM UltimaRecepcion 
 WHERE rn = 1;
+GO
 
 --Vista para reporte de incidencias pendientes de cierre
 CREATE OR ALTER VIEW vw_reporte_pendientes_cierre AS

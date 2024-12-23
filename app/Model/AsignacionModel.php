@@ -143,7 +143,7 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_mantenimiento
+        $sql = "SELECT * FROM vw_incidencias_mantenimiento
         WHERE USU_codigo = :usuarioAsignado
         AND EST_descripcion IN ('EN ESPERA', 'RESUELTO')
         ORDER BY INC_numero_formato DESC";

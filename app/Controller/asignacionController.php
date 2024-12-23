@@ -151,7 +151,7 @@ class AsignacionController
       return $resultado;
     } catch (Exception $e) {
       // Manejo de errores
-      echo "Error al listar incidencias asignacadas al usuario: " . $e->getMessage();
+      echo "Error al listar incidencias asignadas al usuario: " . $e->getMessage();
     }
   }
 
