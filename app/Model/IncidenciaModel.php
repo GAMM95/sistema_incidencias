@@ -413,7 +413,6 @@ class IncidenciaModel extends Conexion
       if ($conector != null) {
         $sql = "SELECT * FROM vista_incidencias_administrador
           ORDER BY 
-          -- Extraer el año de INC_numero_formato y ordenar por año de forma descendente
           SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
           INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);

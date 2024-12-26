@@ -250,3 +250,4 @@
 </div>
 
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">

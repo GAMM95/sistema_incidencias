@@ -132,4 +132,4 @@
 
   </div>
 </div>
-<script src="https://cdn.tailwindcss.com"></script>
+<link href="src/output.css" rel="stylesheet">

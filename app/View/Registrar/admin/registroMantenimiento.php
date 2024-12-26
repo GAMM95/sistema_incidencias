@@ -107,7 +107,7 @@
               <?php foreach ($resultadoMantenimiento as $mantenimiento) : ?>
                 <?php
                 $numeroAsignacion = htmlspecialchars($mantenimiento['ASI_codigo']);
-                $estado = htmlspecialchars($mantenimiento['EST_descripcion']);
+                $estado = htmlspecialchars($mantenimiento['Estado']);
                 $Finalizado = ($estado === 'RESUELTO'); // Comparación forzada como entero
                 ?>
                 <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $numeroAsignacion; ?>">

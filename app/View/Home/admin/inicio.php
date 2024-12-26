@@ -95,17 +95,15 @@
         </div>
       </div>
 
-      <script>
+      <!-- <script>
         document.getElementById('mes-selector').addEventListener('change', function() {
           var mesNombre = this.options[this.selectedIndex].text;
           document.getElementById('mes-nombre').textContent = mesNombre;
         });
-      </script>
+      </script> -->
       <!-- Fin del widget del grafico -->
 
       <!-- Tarjetas de las cantidades  -->
-      <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-      <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
       <script>
         // Pasar datos de PHP a JavaScript
         var incidenciasData = <?php echo json_encode([
@@ -171,18 +169,18 @@
             <div id="support-chart2"></div>
           </div>
         </div>
-        <script>
+        <!-- <script>
           document.getElementById('mes-selector').addEventListener('change', function() {
             var mesNombre = this.options[this.selectedIndex].text;
             document.getElementById('mes-nombre').textContent = mesNombre;
             // Aquí puedes agregar una llamada AJAX para actualizar los datos según el mes seleccionado
           });
-        </script>
+        </script> -->
         <!-- Fin del widget del grafico -->
 
         <!-- Tarjetas de las cantidades  -->
-        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
         <script>
           // Pasar datos de PHP a JavaScript
           var recepcionesData = <?php echo json_encode([
@@ -294,6 +292,3 @@
     <!-- Fin del contenido principal -->
   </div>
 </div>
-<script src="https://cdn.tailwindcss.com"></script>
-<link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
-<script src="./app/View/func/Inicio/func_inicio_admin.js"></script>

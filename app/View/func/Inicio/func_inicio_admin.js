@@ -2,7 +2,7 @@
 $(function () {
   var options1 = {
     chart: {
-      type: 'bar',
+      type: 'area',
       height: 200
     },
     plotOptions: {
@@ -49,7 +49,7 @@ $(function () {
 $(function () {
   var options2 = {
     chart: {
-      type: 'area',
+      type: 'bar',
       height: 200
     },
     plotOptions: {

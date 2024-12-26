@@ -72,6 +72,18 @@ switch ($action) {
   <!-- vendor css -->
   <link rel="stylesheet" href="dist/assets/css/style.css">
 
+  <!-- Archivos cdn -->
+  <!-- Mensajes toastr -->
+  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> -->
+  <!-- Buscador de combos -->
+  <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
+  <!-- Creacion de PDF -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> -->
+  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script> -->
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+
 </head>
 
 <body class="">
@@ -97,30 +109,30 @@ switch ($action) {
   ?>
   <!-- [ Main Content ] end -->
 
-
-  <!-- Required Js -->
-  <script src="dist/assets/js/vendor-all.min.js"></script>
+    <!-- Required Js -->
+    <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
+  <!-- Iconos de Feather -->
+  <script src="dist/assets/js/plugins/feather.min.js"></script>
+  <!-- Select2 -->
+  <link href="dist/assets/css/plugins/select2.min.css" rel="stylesheet">
+  <script src="dist/assets/js/plugins/select2.min.js"></script>
+  <!-- Mensajes toastr -->
+  <script src="dist/assets/js/plugins/toastr.min.js"></script>
+  <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
+  <!-- Framework CSS -->
+  <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+  <!-- Generacion de pdf -->
+  <script src="dist/assets/js/plugins/jspdf.umd.min.js"></script>
+  <script src="dist/assets/js/plugins/jspdf.plugin.autotable.min.js"></script>
 
 
-  <!-- custom-chart js -->
-  <script src="dist/assets/js/pages/dashboard-main.js"></script>
+  <!-- Funcionalidades enrutadas -->
   <script src="./app/View/func/Registros/Recepcion/func_recepcion_admin.js"></script>
 
-  <!-- Framework CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
-  <!-- Mensajes toastr -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-  <!-- Buscador de opciones en combos -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-  <!-- Creacion de PDF -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
 </body>
 
 </html>

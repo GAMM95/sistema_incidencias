@@ -55,6 +55,8 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <meta name="author" content="GAMM95" />
   <!-- vendor css -->
   <link rel="stylesheet" href="dist/assets/css/style.css">
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+
 
 </head>
 
@@ -87,15 +89,30 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
-
+  <!-- Iconos de Feather -->
+  <script src="dist/assets/js/plugins/feather.min.js"></script>
   <!-- Apex Chart -->
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
-
+  <!-- Mensajes toastr -->
+  <script src="dist/assets/js/plugins/toastr.min.js"></script>
+  <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
+  <!-- Framework CSS -->
+  <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+  <!-- scrollbar -->
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+  <!-- apexcharts y jquery -->
+  <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
+  <!-- <script src="dist/assets/js/plugins/jquery.min.js"></script> -->
+
+
+  <!-- Archivos cdn -->
+  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css"> -->
+  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
+  <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+
   <script>
     // Evita que el usuario regrese a la página anterior al presionar "Atrás"
     history.pushState(null, null, location.href);
@@ -103,6 +120,9 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
       history.go(1); // Esto forzará que el navegador avance si intenta ir atrás
     };
   </script>
+
+  <!-- Funcionalidades enrutadas -->
+  <script src="./app/View/func/Inicio/func_inicio_admin.js"></script>
 
 </body>
 

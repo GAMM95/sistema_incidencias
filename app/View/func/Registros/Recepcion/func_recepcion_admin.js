@@ -135,7 +135,7 @@ function validarCamposRegistro() {
 
   // Validar campo de número de incidencia
   if ($('#incidencia').val() === '') {
-    mensajeError += 'Debe seleccionar una incidencia.';
+    mensajeError += 'Debe seleccionar una incidencia nueva.';
     valido = false;
   }
 

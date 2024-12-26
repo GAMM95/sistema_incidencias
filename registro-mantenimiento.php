@@ -94,6 +94,8 @@ switch ($action) {
 
   <!-- Framework CSS -->
   <script src="https://cdn.tailwindcss.com"></script>
+  <link href="dist/assets/css/tailwind.min.css" rel="stylesheet">
+
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
   <!-- Mensajes toastr -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">

@@ -145,7 +145,7 @@ class AsignacionModel extends Conexion
       if ($conector != null) {
         $sql = "SELECT * FROM vw_incidencias_mantenimiento
         WHERE USU_codigo = :usuarioAsignado
-        AND EST_descripcion IN ('EN ESPERA', 'RESUELTO')
+        -- AND EST_descripcion IN ('EN ESPERA', 'RESUELTO')
         ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);
