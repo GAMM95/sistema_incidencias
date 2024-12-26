@@ -1,8 +1,5 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $personaRegistrada;
-    ?>
 
     <!-- Miga de pan -->
     <div class="page-header">
@@ -55,20 +52,20 @@
             <!-- NOMBRES DE LA PERSONA -->
             <div class="mb-2 sm:w-1/2">
               <label for="nombres" class="block mb-1 font-bold text-xs">Nombres: *</label>
-              <input type="text" id="nombres" name="nombres" class="border p-2 w-full text-xs rounded-md" title="Ingrese solo letras" placeholder="Ingrese nombres">
+              <input type="text" id="nombres" name="nombres" class="border p-2 w-full text-xs rounded-md" title="Ingrese solo letras" placeholder="Ingrese nombres" oninput="capitalizeInput(this)">
             </div>
 
             <div class="flex flex-wrap -mx-2">
               <!-- APELLIDO PATERNO -->
               <div class="w-full sm:w-1/2 px-2 mb-2">
                 <label for="apellidoPaterno" class="block mb-1 font-bold text-xs">Apellido Paterno: *</label>
-                <input type="text" id="apellidoPaterno" name="apellidoPaterno" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese apellido paterno">
+                <input type="text" id="apellidoPaterno" name="apellidoPaterno" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese apellido paterno" oninput="capitalizeInput(this)">
               </div>
 
               <!-- APELLIDO MATERNO -->
               <div class="w-full sm:w-1/2 px-2 mb-2">
                 <label for="apellidoMaterno" class="block mb-1 font-bold text-xs">Apellido Materno: *</label>
-                <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese apellido materno">
+                <input type="text" id="apellidoMaterno" name="apellidoMaterno" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese apellido materno" oninput="capitalizeInput(this)">
               </div>
             </div>
 
@@ -85,16 +82,6 @@
                 <input type="email" id="email" name="email" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese email">
               </div>
             </div>
-
-            <!-- Recopilacion de valores de cada input -->
-            <script>
-              document.getElementById('dni').value = '<?php echo $personaRegistrada ? $personaRegistrada['PER_dni'] : ''; ?>';
-              document.getElementById('nombres').value = '<?php echo $personaRegistrada ? $personaRegistrada['PER_nombres'] : ''; ?>';
-              document.getElementById('apellidoPaterno').value = '<?php echo $personaRegistrada ? $personaRegistrada['PER_apellidoPaterno'] : ''; ?>';
-              document.getElementById('apellidoMaterno').value = '<?php echo $personaRegistrada ? $personaRegistrada['PER_apellidoMaterno'] : ''; ?>';
-              document.getElementById('celular').value = '<?php echo $personaRegistrada ? $personaRegistrada['PER_celular'] : ''; ?>';
-              document.getElementById('email').value = '<?php echo $personaRegistrada ? $personaRegistrada['PER_email'] : ''; ?>';
-            </script>
 
             <!-- BOTONES DEL FORMULARIO -->
             <div class="flex justify-center space-x-4 mt-3">
@@ -119,12 +106,12 @@
 
         <!-- Tabla de personas -->
         <input type="hidden" id="personasCount" value="<?php echo count($personas) ?>">
-        <div id="tablaContainer" class="relative max-h-[800px] mt-2 overflow-x-hidden shadow-md sm:rounded-lg bg-white ">
+        <div id="tablaContainer" class="relative mt-2 overflow-x-hidden shadow-md sm:rounded-lg bg-white ">
           <table id="tablaTrabajadores" class="w-full text-xs text-left rtl:text-right text-gray-500 bg-white">
             <!-- Encabezado -->
             <thead class="sticky top-0 text-xs text-gray-70 uppercase bg-lime-300">
               <tr>
-                <th scope="col" class="px-6 py-1 text-center hidden">N&deg;</th>
+                <th scope="col" class="px-6 py-1 text-center ">N&deg;</th>
                 <th scope="col" class="px-6 py-1 text-center">DNI</th>
                 <th scope="col" class="px-6 py-2 text-center">Nombre completo</th>
                 <th scope="col" class="px-6 py-2 text-center">Celular</th>
@@ -135,9 +122,12 @@
 
             <!-- Inicio de cuerpo de tabla -->
             <tbody>
+              <?php $item = 1; // Iniciar contador para el ítem 
+              ?>
               <?php foreach ($personas as $persona) : ?>
                 <tr class="hover:bg-green-100 hover:scale-[101%] transition-all hover:cursor-pointer border-b" data-cod="<?= $persona['PER_codigo']; ?>" data-dni="<?= $persona['PER_dni']; ?>" data-nombre="<?= $persona['persona']; ?>" data-celular="<?= $persona['PER_celular']; ?>" data-email="<?= $persona['PER_email']; ?>">
-                  <th scope="row" class=" hidden px-6 py-3 font-medium text-gray-900 whitespace-nowrap"> <?= $persona['PER_codigo']; ?></th>
+                  <th scope="row" class="hidden px-6 py-3 font-medium text-gray-900 whitespace-nowrap"> <?= $persona['PER_codigo']; ?></th>
+                  <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                   <td class="px-6 py-2 w-1/6 text-center"> <?= $persona['PER_dni']; ?></td>
                   <td class="px-6 py-2 w-1/2 text-center"> <?= $persona['persona']; ?></td>
                   <td class="px-6 py-2 w-1/6 text-center"> <?= $persona['PER_celular']; ?></td>

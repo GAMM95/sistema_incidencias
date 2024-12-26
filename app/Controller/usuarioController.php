@@ -69,6 +69,18 @@ class UsuarioController
     }
   }
 
+  // Metodo para listar los registros de los usuarios
+  public function listarUsuarios()
+  {
+    try {
+      $resultado = $this->usuarioModel->listarUsuarios();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar usuarios: " . $e->getMessage();
+    }
+  }
+
   // Metodo para editar usuarios
   public function actualizarUsuario()
   {
@@ -81,10 +93,10 @@ class UsuarioController
       $area = $_POST['area'] ?? null;
 
       try {
-        // Validar si el usuario ya está registrado
-        if (!$this->usuarioModel->validarUsuarioExistente($username)) {
+        // Validar si el usuario ya está registrado, excluyendo el usuario actual
+        if (!$this->usuarioModel->validarUsuarioExistente($username, $codigoUsuario)) {
           echo json_encode([
-            'success' => true,
+            'success' => false,
             'message' => 'El nombre de usuario ya existe.'
           ]);
           exit();

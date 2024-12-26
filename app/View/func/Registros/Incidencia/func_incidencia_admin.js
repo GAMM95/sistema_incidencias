@@ -423,3 +423,7 @@ function capitalizeInput(element) {
   let value = element.value.toLowerCase(); // Convertir todo a minúsculas primero
   element.value = value.charAt(0).toUpperCase() + value.slice(1); // Convertir solo la primera letra a mayúscula
 }
+
+function uppercaseInput(element) {
+  element.value = element.value.toUpperCase();
+}

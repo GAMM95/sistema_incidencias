@@ -1783,6 +1783,16 @@ INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
 GROUP BY a.ARE_nombre;
 GO
 
+-- VISTA PARA LSITAR PERSONAS 
+CREATE OR ALTER VIEW vw_personas AS SELECT
+  PER_codigo,
+  PER_dni,
+  ( PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno ) AS persona,
+  PER_celular,
+  PER_email 
+FROM PERSONA;
+GO
+
 -- Vista para listar los equipos mas afectados
 CREATE OR ALTER VIEW vw_equipos_mas_afectados AS
 SELECT 
@@ -1824,7 +1834,6 @@ FROM
   INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
   INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo;
 GO
-
 
 --Vista para ver los incios de sesion
 CREATE OR ALTER VIEW vw_auditoria_login AS
@@ -3117,6 +3126,40 @@ BEGIN
         -- Lanzar el error capturado
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
+END;
+GO
+
+-- Procedimiento almacenado para editar persona
+CREATE OR ALTER PROCEDURE sp_editar_persona
+  @PER_codigo SMALLINT,
+  @PER_dni CHAR(8),
+  @PER_nombres VARCHAR(20),
+  @PER_apellidoPaterno VARCHAR(15),
+  @PER_apellidoMaterno VARCHAR(15),
+  @PER_celular CHAR(9),
+  @PER_email VARCHAR(45)
+AS
+BEGIN
+  BEGIN TRY
+    BEGIN TRANSACTION;
+    -- Actualizar los datos del usuario
+    UPDATE PERSONA
+    SET 
+      PER_nombres = @PER_nombres,
+      PER_apellidoPaterno = @PER_apellidoPaterno,
+      PER_apellidoMaterno = @PER_apellidoMaterno,
+      PER_celular = @PER_celular,
+      PER_email = @PER_email
+    WHERE 
+      PER_codigo = @PER_codigo;
+
+    COMMIT TRANSACTION;
+    PRINT 'Persona actualizado correctamente.';
+  END TRY
+  BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error al actualizar persona: ' + ERROR_MESSAGE();
+  END CATCH
 END;
 GO
 

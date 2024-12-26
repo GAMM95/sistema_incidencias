@@ -10,21 +10,12 @@ $state = $_GET['state'] ?? '';
 $PER_codigo = $_GET['PER_codigo'] ?? '';
 
 require_once 'app/Controller/PersonaController.php';
-require_once 'app/Model/PersonaModel.php';
 
 // Crear una instancia del controlador PersonaController
 $personaController = new PersonaController();
-$personaModel = new PersonaModel();
 
 // listar personas registradas
 $personas = $personaModel->listarTrabajadores();
-
-if ($PER_codigo != '') {
-  global $personaRegistrada;
-  $personaRegistrada = $personaModel->obtenerPersonaPorId($PER_codigo);
-} else {
-  $personaRegistrada = null;
-}
 
 // Verificar si se debe manejar una acción
 switch ($action) {
@@ -68,19 +59,31 @@ switch ($action) {
   <?php include('app/View/partials/admin/header.php'); ?>
   <?php include('app/View/Mantenimiento/mantenedorPersona.php'); ?>
 
+  <!-- Required Js -->
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
-  <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/Mantenedores/func_persona.js"></script>
-
+  <!-- Iconos de Feather -->
+  <script src="dist/assets/js/plugins/feather.min.js"></script>
+  <!-- Mensajes toastr -->
+  <script src="dist/assets/js/plugins/toastr.min.js"></script>
+  <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
   <!-- Framework CSS -->
-  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet"> -->
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+
+  <!-- Archivos cdn -->
   <!-- Mensajes toastr -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <!-- Framework CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+
+  <!-- Funcionalidades enrutadas -->
+  <script src="./app/View/func/Mantenedores/func_persona.js"></script>
+
 </body>
 
 </html>

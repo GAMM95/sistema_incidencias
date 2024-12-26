@@ -141,10 +141,10 @@ $(document).ready(function () {
 
     // Establecer valores en los inputs según las celdas seleccionadas
     const codPersona = $(this).find('th').text().trim();
-    const dni = celdas[0].innerText.trim();
-    const nombreCompleto = celdas[1].innerText.trim();
-    const celular = celdas[2].innerText.trim();
-    const email = celdas[3].innerText.trim();
+    const dni = celdas[1].innerText.trim();
+    const nombreCompleto = celdas[2].innerText.trim();
+    const celular = celdas[3].innerText.trim();
+    const email = celdas[4].innerText.trim();
 
     // Dividir el nombre completo en partes para extraer apellidos y nombre
     const partesNombre = nombreCompleto.split(' ');
@@ -169,7 +169,6 @@ $(document).ready(function () {
   });
 });
 
-
 // Función para manejar el nuevo registro
 function nuevoRegistro() {
   const form = document.getElementById('formPersona');
@@ -188,43 +187,6 @@ function nuevoRegistro() {
   document.getElementById('termino').value = '';
   filtrarTablaTrabajador();
 }
-
-// // función para cambiar de página en la tabla de trabajadores
-// function cambiarPaginaTablaTrabajadores(page) {
-//   const terminoBusqueda = document.getElementById('termino').value; // Captura el término de búsqueda actual
-
-//   // Realiza la solicitud incluyendo el término de búsqueda
-//   fetch(`?page=${page}&search=${encodeURIComponent(terminoBusqueda)}`)
-//     .then(response => response.text())
-//     .then(data => {
-//       const parser = new DOMParser();
-//       const newDocument = parser.parseFromString(data, 'text/html');
-//       const newTable = newDocument.querySelector('#tablaTrabajadores');
-//       const newPagination = newDocument.querySelector('.flex.justify-end.items-center.mt-1');
-
-//       // Reemplazar la tabla actual con la nueva tabla obtenida
-//       document.querySelector('#tablaTrabajadores').parentNode.replaceChild(newTable, document.querySelector('#tablaTrabajadores'));
-
-//       // Reemplazar la paginación actual con la nueva paginación obtenida
-//       const currentPagination = document.querySelector('.flex.justify-end.items-center.mt-1');
-//       if (currentPagination && newPagination) {
-//         currentPagination.parentNode.replaceChild(newPagination, currentPagination);
-//       }
-
-//       // Reaplicar el filtro en el cliente si necesario
-//       filtrarTablaTrabajador();
-//     })
-//     .catch(error => {
-//       console.error('Error al cambiar de página:', error);
-//     });
-// }
-
-// // Manejo de la paginación
-// $(document).on('click', '.pagination-link', function (e) {
-//   e.preventDefault();
-//   var page = $(this).data('page');
-//   cambiarPaginaTablaTrabajadores(page);
-// });
 
 // función para filtrar la tabla de trabajadores
 function filtrarTablaTrabajador() {
@@ -245,4 +207,10 @@ function filtrarTablaTrabajador() {
     }
     filas[i].style.display = match ? '' : 'none';
   }
+}
+
+// Funcion para Capitalizar la primera letra de un input
+function capitalizeInput(element) {
+  let value = element.value.toLowerCase(); // Convertir todo a minúsculas primero
+  element.value = value.charAt(0).toUpperCase() + value.slice(1); // Convertir solo la primera letra a mayúscula
 }

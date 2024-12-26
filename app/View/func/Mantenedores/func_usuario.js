@@ -6,6 +6,18 @@ $(document).ready(function () {
     "timeOut": "2000"
   };
 
+  // Evento para manejar la tecla Enter cuando una fila está seleccionada
+  $(document).on('keydown', function (e) {
+    // Verificar si la tecla presionada es Enter
+    if (e.key === 'Enter') {
+      // Si la fila está seleccionada, proceder a actualizar
+      if ($('.bg-blue-200.font-semibold').length > 0) {
+        e.preventDefault();
+        enviarFormulario('editar');
+      }
+    }
+  });
+
   $(document).keydown(function (event) {
     // Verificar si la tecla presionada es ESC
     if (event.key === 'Escape') {
@@ -150,7 +162,6 @@ function enviarFormulario(action) {
   });
 }
 
-
 // Función para validar campos antes de enviar
 function validarCamposRegistroUsuario() {
   var valido = true;
@@ -198,11 +209,11 @@ $(document).on('click', '#tablaListarUsuarios tbody tr', function () {
   // Establecer valores en el formulario según la fila seleccionada
   const celdas = $(this).find('td');
   const codUsuario = $(this).find('th').text().trim();
-  const personaValue = celdas.eq(0).text().trim();
-  const areaValue = celdas.eq(1).text().trim();
-  const usernameValue = celdas.eq(2).text().trim();
-  const passwordValue = celdas.eq(9).text().trim();
-  const rolValue = celdas.eq(4).text().trim();
+  const personaValue = celdas.eq(2).text().trim();
+  const areaValue = celdas.eq(3).text().trim();
+  const usernameValue = celdas.eq(4).text().trim();
+  const passwordValue = celdas.eq(11).text().trim();
+  const rolValue = celdas.eq(6).text().trim();
 
   // Seteo del codigo de usuario en el formulario principal
   $('#CodUsuario').val(codUsuario);
@@ -347,56 +358,6 @@ $(document).ready(function () {
   });
 });
 
-
-// $(document).ready(function () {
-//   // Configuración de Toastr
-//   toastr.options = {
-//     "positionClass": "toast-bottom-right",
-//     "progressBar": true,
-//     "timeOut": "2000"
-//   };
-
-//   $('#restablecerContraseña').on('click', function () {
-//     // Obtén los valores de los campos de contraseña
-//     var codigoUsuario = $('#codigoUsuarioModal').val();
-//     var passwordNuevo = $('#passwordNuevo').val();
-//     var passwordConfirm = $('#passwordConfirm').val();
-
-//     // Validación del lado del cliente
-//     if (passwordNuevo === '' || passwordConfirm === '') {
-//       toastr.success(jsonResponse.message, 'Mensaje');
-//       alert('Debe completar ambos campos de contraseña.');
-//       return;
-//     }
-//     if (passwordNuevo !== passwordConfirm) {
-//       alert('La nueva contraseña y la confirmación no coinciden.');
-//       return;
-//     }
-
-//     // Envío de datos mediante AJAX
-//     $.ajax({
-//       url: 'modulo-usuario.php?action=restablecerContraseña',
-//       type: 'POST',
-//       data: {
-//         codigoUsuarioModal: codigoUsuario,
-//         passwordNuevo: passwordNuevo,
-//         passwordConfirm: passwordConfirm
-//       },
-//       success: function (response) {
-//         // Analiza la respuesta y muestra mensajes adecuados
-//         var result = JSON.parse(response);
-//         if (result.success) {
-//           alert(result.message);  // Aquí podrías usar Toastr para mejor feedback
-//           // Opcional: cerrar el modal o limpiar el formulario
-//           $('#modalCambiarPasswordUser').modal('hide');
-//         } else {
-//           alert(result.message);
-//         }
-//       },
-//       error: function (xhr, status, error) {
-//         alert('Ocurrió un error al procesar la solicitud. Inténtelo nuevamente.');
-//       }
-//     });
-//   });
-// });
-
+function uppercaseInput(element) {
+  element.value = element.value.toUpperCase();
+}

@@ -93,6 +93,7 @@ class PersonaModel extends Conexion
       throw new Exception("Error al obtener el último código de persona: " . $e->getMessage());
     }
   }
+
   // Método para obtener una persona por ID
   public function obtenerPersonaPorId($codigoPersona)
   {
@@ -120,18 +121,18 @@ class PersonaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "UPDATE PERSONA SET PER_dni = ?, PER_nombres = ?, PER_apellidoPaterno = ?, 
-        PER_apellidoMaterno = ?, PER_celular = ?, PER_email = ? WHERE PER_codigo = ?";
+        // $sql = "UPDATE PERSONA SET PER_dni = ?, PER_nombres = ?, PER_apellidoPaterno = ?, 
+        // PER_apellidoMaterno = ?, PER_celular = ?, PER_email = ? WHERE PER_codigo = ?";
+        $sql = "EXEC sp_editar_persona :codigoPersona, :dni, :nombres, :apellidoPaterno, :apellidoMaterno, :celular, :email";
         $stmt = $conector->prepare($sql);
-        $stmt->execute([
-          $dni,
-          $nombres,
-          $apellidoPaterno,
-          $apellidoMaterno,
-          $celular,
-          $email,
-          $codigoPersona
-        ]);
+        $stmt -> bindParam(':dni', $dni);
+        $stmt -> bindParam(':nombres', $nombres);
+        $stmt -> bindParam(':apellidoPaterno', $apellidoPaterno);
+        $stmt -> bindParam(':apellidoMaterno', $apellidoMaterno);
+        $stmt -> bindParam(':celular', $celular);
+        $stmt -> bindParam(':email', $email);
+        $stmt -> bindParam(':codigoPersona', $codigoPersona, PDO::PARAM_INT);
+        $stmt -> execute();
 
         // Registrar el evento en la auditoría
         $this->auditoria->registrarEvento('PERSONA', 'Actualizar persona', $codigoPersona);
@@ -152,10 +153,7 @@ class PersonaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT PER_codigo, PER_dni,
-                (PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno) AS persona,
-                PER_celular, PER_email
-                FROM PERSONA
+        $sql = "SELECT * FROM vw_personas
                 ORDER BY PER_codigo DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();

@@ -177,26 +177,31 @@ class UsuarioModel extends Conexion
   }
 
   // Método para validar la existencia de un usuario
-  public function validarUsuarioExistente($username)
+  public function validarUsuarioExistente($username, $codigoUsuario = null)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) FROM USUARIO WHERE USU_nombre = ?";
+        $sql = "SELECT COUNT(*) FROM USUARIO WHERE USU_nombre = :username";
+        if ($codigoUsuario) {
+          $sql .= " AND USU_codigo != :codigoUsuario";
+        }
         $stmt = $conector->prepare($sql);
-        $stmt->execute([$username]);
+        $stmt->bindParam(':username', $username);
+        if ($codigoUsuario) {
+          $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
+        }
+        $stmt->execute();
         $count = $stmt->fetchColumn();
-        return $count > 0;
+        return $count == 0; // Devolver true si no existe, false si existe
       } else {
         throw new Exception("Error de conexion a la base de datos");
-        return null;
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al validar nombre de usuario: " . $e->getMessage());
-      return null;
     }
   }
-
+  
   // Metodo para validar si persona ya tiene un usuario
   public function validarPersonaConUsuario($persona)
   {
@@ -630,7 +635,7 @@ class UsuarioModel extends Conexion
       return null;
     }
   }
-  
+
   // Metodo para consultar eventos usuarios - auditoria
   public function buscarEventosUsuarios($usuario, $fechaInicio, $fechaFin)
   {

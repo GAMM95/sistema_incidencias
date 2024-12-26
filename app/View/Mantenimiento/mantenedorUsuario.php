@@ -1,9 +1,5 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $usuarioRegistrado;
-    ?>
-
     <!-- Miga de pan -->
     <div class="page-header">
       <div class="page-block">
@@ -73,12 +69,6 @@
           <div class="w-full sm:w-1/5 px-2 mb-2">
             <label for="username" class="block mb-1 font-bold text-xs">Usuario:</label>
             <input type="text" id="username" name="username" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese username" oninput="uppercaseInput(this)">
-
-            <script>
-              function uppercaseInput(element) {
-                element.value = element.value.toUpperCase();
-              }
-            </script>
           </div>
 
           <!-- CONTRASEÑA -->
@@ -119,7 +109,7 @@
 
                         <!-- Codigo de usuario -->
                         <div class="form-group row hidden">
-                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-xs">Codigo de usuario</label>
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-xs">C&oacute;digo de usuario</label>
                           <div class="col-sm-9">
                             <input type="text" id="codigoUsuarioModal" name="codigoUsuarioModal" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" readonly>
                           </div>
@@ -182,16 +172,6 @@
           </div>
           <!-- Fin botones -->
         </div>
-
-        <!-- Funciones -->
-        <script>
-          document.getElementById('CodUsuario').value = '<?php echo $usuarioRegistrado ? $usuarioRegistrado['USU_codigo'] : ''; ?>';
-          document.getElementById('persona').value = '<?php echo $usuarioRegistrado ? $usuarioRegistrado['PER_codigo'] : ''; ?>';
-          document.getElementById('area').value = '<?php echo $usuarioRegistrado ? $usuarioRegistrado['ARE_codigo'] : ''; ?>';
-          document.getElementById('rol').value = '<?php echo $usuarioRegistrado ? $usuarioRegistrado['ROL_codigo'] : ''; ?>';
-          document.getElementById('username').value = '<?php echo $usuarioRegistrado ? $usuarioRegistrado['USU_nombre'] : ''; ?>';
-          document.getElementById('password').value = '<?php echo $usuarioRegistrado ? $usuarioRegistrado['USU_password'] : ''; ?>';
-        </script>
       </div>
       <!-- Fin de Card de formulario -->
     </form>
@@ -211,7 +191,8 @@
           <!-- Encabezado -->
           <thead class="sticky top-0 text-xs text-gray-70 uppercase bg-lime-300">
             <tr>
-              <th scope="col" class="px-6 py-2 text-center hidden">N&deg;</th>
+              <th scope="col" class="px-6 py-2 text-center">N&deg;</th>
+              <th scope="col" class="px-6 py-2 text-center">DNI</th>
               <th scope="col" class="px-6 py-2 text-center">Trabajador</th>
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario</th>
@@ -224,6 +205,8 @@
 
           <!-- Inicio de cuerpo de tabla -->
           <tbody>
+            <?php $item = 1; // Iniciar contador para el ítem 
+            ?>
             <?php if (!empty($resultado)) : ?>
               <?php foreach ($resultado as $usuario) : ?>
                 <?php
@@ -232,12 +215,13 @@
                 $areaEstado = htmlspecialchars($usuario['EST_codigo']);
                 $codigoUsuario = htmlspecialchars($usuario['USU_codigo']);
 
-                // $areaEstado = htmlspecialchars($usuario['ARE_estado']);
                 // Aplicar clase de texto rojo si el ARE_estado es 2
                 $areaInactiva = ($areaEstado == 2) ? 'text-red-600' : 'text-gray-900';
                 ?>
                 <tr class="hover:bg-green-100 hover:scale-[101%] transition-all hover:cursor-pointer border-b" data-id="<?= $usuario['USU_codigo']; ?>">
                   <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap hidden"><?= htmlspecialchars($usuario['USU_codigo']); ?></th>
+                  <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
+                  <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['PER_dni']); ?></td>
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['persona']); ?></td>
                   <td class="px-6 py-2 text-center <?= $areaInactiva; ?>"><?= htmlspecialchars($usuario['ARE_nombre']); ?></td>
                   <td class="px-6 py-2 text-center"><?= htmlspecialchars($usuario['USU_nombre']); ?></td>

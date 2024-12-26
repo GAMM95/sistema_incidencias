@@ -125,11 +125,6 @@
         <div class="w-full sm:w-1/3 px-2 mb-2">
           <label for="documento" class="block mb-1 font-bold text-xs">Documento: *</label>
           <input type="text" id="documento" name="documento" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese documento" oninput="uppercaseInput(this)">
-          <script>
-            function uppercaseInput(element) {
-              element.value = element.value.toUpperCase();
-            }
-          </script>
         </div>
       </div>
 
@@ -156,12 +151,6 @@
       <div class="modal fade" id="modalBuscarIncidencia" tabindex="-1" role="dialog" aria-labelledby="modalBuscarIncidenciaLabel" aria-hidden="true">
         <div class="modal-dialog modal-sm modal-dialog-centered" role="document">
           <div class="modal-content">
-            <!-- <div class="modal-header">
-              <h5 class="modal-title text-xl font-bold" id="modalBuscarIncidenciaLabel">Buscar Incidencia</h5>
-              <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                <span aria-hidden="true">&times;</span>
-              </button>
-            </div> -->
             <div class="modal-body">
               <form>
                 <div class="justify-center">
@@ -171,12 +160,6 @@
                     class="border text-center border-gray-200 p-2 w-64 text-xs rounded-md"
                     placeholder="Ingrese N&deg; de incidencia"
                     oninput="uppercaseInput(this)" autofocus>
-                  <script>
-                    function uppercaseInput(element) {
-                      element.value = element.value.toUpperCase();
-                    }
-                  </script>
-
                 </div>
               </form>
             </div>

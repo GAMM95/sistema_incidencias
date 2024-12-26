@@ -2,7 +2,7 @@
 $(function () {
   var options1 = {
     chart: {
-      type: 'bar',
+      type: 'area',
       height: 200
     },
     plotOptions: {
@@ -44,7 +44,7 @@ $(function () {
 
   // Función para renderizar el gráfico
   function renderChart() {
-    new ApexCharts(document.querySelector("#support-chart"), options1).render();
+    new ApexCharts(document.querySelector("#support-chart2"), options1).render();
   }
 
   // Renderiza el gráfico al cargar la página
