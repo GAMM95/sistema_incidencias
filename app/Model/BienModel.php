@@ -120,10 +120,12 @@ class BienModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "UPDATE BIEN SET BIE_codigoIdentificador = ? , BIE_nombre = ?
-                WHERE BIE_codigo = ?";
+        $sql = "EXEC sp_editar_bien :codigoIdentificador, :nombreTipoBien, :codigoBien";
         $stmt = $conector->prepare($sql);
-        $stmt->execute([$codigoIdentificador, $nombreTipoBien, $codigoBien]);
+        $stmt->bindParam(':codigoIdentificador', $codigoIdentificador);
+        $stmt->bindParam(':nombreTipoBien', $nombreTipoBien);
+        $stmt->bindParam(':codigoBien', $codigoBien, PDO::PARAM_INT);
+        $stmt->execute();
 
         // Registrar el evento en la auditoría
         $this->auditoria->registrarEvento('BIEN', 'Actualizar bien', $codigoBien);
@@ -144,8 +146,7 @@ class BienModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM BIEN
-                WHERE BIE_codigo <> 1";
+        $sql = "SELECT * FROM vw_bienes";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

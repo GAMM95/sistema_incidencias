@@ -127,8 +127,8 @@ $(document).on('click', '#tablaListarBienes tbody tr', function () {
 
   // Asegúrate de que 'codBien' esté correctamente asignado
   const codBien = $(this).find('th').text().trim();
-  const codigoIdentificador = celdas[0].innerText.trim();
-  const nombreTipoBien = celdas[1].innerText.trim();
+  const codigoIdentificador = celdas[1].innerText.trim();
+  const nombreTipoBien = celdas[2].innerText.trim();
 
   // Establecer valores en los inputs
   $('#codBien').val(codBien);
@@ -238,56 +238,7 @@ $(document).ready(function () {
   });
 });
 
-
-// // TODO: falta
-// $(document).ready(function () {
-//   // Manejar el cambio en los switches
-//   $('input[type="checkbox"]').change(function () {
-//     const checkbox = $(this);
-//     const codArea = checkbox.attr('id').replace('customswitch', '');
-//     const url = checkbox.is(':checked') ? 'modulo-area.php?action=habilitar' : 'modulo-area.php?action=deshabilitar';
-
-//     $.ajax({
-//       url: url,
-//       type: 'POST',
-//       data: {
-//         codArea: codArea
-//       },
-//       dataType: 'text',
-//       success: function (response) {
-//         try {
-//           var jsonResponse = JSON.parse(response);
-//           console.log('Parsed JSON:', jsonResponse);
-
-//           if (response.success) {
-//             toastr.success(jsonResponse.message, 'Mensaje');
-//             setTimeout(function () {
-//               location.reload();
-//             }, 1000);
-//           } else {
-//             toastr.success(jsonResponse.message, 'Mensaje de error');
-//             checkbox.prop('checked', !checkbox.is(':checked'));
-//           }
-//         } catch (e) {
-//           console.error('JSON parsing error:', e);
-//           // toastr.error('Error al procesar la respuesta.', 'Mensaje de error');
-//           toastr.success('Estado actualizado.','Mensaje');
-//           setTimeout(function () {
-//             location.reload();
-//           }, 1000);
-//         }
-
-//       },
-//       error: function (xhr, status, error) {
-//         toastr.error('Ocurrió un error al actualizar el estado del usuario.', 'Mensaje de error');
-//         // Restaura el estado del switch en caso de error
-//         checkbox.prop('checked', !checkbox.is(':checked'));
-//       }
-//     });
-//   });
-// });
-
-
+// Funcion para manejar el cambio de estado de los switches
 $(document).ready(function () {
   // Manejar el cambio de estado de los switches
   $('.switch-bien').on('change', function () {
@@ -325,3 +276,13 @@ $(document).ready(function () {
     });
   });
 });
+
+// Funcion para mostrar la notificacion toast
+function showToast() {
+  $('.toast-5s').toast('show');
+}
+
+// Funcion para Capitalizar la primera letra de un input
+function uppercaseInput(element) {
+  element.value = element.value.toUpperCase();
+}

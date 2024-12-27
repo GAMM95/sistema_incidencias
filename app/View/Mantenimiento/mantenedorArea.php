@@ -65,12 +65,12 @@
         <!-- Fin de Buscador -->
 
         <!-- Tabla de areas -->
-        <div class="relative max-h-[550px] mt-2 overflow-x-hidden shadow-md sm:rounded-lg">
+        <div class="relative mt-2 overflow-x-hidden shadow-md sm:rounded-lg">
           <table id="tablaAreas" class="w-full text-xs text-left rtl:text-right text-gray-500 cursor-pointer bg-white">
             <!-- ENCABEZADO DE LA TABLA -->
             <thead class=" top-0 text-xs text-gray-70 uppercase bg-lime-300">
               <tr>
-                <th scope="col" class="px-10 py-2 w-1/6">N&deg;</th>
+                <th scope="col" class="px-10 py-2 w-1/6 text-center">N&deg;</th>
                 <th scope="col" class="px-6 py-2 w-2/3 text-center">&Aacute;rea</th>
                 <th scope="col" class="px-6 py-2 w-1/6 text-center">Estado</th>
               </tr>

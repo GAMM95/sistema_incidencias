@@ -9,16 +9,8 @@ $action = $_GET['action'] ?? '';
 $BIE_codigo = $_GET['BIE_codigo'] ?? '';
 
 require_once 'app/Controller/BienController.php';
-require_once 'app/Model/BienModel.php';
 
 $bienController = new BienController();
-$bienModel = new BienModel();
-
-if ($BIE_codigo != '') {
-  $bienRegistrado = $bienModel->obtenerTipoBienPorID($BIE_codigo);
-} else {
-  $bienRegistrado = null;
-}
 
 $resultado = $bienController->listarBienes();
 
@@ -66,16 +58,34 @@ switch ($action) {
   <?php include('app/View/partials/admin/header.php'); ?>
   <?php include('app/View/Mantenimiento/mantenedorBien.php'); ?>
 
+
+  <!-- Required Js -->
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
-  <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/Mantenedores/func_tipoBien.js"></script>
-
+  <!-- Iconos de Feather -->
+  <script src="dist/assets/js/plugins/feather.min.js"></script>
+  <!-- Select2 -->
+  <link href="dist/assets/css/plugins/select2.min.css" rel="stylesheet">
+  <script src="dist/assets/js/plugins/select2.min.js"></script>
+  <!-- Mensajes toastr -->
+  <script src="dist/assets/js/plugins/toastr.min.js"></script>
+  <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
+  <!-- Framework CSS -->
+  <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+
+  <!-- Archivos cdn -->
+  <!-- Framework CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Mensajes toastr -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <!-- funcionalidades enrutadas -->
+  <script src="./app/View/func/Mantenedores/func_tipoBien.js"></script>
+
 </body>
 
 </html>

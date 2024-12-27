@@ -388,6 +388,12 @@ WHERE
     u.USU_codigo <> 0
 GO
 
+-- VISTA PARA LISTAR BIENES REGISTRADOS
+CREATE OR ALTER VIEW vw_bienes AS
+SELECT * FROM BIEN
+WHERE BIE_codigo <> 1;
+GO
+
 -- VISTA LISTAR INCIDENCIAS ADMINISTRADOR
 CREATE OR ALTER VIEW vista_incidencias_administrador AS
 SELECT 
@@ -3127,6 +3133,33 @@ BEGIN
     END CATCH
 END;
 GO
+
+CREATE OR ALTER PROCEDURE sp_editar_bien
+  @BIE_codigoIdentificador VARCHAR(12),
+  @BIE_nombre VARCHAR(100),
+  @BIE_codigo SMALLINT
+AS
+BEGIN
+  BEGIN TRY
+    BEGIN TRANSACTION;
+    -- Actualizar los datos del usuario
+    UPDATE BIEN
+    SET 
+      BIE_codigoIdentificador = @BIE_codigoIdentificador,
+      BIE_nombre = @BIE_nombre
+    WHERE 
+      BIE_codigo = @BIE_codigo;
+
+    COMMIT TRANSACTION;
+    PRINT 'Bien actualizado correctamente.';
+  END TRY
+  BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error al actualizar bien: ' + ERROR_MESSAGE();
+  END CATCH
+END;
+GO
+  
 
 -- Procedimiento almacenado para editar persona
 CREATE OR ALTER PROCEDURE sp_editar_persona

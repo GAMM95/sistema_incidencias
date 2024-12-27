@@ -39,7 +39,26 @@
           <div class="flex flex-wrap -mx-2">
             <div class="px-2 mb-3 w-1/2">
               <label for="codigoIdentificador" class="block mb-1 font-bold text-xs">C&oacute;digo identificador:</label>
-              <input type="text" id="codigoIdentificador" name="codigoIdentificador" class="border p-2 w-full text-xs rounded-md" maxlength="8" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo identificador">
+              <div class="flex items-center">
+                <input type="text" id="codigoIdentificador" name="codigoIdentificador" class="border p-2 w-full text-xs rounded-md" maxlength="8" pattern="\d{1,12}" inputmode="numeric" title="Ingrese solo dígitos" oninput="this.value = this.value.replace(/[^0-9]/g, '');" placeholder="Ingrese c&oacute;digo identificador">
+                <i class="feather icon-info ml-2 cursor-pointer text-gray-400" onclick="showToast()"></i>
+              </div>
+            </div>
+          </div>
+
+          <!-- Toast (posicionado fijo en la parte superior) -->
+          <div class="toast hide toast-5s" role="alert" aria-live="assertive" data-delay="6000" aria-atomic="true"
+            style="position: fixed; top: 20px; right: 20px; z-index: 1050; min-width: 300px;">
+            <div class="toast-header">
+              <strong class="mr-auto">Informaci&oacute;n</strong>
+              <button type="button" class="m-l-5 mb-1 mt-1 close" data-dismiss="toast" aria-label="Close">
+                <span>&times;</span>
+              </button>
+            </div>
+            <div class="toast-body bg-white">
+              <p>El c&oacute;digo identificador son los primeros <b>8 d&iacute;gitos, sin puntos ni separaciones</b>.<br><br>
+                <b>Ejemplo:</b> <i>74089950</i> (CPU) o <i>74088600</i> (MOUSE)
+              </p>
             </div>
           </div>
 
@@ -47,7 +66,7 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2 mb-3">
               <label for="nombreTipoBien" class="block mb-1 font-bold text-xs">Nombre de bien:</label>
-              <input type="text" id="nombreTipoBien" name="nombreTipoBien" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese nuevo tipo de bien">
+              <input type="text" id="nombreTipoBien" name="nombreTipoBien" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese nuevo tipo de bien" oninput="uppercaseInput(this)">
             </div>
           </div>
 
@@ -74,7 +93,7 @@
             <!-- Encabezado de la tabla -->
             <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-lime-300">
               <tr>
-                <th scope="col" class="px-10 py-2 w-1/6 hidden">N&deg;</th>
+                <th scope="col" class="px-10 py-2 w-1/8 text-center">N&deg;</th>
                 <th scope="col" class="px-6 py-2 w-1/6 text-center">C&oacute;digo identificador</th>
                 <th scope="col" class="px-6 py-2 w-4/6 text-center">Nombre de bien</th>
                 <th scope="col" class="px-6 py-2 text-center">Acci&oacute;n</th>
@@ -84,6 +103,8 @@
 
             <!-- Cuerpo de la tabla -->
             <tbody>
+              <?php $item = 1; // Iniciar contador para el ítem 
+              ?>
               <?php if (!empty($resultado)) : ?>
                 <?php foreach ($resultado as $bien) : ?>
                   <?php
@@ -96,6 +117,7 @@
                   ?>
                   <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b'>
                     <th scope='row' class='px-10 py-2 font-medium text-gray-900 whitespace-nowrap hidden'> <?= $codigoBien; ?></th>
+                    <td class="px-2 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                     <td class="px-6 py-2 text-center  <?= $bienInactivo; ?>"> <?= $bien['BIE_codigoIdentificador']; ?></td>
                     <td class="px-6 py-2 <?= $bienInactivo; ?>"> <?= $bien['BIE_nombre']; ?></td>
                     <td class="px-6 py-2 text-center">
@@ -108,7 +130,7 @@
                 <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                  <td colspan="3" class="text-center py-3">No se han registrado nuevos bienes</td>
+                  <td colspan="4" class="text-center py-3">No se han registrado nuevos bienes</td>
                 </tr>
               <?php endif; ?>
             </tbody>
