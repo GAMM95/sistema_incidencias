@@ -54,7 +54,7 @@ $(document).on('click', '#tablaSoluciones tbody tr', function () {
 
   // Asegúrate de que 'codigoSolucion' esté correctamente asignado
   const codigoSolucion = $(this).find('th').text().trim();
-  const descripcionSolucion = celdas[0].innerText.trim();
+  const descripcionSolucion = celdas[1].innerText.trim();
 
   // Establecer valores en los inputs
   $('#codigoSolucion').val(codigoSolucion);
@@ -192,3 +192,9 @@ $(document).ready(function () {
     });
   });
 });
+
+// Funcion para Capitalizar la primera letra de un input
+function capitalizeInput(element) {
+  let value = element.value.toLowerCase(); // Convertir todo a minúsculas primero
+  element.value = value.charAt(0).toUpperCase() + value.slice(1); // Convertir solo la primera letra a mayúscula
+}

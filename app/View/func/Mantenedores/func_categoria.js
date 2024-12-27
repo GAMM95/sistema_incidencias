@@ -26,7 +26,6 @@ $(document).ready(function () {
     }
   });
 
-
   $('#guardar-categoria').on('click', function (e) {
     e.preventDefault();
     enviarFormulario($('#form-action').val());
@@ -54,7 +53,7 @@ $(document).on('click', '#tablaCategorias tbody tr', function () {
 
   // Asegúrate de que 'codBien' esté correctamente asignado
   const codCategoria = $(this).find('th').text().trim();
-  const nombreCategoria = celdas[0].innerText.trim();
+  const nombreCategoria = celdas[1].innerText.trim();
 
   // Establecer valores en los inputs
   $('#codCategoria').val(codCategoria);
@@ -240,3 +239,9 @@ $(document).ready(function () {
     });
   });
 });
+
+// Funcion para Capitalizar la primera letra de un input
+function capitalizeInput(element) {
+  let value = element.value.toLowerCase(); // Convertir todo a minúsculas primero
+  element.value = value.charAt(0).toUpperCase() + value.slice(1); // Convertir solo la primera letra a mayúscula
+}

@@ -39,7 +39,7 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2 mb-3">
               <label for="descripcionSolucion" class="block mb-1 font-bold text-xs">Descripci&oacute;n de soluci&oacute;n:</label>
-              <input type="text" id="descripcionSolucion" name="descripcionSolucion" class="border p-2 w-full text-xs rounded-md" pattern="[A-Za-z\s]+" placeholder="Ingrese nueva descripci&oacute;n de soluci&oacute;n">
+              <input type="text" id="descripcionSolucion" name="descripcionSolucion" class="border p-2 w-full text-xs rounded-md" pattern="[A-Za-z\s]+" placeholder="Ingrese nueva descripci&oacute;n de soluci&oacute;n"  oninput="capitalizeInput(this)">
             </div>
           </div>
 
@@ -61,15 +61,17 @@
             <!-- Encabezado de la tabla -->
             <thead class="sticky top-0 text-xs text-gray-70 uppercase bg-lime-300">
               <tr>
-                <th scope="col" class="px-10 py-2 w-1/6 hidden">N&deg;</th>
+                <th scope="col" class="px-10 py-2 w-1/8 text-center">N&deg;</th>
                 <th scope="col" class="px-6 py-2 w-5/6 text-center">Soluci&oacute;n</th>
-                <th scope="col" class="px-6 py-2 text-center">Acci&oacute;n</th>
+                <th scope="col" class="px-6 py-2 w-2/6 text-center">Acci&oacute;n</th>
               </tr>
             </thead>
             <!-- Fin de encabezado -->
 
             <!-- Encabezado de la tabla -->
             <tbody>
+              <?php $item = 1; // Iniciar contador para el ítem 
+              ?>
               <?php if (!empty($resultado)): ?>
                 <?php foreach ($resultado as $solucion) : ?>
                   <?php
@@ -81,6 +83,7 @@
                   ?>
                   <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $codigoSolucion; ?>">
                     <th scope='row' class='px-6 py-2 font-medium text-gray-900 whitespace-nowrap hidden'><?= $codigoSolucion; ?></th>
+                    <td class="px-2 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                     <td class='px-6 py-2 w-2/3 <?= $solucionInactiva; ?>'><?= $solucion['SOL_descripcion']; ?></td>
                     <td class="px-6 py-2 text-center">
                       <div class="custom-control custom-switch cursor-pointer">
@@ -92,7 +95,7 @@
                 <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                  <td colspan="3" class="text-center py-3">No se han registrado nuevas soluciones.
+                  <td colspan="5" class="text-center py-3">No se han registrado nuevas soluciones.
                 </tr>
               <?php endif; ?>
             </tbody>

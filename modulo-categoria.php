@@ -7,22 +7,13 @@ if (!isset($_SESSION['usuario'])) {
 }
 $rol = $_SESSION['rol'];
 $action = $_GET['action'] ?? '';
-$CodCategoria = $_GET['CAT_codigo'] ?? '';
 
 require_once 'app/Controller/CategoriaController.php';
-require_once 'app/Model/CategoriaModel.php';
-
 $categoriaController = new CategoriaController();
-$categoriaModel = new CategoriaModel();
 
 // Listar tabla de categorias registradas
 $resultado = $categoriaController->listarCategorias();
 
-if ($CodCategoria != '') {
-  $CategoriaRegistrada = $categoriaModel->obtenerCategoriaPorId($CodCategoria);
-} else {
-  $CategoriaRegistrada = null;
-}
 
 switch ($action) {
   case 'registrar':
@@ -78,17 +69,30 @@ switch ($action) {
   ?>
   <!-- [ Main Content ] end -->
 
-
+  <!-- Required Js -->
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
-  <script src="dist/assets/js/pages/dashboard-main.js"></script>
-  <script src="./app/View/func/Mantenedores/func_categoria.js"></script>
-
+  <!-- Iconos de Feather -->
+  <script src="dist/assets/js/plugins/feather.min.js"></script>
+  <!-- Mensajes toastr -->
+  <script src="dist/assets/js/plugins/toastr.min.js"></script>
+  <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
+  <!-- Framework CSS -->
+  <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+
+  <!-- Archivos cdn -->
+  <!-- Framework CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Mensajes toastr -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+
+  <!-- Funcionalidades enrutadas -->
+  <script src="./app/View/func/Mantenedores/func_categoria.js"></script>
+
 </body>
 
 </html>

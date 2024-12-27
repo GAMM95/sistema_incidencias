@@ -39,7 +39,7 @@
           <div class="flex flex-wrap -mx-2">
             <div class="w-full px-2 mb-3">
               <label for="nombreCategoria" class="block mb-1 font-bold text-xs">Nombre de categor&iacute;a:</label>
-              <input type="text" id="nombreCategoria" name="nombreCategoria" class="border p-2 w-full text-xs rounded-md" pattern="[A-Za-z\s]+" placeholder="Ingrese nueva categor&iacute;a">
+              <input type="text" id="nombreCategoria" name="nombreCategoria" class="border p-2 w-full text-xs rounded-md" pattern="[A-Za-z\s]+" placeholder="Ingrese nueva categor&iacute;a" oninput="capitalizeInput(this)">
             </div>
           </div>
 
@@ -56,20 +56,22 @@
 
       <!-- Tabla de categorias -->
       <div class="w-2/3">
-        <div class="relative max-h-[800px] overflow-x-hidden shadow-md sm:rounded-lg">
+        <div class="relative overflow-x-hidden shadow-md sm:rounded-lg">
           <table id="tablaCategorias" class="w-full text-xs text-left rtl:text-right text-gray-500 cursor-pointer bg-white">
             <!-- Encabezado de la tabla -->
             <thead class="sticky top-0 text-xs text-gray-70 uppercase bg-lime-300">
               <tr>
-                <th scope="col" class="px-10 py-2 w-1/6 hidden">N&deg;</th>
+                <th scope="col" class="px-10 py-2 w-1/8 text-center">N&deg;</th>
                 <th scope="col" class="px-6 py-2 w-5/6 text-center">Categor&iacute;a</th>
-                <th scope="col" class="px-6 py-2 text-center">Acci&oacute;n</th>
+                <th scope="col" class="px-6 py-2 w-2/6 text-center">Acci&oacute;n</th>
               </tr>
             </thead>
             <!-- Fin de encabezado -->
 
             <!-- Encabezado de la tabla -->
             <tbody>
+              <?php $item = 1; // Iniciar contador para el ítem 
+              ?>
               <?php if (!empty($resultado)): ?>
                 <?php foreach ($resultado as $categoria) : ?>
                   <?php
@@ -81,6 +83,7 @@
                   ?>
                   <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $codigoCategoria; ?>">
                     <th scope='row' class='px-6 py-2 font-medium text-gray-900 whitespace-nowrap hidden'><?= $codigoCategoria; ?></th>
+                    <td class="px-2 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                     <td class='px-6 py-2 w-2/3 <?= $categoriaInactiva; ?>'><?= $categoria['CAT_nombre']; ?></td>
                     <td class="px-6 py-2 text-center">
                       <div class="custom-control custom-switch cursor-pointer">
@@ -92,7 +95,7 @@
                 <?php endforeach; ?>
               <?php else: ?>
                 <tr>
-                  <td colspan="10" class="text-center py-3">No se han registrado nuevas categor&iacute;as.
+                  <td colspan="5" class="text-center py-3">No se han registrado nuevas categor&iacute;as.
                 </tr>
               <?php endif; ?>
             </tbody>
