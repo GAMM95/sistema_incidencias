@@ -367,7 +367,7 @@ GO
   -- VISTAS
 -------------------------------------------------------------------------------------------------------
 -- VISTA LISTAR USUARIOS
-CREATE OR ALTER VIEW vista_usuarios AS
+CREATE OR ALTER VIEW vw_usuarios AS
 SELECT 
     u.USU_codigo, 
     p.PER_dni, 
@@ -387,7 +387,6 @@ FROM
 WHERE 
     u.USU_codigo <> 0
 GO
-
 
 -- VISTA LISTAR INCIDENCIAS ADMINISTRADOR
 CREATE OR ALTER VIEW vista_incidencias_administrador AS
@@ -3159,6 +3158,31 @@ BEGIN
   BEGIN CATCH
     ROLLBACK TRANSACTION;
     PRINT 'Error al actualizar persona: ' + ERROR_MESSAGE();
+  END CATCH
+END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA EDITAR AREA
+CREATE OR ALTER PROCEDURE sp_editar_area
+  @ARE_codigo SMALLINT,
+  @ARE_nombre VARCHAR(100)
+AS
+BEGIN
+  BEGIN TRY
+    BEGIN TRANSACTION;
+    -- Actualizar los datos del usuario
+    UPDATE AREA
+    SET 
+      ARE_nombre = @ARE_nombre
+    WHERE 
+      ARE_codigo = @ARE_codigo;
+
+    COMMIT TRANSACTION;
+    PRINT 'Area actualizado correctamente.';
+  END TRY
+  BEGIN CATCH
+    ROLLBACK TRANSACTION;
+    PRINT 'Error al actualizar area: ' + ERROR_MESSAGE();
   END CATCH
 END;
 GO

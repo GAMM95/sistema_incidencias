@@ -122,7 +122,7 @@ $(document).on('click', '#tablaAreas tbody tr', function () {
 
   // Asegúrate de que 'codArea' esté correctamente asignado
   const codArea = $(this).find('th').text().trim(); // Verifica que esta selección es correcta
-  const nombreArea = celdas[0].innerText.trim();
+  const nombreArea = celdas[1].innerText.trim();
 
   // Establecer valores en los inputs
   $('#codArea').val(codArea);

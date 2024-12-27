@@ -306,7 +306,7 @@ class UsuarioModel extends Conexion
     try {
       $conector = parent::getConexion();
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_usuarios
+        $sql = "SELECT * FROM vw_usuarios
         ORDER BY USU_codigo DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -420,7 +420,7 @@ class UsuarioModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_usuarios
+        $sql = "SELECT * FROM vw_usuarios
         WHERE persona LIKE :terminoBusqueda
         OR ARE_nombre LIKE :terminoBusqueda
         OR USU_nombre LIKE :terminoBusqueda

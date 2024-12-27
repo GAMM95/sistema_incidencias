@@ -55,6 +55,17 @@ class PersonaController
     }
   }
 
+  // Metodo para listar personas
+  public function listarPersonas()
+  {
+    try {
+      $resultado = $this->personaModel->listarPersonas();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar usuarios: " . $e->getMessage();
+    }
+  }
   // Método para editar personas
   public function editarPersona()
   {

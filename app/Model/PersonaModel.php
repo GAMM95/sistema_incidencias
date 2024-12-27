@@ -148,7 +148,7 @@ class PersonaModel extends Conexion
   }
 
   // Metodo para obtener la lista de personas
-  public function listarTrabajadores()
+  public function listarPersonas()
   {
     $conector = parent::getConexion();
     try {

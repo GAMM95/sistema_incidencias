@@ -15,7 +15,7 @@ require_once 'app/Controller/PersonaController.php';
 $personaController = new PersonaController();
 
 // listar personas registradas
-$personas = $personaModel->listarTrabajadores();
+$personas = $personaController->listarPersonas();
 
 // Verificar si se debe manejar una acción
 switch ($action) {

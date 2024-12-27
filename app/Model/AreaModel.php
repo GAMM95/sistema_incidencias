@@ -137,12 +137,12 @@ class AreaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "UPDATE AREA SET ARE_nombre = ? WHERE ARE_codigo = ?";
+        // $sql = "UPDATE AREA SET ARE_nombre = ? WHERE ARE_codigo = ?";
+        $sql = "EXEC sp_editar_area  :codigoArea, :nombreArea";
         $stmt = $conector->prepare($sql);
-        $stmt->execute([
-          $nombreArea,
-          $codigoArea
-        ]);
+        $stmt->bindParam(':nombreArea', $nombreArea);
+        $stmt->bindParam(':codigoArea', $codigoArea);
+        $stmt->execute();
         // Registrar el evento en la auditoría
         $this->auditoria->registrarEvento('AREA', 'Actualizar área', $codigoArea);
         return $stmt->rowCount();

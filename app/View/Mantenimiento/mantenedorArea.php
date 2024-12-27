@@ -1,9 +1,6 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
 
-    <?php
-    global $AreaRegistrada;
-    ?>
     <!-- Miga de pan -->
     <div class="page-header">
       <div class="page-block">
@@ -71,9 +68,9 @@
         <div class="relative max-h-[550px] mt-2 overflow-x-hidden shadow-md sm:rounded-lg">
           <table id="tablaAreas" class="w-full text-xs text-left rtl:text-right text-gray-500 cursor-pointer bg-white">
             <!-- ENCABEZADO DE LA TABLA -->
-            <thead class="sticky top-0 text-xs text-gray-70 uppercase bg-lime-300">
+            <thead class=" top-0 text-xs text-gray-70 uppercase bg-lime-300">
               <tr>
-                <th scope="col" class="px-10 py-2 w-1/6 hidden">N&deg;</th>
+                <th scope="col" class="px-10 py-2 w-1/6">N&deg;</th>
                 <th scope="col" class="px-6 py-2 w-2/3 text-center">&Aacute;rea</th>
                 <th scope="col" class="px-6 py-2 w-1/6 text-center">Estado</th>
               </tr>
@@ -82,16 +79,19 @@
 
             <!-- Cuerpo de la tabla -->
             <tbody>
+              <?php $item = 1; // Iniciar contador para el ítem 
+              ?>
               <?php if (!empty($resultado)) : ?>
                 <?php foreach ($resultado as $area) : ?>
                   <?php
                   $estado = htmlspecialchars($area['EST_codigo']);
                   $isActive = ($estado === '1');
-                  $codigoArea = htmlspecialchars($area['ARE_codigo']); 
+                  $codigoArea = htmlspecialchars($area['ARE_codigo']);
                   $areaInactiva = ($estado == 2) ? 'text-red-600' : 'text-gray-900';
                   ?>
                   <tr class="hover:bg-green-100 hover:scale-[101%] transition-all hover:cursor-pointer border-b" data-id="<?= $codigoArea; ?>">
                     <th scope="row" class="px-6 py-2 font-medium text-gray-900 whitespace-nowrap hidden"><?= $codigoArea; ?></th>
+                    <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                     <td class="px-6 py-2 text-center <?= $areaInactiva; ?>"><?= htmlspecialchars($area['ARE_nombre']); ?></td>
                     <td class="px-6 py-2 text-center">
                       <div class="custom-control custom-switch cursor-pointer">
@@ -118,8 +118,3 @@
   </div>
 </div>
 <script src="https://cdn.tailwindcss.com"></script>
-
-
-<script>
-
-</script>
