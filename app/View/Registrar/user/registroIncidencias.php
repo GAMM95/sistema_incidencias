@@ -1,10 +1,7 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $incidenciaRegistrada;
-    ?>
 
-    <!-- Miga de pan -->
+    <!-- Inicio de breadcrumb -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -21,7 +18,7 @@
         </div>
       </div>
     </div>
-    <!-- Fin de miga de pan -->
+    <!-- Fin de breacrumb -->
 
     <!-- Formulario de registro -->
     <form id="formIncidencia" action="registro-incidencia-user.php?action=registrar" method="POST" class="card table-card  bg-white shadow-md p-6 w-full text-xs mb-2">
@@ -122,17 +119,12 @@
         <!-- ASUNTO DE LA INCIDENCIA -->
         <div class="w-full sm:w-1/2 px-2 mb-2">
           <label for="asunto" class="block mb-1 font-bold text-xs">Asunto: *</label>
-          <input type="text" id="asunto" name="asunto" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese asunto">
+          <input type="text" id="asunto" name="asunto" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese asunto" oninput="capitalizeInput(this)">
         </div>
         <!-- DOCUMENTO DE LA INCIDENCIA -->
         <div class="w-full sm:w-1/2 px-2 mb-2">
           <label for="documento" class="block mb-1 font-bold text-xs">Documento: *</label>
           <input type="text" id="documento" name="documento" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese documento" oninput="uppercaseInput(this)">
-          <script>
-            function uppercaseInput(element) {
-              element.value = element.value.toUpperCase();
-            }
-          </script>
         </div>
       </div>
 
@@ -141,7 +133,8 @@
         <!-- DESCRIPCION DE LA INCIDENCIA -->
         <div class="w-full md:w-1/1 px-2 mb-2">
           <label for="descripcion" class="block mb-1 font-bold text-xs">Descripci&oacute;n:</label>
-          <input type="text" id="descripcion" name="descripcion" class="border p-2 w-full text-xs mb-3 rounded-md" placeholder="Ingrese descripci&oacute;n (opcional)">
+          <input type="text" id="descripcion" name="descripcion" class="border p-2 w-full text-xs mb-3 rounded-md" placeholder="Ingrese descripci&oacute;n (opcional)"
+          oninput="capitalizeInput(this)">
         </div>
       </div>
 
@@ -247,5 +240,5 @@
     <!-- Fin de tabla de incidencias registradas -->
   </div>
 </div>
-
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">

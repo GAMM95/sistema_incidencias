@@ -26,9 +26,6 @@ switch ($action) {
   case 'editar':
     $incidenciaController->actualizarIncidenciaAdministrador();
     break;
-  case 'eliminar':
-    $incidenciaController->eliminarIncidencia();
-    break;
   case 'activar':
     $incidenciaController->activarIncidencia();
     break;
@@ -56,7 +53,6 @@ switch ($action) {
 
   <!-- vendor css -->
   <link rel="stylesheet" href="dist/assets/css/style.css">
-  <link href="./output.css" rel="stylesheet">
 
 </head>
 
@@ -94,7 +90,8 @@ switch ($action) {
   <script src="dist/assets/js/plugins/toastr.min.js"></script>
   <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
   <!-- Framework CSS -->
-  <!-- <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet"> -->
+  <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">
+  <link href="src/output.css" rel="stylesheet">
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
   <!-- Generacion de pdf -->
   <script src="dist/assets/js/plugins/jspdf.umd.min.js"></script>

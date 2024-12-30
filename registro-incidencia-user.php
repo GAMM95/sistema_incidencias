@@ -10,12 +10,10 @@ $state = $_GET['state'] ?? '';
 $INC_numero = $_GET['INC_numero'] ?? '';
 
 require_once 'app/Controller/incidenciaController.php';
-require_once 'app/Model/incidenciaModel.php';
 
 $incidenciaController = new IncidenciaController();
-$incidenciaModel = new IncidenciaModel();
 
-$resultado = $incidenciaModel->listarIncidenciasRegistroUsuario($_SESSION['codigoArea']);
+$resultado = $incidenciaController->listarIncidenciasRegistradasPorUsuario($_SESSION['codigoArea']);
 
 switch ($action) {
   case 'registrar':
@@ -29,11 +27,12 @@ switch ($action) {
 }
 
 ?>
+
 <!DOCTYPE html>
 <html lang="es">
 
 <head>
-  <title>Sistema de Gestión de Incidencias</title>
+  <title>Sistema de Gesti&oacute;n de Incidencias</title>
   <link rel="icon" href="public/assets/logo.ico">
   <!-- Meta -->
   <meta charset="utf-8">
@@ -42,6 +41,7 @@ switch ($action) {
   <meta name="description" content="" />
   <meta name="keywords" content="">
   <meta name="author" content="GAMM95" />
+
   <!-- vendor css -->
   <link rel="stylesheet" href="dist/assets/css/style.css">
 </head>
@@ -59,34 +59,45 @@ switch ($action) {
   <?php include('app/View/partials/user/header.php'); ?>
   <?php include('app/View/Registrar/user/registroIncidencias.php'); ?>
 
+
+
   <!-- Required Js -->
   <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
+  <!-- Iconos de Feather -->
+  <script src="dist/assets/js/plugins/feather.min.js"></script>
+  <!-- Select2 -->
+  <link href="dist/assets/css/plugins/select2.min.css" rel="stylesheet">
+  <script src="dist/assets/js/plugins/select2.min.js"></script>
+  <!-- Mensajes toastr -->
+  <script src="dist/assets/js/plugins/toastr.min.js"></script>
+  <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
+  <!-- Framework CSS -->
+  <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">
+  <link href="src/output.css" rel="stylesheet">
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
+  <!-- Generacion de pdf -->
+  <script src="dist/assets/js/plugins/jspdf.umd.min.js"></script>
+  <script src="dist/assets/js/plugins/jspdf.plugin.autotable.min.js"></script>
 
-  <script src="dist/assets/js/pages/dashboard-main.js"></script>
+  <!-- Archivos cdn -->
+  <!-- Mensajes toastr -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <!-- Buscador de combos -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- Creacion de PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- Funciones y reportes -->
+  <!-- Funcionalidades enrutadas -->
   <script src="./app/View/func/Registros/Incidencia/func_incidencia_user.js"></script>
   <script src="./app/View/func/Registros/Incidencia/reporteDetalleIncidencia.js"></script>
   <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
-  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 
-  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-  <!-- <script src="https://code.jquery.com/jquery-3.7.0.min.js" crossorigin="anonymous"></script> -->
-  <!-- Incluir CSS de Select2 -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-
-  <!-- Incluir JS de Select2 -->
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
-
-  <!-- jsPDF Library -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <!-- jsPDF AutoTable plugin -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
 </body>
 
 </html>

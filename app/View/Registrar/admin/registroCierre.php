@@ -1,8 +1,5 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $cierreRegistrado;
-    ?>
 
     <!-- Inicio de breadcrumb -->
     <div class="page-header">
@@ -163,11 +160,6 @@
         <div class="w-full md:w-2/5 px-2 mb-2">
           <label for="documento" class="block mb-1 font-bold text-xs">Documento de cierre: *</label>
           <input type="text" id="documento" name="documento" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese documento de cierre" oninput="uppercaseInput(this)">
-          <script>
-            function uppercaseInput(element) {
-              element.value = element.value.toUpperCase();
-            }
-          </script>
         </div>
         <!-- Fin de documento de cierre -->
 
@@ -182,10 +174,11 @@
         <!-- Solucion del cierre -->
         <div class="w-full md:w-2/5 px-2 mb-2 flex items-end">
           <div class="w-full">
-            <label for="solucion" class="block font-bold mb-1 text-xs">Soluci&oacute;n:</label>
+            <label for="solucion" class="block font-bold mb-1 text-xs">Soluci&oacute;n: *</label>
             <select id="solucion" name="solucion" class="border p-2 w-full text-xs cursor-pointer rounded-md">
             </select>
           </div>
+
           <!-- Botón al costado del select -->
           <a href="modulo-solucion.php"
             class="ml-2 bn btn-warning text-xs text-white font-bold h-9 py-2 px-3 rounded-md flex items-center hover:bg-yellow-600 focus:outline-none focus:ring-2 focus:ring-yellow-400"
@@ -204,7 +197,7 @@
         <!-- Diagnostico y observaciones del cierre -->
         <div class="w-1/2 px-2 mb-2">
           <label for="diagnostico" class="block mb-1 font-bold text-xs">Diagn&oacute;stico / observaciones:</label>
-          <textarea id="diagnostico" name="diagnostico" rows="3" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese diagnóstico (opcional)" style="resize: none;" maxlength="1000" oninput="updateCharCount('diagnostico', 'charCount1')"></textarea>
+          <textarea id="diagnostico" name="diagnostico" rows="3" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese diagnóstico (opcional)" style="resize: none;" maxlength="1000" oninput="updateCharCount('diagnostico', 'charCount1')" oninput="capitalizeInput(this)"></textarea>
           <p id="charCount1" class="text-xs text-gray-500">0/1000 caracteres</p>
         </div>
         <!-- Fin del diagnostico y observaciones -->
@@ -212,36 +205,12 @@
         <!-- Recomendaciones del cierre -->
         <div class="w-1/2 md:w-1/1 px-2 mb-2">
           <label for="recomendaciones" class="block mb-1 font-bold text-xs">Recomendaciones:</label>
-          <textarea id="recomendaciones" name="recomendaciones" rows="3" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese recomendaciones (opcional)" style="resize: none;" maxlength="1000" oninput="updateCharCount('recomendaciones', 'charCount2')"></textarea>
+          <textarea id="recomendaciones" name="recomendaciones" rows="3" class="border p-2 w-full text-xs rounded-md" placeholder="Ingrese recomendaciones (opcional)" style="resize: none;" maxlength="1000" oninput="updateCharCount('recomendaciones', 'charCount2')" oninput="capitalizeInput(this)"></textarea>
           <p id="charCount2" class="text-xs text-gray-500">0/1000 caracteres</p>
         </div>
         <!-- Fin de recomendaciones del cierre -->
-
-        <!-- Contador de caracteres -->
-        <script>
-          function updateCharCount(textareaId, charCountId) {
-            const textarea = document.getElementById(textareaId);
-            const charCount = document.getElementById(charCountId);
-            charCount.textContent = `${textarea.value.length}/1000 caracteres`;
-          }
-        </script>
-
       </div>
       <!-- Fin de segunda fila de formulario -->
-
-      <!-- RECOPILACION DE VALORES DE CADA INPUT Y COMBOBOX     -->
-      <!-- <script>
-        document.getElementById('recepcion').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_codigo'] : ''; ?>';
-        document.getElementById('fecha').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['CIE_fecha'] : $fecha_actual; ?>';
-        document.getElementById('hora').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_hora'] : $hora_actual; ?>';
-        document.getElementById('operatividad').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['CON_codigo'] : ''; ?>';
-        document.getElementById('usuarioDisplay').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['codigoUsuario'] : $_SESSION['usuario']; ?>';
-        document.getElementById('usuario').value = '<?php echo $incidenciaRegistrada ? $incidenciaRegistrada['codigoUsuario'] : $_SESSION['codigoUsuario']; ?>';
-        document.getElementById('asunto').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_asunto'] : ''; ?>';
-        document.getElementById('documento').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_documento'] : ''; ?>';
-        document.getElementById('diagnostico').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_diagnostico'] : ''; ?>';
-        document.getElementById('recomendaciones').value = '<?php echo $cierreRegistrado ? $cierreRegistrado['REC_recomendaciones'] : ''; ?>';
-      </script> -->
 
       <!-- Botones del formulario -->
       <div class="flex justify-center space-x-4">
@@ -285,34 +254,38 @@
 
         <!-- Cuerpo de la tabla -->
         <tbody>
-          <?php foreach ($cierres as $incidencia) : ?>
-            <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $incidencia['CIE_numero']; ?>">
-              <th scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap hidden'> <?= $incidencia['CIE_numero']; ?></th>
-              <td class='px-6 py-2 text-center'><?= $incidencia['INC_numero_formato']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['fechaIncidenciaFormateada']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['ARE_nombre']; ?></td>
-              <td class='px-6 py-2 text-center hidden'><?= $incidencia['INC_codigoPatrimonial']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['fechaCierreFormateada']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['CIE_documento']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['CON_descripcion']; ?></td>
-              <td class='px-6 py-2 text-center hidden'><?= $incidencia['CIE_diagnostico']; ?></td>
-              <td class='px-6 py-2 text-center hidden'><?= $incidencia['CIE_recomendaciones']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['Usuario']; ?></td>
-              <td class='px-6 py-2 text-center'><?= $incidencia['SOL_descripcion']; ?></td>
-              <td class="px-6 py-2 justify-center text-center justify-middle flex space-x-2"> <!-- Columna de Acción con botones -->
-                <!-- Botón de Imprimir detalla de incidencia -->
-                <button type="button" id="imprimir-cierre" class="bn btn-warning text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center" title="Imprimir detalle de cierre">
-                  <i class="feather icon-printer"></i>
-                </button>
+          <?php if (!empty($cierres)): ?>
+            <?php foreach ($cierres as $incidencia) : ?>
+              <?php
+              $codigoCierre = htmlspecialchars($incidencia['CIE_numero']);
+              ?>
+              <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $codigoCierre; ?>">
+                <th scope='row' class='px-6 py-4 font-medium text-gray-900 whitespace-nowrap hidden'> <?= $incidencia['CIE_numero']; ?></th>
+                <td class='px-6 py-2 text-center'><?= $incidencia['INC_numero_formato']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['fechaIncidenciaFormateada']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['ARE_nombre']; ?></td>
+                <td class='px-6 py-2 text-center hidden'><?= $incidencia['INC_codigoPatrimonial']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['fechaCierreFormateada']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['CIE_documento']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['CON_descripcion']; ?></td>
+                <td class='px-6 py-2 text-center hidden'><?= $incidencia['CIE_diagnostico']; ?></td>
+                <td class='px-6 py-2 text-center hidden'><?= $incidencia['CIE_recomendaciones']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['Usuario']; ?></td>
+                <td class='px-6 py-2 text-center'><?= $incidencia['SOL_descripcion']; ?></td>
+                <td class="px-6 py-2 justify-center text-center justify-middle flex space-x-2"> <!-- Columna de Acción con botones -->
+                  <!-- Botón de Imprimir detalla de incidencia -->
+                  <button type="button" id="imprimir-cierre" class="bn btn-warning text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center" title="Imprimir detalle de cierre">
+                    <i class="feather icon-printer"></i>
+                  </button>
 
-                <!-- Botón de Eliminar -->
-                <button type="button" class="eliminar-cierre bn btn-danger text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center" title="Eliminar cierre">
-                  <i class="feather icon-trash-2"></i>
-                </button>
-              </td>
-            </tr>
-          <?php endforeach; ?>
-          <?php if (empty($cierres)) : ?>
+                  <!-- Botón de Eliminar -->
+                  <button type="button" class="eliminar-cierre bn btn-danger text-xs text-white font-bold py-2 px-2 rounded-md flex items-center justify-center" title="Eliminar cierre">
+                    <i class="feather icon-trash-2"></i>
+                  </button>
+                </td>
+              </tr>
+            <?php endforeach; ?>
+          <?php else: ?>
             <tr>
               <td colspan="9" class="text-center py-3">No hay incidencias cerradas.</td>
             </tr>
@@ -325,3 +298,4 @@
   </div>
 </div>
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">

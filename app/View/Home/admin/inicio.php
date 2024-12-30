@@ -179,8 +179,8 @@
         <!-- Fin del widget del grafico -->
 
         <!-- Tarjetas de las cantidades  -->
-        <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
-        <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
+        <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
+        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
           // Pasar datos de PHP a JavaScript
           var recepcionesData = <?php echo json_encode([

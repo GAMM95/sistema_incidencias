@@ -24,7 +24,6 @@ $page = isset($_GET['page']) ? (int)$_GET['page'] : 1; // Página actual
 $start = ($page - 1) * $limit; // Calcula el índice de inicio
 // Obtener el total de registros
 $totalIncidenciasSinRecepcionar = $incidenciaController->contarIncidenciasRegistradas();
-// $totalIncidenciasSinRecepcionar = $incidenciaModel->contarIncidenciasAdministrador();
 $totalPages = ceil($totalIncidenciasSinRecepcionar / $limit);
 // Listar las incidencias para la pagina actual
 $resultadoIncidencias = $incidenciaController->listarIncidenciasRegistradasPaginas($start, $limit);
@@ -72,18 +71,6 @@ switch ($action) {
   <!-- vendor css -->
   <link rel="stylesheet" href="dist/assets/css/style.css">
 
-  <!-- Archivos cdn -->
-  <!-- Mensajes toastr -->
-  <!-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css"> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script> -->
-  <!-- Buscador de combos -->
-  <!-- <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" /> -->
-  <!-- <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script> -->
-  <!-- Creacion de PDF -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script> -->
-  <!-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script> -->
-  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
-
 </head>
 
 <body class="">
@@ -109,8 +96,8 @@ switch ($action) {
   ?>
   <!-- [ Main Content ] end -->
 
-    <!-- Required Js -->
-    <script src="dist/assets/js/vendor-all.min.js"></script>
+  <!-- Required Js -->
+  <script src="dist/assets/js/vendor-all.min.js"></script>
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
@@ -129,6 +116,13 @@ switch ($action) {
   <script src="dist/assets/js/plugins/jspdf.umd.min.js"></script>
   <script src="dist/assets/js/plugins/jspdf.plugin.autotable.min.js"></script>
 
+  <!-- Archivos cdn -->
+  <!-- Mensajes toastr -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <!-- Buscador de combos -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <!-- Funcionalidades enrutadas -->
   <script src="./app/View/func/Registros/Recepcion/func_recepcion_admin.js"></script>

@@ -41,11 +41,11 @@ class CierreModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT TOP 1 CIE_numero FROM CIERRE ORDER BY CIE_numero DESC";
+        $sql = "SELECT MAX(CIE_numero) AS ultimo_codigo FROM CIERRE";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
-        $resultado = $stmt->fetchAll();
-        return $resultado[0]['codigo'];
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['ultimo_codigo'];
       } else {
         throw new Exception("Error de conexión a la base de datos");
       }
@@ -60,7 +60,7 @@ class CierreModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "EXEC sp_registrar_cierre :fecha, :hora, :diagnostico, :documento, :recomendaciones, :operatividad, :mantenimiento, :usuario, :solucion";
+        $sql = "EXEC sp_insertar_cierre :fecha, :hora, :diagnostico, :documento, :recomendaciones, :operatividad, :mantenimiento, :usuario, :solucion";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':fecha', $fecha);
         $stmt->bindParam(':hora', $hora);
@@ -77,7 +77,7 @@ class CierreModel extends Conexion
         $numCierre = $this->obtenerUltimoCodigoRegistrado();
 
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('INCIDENCIA', 'Cerrar incidencia', $numCierre);
+        $this->auditoria->registrarEvento('CIERRE', 'Cerrar incidencia', $numCierre);
 
         return $stmt->rowCount() > 0 ? true : false;
       } else {
@@ -85,7 +85,7 @@ class CierreModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      throw new PDOException("Error al insertar el cierre xD: " . $e->getMessage());
+      throw new PDOException("Error al insertar el cierre: " . $e->getMessage());
       return null;
     }
   }
@@ -101,7 +101,7 @@ class CierreModel extends Conexion
         $stmt->bindParam(':codigoCierre', $codigoCierre);
         $stmt->execute();
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('INCIDENCIA', 'Eliminar cierre', $codigoCierre);
+        $this->auditoria->registrarEvento('CIERRE', 'Eliminar cierre', $codigoCierre);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -129,7 +129,7 @@ class CierreModel extends Conexion
       $stmt->execute(); // Ejecutar el procedimiento almacenado
 
       // Registrar el evento en la auditoría
-      $this->auditoria->registrarEvento('INCIDENCIA', 'Actualizar cierre', $cierre);
+      $this->auditoria->registrarEvento('CIERRE', 'Actualizar cierre', $cierre);
       // Confirmar que se ha actualizado al menos una fila
       return $stmt->rowCount() > 0 ? true : false;
     } else {
@@ -149,7 +149,7 @@ class CierreModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_cierres
+        $sql = "SELECT * FROM vw_cierres
         ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -200,7 +200,7 @@ class CierreModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_cierres
+        $sql = "SELECT * FROM vw_cierres
         ORDER BY CIE_numero DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -216,57 +216,12 @@ class CierreModel extends Conexion
     }
   }
 
-  // public function listarCierres($start, $limit)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       $sql = "SELECT * FROM vista_cierres
-  //       ORDER BY CIE_numero DESC
-  //       OFFSET :start ROWS
-  //       FETCH NEXT :limit ROWS ONLY";
-  //       $stmt = $conector->prepare($sql);
-  //       $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-  //       $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-  //       $stmt->execute();
-  //       $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  //       return $result;
-  //     } else {
-  //       throw new Exception("Error de conexión a la base de datos.");
-  //       return null;
-  //     }
-  //   } catch (PDOException $e) {
-  //     echo "Error obtener lista de incidencias cerradas: " . $e->getMessage();
-  //     return null;
-  //   }
-  // }
-
   // Contar incidencias del ultimo mes para el administrador
   public function contarCierresUltimoMesAdministrador()
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        // $sql = "SELECT
-        // COUNT(*) AS cierres_mes_actual
-        // FROM RECEPCION R
-        // INNER JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
-        // RIGHT JOIN INCIDENCIA I ON R.INC_numero = I.INC_numero
-        // INNER JOIN  AREA A ON I.ARE_codigo = A.ARE_codigo
-        // INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
-        // INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-        // INNER JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
-        // INNER JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
-        // LEFT JOIN CIERRE C ON C.MAN_codigo =  MAN.MAN_codigo
-        // LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
-        // INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
-        // INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
-        // INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-        // WHERE  I.EST_codigo = 7 OR C.EST_codigo = 7
-        // AND INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-        // AND INC_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1) 
-        // AND CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-        // AND CIE_FECHA < DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()) + 1, 1)";
         $sql = "SELECT
           COUNT(*) AS cierres_mes_actual
           FROM RECEPCION R

@@ -143,51 +143,6 @@ class IncidenciaController
     }
   }
 
-  // Metodo para eliminar la incidencia 
-  public function eliminarIncidencia()
-  {
-    if ($_SERVER["REQUEST_METHOD"] == "POST") {
-      // Obtener y validar los parámetros
-      $numeroIncidencia = $_POST['numero_incidencia'] ?? null;
-
-      if (empty($numeroIncidencia)) {
-        echo json_encode([
-          'success' => false,
-          'message' => 'Debe seleccionar una incidencia'
-        ]);
-        exit();
-      }
-
-      try {
-        // Llamar al modelo para actualizar la incidencia
-        $updateSuccess = $this->incidenciaModel->eliminarIncidencia($numeroIncidencia);
-
-        if ($updateSuccess) {
-          echo json_encode([
-            'success' => true,
-            'message' => 'Incidencia eliminada.'
-          ]);
-        } else {
-          echo json_encode([
-            'success' => false,
-            'message' => 'No se realiz&oacute; ninguna eliminaci&oacute;n.'
-          ]);
-        }
-      } catch (Exception $e) {
-        echo json_encode([
-          'success' => false,
-          'message' => 'Error: ' . $e->getMessage()
-        ]);
-      }
-      exit();
-    } else {
-      echo json_encode([
-        'success' => false,
-        'message' => 'Método no permitido.'
-      ]);
-    }
-  }
-
   // Método de controlador para registrar una incidencia - USUARIO.
   public function registrarIncidenciaUsuario()
   {
@@ -626,6 +581,19 @@ class IncidenciaController
     try {
       // Llamada al modelo para obtener las incidencias
       $resultado = $this->incidenciaModel->listarIncidenciasRegistroAdmin();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias registradas: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar incidencias registradas por el usuario de una area especifica
+  public function listarIncidenciasRegistradasPorUsuario($area = null)
+  {
+    try {
+      // Llamada al modelo para obtener las incidencias
+      $resultado = $this->incidenciaModel->listarIncidenciasRegistroUsuario($area);
       return $resultado;
     } catch (Exception $e) {
       // Manejo de errores

@@ -109,7 +109,6 @@ function enviarFormulario(action) {
           } else if (action === 'editar') {
             toastr.success(jsonResponse.message, 'Mensaje');
           }
-          // toastr.success(action === 'registrar' ? 'Incidencia recepcionada.', 'Mensaje' : 'Incidencia recepcionada actualizada.');
           setTimeout(function () {
             location.reload();
           }, 1500);

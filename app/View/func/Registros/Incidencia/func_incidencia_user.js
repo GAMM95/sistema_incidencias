@@ -323,3 +323,13 @@ function showToast() {
   $('.toast-5s').toast('show');
 }
 
+// Funcion para Capitalizar la primera letra de un input
+function capitalizeInput(element) {
+  let value = element.value.toLowerCase(); // Convertir todo a minúsculas primero
+  element.value = value.charAt(0).toUpperCase() + value.slice(1); // Convertir solo la primera letra a mayúscula
+}
+
+// Funcion para convertir todo el texto a mayúsculas
+function uppercaseInput(element) {
+  element.value = element.value.toUpperCase();
+}

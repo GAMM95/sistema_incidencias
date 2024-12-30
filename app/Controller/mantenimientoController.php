@@ -114,6 +114,31 @@ class MantenimientoController
     }
   }
 
+  // Metodo para contar incidencias finalizadas
+  public function contarIncidenciasFinalizadas()
+  {
+    try {
+      // Llamada al modelo para contar todas las incidencias finalizadas
+      $resultado = $this->mantenimientoModel->contarIncidenciasFinalizadas();
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al contar incidencias finalizadas: " . $e->getMessage();
+    }
+  }
+
+  // Metodo para listar asignaciones para el administrador
+  public function listarIncidenciasFinalizadas($inicio = null, $limite = null)
+  {
+    try {
+      $resultado = $this->mantenimientoModel->listarIncidenciasFinalizadas($inicio, $limite);
+      return $resultado;
+    } catch (Exception $e) {
+      // Manejo de errores
+      echo "Error al listar incidencias finalizadas: " . $e->getMessage();
+    }
+  }
+
   // Metodo para consultar incidencias asignadas en mantenimiento para el usuario de soporte
   public function consultarIncidenciasMantenimientoSoporte($usuario = NULL, $codigoPatrimonial = null, $fechaInicio = null, $fechaFin = null)
   {

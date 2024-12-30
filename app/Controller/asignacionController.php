@@ -132,7 +132,7 @@ class AsignacionController
   }
 
   // Metodo para listar asignaciones registradas
-  public function listarAsignacionesPaginacion($start = null, $limit = null)
+  public function listarAsignaciones($start = null, $limit = null)
   {
     try {
       $resultado = $this->asignacionModel->listarAsignaciones($start, $limit);

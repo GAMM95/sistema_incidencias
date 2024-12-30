@@ -1,8 +1,5 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $asignacionRegistrada;
-    ?>
 
     <!-- Iinicio de breadcrumb -->
     <div class="page-header">
@@ -247,5 +244,5 @@
     <!-- Fin de la tabla -->
   </div>
 </div>
-
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">

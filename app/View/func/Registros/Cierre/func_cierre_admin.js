@@ -99,9 +99,8 @@ function enviarFormulario(action) {
     data: data,
     dataType: 'text',
     success: function (response) {
+      console.log('Raw response:', response);
       try {
-        // Convertir la respuesta en json
-        console.log('DATA: ', data);
         var jsonResponse = JSON.parse(response);
         console.log('Parsed JSON:', jsonResponse);
 
@@ -119,12 +118,12 @@ function enviarFormulario(action) {
         }
       } catch (e) {
         console.error('JSON parsing error:', e);
-        toastr.error('Error al procesar la respuesta.');
+        toastr.error('Error al procesar la respuesta.','Mensaje de error');
       }
     },
     error: function (xhr, status, error) {
       console.error('AJAX Error:', error);
-      toastr.error('Error en la solicitud AJAX.');
+      toastr.error('Error en la solicitud AJAX.', 'Mensaje de error');
     }
   });
 }
@@ -145,8 +144,9 @@ function validarCamposRegistroCierre() {
     // Validacion de campos
     var faltaOperatividad = ($('#operatividad').val() === null || $('#operatividad').val() === '');
     var faltaDocumento = ($('#documento').val() === null || $('#documento').val() === '');
+    var faltaSolucion = ($('#solucion').val() === null || $('#solucion').val() === '');
 
-    if (faltaOperatividad && faltaDocumento) {
+    if (faltaOperatividad && faltaDocumento && faltaSolucion) {
       mensajeError += 'Ingrese campos requeridos.';
       valido = false;
     } else if (faltaOperatividad) {
@@ -154,6 +154,9 @@ function validarCamposRegistroCierre() {
       valido = false;
     } else if (faltaDocumento) {
       mensajeError += 'Debe ingresar documento de cierre. ';
+      valido = false;
+    } else if (faltaSolucion) {
+      mensajeError += 'Debe seleccionar una soluci&oacute;n.';
       valido = false;
     }
   }
@@ -181,8 +184,9 @@ function validarCamposActualizacionCierre() {
     // Validacion de campos
     var faltaOperatividad = ($('#operatividad').val() === null || $('#operatividad').val() === '');
     var faltaDocumento = ($('#documento').val() === null || $('#documento').val() === '');
+    var faltaSolucion = ($('#solucion').val() === null || $('#solucion').val() === '');
 
-    if (faltaOperatividad && faltaDocumento) {
+    if (faltaOperatividad && faltaDocumento && faltaSolucion) {
       mensajeError += 'Ingrese campos requeridos.';
       valido = false;
     } else if (faltaOperatividad) {
@@ -190,6 +194,9 @@ function validarCamposActualizacionCierre() {
       valido = false;
     } else if (faltaDocumento) {
       mensajeError += 'Debe ingresar documento de cierre. ';
+      valido = false;
+    } else if (faltaSolucion) {
+      mensajeError += 'Debe seleccionar una soluci&oacute;n.';
       valido = false;
     }
   }
@@ -470,4 +477,22 @@ function filtrarTablaCierres() {
     }
     filas[i].style.display = match ? '' : 'none';
   }
+}
+
+// Funcion para Capitalizar la primera letra de un input
+function capitalizeInput(element) {
+  let value = element.value.toLowerCase(); // Convertir todo a minúsculas primero
+  element.value = value.charAt(0).toUpperCase() + value.slice(1); // Convertir solo la primera letra a mayúscula
+}
+
+// Funcion para convertir todo el texto a mayúsculas
+function uppercaseInput(element) {
+  element.value = element.value.toUpperCase();
+}
+
+// Funcion para contar los caracteres de un input
+function updateCharCount(textareaId, charCountId) {
+  const textarea = document.getElementById(textareaId);
+  const charCount = document.getElementById(charCountId);
+  charCount.textContent = `${textarea.value.length}/1000 caracteres`;
 }

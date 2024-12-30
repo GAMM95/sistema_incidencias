@@ -24,7 +24,8 @@ class cierreController
       $solucion = $_POST['solucion'] ?? null;
 
       // Validar que todos los campos requeridos estén completos
-      if (empty($documento) || empty($operatividad)) {
+      if (empty($documento) || empty($operatividad) || empty($solucion)) {
+        header('Content-Type: application/json');
         echo json_encode([
           'success' => false,
           'message' => 'Complete los campos requeridos (*).'
@@ -39,6 +40,7 @@ class cierreController
         if ($insertSuccess) {
           echo json_encode([
             'success' => false,
+            // 'message' => 'Incidencia cerrada.',
             'message' => 'Error al registrar el cierre.',
             'CIE_numero' => $insertSuccess
           ]);
@@ -74,8 +76,9 @@ class cierreController
       $solucion = $_POST['solucion'] ?? null;
       $diagnostico = $_POST['diagnostico'] ?? null;
       $recomendaciones = $_POST['recomendaciones'] ?? null;
+      $solucion = $_POST['solucion'] ?? null;
 
-      if (empty($documento) || empty($condicion)) {
+      if (empty($documento) || empty($condicion) || empty($solucion) || empty($numeroCierre)) {
         echo json_encode([
           'success' => false,
           'message' => 'Campo obligatorio.'
@@ -192,6 +195,13 @@ class cierreController
   public function listarIncidenciasCerradas()
   {
     $resultado = $this->cierreModel->listarCierresConsulta();
+    return $resultado;
+  }
+
+  // Metodo para listar todas las incidencias cerradas
+  public function listarCierres()
+  {
+    $resultado = $this->cierreModel->listarCierres();
     return $resultado;
   }
 }

@@ -1,10 +1,7 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <?php
-    global $mantenimientoRegistrado;
-    ?>
 
-    <!-- Miga de pan -->
+    <!-- Inicio de breadcrumb -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -21,7 +18,7 @@
         </div>
       </div>
     </div>
-    <!-- Fin de miga de pan -->
+    <!-- Fin de breadcrumb -->
 
     <!-- Formulario de registro de asignacion de incidencias -->
     <form id="formMantenimiento" action="registro-mantenimiento.php?action=habilitar" method="POST" class="card table-card bg-white shadow-md p-4 w-full text-xs mb-3 hidden">
@@ -31,7 +28,7 @@
         <!-- Numero de asignacion -->
         <div class="flex justify-center items-center">
           <div class="text-center">
-            <label for="numeroAsignacion" class="block font-bold mb-1 mr-3 text-lime-500">Número de Asignacion:</label>
+            <label for="numeroAsignacion" class="block font-bold mb-1 mr-3 text-lime-500">N&uacute;mero de Asignaci&oacute;n:</label>
             <input type="text" id="numeroAsignacion" name="numeroAsignacion" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs text-center" readonly>
           </div>
         </div>
@@ -96,7 +93,7 @@
               <th scope="col" class="px-6 py-2 text-center">Fecha de asignaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Fecha de finalizaci&oacute;n</th>
               <th scope="col" class="px-6 py-2 text-center">Usuario soporte</th>
-              <th scope="col" class="px-6 py-2 text-center">Cambiar estado</th>
+              <th scope="col" class="px-6 py-2 text-center">Estado Actual</th>
             </tr>
           </thead>
           <!-- Fin de encabezado -->
@@ -125,7 +122,7 @@
                     <div class="custom-control custom-switch cursor-pointer">
                       <input type="checkbox" class="custom-control-input switch-mantenimiento" id="customswitch<?= $numeroAsignacion; ?>" data-id="<?= $numeroAsignacion; ?>" <?= $Finalizado ? 'checked' : ''; ?>>
                       <!-- Mostramos el estado exacto desde la base de datos -->
-                      <label class="custom-control-label" for="customswitch<?= $numeroAsignacion; ?>"><?= $Finalizado ? 'Finalizado' : 'En espera'; ?></label>
+                      <label class="custom-control-label" for="customswitch<?= $numeroAsignacion; ?>"><?= $Finalizado ? 'Finalizado' : 'En proceso'; ?></label>
                     </div>
                   </td>
                 </tr>
@@ -144,5 +141,5 @@
     <!-- Fin de la tabla -->
   </div>
 </div>
-
 <script src="https://cdn.tailwindcss.com"></script>
+<link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">

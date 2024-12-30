@@ -144,7 +144,6 @@ class RecepcionModel extends Conexion
         $stmt->bindParam(':prioridad', $prioridad);
         $stmt->bindParam(':impacto', $impacto);
         $stmt->execute(); // Ejecutar el procedimiento almacenado
-        // Confirmar que se ha actualizado al menos una fila
 
         // Registrar el evento en la auditoría
         $this->auditoria->registrarEvento('RECEPCION', 'Actualizar incidencia recepcionada', $recepcion);
@@ -164,10 +163,9 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     if ($conector != null) {
       try {
-        $sql = "SELECT * FROM vw_incidencias_recepcionadas
-            ORDER BY INC_numero DESC
-            OFFSET :start ROWS
-            FETCH NEXT :limit ROWS ONLY";
+        $sql = "SELECT * FROM vw_incidencias_recepcionadas 
+        ORDER BY INC_numero DESC 
+        OFFSET :start ROWS FETCH NEXT :limit ROWS ONLY";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':start', $start, PDO::PARAM_INT);
         $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
@@ -212,8 +210,7 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as total FROM vista_recepciones";
-        //  r    WHERE r.EST_codigo = 4";
+        $sql = "SELECT COUNT(*) as total FROM vw_recepciones";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -95,8 +95,7 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as total FROM MANTENIMIENTO m
-      WHERE m.EST_codigo = 6";
+        $sql = "SELECT COUNT(*) as total FROM vw_incidencias_finalizadas";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -115,8 +114,7 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     if ($conector != null) {
       try {
-        $sql = "SELECT * FROM vw_incidencias_mantenimiento
-            -- WHERE EST_descripcion LIKE 'RESUELTO'
+        $sql = "SELECT * FROM vw_incidencias_finalizadas
             ORDER BY 
               SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
               INC_numero_formato DESC
@@ -191,8 +189,7 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_incidencias_mantenimiento
-        -- WHERE EST_descripcion IN ('EN ESPERA', 'RESUELTO')
+        $sql = "SELECT * FROM vw_mantenimiento
         ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -230,7 +227,7 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_matenimiento
+        $sql = "SELECT * FROM vw_incidencias_mantenimiento
           WHERE USU_codigo = :usuarioAsignado
           ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);

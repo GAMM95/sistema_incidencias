@@ -11,7 +11,7 @@
             <ul class="breadcrumb">
               <li class="breadcrumb-item"><a href=""><i class="feather icon-clipboard"></i></a></li>
               <li class="breadcrumb-item"><a href="#">Consultas</a></li>
-              <li class="breadcrumb-item"><a href="">Asignaciones</a></li>
+              <li class="breadcrumb-item"><a href="">Asignaciones personales</a></li>
             </ul>
           </div>
         </div>

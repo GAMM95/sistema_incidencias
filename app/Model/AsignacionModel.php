@@ -96,7 +96,7 @@ class AsignacionModel extends Conexion
     try {
       if ($conector != null) {
         $sql = "SELECT COUNT(*) AS total FROM ASIGNACION a
-      WHERE a.EST_codigo = 5";
+        WHERE a.EST_codigo = 5";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -143,9 +143,8 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_incidencias_mantenimiento
+        $sql = "SELECT * FROM vw_mantenimiento
         WHERE USU_codigo = :usuarioAsignado
-        -- AND EST_descripcion IN ('EN ESPERA', 'RESUELTO')
         ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':usuarioAsignado', $usuario, PDO::PARAM_INT);

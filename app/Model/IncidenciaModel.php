@@ -80,22 +80,22 @@ class IncidenciaModel extends Conexion
 
 
   // Método para insertar una nueva incidencia en la base de datos - ADMINISTRADOR / USUARIO.
-  public function insertarIncidencia($INC_fecha, $INC_hora, $INC_asunto, $INC_descripcion, $INC_documento, $INC_codigoPatrimonial, $CAT_codigo, $ARE_codigo, $USU_codigo)
+  public function insertarIncidencia($fecha, $hora, $asunto, $descripcion, $documento, $codigoPatrimonial, $categoria, $area, $usuario)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
         $sql = "EXEC sp_registrar_incidencia :fecha, :hora, :asunto, :descripcion, :documento, :codigoPatrimonial, :categoria, :area, :usuario";
         $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':fecha', $INC_fecha);
-        $stmt->bindParam(':hora', $INC_hora);
-        $stmt->bindParam(':asunto', $INC_asunto);
-        $stmt->bindParam(':descripcion', $INC_descripcion);
-        $stmt->bindParam(':documento', $INC_documento);
-        $stmt->bindParam(':codigoPatrimonial', $INC_codigoPatrimonial);
-        $stmt->bindParam(':categoria', $CAT_codigo);
-        $stmt->bindParam(':area', $ARE_codigo);
-        $stmt->bindParam(':usuario', $USU_codigo);
+        $stmt->bindParam(':fecha', $fecha);
+        $stmt->bindParam(':hora', $hora);
+        $stmt->bindParam(':asunto', $asunto);
+        $stmt->bindParam(':descripcion', $descripcion);
+        $stmt->bindParam(':documento', $documento);
+        $stmt->bindParam(':codigoPatrimonial', $codigoPatrimonial);
+        $stmt->bindParam(':categoria', $categoria);
+        $stmt->bindParam(':area', $area);
+        $stmt->bindParam(':usuario', $usuario);
         $success = $stmt->execute();
 
         // Obtener el ID de la incidencia recién insertada
@@ -228,38 +228,13 @@ class IncidenciaModel extends Conexion
     }
   }
 
-
-  // Metodo para eliminar incidencia
-  public function eliminarIncidencia($codigoIncidencia)
-  {
-    $conector = parent::getConexion();
-    try {
-      if ($conector != null) {
-        $sql = "EXEC sp_eliminar_incidencia :codigoIncidencia";
-        $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':codigoIncidencia', $codigoIncidencia);
-        $stmt->execute();
-        // Registrar el evento en la auditoría
-        $auditoria = new AuditoriaModel($conector);
-        $auditoria->registrarEvento('INCIDENCIA', 'Eliminar incidencia', $codigoIncidencia);
-        return $stmt->rowCount() > 0 ? true : false;
-      } else {
-        throw new Exception("Error de conexion a la base de datos");
-        return null;
-      }
-    } catch (PDOException $e) {
-      throw new PDOException("Error al eliminar la incidencia: " . $e->getMessage());
-      return null;
-    }
-  }
-
   // Metodo para listar incidencias totales para reporte
   public function listarIncidenciasTotales()
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_incidencias_totales_administrador
+        $sql = "SELECT * FROM vw_incidencias_totales
           ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -361,7 +336,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_totales_usuario
+        $sql = "SELECT * FROM vw_incidencias_totales_usuario
         WHERE ARE_codigo = :are_codigo
         ORDER BY INC_numero_formato DESC";
         $stmt = $conector->prepare($sql);
@@ -411,7 +386,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_administrador
+        $sql = "SELECT * FROM vw_incidencias
           ORDER BY 
           SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,
           INC_numero_formato DESC";
@@ -480,7 +455,7 @@ class IncidenciaModel extends Conexion
     $conector = $this->getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as total FROM vista_incidencias_administrador
+        $sql = "SELECT COUNT(*) as total FROM vw_incidencias
                 where EST_descripcion NOT LIKE 'INACTIVO'";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -515,43 +490,17 @@ class IncidenciaModel extends Conexion
     }
   }
 
-  // // Metodo para listar incidencias registradas por el usuario de un area especifica
-  // public function listarIncidenciasRegistroUsuario($ARE_codigo, $start, $limit)
-  // {
-  //   $conector = parent::getConexion();
-  //   try {
-  //     if ($conector != null) {
-  //       $sql = "SELECT * FROM vista_incidencias_usuario
-  //             WHERE ARE_codigo = :are_codigo
-  //             ORDER BY INC_numero DESC
-  //             OFFSET :start ROWS
-  //             FETCH NEXT :limit ROWS ONLY";
-  //       $stmt = $conector->prepare($sql);
-  //       $stmt->bindParam(':are_codigo', $ARE_codigo, PDO::PARAM_INT);
-  //       $stmt->bindParam(':start', $start, PDO::PARAM_INT);
-  //       $stmt->bindParam(':limit', $limit, PDO::PARAM_INT);
-  //       $stmt->execute();
-  //       $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
-  //       return $result;
-  //     } else {
-  //       throw new Exception("Error de conexión a la base de datos.");
-  //     }
-  //   } catch (PDOException $e) {
-  //     throw new Exception("Error al listar incidencias registradas por el usuario: " . $e->getMessage());
-  //   }
-  // }
-
   // Metodo para listar incidencias registradas por el usuario de un area especifica
-  public function listarIncidenciasRegistroUsuario($ARE_codigo)
+  public function listarIncidenciasRegistroUsuario($area)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_usuario
+        $sql = "SELECT * FROM vw_incidencias
                 WHERE ARE_codigo = :are_codigo
                 ORDER BY INC_numero DESC";
         $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':are_codigo', $ARE_codigo, PDO::PARAM_INT);
+        $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;

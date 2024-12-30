@@ -108,8 +108,8 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
 
 
   <!-- Archivos cdn -->
-  <!-- <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css"> -->
-  <!-- <script src="https://cdn.tailwindcss.com"></script> -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/feather-icons/dist/feather.min.css">
+  <script src="https://cdn.tailwindcss.com"></script>
   <!-- <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script> -->
   <!-- <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script> -->
 

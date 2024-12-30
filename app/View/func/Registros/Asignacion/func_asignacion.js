@@ -365,7 +365,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
       // Mapeo de los valores de las celdas a los inputs del formulario
       const codAsignacion = fila.querySelector('th').innerText.trim();
       const codRecepcion = celdas[1].innerText.trim();
-      const usuarioValue = celdas[5].innerText.trim();
+      const usuarioValue = celdas[6].innerText.trim();
 
       // Seteo de valores en los inputs
       document.getElementById('num_asignacion').value = codAsignacion;
