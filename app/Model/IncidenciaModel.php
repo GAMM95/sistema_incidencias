@@ -294,8 +294,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * 
-                FROM vw_incidencias_totales_administrador
+        $sql = "SELECT * FROM vw_incidencias_totales
                 ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();

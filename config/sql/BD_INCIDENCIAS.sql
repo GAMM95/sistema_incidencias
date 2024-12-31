@@ -733,7 +733,6 @@ FROM IncidenciasOrdenadas
 WHERE rn = 1;
 GO
 
-
 -- Vista para listar incidencias por fecha para el administrador
 CREATE OR ALTER VIEW vista_incidencias_fecha_admin AS
 SELECT 
@@ -1679,7 +1678,6 @@ SELECT
   A.AUD_tabla,
   I.INC_numero_formato AS referencia,
 CASE
-    
     WHEN A.AUD_tabla = 'INCIDENCIA' THEN
     I.INC_numero 
   END AS NumeroReferencia,
