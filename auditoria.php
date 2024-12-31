@@ -98,7 +98,7 @@ function obtenerColumnasParaAccion($action)
 {
   switch ($action) {
     case 'consultarEventosTotales':
-      return ['fechaFormateada', 'AUD_operacion', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
+      return ['fechaFormateada', 'AUD_operacion', 'NombreCompleto', 'ROL_nombre', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosLogin':
       return ['fechaFormateada', 'ROL_nombre', 'USU_nombre', 'NombreCompleto', 'ARE_nombre', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosIncidencias':
@@ -284,11 +284,37 @@ $resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSolucio
   <script src="dist/assets/js/plugins/bootstrap.min.js"></script>
   <script src="dist/assets/js/pcoded.min.js"></script>
   <script src="dist/assets/js/plugins/apexcharts.min.js"></script>
-
+  <!-- Iconos de Feather -->
+  <script src="dist/assets/js/plugins/feather.min.js"></script>
+  <!-- Select2 -->
+  <link href="dist/assets/css/plugins/select2.min.css" rel="stylesheet">
+  <script src="dist/assets/js/plugins/select2.min.js"></script>
+  <!-- Mensajes toastr -->
+  <script src="dist/assets/js/plugins/toastr.min.js"></script>
+  <link rel="stylesheet" href="dist/assets/css/plugins/toastr.min.css">
+  <!-- Framework CSS -->
+  <link href="dist/assets/css/plugins/tailwind.min.css" rel="stylesheet">
+  <link href="src/output.css" rel="stylesheet">
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
   <!-- custom-chart js -->
   <script src="dist/assets/js/pages/dashboard-main.js"></script>
+  <!-- Generacion de pdf -->
+  <script src="dist/assets/js/plugins/jspdf.umd.min.js"></script>
+  <script src="dist/assets/js/plugins/jspdf.plugin.autotable.min.js"></script>
 
-  <!-- Funcionalidades -->
+  <!-- Archivos cdn -->
+  <!-- Mensajes toastr -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
+  <!-- Buscador de combos -->
+  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+  <!-- Creacion de PDF -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
+
+
+  <!-- Funcionalidades enrutadas -->
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/func_auditoria_eventos_totales.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosLogin/func_auditoria_eventos_login.js"></script>
 
@@ -322,20 +348,6 @@ $resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSolucio
   <!-- Reporte de mantenedores -->
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Usuarios/Reports/reporteEventosUsuarios.js"></script>
 
-
-
-  <script src="https://cdn.tailwindcss.com"></script>
-  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
-
-  <!-- Mensajes toastr -->
-  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/css/toastr.min.css">
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
-  <!-- Generacion de PDF con js -->
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
-  <!-- Buscador de combobox -->
-  <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
-  <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 </body>
 
 </html>

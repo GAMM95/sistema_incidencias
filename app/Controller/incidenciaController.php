@@ -450,9 +450,9 @@ class IncidenciaController
     return $resultado;
   }
 
-  public function listarIncidenciasAreaEquipo()
+  public function listarIncidenciasArea()
   {
-    $resultado = $this->incidenciaModel->listarIncidenciasAreaEquipo();
+    $resultado = $this->incidenciaModel->listarIncidenciasArea();
     return $resultado;
   }
 

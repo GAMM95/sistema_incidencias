@@ -249,12 +249,12 @@ class IncidenciaModel extends Conexion
   }
 
   // Metodo para listar incidencias totales para reporte
-  public function listarIncidenciasAreaEquipo()
+  public function listarIncidenciasArea()
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_reporte_incidencias_area_equipo
+        $sql = "SELECT * FROM vw_reporte_incidencias_area
                   ORDER BY INC_numero DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -359,7 +359,6 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        // $sql = "SELECT * FROM vista_incidencias_recepcionar
         $sql = "SELECT * FROM vw_incidencias_registradas
           ORDER BY 
           SUBSTRING(INC_numero_formato, CHARINDEX('-', INC_numero_formato) + 1, 4) DESC,

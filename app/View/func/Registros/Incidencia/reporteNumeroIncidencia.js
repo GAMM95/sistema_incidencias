@@ -84,11 +84,11 @@ $(document).ready(function () {
                 [{ content: 'Categoría:', styles: { fontStyle: 'bold' } }, incidencia.CAT_nombre],
                 [{ content: 'Asunto:', styles: { fontStyle: 'bold' } }, incidencia.INC_asunto],
                 [{ content: 'Documento:', styles: { fontStyle: 'bold' } }, incidencia.INC_documento],
-                [{ content: 'Nombre del bien:', styles: { fontStyle: 'bold' } }, incidencia.nombreBien],
+                [{ content: 'Nombre del bien:', styles: { fontStyle: 'bold' } }, incidencia.BIE_nombre],
                 [{ content: 'Código Patrimonial:', styles: { fontStyle: 'bold' } }, incidencia.INC_codigoPatrimonial],
                 [{ content: 'Área solicitante:', styles: { fontStyle: 'bold' } }, incidencia.ARE_nombre],
                 [{ content: 'Descripción:', styles: { fontStyle: 'bold' } }, incidencia.INC_descripcion],
-                [{ content: 'Estado:', styles: { fontStyle: 'bold' } }, incidencia.ESTADO],
+                [{ content: 'Estado:', styles: { fontStyle: 'bold' } }, incidencia.EST_descripcion],
                 [{ content: 'Usuario:', styles: { fontStyle: 'bold' } }, incidencia.Usuario]
               ],
               styles: {

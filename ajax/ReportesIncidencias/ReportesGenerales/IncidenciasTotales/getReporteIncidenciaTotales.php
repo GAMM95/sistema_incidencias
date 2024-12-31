@@ -10,7 +10,7 @@ class ReporteIncidenciasTotales extends Conexion
   public function getReporteIncidenciasTotales()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT * FROM vw_incidencias_totales_administrador
+    $sql = "SELECT * FROM vw_incidencias_totales
             ORDER BY INC_numero_formato DESC";
     $stmt = $conector->prepare($sql);
     $stmt->execute();

@@ -10,7 +10,7 @@ class ReporteDetalleCierre extends Conexion
   public function getReporteDetalleCierre()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT * FROM vista_cierres";
+    $sql = "SELECT * FROM vw_cierres";
     $stmt = $conector->prepare($sql);
     try {
       $stmt->execute();

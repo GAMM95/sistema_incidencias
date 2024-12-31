@@ -11,11 +11,8 @@ class ReporteTotalAreaMasAfectada extends Conexion
   public function getReporteTotalAreaMasAfectada()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT A.ARE_nombre AS areaMasIncidencia, COUNT(*) AS cantidadIncidencias
-      FROM INCIDENCIA I
-      INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
-      GROUP BY A.ARE_nombre
-      ORDER BY cantidadIncidencias DESC";
+    $sql = "SELECT * FROM vw_area_mas_afectada
+            ORDER BY cantidadIncidencias DESC";
     $stmt = $conector->prepare($sql);
 
     try {

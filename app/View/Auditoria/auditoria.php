@@ -111,9 +111,8 @@
                           <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
                           <th scope="col" class="px-3 py-2 text-center">Fecha y Hora del evento </th>
                           <th scope="col" class="px-3 py-2 text-center">Evento</th>
-                          <th scope="col" class="px-3 py-2 text-center">Rol</th>
-                          <th scope="col" class="px-3 py-2 text-center">Usuario</th>
                           <th scope="col" class="px-3 py-2 text-center">Nombre Completo</th>
+                          <th scope="col" class="px-3 py-2 text-center">Rol</th>
                           <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                           <th scope="col" class="px-3 py-2 text-center">IP</th>
                           <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
@@ -131,9 +130,8 @@
                               <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                               <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['fechaFormateada']) ?></td>
                               <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['AUD_operacion']) ?></td>
-                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ROL_nombre']) ?></td>
-                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['USU_nombre']) ?></td>
                               <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['NombreCompleto']) ?></td>
+                              <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ROL_nombre']) ?></td>
                               <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['ARE_nombre']) ?></td>
                               <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['AUD_ip']) ?></td>
                               <td class="px-3 py-2 text-center"><?= htmlspecialchars($totales['AUD_nombreEquipo']) ?></td>

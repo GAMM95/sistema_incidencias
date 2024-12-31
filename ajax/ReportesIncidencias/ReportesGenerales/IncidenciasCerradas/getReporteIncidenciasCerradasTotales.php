@@ -11,7 +11,7 @@ class ReporteIncidenciasCerradasTotales extends Conexion
   public function getReporteIncidenciasCerradasTotales()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT * FROM vista_cierres
+    $sql = "SELECT * FROM vw_cierres
             ORDER BY 
             ultimaFecha DESC, --Ordenar por la última fecha
             ultimaHora DESC";  //Ordenar por la última hora

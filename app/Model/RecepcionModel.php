@@ -223,7 +223,7 @@ class RecepcionModel extends Conexion
     }
   }
 
-  // Contar recepciones del ultimo mes para el administrador
+  // TODO: Contar recepciones del ultimo mes para el administrador
   public function contarRecepcionesUltimoMesAdministrador()
   {
     $conector = parent::getConexion();
@@ -238,11 +238,11 @@ class RecepcionModel extends Conexion
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['recepciones_mes_actual'];
       } else {
-        echo "Error de conexión con la base de datos.";
+        throw new Exception("Error de conexión con la base de datos.");
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar recepciones del ultimo mes para el administrador: " . $e->getMessage();
+      throw new PDOException("Error al contar recepciones del ultimo mes para el administrador: " . $e->getMessage());
       return null;
     }
   }
@@ -281,7 +281,7 @@ class RecepcionModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar recepciones del ultimo mes para el administrador: " . $e->getMessage();
+      echo "Error al contar recepciones del ultimo mes para el usuario: " . $e->getMessage();
       return null;
     }
   }

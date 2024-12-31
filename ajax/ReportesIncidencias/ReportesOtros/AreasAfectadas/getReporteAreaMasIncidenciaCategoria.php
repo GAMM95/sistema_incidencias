@@ -11,6 +11,7 @@ class ReporteAreaMasIncidenciaCategoria extends Conexion
   public function getReporteAreaMasIncidenciaCategoria($categoria)
   {
     $conector = parent::getConexion();
+  
     $sql = "SELECT TOP 10 C.CAT_codigo, a.ARE_nombre AS areaMasIncidencia, COUNT(*) AS cantidadIncidencias 
       FROM INCIDENCIA i
       INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
