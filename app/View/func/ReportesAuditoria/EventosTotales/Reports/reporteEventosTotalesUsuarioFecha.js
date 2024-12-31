@@ -259,6 +259,25 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
   });
 });
 
+// function validarCamposEventosTotalesUsuarioFecha() {
+//   var valido = false;
+//   var mensajeError = '';
+
+//   // Verificar si los campos no están vacíos
+//   var fechaInicioSeleccionada = ($('#fechaInicioEventosTotales').val() !== null && $('#fechaInicioEventosTotales').val().trim() !== '');
+//   var fechaFinSeleccionada = ($('#fechaFinEventosTotales').val() !== null && $('#fechaFinEventosTotales').val().trim() !== '');
+//   var usuarioSeleccionado = ($('#personaEventosTotales').val() !== null && $('#personaEventosTotales').val().trim() !== '');
+
+//   // Verificar si al menos uno de los campos tiene datos
+//   if (fechaInicioSeleccionada && fechaFinSeleccionada ) {
+//     valido = true;
+//   } else {
+//     mensajeError = 'Debe seleccionar un usuario e ingresar el rango de fechas para generar el reporte.';
+//   }
+
+//   if (!valido) {
+//     toastr.warning(mensajeError.trim(), 'Advertencia');
+//   }
 function validarCamposEventosTotalesUsuarioFecha() {
   var valido = false;
   var mensajeError = '';
@@ -268,16 +287,22 @@ function validarCamposEventosTotalesUsuarioFecha() {
   var fechaFinSeleccionada = ($('#fechaFinEventosTotales').val() !== null && $('#fechaFinEventosTotales').val().trim() !== '');
   var usuarioSeleccionado = ($('#personaEventosTotales').val() !== null && $('#personaEventosTotales').val().trim() !== '');
 
-  // Verificar si al menos uno de los campos tiene datos
-  if (fechaInicioSeleccionada && fechaFinSeleccionada && usuarioSeleccionado) {
-    valido = true;
+  // Verificar si los campos de fecha están completos
+  if (!fechaInicioSeleccionada || !fechaFinSeleccionada) {
+    mensajeError = 'Debe ingresar un rango de fechas para generar el reporte.';
+  }
+  // Verificar si el usuario está seleccionado
+  else if (!usuarioSeleccionado) {
+    mensajeError = 'Debe seleccionar un usuario para generar el reporte.';
   } else {
-    mensajeError = 'Debe seleccionar un usuario e ingresar el rango de fechas para generar el reporte.';
+    valido = true;  // Si todos los campos son válidos, se marca como válido
   }
 
+  // Mostrar mensaje de advertencia si algún campo está vacío
   if (!valido) {
     toastr.warning(mensajeError.trim(), 'Advertencia');
   }
 
   return valido;
 }
+

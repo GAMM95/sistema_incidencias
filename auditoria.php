@@ -312,7 +312,9 @@ $resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSolucio
   <!-- Creacion de PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
-
+  <!-- Framework CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 
   <!-- Funcionalidades enrutadas -->
   <script src="./app/View/func/ReportesAuditoria/EventosTotales/func_auditoria_eventos_totales.js"></script>

@@ -232,7 +232,7 @@ class RecepcionModel extends Conexion
         $sql = "SELECT COUNT( * ) AS recepciones_mes_actual 
                 FROM vw_incidencias_pendientes 
                 WHERE EST_codigo IN ( 4 ) 
-                AND REC_FECHA >= DATEFROMPARTS ( YEAR( GETDATE( ) ), MONTH( GETDATE( ) ), 1 )";
+                AND INC_FECHA >= DATEFROMPARTS ( YEAR( GETDATE( ) ), MONTH( GETDATE( ) ), 1 )";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -242,7 +242,7 @@ class RecepcionModel extends Conexion
         return null;
       }
     } catch (PDOException $e) {
-      throw new PDOException("Error al contar recepciones del ultimo mes para el administrador: " . $e->getMessage());
+      throw new PDOException("Error al contar recepciones del ultimo mes para el administrador :c: " . $e->getMessage());
       return null;
     }
   }

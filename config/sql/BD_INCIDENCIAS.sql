@@ -1632,30 +1632,11 @@ GO
 
 --Vista para ver los incios de sesion
 CREATE OR ALTER VIEW vw_auditoria_login AS
-SELECT
-  (
-    CONVERT ( VARCHAR ( 10 ), AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
-  ) AS fechaFormateada,
-  A.AUD_fecha,-- Campo de fecha original
-  A.AUD_hora,-- Campo de hora original
-  A.AUD_tabla,
-  A.AUD_usuario,
-  R.ROL_nombre,
-  U.USU_nombre,
-  PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
-  A.AUD_operacion,
-  AR.ARE_nombre,
-  A.AUD_ip,
-  A.AUD_nombreEquipo 
-FROM
-  AUDITORIA A
-  INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
-  INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-  INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo
-WHERE
-  AUD_operacion IN ( 'Iniciar sesión' );
+SELECT *
+FROM vw_eventos_totales
+WHERE AUD_operacion = 'Iniciar sesión';
 GO
+
 
 CREATE OR ALTER VIEW vw_auditoria_registrar_incidencia AS
 SELECT  
@@ -4154,36 +4135,28 @@ CREATE OR ALTER PROCEDURE sp_consultar_eventos_login
 AS
 BEGIN
     SELECT
-      (
-        CONVERT ( VARCHAR ( 10 ), AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
-      ) AS fechaFormateada,
-      A.AUD_fecha,
-      A.AUD_hora,
-      A.AUD_tabla,
-      A.AUD_usuario,
-      R.ROL_nombre,
-      U.USU_nombre,
-      PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno AS NombreCompleto,
-      A.AUD_operacion,
-      AR.ARE_nombre,
-      A.AUD_ip,
-      A.AUD_nombreEquipo 
+      fechaFormateada,
+      AUD_fecha,
+      AUD_hora,
+      AUD_tabla,
+      AUD_usuario,
+      ROL_nombre,
+      USU_nombre,
+      NombreCompleto,
+      AUD_operacion,
+      ARE_nombre,
+      AUD_ip,
+      AUD_nombreEquipo
     FROM
-      AUDITORIA A
-      INNER JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-      INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
-      INNER JOIN ROL R ON R.ROL_codigo = U.ROL_codigo
-      INNER JOIN AREA AR ON AR.ARE_codigo = U.ARE_codigo 
+      vw_auditoria_login
     WHERE
-      A.AUD_operacion LIKE 'Iniciar sesión' 
-      AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
-      AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
-      AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+      ( @fechaInicio IS NULL OR AUD_fecha >= @fechaInicio ) 
+      AND ( @fechaFin IS NULL OR AUD_fecha <= @fechaFin ) 
+      AND ( @usuario IS NULL OR AUD_usuario = @usuario ) 
     ORDER BY
       AUD_fecha DESC,
       AUD_hora DESC;
-    
-  END 
+END 
 GO
 
 

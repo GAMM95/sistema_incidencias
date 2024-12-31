@@ -13,7 +13,7 @@ class getReporteEventosTotalesUsuarioFecha extends Conexion
     $conector = parent::getConexion();
     $sql = "EXEC sp_consultar_eventos_totales :usuario, :fechaInicio, :fechaFin";
     $stmt = $conector->prepare($sql);
-    $stmt->bindParam(':usuario', $usuario, PDO::PARAM_INT);
+    $stmt->bindParam(':usuario', $usuario);
     $stmt->bindParam(':fechaInicio', $fechaInicio, PDO::PARAM_STR);
     $stmt->bindParam(':fechaFin', $fechaFin, PDO::PARAM_STR);
 
@@ -32,6 +32,11 @@ class getReporteEventosTotalesUsuarioFecha extends Conexion
 $usuario = isset($_GET['personaEventosTotales']) ?  $_GET['personaEventosTotales'] : null;
 $fechaInicio = isset($_GET['fechaInicioEventosTotales']) ? $_GET['fechaInicioEventosTotales'] : null;
 $fechaFin = isset($_GET['fechaFinEventosTotales']) ? $_GET['fechaFinEventosTotales'] : null;
+
+if (!$fechaInicio || !$fechaFin) {
+  echo json_encode(['error' => 'Las fechas de inicio y fin son requeridas']);
+  exit;
+}
 
 $reporteEventosTotalesUsuarioFecha = new getReporteEventosTotalesUsuarioFecha();
 $reporte = $reporteEventosTotalesUsuarioFecha->getReporteEventosTotalesUsuarioFecha($usuario, $fechaInicio, $fechaFin);

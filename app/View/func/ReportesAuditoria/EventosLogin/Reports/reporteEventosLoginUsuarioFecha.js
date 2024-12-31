@@ -17,7 +17,7 @@ $('#reporteEventosLoginUsuarioFecha').click(function () {
   console.log('Fecha Fin:', fechaFin);
 
   // Verificar si los campos son validos
-  if (!validarCamposEventosTotalesUsuarioFecha()) {
+  if (!validarCamposEventosLoginUsuarioFecha()) {
     return;
   }
 
@@ -232,7 +232,7 @@ $('#reporteEventosLoginUsuarioFecha').click(function () {
           }
 
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de eventos por usuario y fechas generado.', 'Mensaje');
+          toastr.success('Reporte de eventos de logueo por usuario y fechas generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
@@ -253,7 +253,7 @@ $('#reporteEventosLoginUsuarioFecha').click(function () {
   });
 });
 
-function validarCamposEventosTotalesUsuarioFecha() {
+function validarCamposEventosLoginUsuarioFecha() {
   var valido = false;
   var mensajeError = '';
 
