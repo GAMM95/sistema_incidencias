@@ -193,7 +193,7 @@ class UsuarioModel extends Conexion
         }
         $stmt->execute();
         $count = $stmt->fetchColumn();
-        return $count == 0; // Devolver true si no existe, false si existe
+        return $count > 0; // True si el usuario existe
       } else {
         throw new Exception("Error de conexion a la base de datos");
       }
@@ -201,7 +201,7 @@ class UsuarioModel extends Conexion
       throw new PDOException("Error al validar nombre de usuario: " . $e->getMessage());
     }
   }
-  
+
   // Metodo para validar si persona ya tiene un usuario
   public function validarPersonaConUsuario($persona)
   {

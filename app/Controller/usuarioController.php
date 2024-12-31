@@ -93,8 +93,7 @@ class UsuarioController
       $area = $_POST['area'] ?? null;
 
       try {
-        // Validar si el usuario ya está registrado, excluyendo el usuario actual
-        if (!$this->usuarioModel->validarUsuarioExistente($username, $codigoUsuario)) {
+        if ($this->usuarioModel->validarUsuarioExistente($username, $codigoUsuario)) {
           echo json_encode([
             'success' => false,
             'message' => 'El nombre de usuario ya existe.'
@@ -130,6 +129,7 @@ class UsuarioController
       ]);
     }
   }
+
 
   //  Metodo para editar perfil de usuario
   public function editarPerfil()

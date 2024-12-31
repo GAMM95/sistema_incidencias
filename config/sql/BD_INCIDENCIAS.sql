@@ -366,6 +366,16 @@ GO
 -------------------------------------------------------------------------------------------------------
   -- VISTAS
 -------------------------------------------------------------------------------------------------------
+-- VISTA PARA LSITAR PERSONAS 
+CREATE OR ALTER VIEW vw_personas AS SELECT
+  PER_codigo,
+  PER_dni,
+  ( PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno ) AS persona,
+  PER_celular,
+  PER_email 
+FROM PERSONA;
+GO
+
 -- VISTA LISTAR USUARIOS
 CREATE OR ALTER VIEW vw_usuarios AS
 SELECT 
@@ -1576,15 +1586,6 @@ INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
 GROUP BY a.ARE_nombre;
 GO
 
--- VISTA PARA LSITAR PERSONAS 
-CREATE OR ALTER VIEW vw_personas AS SELECT
-  PER_codigo,
-  PER_dni,
-  ( PER_nombres + ' ' + PER_apellidoPaterno + ' ' + PER_apellidoMaterno ) AS persona,
-  PER_celular,
-  PER_email 
-FROM PERSONA;
-GO
 
 -- Vista para listar los equipos mas afectados
 CREATE OR ALTER VIEW vw_equipos_mas_afectados AS

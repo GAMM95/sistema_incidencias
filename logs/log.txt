@@ -2458,3 +2458,15 @@ IP: ::1
 Nombre de Equipo: JhonatanMM
 ------- END LOGIN LOGS ---------
 
+------- START LOGIN LOGS ---------
+Fecha y Hora: 2025-01-01 00:53:46
+Nombre de Persona: Jose Castro
+Rol: Administrador
+Codigo Area: 1
+Área: Subgerencia de Informática y Sistemas
+Código de Usuario: 1
+Usuario: JCASTRO
+IP: ::1
+Nombre de Equipo: JhonatanMM
+------- END LOGIN LOGS ---------
+
