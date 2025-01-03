@@ -32,7 +32,7 @@ $('#reporteAreaFecha').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesIncidencias/ReportesAreas/getReportePorFecha.php', 
+    url: 'ajax/ReportesIncidencias/ReportesAreas/getReportePorFecha.php',
     method: 'GET',
     data: {
       fechaInicioIncidenciasArea: fechaInicio,
@@ -222,6 +222,11 @@ $('#reporteAreaFecha').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
+
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de áreas afectadas por fechas.pdf"
+          });
 
           // Mostrar mensaje de éxito
           toastr.success('Reporte de equipos afectados por rango de fechas generado.', 'Mensaje');

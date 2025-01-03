@@ -93,7 +93,7 @@ $(document).ready(function () {
                 [{ content: 'Código Patrimonial:', styles: { fontStyle: 'bold' } }, incidencia.INC_codigoPatrimonial],
                 [{ content: 'Área solicitante:', styles: { fontStyle: 'bold' } }, incidencia.ARE_nombre],
                 [{ content: 'Descripción:', styles: { fontStyle: 'bold' } }, incidencia.INC_descripcion],
-                [{ content: 'Estado:', styles: { fontStyle: 'bold' } }, incidencia.EST_descripcion],
+                [{ content: 'Estado:', styles: { fontStyle: 'bold' } }, incidencia.Estado],
                 [{ content: 'Usuario:', styles: { fontStyle: 'bold' } }, incidencia.Usuario]
               ],
               styles: {
@@ -152,12 +152,15 @@ $(document).ready(function () {
               doc.setPage(i);
               addFooter(doc, i, totalPages);
             }
-
+            // Establecer las propiedades del documento
+            doc.setProperties({
+              title: "Reporte detallado de incidencia.pdf"
+            });
             // Mostrar mensaje de exito de pdf generado
             toastr.success('Reporte detallado de incidencia generado.', 'Mensaje');
             // Retrasar la apertura del PDF y limpiar el campo de entrada
             setTimeout(() => {
-              window.open(doc.output('bloburl'));
+              window.open(doc.output('bloburl'), '_blank');
             }, 2000);
           } catch (error) {
             toastr.error('Hubo un error al generar reporte detallado de incidencia.', 'Mensaje de error');

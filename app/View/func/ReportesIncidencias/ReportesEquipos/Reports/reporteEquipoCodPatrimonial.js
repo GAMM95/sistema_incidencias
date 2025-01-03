@@ -30,7 +30,7 @@ $('#reporteEquiposPorCodigoPatrimonial').click(function () {
 
   // Realizar una solicitud AJAX para obtener los datos de la incidencia
   $.ajax({
-    url: 'ajax/ReportesIncidencias/ReporteEquipos/getReportePorCodigoPatrimonial.php', 
+    url: 'ajax/ReportesIncidencias/ReporteEquipos/getReportePorCodigoPatrimonial.php',
     method: 'GET',
     data: {
       codigoPatrimonialEquipo: equipo
@@ -193,13 +193,16 @@ $('#reporteEquiposPorCodigoPatrimonial').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
-
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de equipos afectados por código patrimonial.pdf"	
+          });
           // Mostrar mensaje de éxito
           toastr.success('Reporte de incidencias de equipos por c&oacute;digo patrimonial generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado incidencias de equipos por c&oacute;digo patrimonial ingresado.', 'Advertencia');

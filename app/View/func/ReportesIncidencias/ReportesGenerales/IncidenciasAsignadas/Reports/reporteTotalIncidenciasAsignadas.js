@@ -149,12 +149,15 @@ $('#reporteIncidenciasAsignadas').click(function () {
           doc.setPage(i);
           addFooter(doc, i, totalPages);
         }
-
+        // Establecer las propiedades del documento
+        doc.setProperties({
+          title: "Reporte de incidencias asignadas.pdf"
+        })
         // Mostrar mensaje de exito de pdf generado
         toastr.success('Reporte de incidencias asignadas generado.', 'Mensaje');
         // Retrasar la apertura del PDF y limpiar el campo de entrada
         setTimeout(() => {
-          window.open(doc.output('bloburl'));
+          window.open(doc.output('bloburl'),'_blank');
         }, 2000);
       } catch (error) {
         toastr.error('Hubo un error al generar el reporte de incidencias asignadas.', 'Mensaje de error');

@@ -221,12 +221,16 @@ $('#reporteAreaMasIncidenciasCategoriaFecha').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de áreas afectadas por categoría y fechas.pdf"
+          });
           // Mostrar mensaje de exito de pdf generado
           toastr.success('Reporte de las &aacute;reas con m&aacute;s incidencias por caregor&iacute;a y fechas ingresadas generado.', 'Mensaje');
 
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado datos para los campos ingresados.', 'Advertencia');

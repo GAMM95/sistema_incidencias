@@ -573,7 +573,7 @@
                     <!-- Encabezado de la tabla -->
                     <thead class="sticky top-0 text-xs text-gray-700 uppercase bg-blue-300">
                       <tr>
-                        <th scope="col" class="px-3 py-2 text-center hidden">Num_incidencia</th>
+                        <th scope="col" class="px-3 py-2 text-center hidden">INC_numero</th>
                         <th scope="col" class="px-3 py-2 text-center hidden">Num_cierre</th>
                         <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
                         <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
@@ -709,7 +709,7 @@
                 </div>
                 <!-- input tipo de bien (más largo) -->
                 <div class="flex justify-center items-center text-center">
-                  <input type="text" id="tipoBienEquipo" name="tipoBienEquipo" class="border p-2 w-3/4 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
+                  <input type="text" id="tipoBienEquipo" name="tipoBienEquipo" class="border p-2 w-1/2 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
                 </div>
                 <!-- Fin de input tipo de bien -->
 
@@ -722,7 +722,7 @@
                           <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
                           <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
                           <th scope="col" class="px-3 py-2 text-center hidden">Area</th>
-                          <th scope="col" class="px-3 py-2 text-center">Fecha Inc.</th>
+                          <th scope="col" class="px-3 py-2 text-center">Fecha Incidencia</th>
                           <th scope="col" class="px-3 py-2 text-center">Asunto</th>
                           <th scope="col" class="px-3 py-2 text-center">Documento</th>
                           <th scope="col" class="px-3 py-2 text-center">C&oacute;d. Patrimonial</th>
@@ -1026,7 +1026,7 @@
                                       <i class="feather mr-2 icon-file"></i>Reporte
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidencias">Todas las incidencias</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidencias">Todas las &aacute;reas afectadas</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidenciasFecha">Reporte por fecha</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidenciasCategoria">Reporte por categor&iacute;a</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteAreaMasIncidenciasCategoriaFecha">Reporte por categor&iacute;a y fecha</div>

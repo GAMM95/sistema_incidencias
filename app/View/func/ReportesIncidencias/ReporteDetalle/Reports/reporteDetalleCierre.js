@@ -158,13 +158,15 @@ $(document).ready(function () {
               doc.setPage(i);
               addFooter(doc, i, totalPages);
             }
-
-
+// Establecer las propiedades del documento
+doc.setProperties({
+  title: "Reporte detallado de cierre.pdf"
+});
             // Mostrar mensaje de exito de pdf generado
             toastr.success('Reporte detallado de cierre generado.', 'Mensaje');
             // Retrasar la apertura del PDF y limpiar el campo de entrada
             setTimeout(() => {
-              window.open(doc.output('bloburl'));
+              window.open(doc.output('bloburl'), '_blank');
               $('#numeroIncidencia').val(''); // Limpiar el campo de entrada
             }, 2000);
             // doc.save(`incidencia_${numeroIncidencia}.pdf`);

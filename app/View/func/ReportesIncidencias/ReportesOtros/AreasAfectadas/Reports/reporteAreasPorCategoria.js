@@ -59,41 +59,67 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
 
           // Funcion para agregar encabezado
           function addHeader(doc, totalRecords) {
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            const fechaImpresion = new Date().toLocaleDateString();
+            const headerText2 = 'Subgerencia de Informática y Sistemas';
+            const reportTitle = 'ÁREAS CON MÁS INCIDENCIAS';
+
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = ' ÁREAS CON MÁS INCIDENCIAS';
-            const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const fechaImpresion = new Date().toLocaleDateString();
 
             // Agregar logo
             doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
             // Titulo principal
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(13);
+            doc.setFontSize(12);
             const titleWidth = doc.getTextWidth(reportTitle);
             const titleX = (pageWidth - titleWidth) / 2;
-            doc.text(reportTitle, titleX, marginY + 10);
-            doc.setLineWidth(0.5); // Ancho de subrayado
-            doc.line(titleX, marginY + 11, titleX + titleWidth, marginY + 11);
+            const titleY = 20;
+            doc.text(reportTitle, titleX, titleY);
+            doc.setLineWidth(0.5);
+            doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
 
             // Subtítulo: cantidad de registros
             const subtitleText = `Cantidad de registros: ${totalRecords}`;
             doc.setFontSize(11);
             const subtitleWidth = doc.getTextWidth(subtitleText);
             const subtitleX = (pageWidth - subtitleWidth) / 2;
-            doc.text(subtitleText, subtitleX, marginY + 17);
+            doc.text(subtitleText, subtitleX, marginY + 25);
 
             // Fecha de impresion 
             doc.setFontSize(8);
-            const headerText2Width = doc.getTextWidth(headerText2);
+            doc.setFont('helvetica', 'normal');
             const fechaText = `Fecha de impresión: ${fechaImpresion}`;
+            const headerText2Width = doc.getTextWidth(headerText2);
             const fechaTextWidth = doc.getTextWidth(fechaText);
-            doc.text(headerText2, pageWidth - marginX - headerText2Width, marginY + logoHeight / 2);
-            doc.text(fechaText, pageWidth - marginX - fechaTextWidth, marginY + logoHeight / 2 + 5);
+            const headerText2X = pageWidth - marginX - headerText2Width;
+            const fechaTextX = pageWidth - marginX - fechaTextWidth;
+            const headerText2Y = marginY + logoHeight / 2;
+            const fechaTextY = headerText2Y + 5;
+
+            doc.text(headerText2, headerText2X, headerText2Y);
+            doc.text(fechaText, fechaTextX, fechaTextY);
+          }
+          // addHeader(doc);
+          addHeader(doc, data.length);
+
+          // Funcion para agregar el pie de pagina
+          function addFooter(doc, pageNumber, totalPages) {
+            doc.setFontSize(8);
+            doc.setFont('helvetica', 'italic');
+            const footerY = 285;
+            doc.setLineWidth(0.5);
+            doc.line(10, footerY - 5, doc.internal.pageSize.width - 10, footerY - 5);
+
+            const footerText = 'Sistema de Gestión de Incidencias';
+            const pageInfo = `Página ${pageNumber} de ${totalPages}`;
+            doc.text(footerText, 10, footerY);
+            doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
           // Funcion para agregar el pie de pagina
@@ -110,39 +136,41 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
             doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
-          // Función para agregar el nombre de la categoría
-          function addCategory(doc) {
-            const pageWidth = doc.internal.pageSize.width;
-            const labels = {
-              categoria: 'Categoría: '
-            };
-
-            // Obtener valores
+          // Función para agregar una tabla con la categoría seleccionada
+          function addCategoryTable(doc) {
             const categoriaNombre = $('#nombreCategoriaSeleccionada').val() || '-';
 
-            // Dibujar datos de la categoria
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
-
-            // Categoria
-            const categoriaLabelWidth = doc.getTextWidth(labels.categoria);
-            const categoriaValueWidth = doc.getTextWidth(` ${categoriaNombre}`);
-            const totalCategoriaWidth = categoriaLabelWidth + categoriaValueWidth;
-            const startXCategoria = (pageWidth - totalCategoriaWidth) / 2;
-            const titleYCategoria = 29;
-            doc.text(labels.categoria, startXCategoria, titleYCategoria);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${categoriaNombre}`, startXCategoria + categoriaLabelWidth, titleYCategoria);
+            // Crear tabla de categoría seleccionada
+            doc.autoTable({
+              startY: 40, // Ajustar la altura donde se dibuja la tabla
+              margin: { left: 10 },
+              head: [['CATEGORÍA SELECCIONADA']],
+              body: [[categoriaNombre]],    // Cuerpo con la categoría
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [44, 62, 80],
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 190 } // Ajusta el ancho de la columna
+              }
+            });
           }
-
 
           // Funcion para agregar la tablz de datos
           function addTable(doc) {
             let item = 1;
             doc.autoTable({
-              startY: 35, // Altura de la tabla respecto a la parte superior
+              startY: 60, // Altura de la tabla respecto a la parte superior
               margin: { left: 10 },
-              head: [['N°', 'ÁREA', 'CANTIDAD']],
+              head: [['N°', 'Área afectada', 'Total de incidencias']],
               body: data.map(reporte => [
                 item++,
                 reporte.areaMasIncidencia,
@@ -155,7 +183,7 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
                 valign: 'middle'
               },
               headStyles: {
-                fillColor: [9, 4, 6],
+                fillColor: [119, 146, 170],
                 textColor: [255, 255, 255],
                 fontStyle: 'bold',
                 halign: 'center'
@@ -170,7 +198,8 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
 
           // Agregar encabezado, dato de la categoriaSeleccionada, tabla y pie de página
           addHeader(doc, totalRecords);
-          addCategory(doc);
+          addCategoryTable(doc);  // Agrega esta nueva tabla antes de la tabla principal
+          // addCategory(doc);
           addTable(doc);
 
           // Agregar pie de página en todas las páginas
@@ -179,12 +208,18 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
+
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de áreas afectadas por categoría.pdf"
+          });
+
           // Mostrar mensaje de exito de pdf generado
           toastr.success('Reporte de las &aacute;reas con m&aacute;s incidencias por caregor&iacute;a generado.', 'Mensaje');
 
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado &aacute;reas con m&aacute;s incidencias para la categor&iacute;a seleccionada.', 'Advertencia');

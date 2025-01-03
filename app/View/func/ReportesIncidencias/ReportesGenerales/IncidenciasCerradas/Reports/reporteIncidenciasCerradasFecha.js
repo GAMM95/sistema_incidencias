@@ -222,13 +222,15 @@ $('#reporteIncidenciasCerradasFecha').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
-
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de incidencias cerradas por fechas.pdf"
+          })
           // Mostrar mensaje de éxito
           toastr.success('Reporte de incidencias cerradas por rango de fechas generado.', 'Mensaje');
-
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'),' _blank');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado incidencias cerradas para los campos ingresados.', 'Advertencia');

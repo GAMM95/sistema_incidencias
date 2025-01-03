@@ -165,7 +165,7 @@ $('#reporteAreaMasIncidenciasFecha').click(function () {
           doc.autoTable({
             startY: 35, // Altura de la tabla respecto a la parte superior
             margin: { left: 10 },
-            head: [['N°', 'ÁREA', 'CANTIDAD']],
+            head: [['N°', 'ÁREA AFECTADA', 'TOTAL INCIDENCIAS']],
             body: data.map(reporte => [
               item++,
               reporte.areaMasIncidencia,
@@ -211,11 +211,16 @@ $('#reporteAreaMasIncidenciasFecha').click(function () {
             addFooter(doc, i, totalPages);
           }
 
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de áreas afectadas por fechas.pdf"
+          });
+          
           // Mostrar mensaje de exito de pdf generado
           toastr.success('Reporte de las 10 primeras &aacute;reas con m&aacute;s incidencias generado.', 'Mensaje');
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
             $('#fechaInicio').val('');
             $('#fechaFin').val('');
           }, 2000);

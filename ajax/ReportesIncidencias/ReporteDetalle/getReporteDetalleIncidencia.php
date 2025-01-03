@@ -10,7 +10,7 @@ class ReporteDetalleIncidencia extends Conexion
   public function getReporteDetalleIncidencia()
   {
     $conector = parent::getConexion();
-    $sql = "SELECT * FROM vw_incidencias";
+    $sql = "SELECT * FROM vw_incidencias_totales";
     $stmt = $conector->prepare($sql);
     $stmt->execute();
     $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
