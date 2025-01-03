@@ -1,5 +1,6 @@
 <?php
 require_once 'app/Model/UsuarioModel.php';
+require_once './app/Model/IncidenciaModel.php';
 // Código PHP para obtener los datos del usuario
 if (isset($_SESSION['codigoUsuario'])) {
   $user_id = $_SESSION['codigoUsuario'];
@@ -8,6 +9,10 @@ if (isset($_SESSION['codigoUsuario'])) {
 } else {
   $perfil = null;
 }
+
+$incidenciaModel = new IncidenciaModel();
+$asignaciones = $incidenciaModel->notificacionesSoporte($user_id);
+$incidencias = $incidenciaModel->notificacionesAdmin();
 ?>
 <header class="navbar pcoded-header navbar-expand-lg navbar-light header-dark fixed top-0 left-0 right-0 z-50">
   <div class="m-header">
@@ -38,11 +43,53 @@ if (isset($_SESSION['codigoUsuario'])) {
     </ul>
     <ul class="navbar-nav ml-auto">
 
-      <?php
-      require_once './app/Model/IncidenciaModel.php';
-      $incidenciaModel = new IncidenciaModel();
-      $incidencias = $incidenciaModel->notificacionesAdmin();
-      ?>
+      <!-- Notificaciones de incidencias asignadas a cada uno de los de soporte -->
+      <li>
+        <div class="dropdown">
+          <a class="dropdown-toggle" href="#" data-toggle="dropdown">
+            <i class="icon feather icon-headphones mr-2"></i>
+            <?php if (count($asignaciones) > 0) : ?>
+              <span class="badge badge-pill badge-danger"><?= count($asignaciones); ?></span>
+            <?php endif; ?>
+          </a>
+          <div class="dropdown-menu dropdown-menu-right notification">
+            <div class="noti-head">
+              <h6 class="d-inline-block m-b-0">Incidencias asignadas</h6>
+            </div>
+            <ul class="noti-body" style="max-height: 250px; overflow-y: auto;">
+              <?php if (empty($asignaciones)) : ?>
+                <li class="notification">
+                  <div class="media">
+                    <div class="media-body">
+                      <p class="text-center">No se le han asignado incidencias.</p>
+                    </div>
+                  </div>
+                </li>
+              <?php else : ?>
+                <?php foreach (array_slice($asignaciones, 0, 5) as $notificacion) : ?>
+                  <li class="notification">
+                    <div class="media">
+                      <img class="img-radius" src="dist/assets/images/support/support.png" alt="User-Profile-Image">
+                      <div class="media-body">
+                        <p>
+                          <strong><?= htmlspecialchars($notificacion['INC_numero_formato']); ?></strong>
+                          <span class="n-time text-muted">
+                            <i class="icon feather icon-clock m-r-10"></i>
+                            <?= htmlspecialchars($notificacion['tiempoDesdeAsignacion']); ?>
+                          </span>
+                        </p>
+                        <p><?= htmlspecialchars($notificacion['INC_asunto']); ?></p>
+                      </div>
+                    </div>
+                  </li>
+                <?php endforeach; ?>
+              <?php endif; ?>
+            </ul>
+          </div>
+        </div>
+      </li>
+
+      <!-- Notificaciones de nuevas incidencias -->
       <li>
         <div class="dropdown">
           <a class="dropdown-toggle" href="#" data-toggle="dropdown">
@@ -55,7 +102,7 @@ if (isset($_SESSION['codigoUsuario'])) {
             <div class="noti-head">
               <h6 class="d-inline-block m-b-0">Nuevas incidencias</h6>
             </div>
-            <ul class="noti-body" style="max-height: 250px; overflow-y: auto;">
+            <ul class="noti-body" style="max-height: 250px;">
               <?php if (empty($incidencias)) : ?>
                 <li class="notification">
                   <div class="media">

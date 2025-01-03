@@ -75,7 +75,7 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
     include('app/View/Home/admin/inicio.php');
   } else  if ($rol === 'Soporte') {
     include('app/View/partials/soporte/navbar.php');
-    include('app/View/partials/admin/header.php');
+    include('app/View/partials/soporte/header.php');
     include('app/View/Home/admin/inicio.php');
   } else if ($rol === 'Usuario') {
     include('app/View/partials/user/navbar.php');

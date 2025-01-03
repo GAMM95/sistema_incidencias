@@ -337,7 +337,7 @@ class IncidenciaModel extends Conexion
       if ($conector != null) {
         $sql = "SELECT * FROM vw_incidencias_totales_usuario
         WHERE ARE_codigo = :are_codigo
-        ORDER BY INC_numero_formato DESC";
+        ORDER BY ultimaFecha DESC, ultimaHora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT);
         $stmt->execute();
@@ -909,15 +909,17 @@ public function contarPendientesUltimoMesUsuario($area)
     }
   }
 
-  // Notificaciones por usuario que resuelve la incidencia
+  // Notificaciones de incidencias asignadas a cada uno de los de soporte
   public function notificacionesSoporte($codigoUsuario)
   {
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_notificaciones_administrador
-        ORDER BY INC_numero DESC";
+        $sql = "SELECT * FROM vw_notificaciones_soporte
+                WHERE USU_codigo = :codigoUsuario
+                ORDER BY tiempoDesdeAsignacion ASC";
         $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':codigoUsuario', $codigoUsuario, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetchAll(PDO::FETCH_ASSOC);
         return $result;

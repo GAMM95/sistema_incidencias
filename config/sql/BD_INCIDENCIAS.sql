@@ -571,13 +571,12 @@ WITH IncidenciasOrdenadas AS (
         B.BIE_nombre,
         I.INC_documento,
         (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
-        -- Si el estado es "ABIERTO", mostramos NULL en PRI_nombre e IMP_descripcion
         CASE
-            WHEN E.EST_descripcion = 'ABIERTO' THEN NULL
+            WHEN E.EST_codigo = 3 THEN NULL
             ELSE PRI.PRI_nombre
         END AS PRI_nombre,
         CASE
-            WHEN E.EST_descripcion = 'ABIERTO' THEN NULL
+            WHEN E.EST_codigo = 3 THEN NULL
             ELSE IMP.IMP_descripcion
         END AS IMP_descripcion,
         (CONVERT(VARCHAR(10), CIE_fecha, 103)) AS fechaCierreFormateada,
@@ -585,9 +584,13 @@ WITH IncidenciasOrdenadas AS (
         U.USU_nombre,
         U.USU_nombre + ' - ' + P.PER_nombres + ' ' + P.PER_apellidoPaterno AS Usuario,
         CASE
-            WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
-            ELSE E.EST_descripcion
+            WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion 
+            ELSE E.EST_descripcion  
         END AS Estado,
+        CASE
+            WHEN C.CIE_numero IS NOT NULL THEN EC.EST_codigo 
+            ELSE E.EST_codigo 
+        END AS EST_codigo,  
         COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha) AS ultimaFecha,
         COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora) AS ultimaHora,
         ROW_NUMBER() OVER (PARTITION BY I.INC_numero ORDER BY COALESCE(C.CIE_fecha, R.REC_fecha, I.INC_fecha) DESC, COALESCE(C.CIE_hora, R.REC_hora, I.INC_hora) DESC) AS rn
@@ -600,7 +603,7 @@ WITH IncidenciasOrdenadas AS (
     RIGHT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
     INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
     INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
-    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+    INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo 
     LEFT JOIN BIEN B ON LEFT(I.INC_codigoPatrimonial, 8) = B.BIE_codigoIdentificador
     LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
     LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
@@ -630,11 +633,11 @@ SELECT
     USU_nombre,
     Usuario,
     Estado,
+    EST_codigo,
     ultimaFecha,
     ultimaHora
 FROM IncidenciasOrdenadas
 WHERE rn = 1;
-GO
 
 -- Vista para listar incidencias pendientes de cierre
 CREATE OR ALTER VIEW vw_incidencias_pendientes AS
@@ -964,7 +967,6 @@ SELECT
     (CONVERT(VARCHAR(10), REC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), REC_hora, 0), 7), 6, 0, ' ')) AS fechaRecepcionFormateada,
     (CONVERT(VARCHAR(10), ASI.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), ASI.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,    
     (CONVERT(VARCHAR(10), M.MAN_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), M.MAN_hora, 0), 7), 6, 0, ' ')) AS fechaMantenimientoFormateada,
-    
     A.ARE_nombre,
     I.INC_asunto,
     I.INC_documento,
@@ -1300,6 +1302,42 @@ LEFT JOIN AREA A2 ON U2.ARE_codigo = A2.ARE_codigo
 INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
 WHERE (I.EST_codigo NOT IN (3, 4) OR C.EST_codigo NOT IN (3, 4))
 AND CONVERT(DATE, C.CIE_fecha) = CONVERT(DATE, GETDATE());
+GO
+
+-- NOTIFICACIONES DE INCIDENCIAS ASIGNADAS PARA EL DE SOPORTE
+CREATE OR ALTER VIEW vw_notificaciones_soporte AS
+SELECT 
+    I.INC_numero,
+    I.INC_numero_formato,
+    A.ASI_codigo,
+    M.MAN_codigo,
+    (CONVERT(VARCHAR(10), A.ASI_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), A.ASI_hora, 0), 7), 6, 0, ' ')) AS fechaAsignacionFormateada,
+    I.INC_asunto,
+    U.USU_codigo,
+    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS usuarioSoporte,
+    pA.PER_nombres + ' ' + pA.PER_apellidoPaterno AS usuarioAsignador,
+    CASE
+        WHEN DATEDIFF(MINUTE, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) < 60 THEN 
+            CAST(DATEDIFF(MINUTE, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) AS VARCHAR) + ' min'
+        WHEN DATEDIFF(DAY, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) < 1 THEN 
+            CAST(DATEDIFF(HOUR, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) AS VARCHAR) + ' h ' +
+            CAST(DATEDIFF(MINUTE, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) % 60 AS VARCHAR) + ' min'
+        ELSE 
+            CAST(DATEDIFF(DAY, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) AS VARCHAR) + ' d ' +
+            CAST(DATEDIFF(HOUR, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) % 24 AS VARCHAR) + ' h ' +
+            CAST(DATEDIFF(MINUTE, CAST(A.ASI_fecha AS DATETIME) + CAST(A.ASI_hora AS DATETIME), GETDATE()) % 60 AS VARCHAR) + ' min'
+    END AS tiempoDesdeAsignacion,
+    E.EST_codigo
+FROM ASIGNACION A
+INNER JOIN ESTADO E ON E.EST_codigo = A.EST_codigo
+LEFT JOIN RECEPCION R ON R.REC_numero = A.REC_numero
+LEFT JOIN INCIDENCIA I ON I.INC_numero = R.INC_numero
+LEFT JOIN USUARIO uA ON uA.USU_codigo = R.USU_codigo
+LEFT JOIN PERSONA pA ON pA.PER_codigo = uA.PER_codigo
+LEFT JOIN USUARIO U ON U.USU_codigo = A.USU_codigo
+INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = A.ASI_codigo
+WHERE E.EST_codigo IN (5);
 GO
 
 --VISTA PARA MOSTRAR NOTIFICACIONES PARA EL ADMINISTRADOR 
@@ -4214,11 +4252,12 @@ BEGIN
     I.CON_descripcion,
     I.USU_nombre,
     I.Estado,
+    EST_codigo,
     I.ultimaFecha,
     I.ultimaHora
   FROM vw_incidencias_totales I
   WHERE 
-    (@estado IS NULL OR I.Estado = @estado) AND
+    (@estado IS NULL OR I.EST_codigo = @estado) AND
     (@fechaInicio IS NULL OR I.ultimaFecha >= @fechaInicio) AND
     (@fechaFin IS NULL OR I.ultimaFecha <= @fechaFin) AND
     (@area IS NULL OR I.ARE_codigo = @area) AND
