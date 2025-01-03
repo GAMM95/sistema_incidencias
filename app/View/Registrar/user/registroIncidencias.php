@@ -167,7 +167,7 @@
             <tr>
               <th scope="col" class="px-6 py-2 text-center hidden">N&deg;</th>
               <th scope="col" class="px-6 py-2 text-center">N&deg; Incidencia</th>
-              <th scope="col" class="px-6 py-2 text-center">Fecha de entrada</th>
+              <th scope="col" class="px-6 py-2 text-center">Fecha de Incidencia</th>
               <th scope="col" class="px-6 py-2 text-center">C&oacute;digo Patrimonial</th>
               <th scope="col" class="px-6 py-2 text-center">Asunto</th>
               <th scope="col" class="px-6 py-2 text-center">Documento</th>

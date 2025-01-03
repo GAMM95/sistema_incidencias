@@ -404,6 +404,30 @@ SELECT * FROM BIEN
 WHERE BIE_codigo <> 1;
 GO
 
+-- VISTA PARA LISTAR AREAS
+CREATE OR ALTER VIEW vw_areas AS
+SELECT
+  ARE_codigo,
+  ARE_nombre,
+  EST_codigo 
+FROM AREA 
+WHERE ARE_codigo <> 0;
+GO
+
+-- VISTA PARA LISTAR CATEGORIAS
+CREATE OR ALTER VIEW vw_categorias AS
+SELECT
+  CAT_codigo,
+  CAT_nombre,
+  EST_codigo 
+FROM CATEGORIA;
+GO
+
+-- VISTA PARA LISTAR SOLUCIONES
+CREATE OR ALTER VIEW vw_soluciones AS
+SELECT * FROM SOLUCION;
+GO
+
 -- VISTA LISTAR INCIDENCIAS ADMINISTRADOR
 CREATE OR ALTER VIEW vw_incidencias AS
 SELECT 
@@ -509,6 +533,28 @@ SELECT * FROM UltimaRecepcion
 WHERE rn = 1
 GO
 
+-- VISTA PARA SETEAR LA INFORMACION DEL USUARIO
+CREATE OR ALTER VIEW vw_usuario_detalle AS
+SELECT 
+    u.USU_nombre, 
+    u.USU_codigo,
+    u.USU_password, 
+    p.PER_dni, 
+    p.PER_nombres, 
+    p.PER_apellidoPaterno, 
+    p.PER_apellidoMaterno,
+    (p.PER_nombres + ' ' + p.PER_apellidoPaterno + ' ' + p.PER_apellidoMaterno) AS Persona,
+    r.ROL_nombre, 
+    a.ARE_nombre, 
+    p.PER_celular, 
+    p.PER_email
+FROM USUARIO u
+INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
+INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo
+INNER JOIN AREA a ON a.ARE_codigo = u.ARE_codigo;
+GO
+
+-- VISTA PARA LISTAR TODAS LAS INCIDENCIAS
 CREATE OR ALTER VIEW vw_incidencias_totales AS
 WITH IncidenciasOrdenadas AS (
     SELECT
@@ -537,6 +583,7 @@ WITH IncidenciasOrdenadas AS (
         (CONVERT(VARCHAR(10), CIE_fecha, 103)) AS fechaCierreFormateada,
         O.CON_descripcion,
         U.USU_nombre,
+        U.USU_nombre + ' - ' + P.PER_nombres + ' ' + P.PER_apellidoPaterno AS Usuario,
         CASE
             WHEN C.CIE_numero IS NOT NULL THEN EC.EST_descripcion
             ELSE E.EST_descripcion
@@ -558,6 +605,7 @@ WITH IncidenciasOrdenadas AS (
     LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
     LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
     LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
+    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
     WHERE (I.EST_codigo IN (3, 4, 7) OR C.EST_codigo IN (3, 4, 7))
 )
 -- Seleccionamos solo el registro más reciente (rn = 1)
@@ -580,6 +628,7 @@ SELECT
     fechaCierreFormateada,
     CON_descripcion,
     USU_nombre,
+    Usuario,
     Estado,
     ultimaFecha,
     ultimaHora
@@ -597,6 +646,7 @@ WITH IncidenciasOrdenadas AS (
         I.INC_hora AS ultimaHora,
         (CONVERT(VARCHAR(10), I.INC_fecha, 103) + ' - ' + STUFF(RIGHT('0' + CONVERT(VARCHAR(7), I.INC_hora, 0), 7), 6, 0, ' ')) AS fechaIncidenciaFormateada,
         A.ARE_nombre,
+        A.ARE_codigo,
         CAT.CAT_nombre,
         I.INC_asunto,
         I.INC_codigoPatrimonial,
@@ -647,6 +697,7 @@ SELECT
     ultimaFecha AS INC_fecha, 
     ultimaHora AS INC_hora,   
     ARE_nombre,
+    ARE_codigo,
     CAT_nombre,
     INC_asunto,
     INC_codigoPatrimonial,
@@ -1202,7 +1253,7 @@ GROUP BY
 GO
 
 --VISTA PARA MOSTRAR NOTIFICACIONES PARA LOS USUARIOS
-CREATE OR ALTER VIEW vista_notificaciones_usuario AS
+CREATE OR ALTER VIEW vw_notificaciones_usuario AS
 SELECT 
 I.INC_numero,
 I.INC_numero_formato,
@@ -1252,7 +1303,7 @@ AND CONVERT(DATE, C.CIE_fecha) = CONVERT(DATE, GETDATE());
 GO
 
 --VISTA PARA MOSTRAR NOTIFICACIONES PARA EL ADMINISTRADOR 
-CREATE OR ALTER VIEW vista_notificaciones_administrador AS
+CREATE OR ALTER VIEW vw_notificaciones_administrador AS
 SELECT 
 I.INC_numero,
 (CONVERT(VARCHAR(10), I.INC_fecha, 103) + ' - ' + CONVERT(VARCHAR(5), I.INC_hora, 108)) AS fechaIncidenciaFormateada,
@@ -1280,6 +1331,172 @@ LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
 INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
 WHERE I.EST_codigo NOT IN (2, 4, 5) 
 AND A.ARE_codigo <> 1;
+GO
+
+-- VISTA PARA CONTAR LAS INCIDENCIAS DEL MES ACTUAL PARA EL ADMINISTRADOR Y SOPORTE
+-- Numero superior que indica el total de incidencias del mes
+CREATE OR ALTER VIEW vw_incidencias_mes_actual
+AS
+  SELECT COUNT(*) AS incidencias_mes_actual
+  FROM INCIDENCIA
+  WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND EST_codigo NOT IN (2);
+GO
+
+-- Numero superior que indica el total de incidencias del mes por area
+CREATE OR ALTER VIEW vw_incidencias_mes_actual_area
+AS
+  SELECT 
+    a.ARE_nombre AS area,
+    COUNT(*) AS incidencias_mes_actual
+  FROM INCIDENCIA i
+  INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
+  WHERE i.INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND i.EST_codigo NOT IN (2)
+  GROUP BY a.ARE_nombre;
+GO
+
+-- VISTA PARA CONTAR LAS INCIDENCIAS NUEVAS EN EL MES ACTUAL PARA EL ADMINISTRADOR Y SOPORTE
+CREATE OR ALTER VIEW vw_pendientes_mes_actual
+AS
+  SELECT COUNT(*) AS pendientes_mes_actual
+  FROM INCIDENCIA
+  WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND EST_codigo = 3;
+GO
+
+-- Vista para contar las nuevas incidencias del mes actual por area para el usuario
+CREATE OR ALTER VIEW vw_pendientes_mes_actual_area
+AS
+  SELECT 
+    a.ARE_codigo AS area,
+    COUNT(*) AS pendientes_mes_actual
+  FROM INCIDENCIA i
+  INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
+  WHERE i.INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND I.EST_codigo = 3
+  GROUP BY a.ARE_codigo;
+GO
+
+-- VISTA PARA CONTAR LAS INCIDENCIAS RECEPCIONADAS EN EL MES ACTUAL PARA EL ADMINSTRADOR Y SOPORTE
+CREATE OR ALTER VIEW vw_recepciones_mes_actual
+AS
+  SELECT COUNT(*) AS recepciones_mes_actual
+  FROM vw_incidencias_pendientes
+  WHERE EST_codigo IN (4)
+    AND INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1);
+GO
+
+-- Vista para contar las incidencias recepcionadas por area para el usuario
+CREATE OR ALTER VIEW vw_recepciones_mes_actual_area
+AS
+  SELECT 
+    a.ARE_codigo AS area,
+    COUNT(*) AS recepciones_mes_actual
+  FROM vw_incidencias_pendientes r
+  INNER JOIN AREA a ON a.ARE_codigo = r.ARE_codigo
+  WHERE r.EST_codigo IN (4)
+    AND r.ultimaFecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+  GROUP BY a.ARE_codigo;
+GO
+
+-- VISTAS PARA CONTAR LOS CIERRES DEL MES ACTUAL - ADMINISTRADOR Y SOPORTE
+CREATE OR ALTER VIEW vw_cierres_mes_actual
+AS
+  SELECT
+    COUNT(*) AS cierres_mes_actual
+  FROM RECEPCION R
+  INNER JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+  RIGHT JOIN INCIDENCIA I ON R.INC_numero = I.INC_numero
+  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+  INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+  INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+  INNER JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+  INNER JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+  LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
+  LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+  INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+  INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
+  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  WHERE (I.EST_codigo = 7 OR C.EST_codigo = 7)
+    AND I.INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND I.INC_FECHA < DATEADD(DAY, 1, EOMONTH(GETDATE()))
+    AND C.CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND C.CIE_FECHA < DATEADD(DAY, 1, EOMONTH(GETDATE()));
+GO
+
+-- Vista para contar los cierres del mes actual por area para el usuario
+CREATE OR ALTER VIEW vw_cierres_mes_actual_area
+AS
+  SELECT
+   a.ARE_codigo AS area,
+   COUNT(*) AS cierres_mes_actual
+  FROM RECEPCION R
+  INNER JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
+  RIGHT JOIN INCIDENCIA I ON R.INC_numero = I.INC_numero
+  INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
+  INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
+  INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
+  INNER JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
+  INNER JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
+  LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
+  LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
+  INNER JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
+  INNER JOIN USUARIO U ON U.USU_codigo = C.USU_codigo
+  INNER JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
+  WHERE (I.EST_codigo = 7 OR C.EST_codigo = 7)
+    AND I.INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND I.INC_FECHA < DATEADD(DAY, 1, EOMONTH(GETDATE()))
+    AND C.CIE_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND C.CIE_FECHA < DATEADD(DAY, 1, EOMONTH(GETDATE()))
+  GROUP BY a.ARE_codigo;
+GO
+
+-- VISTA PARA LISTAR TODAS LAS INCIDENCIAS RECEPCIONADAS AL MES ACTUAL PARA EL ADMINISTRADOR Y SOPORTE
+CREATE OR ALTER VIEW vw_total_recepciones_mes_actual
+AS
+  SELECT 
+    SUM(
+      CASE WHEN A.EST_codigo = 5 THEN 1 ELSE 0 END + 
+      CASE WHEN M.EST_codigo = 6 THEN 1 ELSE 0 END
+    ) AS total_recepciones_mes_actual
+  FROM ASIGNACION A
+  LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = A.ASI_codigo
+  WHERE A.ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1);
+GO
+
+-- VISTA PARA CONTAR TODAS LAS INCIDENCIAS RECEPCIONADAS EN ESPERA PARA EL ADMINISTRADOR Y SOPORTE
+CREATE OR ALTER VIEW vw_recepciones_en_espera_mes_actual
+AS
+  SELECT 
+    COUNT(*) AS recepciones_en_espera_mes_actual
+  FROM ASIGNACION
+  WHERE ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND EST_codigo = 5;
+GO
+
+-- VISTA PARA LISTAR TODAS LAS INCIDENCIAS RECEPCIONADAS QUE YA CONCLUYERON EL MANTENIMIENTO - ADMINISTRADOR Y SOPORTE
+CREATE OR ALTER VIEW vw_recepciones_finalizadas_mes_actual
+AS
+  SELECT 
+    COUNT(*) AS recepciones_finalizadas_mes_actual
+  FROM ASIGNACION A
+  LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = A.ASI_codigo
+  WHERE A.ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+    AND M.EST_codigo = 6;
+GO
+
+-- VISTA PARA LISTAR EL AREA CON MAS INCIDENCIAS EN EL ULTIMO MES
+CREATE OR ALTER VIEW vw_area_mas_incidencias_mes
+AS
+  SELECT TOP 1 
+    a.ARE_nombre AS areaMasIncidencia, 
+    COUNT(*) AS Incidencias
+  FROM INCIDENCIA i
+  INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
+  WHERE i.INC_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
+  GROUP BY a.ARE_nombre
+  ORDER BY Incidencias DESC;
 GO
 
 --VISTA PARA REPORTE DE INCIDENCIAS TOTALES
@@ -2903,6 +3120,7 @@ BEGIN
 END;
 GO
 
+-- PROCEDIMIENTO ALMACENADO PARA EDITAR BIEN
 CREATE OR ALTER PROCEDURE sp_editar_bien
   @BIE_codigoIdentificador VARCHAR(12),
   @BIE_nombre VARCHAR(100),
@@ -2929,6 +3147,35 @@ BEGIN
 END;
 GO
   
+-- PROCEDIMIENTO ALMACENADO PARA EDITAR SOLUCION
+CREATE OR ALTER PROCEDURE sp_editar_solucion
+  @descripcion VARCHAR(255),
+  @codigoSolucion INT
+AS
+BEGIN
+  -- Comienza la transacción
+  BEGIN TRY
+    BEGIN TRANSACTION
+
+    -- Actualizar la descripción de la solución
+    UPDATE SOLUCION
+    SET SOL_descripcion = @descripcion
+    WHERE SOL_codigo = @codigoSolucion;
+
+    -- Confirma la transacción si no hay errores
+    COMMIT TRANSACTION;
+  END TRY
+  BEGIN CATCH
+    -- Si ocurre un error, revierte la transacción
+    ROLLBACK TRANSACTION;
+    
+    -- Opcional: muestra el mensaje de error
+    DECLARE @ErrorMessage NVARCHAR(4000);
+    SET @ErrorMessage = ERROR_MESSAGE();
+    RAISERROR(@ErrorMessage, 16, 1);
+  END CATCH
+END
+GO
 
 -- Procedimiento almacenado para editar persona
 CREATE OR ALTER PROCEDURE sp_editar_persona
@@ -3044,6 +3291,36 @@ BEGIN
         RAISERROR (@ErrorMessage, @ErrorSeverity, @ErrorState);
     END CATCH
 END;
+GO
+
+-- PROCEDIMIENTO ALMACENADO PARA EDITAR CATEGORIA
+CREATE OR ALTER PROCEDURE sp_editar_categoria
+  @nombre VARCHAR(60),
+  @codigo SMALLINT
+AS
+BEGIN
+  -- Comienza la transacción
+  BEGIN TRY
+    BEGIN TRANSACTION
+
+    -- Actualizar la categoría
+    UPDATE CATEGORIA
+    SET CAT_nombre = @nombre
+    WHERE CAT_codigo = @codigo;
+
+    -- Si no hay errores, confirma la transacción
+    COMMIT TRANSACTION;
+  END TRY
+  BEGIN CATCH
+    -- Si ocurre un error, revierte la transacción
+    ROLLBACK TRANSACTION;
+    
+    -- Opcional: devuelve información sobre el error
+    DECLARE @ErrorMessage NVARCHAR(4000);
+    SET @ErrorMessage = ERROR_MESSAGE();
+    RAISERROR(@ErrorMessage, 16, 1);
+  END CATCH
+END
 GO
 
 -- PROCEDIMIENTO ALMACENADO PARA DESHABILITAR CATEGORIA
@@ -3240,27 +3517,6 @@ BEGIN
   AND EST_codigo = 3;
 END;
 GO 
-
--- PROCEDIMIENTO ALMACENADO PARA ELIMINAR INCIDENCIA
-CREATE OR ALTER PROCEDURE sp_eliminar_incidencia
-    @NumeroIncidencia INT
-AS
-BEGIN
-    BEGIN TRANSACTION;
-    BEGIN TRY
-        -- Eliminar la incidencia basada en el numero de incidencia
-        DELETE FROM INCIDENCIA
-        WHERE INC_numero = @NumeroIncidencia;
-
-        -- Confirmar la transaccion
-        COMMIT TRANSACTION;
-    END TRY
-    BEGIN CATCH
-        ROLLBACK TRANSACTION;
-        THROW;
-    END CATCH;
-END;
-GO
 
 -- PROCEDIMIENTO ALMACENADO PARA INSERTAR LA RECEPCION Y ACTUALIZAR ESTADO DE INCIDENCIA
 CREATE OR ALTER PROCEDURE sp_insertar_recepcion (

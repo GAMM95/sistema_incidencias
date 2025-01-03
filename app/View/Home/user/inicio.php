@@ -50,7 +50,7 @@
             <p class="mb-3 mt-3">Total de incidencias en el mes de <?php echo $nombreMes; ?> de <?php echo date('Y'); ?>.</p>
 
           </div>
-          <div id="support-chart"></div> <!-- Asegúrate de tener este div -->
+          <div id="support-chart3"></div> <!-- Asegúrate de tener este div -->
           <div class="card-footer bg-primary text-white">
             <div class="row text-center">
               <div class="col">
@@ -73,7 +73,7 @@
         <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
         <script>
           // Pasar datos de PHP a JavaScript
-          var incidenciasData = <?php echo json_encode([
+          var incidenciasDataUser = <?php echo json_encode([
                                   (int)$cantidades['pendientes_mes_actual'],
                                   (int)$cantidades['recepciones_mes_actual'],
                                   (int)$cantidades['cierres_mes_actual']
@@ -102,6 +102,17 @@
             </div>
             <!-- Fin de la fecha seleccionada -->
 
+            <!-- Input del área -->
+            <?php
+            $area = isset($_SESSION['codigoArea']) ? $_SESSION['codigoArea'] : ''; 
+            ?>
+
+            <div class="w-full sm:w-1/6 px-2 mb-2">
+              <label for="codigoArea" class="block mb-1 font-bold text-xs hidden">C&oacute;digo &Aacute;rea:</label>
+              <input type="hidden" id="codigoArea" name="codigoArea" value="<?= $area; ?>" readonly>
+            </div>
+            <!-- Fin del input del área -->
+
             <!-- Botones alineados a la derecha -->
             <div class="btn-group card-option flex-shrink-0">
               <button type="button" class="btn " data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
@@ -124,10 +135,10 @@
                 <!-- Encabezado -->
                 <thead>
                   <tr>
-                    <th class="text-center">N&deg; INCIDENCIA</th>
+                    <th class="text-center">INCIDENCIA</th>
                     <th class="text-center">Usuario</th>
-                    <th class="text-center">Fecha</th>
-                    <th class="text-center">Incidencia</th>
+                    <th class="text-center">Fecha incidencia</th>
+                    <th class="text-center">Asunto</th>
                     <th class="text-center">Documento</th>
                     <th class="text-center">Estado</th>
                   </tr>

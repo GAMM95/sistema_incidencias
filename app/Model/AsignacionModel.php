@@ -213,9 +213,7 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as recepciones_en_espera_mes_actual FROM ASIGNACION 
-          WHERE ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-          AND EST_codigo = 5";
+        $sql = "SELECT * FROM vw_recepciones_en_espera_mes_actual";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -236,20 +234,17 @@ class AsignacionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as recepciones_finalizadas_mes_actual FROM ASIGNACION A
-          LEFT JOIN MANTENIMIENTO	M ON M.ASI_codigo = A.ASI_codigo
-          WHERE ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-          AND M.EST_codigo = 6";
+        $sql = "SELECT * FROM vw_recepciones_finalizadas_mes_actual";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['recepciones_finalizadas_mes_actual'];
       } else {
-        echo "Error de conexión con la base de datos.";
+        throw new Exception ("Error de conexión con la base de datos.");
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar recepciones en espera del ultimo mes para el administrador: " . $e->getMessage();
+      throw new PDOException ("Error al contar recepciones en espera del ultimo mes para el administrador: " . $e->getMessage());
       return null;
     }
   }

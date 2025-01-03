@@ -47,6 +47,11 @@
         </div>
       </div>
 
+      <!-- TIPO DE BIEN -->
+      <div class="flex justify-center items-center text-center">
+        <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-1/2 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
+      </div>
+
       <!-- BOTONES DEL FORMULARIO -->
       <div class="flex justify-center space-x-2 mt-2">
         <button type="submit" id="buscar-incidencias" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-search"></i>Buscar</button>

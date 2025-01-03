@@ -11,7 +11,7 @@
       $perfil = null; // O maneja el caso en que el usuario no está logueado
     }
     ?>
-    <!-- Miga de pan -->
+    <!-- Inicio de breadcrumb -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -28,7 +28,7 @@
         </div>
       </div>
     </div>
-    <!-- Fin de miga de pan -->
+    <!-- Fin de breadcrumb -->
 
     <!-- Contenedor principal para el formulario y la tabla -->
     <form id="formPerfil" action="mi-perfil.php?action=editar" method="POST" class="card table-card bg-white shadow-md p-6 text-xs flex flex-col mb-2">
@@ -105,7 +105,7 @@
 
             <!-- Codigo de usuario -->
             <div class="form-group row hidden">
-              <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">Codigo de usuario</label>
+              <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-sm">C&oacute;digo de usuario</label>
               <div class="col-sm-9">
                 <input type="text" id="codigoUsuario" name="codigoUsuario" class="w-20 border border-gray-200 bg-gray-100 rounded-md p-2 text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>" readonly>
               </div>
@@ -162,7 +162,7 @@
 
                         <!-- Codigo de usuario -->
                         <div class="form-group row hidden">
-                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-xs">Codigo de usuario</label>
+                          <label for="colFormLabelSm" class="col-sm-3 col-form-label col-form-label-xs">C&oacute;digo de usuario</label>
                           <div class="col-sm-9">
                             <input type="text" id="codigoUsuarioModal" name="codigoUsuarioModal" class="border border-gray-200 bg-gray-100 p-2 w-full text-xs" value="<?php echo $_SESSION['codigoUsuario']; ?>" readonly>
                           </div>

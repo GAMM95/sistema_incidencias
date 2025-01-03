@@ -94,8 +94,7 @@ class SolucionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $query = "UPDATE SOLUCION SET SOL_descripcion = :descripcion
-                WHERE SOL_codigo = :codigoSolucion";
+        $query = "EXEC sp_editar_solucion :descripcion, :codigoSolucion";
         $stmt = $conector->prepare($query);
         $stmt->bindParam(':descripcion', $descripcion);
         $stmt->bindParam(':codigoSolucion', $codigoSolucion);
@@ -121,7 +120,7 @@ class SolucionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM SOLUCION";
+        $sql = "SELECT * FROM vw_soluciones";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         return $stmt->fetchAll(PDO::FETCH_ASSOC);

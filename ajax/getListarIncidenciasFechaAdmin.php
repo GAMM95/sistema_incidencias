@@ -13,8 +13,8 @@ class IncidenciasFechasAdmin extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_fecha_admin
-                WHERE INC_fecha = :fechaConsulta
+        $sql = "SELECT * FROM vw_incidencias_totales
+                WHERE CONVERT(DATE, ultimaFecha) = :fechaConsulta
                 ORDER BY INC_numero DESC";
         $stmt = $conector->prepare($sql); 
         $stmt->bindParam(':fechaConsulta', $fechaConsulta, PDO::PARAM_STR); 

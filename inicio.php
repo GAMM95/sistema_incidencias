@@ -44,7 +44,7 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
 <html lang="es">
 
 <head>
-  <title>Sistema de Gestión de Incidencias</title>
+  <title>Sistema de Gesti&oacute;n de Incidencias</title>
   <link rel="icon" href="public/assets/logo.ico">
   <!-- Meta -->
   <meta charset="utf-8">
@@ -56,7 +56,6 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <!-- vendor css -->
   <link rel="stylesheet" href="dist/assets/css/style.css">
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
-
 
 </head>
 
@@ -122,8 +121,6 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   </script>
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Inicio/func_inicio_admin.js"></script>
-
 </body>
 
 </html>

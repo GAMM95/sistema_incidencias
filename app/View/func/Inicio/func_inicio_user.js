@@ -17,10 +17,10 @@ $(function () {
     colors: ["#1abc9c", "#3498db", "#e74c3c"], // Colores para cada barra
     series: [{
       name: 'Incidencias',
-      data: incidenciasData
+      data: incidenciasDataUser
     }],
     xaxis: {
-      categories: ['Abiertas', 'Recepcionadas', 'Cerradas'], // Etiquetas de categorías
+      categories: ['Nuevas', 'Recepcionadas', 'Cerradas'], // Etiquetas de categorías
     },
     tooltip: {
       fixed: {
@@ -44,7 +44,7 @@ $(function () {
 
   // Función para renderizar el gráfico
   function renderChart() {
-    new ApexCharts(document.querySelector("#support-chart2"), options1).render();
+    new ApexCharts(document.querySelector("#support-chart3"), options1).render();
   }
 
   // Renderiza el gráfico al cargar la página
@@ -56,18 +56,21 @@ $(function () {
   }, 60000); // = 1 minuto
 });
 
-
-// Funcion para listar incidencias por fecha seleccionada
+// Funcion para cargar las incidencias basado en la fecha seleccionada o la fecha por defecto
 document.addEventListener('DOMContentLoaded', function () {
   // Función para cargar las incidencias basado en la fecha seleccionada o la fecha por defecto
-  function cargarIncidencias(fecha, area) {
-    // Construir la URL con los parámetros de fecha y área
-    const url = `ajax/getListarIncidenciasFechaUser.php?fecha=${encodeURIComponent(fecha)}&area=${encodeURIComponent(area)}`;
+  function cargarIncidencias(fecha, codigoArea) {
+    console.log("Fecha seleccionada:", fecha);
+    console.log("Código de Área:", codigoArea);
 
+    // Construir la URL con los parámetros de fecha y área
+    const url = `ajax/getListarIncidenciasFechaUser.php?fecha=${encodeURIComponent(fecha)}&codigoArea=${encodeURIComponent(codigoArea)}`;
     // Realizar la solicitud AJAX
     fetch(url)
-      .then(response => response.json())
+      .then(response => response.json())  // Espera la respuesta en formato JSON
       .then(data => {
+        console.log("Respuesta del servidor:", data);  // Muestra la respuesta completa
+
         // Selecciona el cuerpo de la tabla
         var tbody = document.getElementById('incidenciasBody');
         tbody.innerHTML = ''; // Limpia el contenido actual
@@ -94,12 +97,12 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td class="text-center text-xs align-middle">${incidencia.INC_documento}</td>
             <td class="text-center text-xs align-middle">
-              <label class="badge ${getBadgeClass(incidencia.ESTADO)}">${incidencia.ESTADO}</label>
-            </td>
-          `;
+              <label class="badge ${getBadgeClass(incidencia.Estado)}">${incidencia.Estado}</label>
+            </td>`;
           tbody.appendChild(row);
         });
 
+        // Mensaje si no se encuentran incidencias
         if (data.length === 0) {
           tbody.innerHTML = '<tr><td colspan="6" class="text-center py-3">No hay incidencias para la fecha seleccionada.</td></tr>';
         }
@@ -121,18 +124,23 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   }
 
-  // Llamada inicial con la fecha por defecto
-  var fechaInput = document.getElementById('fechaInput');
-  var areaInput = document.getElementById('areaInput'); 
-  var fechaInicial = fechaInput ? fechaInput.value : '';
-  var area = areaInput ? areaInput.value : 0;
+  // Inicialización
+  var area = '<?= $area; ?>'; // Esto debe tener el valor del área desde la sesión
 
+  var fechaInput = document.getElementById('fechaInput');
+  var areaInput = document.getElementById('codigoArea');
+
+  var fechaInicial = fechaInput ? fechaInput.value : '';
+  // Si el área no está definido, se usa el área desde la sesión
+  area = areaInput && areaInput.value ? areaInput.value : area;
+
+  // Cargar las incidencias iniciales
   cargarIncidencias(fechaInicial, area);
 
   // Evento para cargar incidencias cuando cambia la fecha
   fechaInput.addEventListener('change', function () {
     var fechaSeleccionada = this.value;
-    var areaSeleccionada = areaInput ? areaInput.value : 0;
+    var areaSeleccionada = areaInput && areaInput.value ? areaInput.value : area;
     cargarIncidencias(fechaSeleccionada, areaSeleccionada);
   });
 

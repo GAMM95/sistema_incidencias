@@ -517,10 +517,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as incidencias_mes_actual
-        FROM INCIDENCIA 
-        WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-        AND EST_codigo NOT IN (2)";
+        $sql = "SELECT * FROM vw_incidencias_mes_actual";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -541,9 +538,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as pendientes_mes_actual FROM INCIDENCIA 
-              WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-              AND EST_codigo = 3";
+        $sql = "SELECT * FROM vw_pendientes_mes_actual";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -564,51 +559,54 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as incidencias_mes_actual FROM INCIDENCIA i
-        INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
-        WHERE INC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-        AND i.EST_codigo NOT IN (2)
-        AND a.ARE_codigo = :are_codigo";
+        $sql = "SELECT incidencias_mes_actual 
+            FROM vw_incidencias_mes_actual_area 
+            WHERE area = :are_codigo";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         return $result['incidencias_mes_actual'];
       } else {
-        echo "Error de conexión con la base de datos.";
+        throw new Exception("Error de conexión con la base de datos.");
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar incidencias del ultimo mes para el usuario: " . $e->getMessage();
+      throw new PDOException("Error al contar incidencias del ultimo mes para el usuario: " . $e->getMessage());
       return null;
     }
   }
 
   // METODO PARA CONTAR LOS PENDIENTES EN EL MES ACTUAL PARA EL USUARIO
-  public function contarPendientesUltimoMesUsuario($area)
-  {
+public function contarPendientesUltimoMesUsuario($area)
+{
     $conector = parent::getConexion();
     try {
-      if ($conector != null) {
-        $sql = "SELECT COUNT(*) as pendientes_mes_actual FROM INCIDENCIA i
-                INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
-                WHERE INC_FECHA >=  DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-                AND I.EST_codigo = 3 AND
-                a.ARE_codigo = :are_codigo";
-        $stmt = $conector->prepare($sql);
-        $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
-        $stmt->execute();
-        $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['pendientes_mes_actual'];
-      } else {
-        echo "Error de conexión con la base de datos.";
-        return null;
-      }
+        if ($conector != null) {
+            $sql = "SELECT pendientes_mes_actual 
+                    FROM vw_pendientes_mes_actual_area 
+                    WHERE area = :are_codigo";
+            $stmt = $conector->prepare($sql);
+            $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
+            $stmt->execute();
+            $result = $stmt->fetch(PDO::FETCH_ASSOC);
+            
+            // Verificar si se obtuvo algún resultado
+            if ($result) {
+                return $result['pendientes_mes_actual'];
+            } else {
+                return 0; // Si no hay resultados, devolver 0
+            }
+        } else {
+            throw new Exception("Error de conexión con la base de datos.");
+            return null;
+        }
     } catch (PDOException $e) {
-      echo "Error al contar pendientes del ultimo mes para el usuario: " . $e->getMessage();
-      return null;
+        throw new PDOException ("Error al contar pendientes del ultimo mes para el usuario: " . $e->getMessage());
+        return null;
     }
-  }
+}
+
 
   // METODOS PARA CONSULTAS
   //  Metodo para consultar incidencias pendientes - ADMINISTRADOR
@@ -822,12 +820,13 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT TOP 1 a.ARE_nombre AS areaMasIncidencia, COUNT(*) AS Incidencias
-                FROM INCIDENCIA i
-                INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
-                WHERE i.INC_fecha >= DATEADD(MONTH, -1, GETDATE()) 
-                GROUP BY a.ARE_nombre
-                ORDER BY Incidencias DESC";
+        // $sql = "SELECT TOP 1 a.ARE_nombre AS areaMasIncidencia, COUNT(*) AS Incidencias
+        //         FROM INCIDENCIA i
+        //         INNER JOIN AREA a ON a.ARE_codigo = i.ARE_codigo
+        //         WHERE i.INC_fecha >= DATEADD(MONTH, -1, GETDATE()) 
+        //         GROUP BY a.ARE_nombre
+        //         ORDER BY Incidencias DESC";
+                $sql = "SELECT * FROM vw_area_mas_incidencias_mes";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -896,7 +895,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_notificaciones_administrador
+        $sql = "SELECT * FROM vw_notificaciones_administrador
                 ORDER BY tiempoDesdeIncidencia ASC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -936,7 +935,7 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_notificaciones_usuario
+        $sql = "SELECT * FROM vw_notificaciones_usuario
                 WHERE ARE_codigo = :area
                 ORDER BY tiempoDesdeCierre ASC";
         $stmt = $conector->prepare($sql);

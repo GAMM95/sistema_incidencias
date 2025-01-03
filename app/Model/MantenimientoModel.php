@@ -166,11 +166,7 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT 
-            SUM(CASE WHEN A.EST_codigo = 5 THEN 1 ELSE 0 END + CASE WHEN M.EST_codigo = 6 THEN 1 ELSE 0 END) AS total_recepciones_mes_actual
-        FROM ASIGNACION A
-        LEFT JOIN MANTENIMIENTO M ON M.ASI_codigo = A.ASI_codigo
-        WHERE A.ASI_fecha >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)";
+        $sql = "SELECT * FROM vw_total_recepciones_mes_actual";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);

@@ -32,10 +32,10 @@ class InicioController extends Conexion
       $cantidadRecepcionesFinalizadasMesActualAdmin = $this->asignacionModel->contarRecepcionesFinalizadasUltimoMesAdministrador();
       $totalRecepcionesAlMes = $this->mantenimientoModel->totalRecepcionesAlMes();
       $cantidadCierresMesActualAdmin = $this->cierreModel->contarCierresUltimoMesAdministrador();
-      $cantidadAreas = $this->areaModel->contarAreas();
-      $cantidadUsuarios = $this->usuarioModel->contarUsuarios();
-      $cantidadIncidencias = $this->incidenciasModel->contarIncidencias();
-      $cantidadCategorias = $this->categoriaModel->contarCategorias();
+      // $cantidadAreas = $this->areaModel->contarAreas();
+      // $cantidadUsuarios = $this->usuarioModel->contarUsuarios();
+      // $cantidadIncidencias = $this->incidenciasModel->contarIncidencias();
+      // $cantidadCategorias = $this->categoriaModel->contarCategorias();
       $areaConMasIncidencias = $this->incidenciasModel->areasConMasIncidencias();
 
       return [
@@ -46,10 +46,10 @@ class InicioController extends Conexion
         'recepciones_finalizadas_mes_actual' => $cantidadRecepcionesFinalizadasMesActualAdmin,
         'total_recepciones_mes_actual' => $totalRecepcionesAlMes,
         'cierres_mes_actual' => $cantidadCierresMesActualAdmin,
-        'usuarios_total' => $cantidadUsuarios,
-        'cantidadAreas' => $cantidadAreas,
-        'cantidadIncidencias' => $cantidadIncidencias,
-        'cantidadCategorias' => $cantidadCategorias,
+        // 'usuarios_total' => $cantidadUsuarios,
+        // 'cantidadAreas' => $cantidadAreas,
+        // 'cantidadIncidencias' => $cantidadIncidencias,
+        // 'cantidadCategorias' => $cantidadCategorias,
         'areaMasIncidencia' => $areaConMasIncidencias,
       ];
     } catch (Exception $e) {

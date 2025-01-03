@@ -48,6 +48,11 @@
         </div>
       </div>
 
+      <!-- TIPO DE BIEN -->
+      <div class="flex justify-center items-center text-center">
+        <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-1/2 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
+      </div>
+
       <!-- BOTONES DEL FORMULARIO -->
       <div class="flex justify-center space-x-2 mt-2">
         <button type="submit" id="buscar-cierres" class="bn btn-primary text-xs text-white font-bold py-2 px-3 rounded-md"><i class="feather mr-2 icon-search"></i>Buscar</button>
@@ -59,8 +64,8 @@
 
     <!-- Tabla de resultados para cierres -->
     <div class="relative shadow-md sm:rounded-lg">
-    <div class="relative overflow-x-hidden shadow-md sm:rounded-lg">
-      <!-- <div class="max-w-full overflow-hidden"> -->
+      <div class="relative overflow-x-hidden shadow-md sm:rounded-lg">
+        <!-- <div class="max-w-full overflow-hidden"> -->
         <table id="tablaCierres" class="w-full text-xs text-left rtl:text-right text-gray-500 bg-white">
           <!-- Encabezado de la tabla -->
           <thead class="text-xs text-gray-700 uppercase bg-lime-300">

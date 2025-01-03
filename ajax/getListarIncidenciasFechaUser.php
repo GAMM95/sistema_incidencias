@@ -1,5 +1,6 @@
 <?php
 require_once '../config/conexion.php';
+session_start(); // Agregar esta línea al principio del archivo PHP
 
 class IncidenciasFechasUsuario extends Conexion
 {
@@ -13,10 +14,10 @@ class IncidenciasFechasUsuario extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vista_incidencias_fecha_user
-                WHERE INC_fecha = :fechaConsulta
-                AND ARE_codigo = :area
-                ORDER BY INC_numero DESC";
+        $sql = "SELECT * FROM vw_incidencias_totales
+        WHERE CONVERT(DATE, ultimaFecha) = :fechaConsulta
+        AND ARE_codigo = :area
+        ORDER BY INC_numero DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':fechaConsulta', $fechaConsulta, PDO::PARAM_STR);
         $stmt->bindParam(':area', $area, PDO::PARAM_INT);
@@ -27,16 +28,22 @@ class IncidenciasFechasUsuario extends Conexion
         throw new Exception("Error de conexión a la base de datos.");
       }
     } catch (PDOException $e) {
-      throw new Exception("Error al listar las incidencias por fecha del usuario: " . $e->getMessage());
+      $errorResponse = [
+        'error' => true,
+        'message' => "Error al listar las incidencias por fecha del usuario: " . $e->getMessage()
+      ];
+      echo json_encode($errorResponse);
+      exit();
     }
   }
 }
 
 $fechaConsulta = isset($_GET['fecha']) ? $_GET['fecha'] : date('Y-m-d');
-$area = isset($_GET['codigoArea']) ?  $_GET['codigoArea'] : null;
-
+$area = isset($_GET['codigoArea']) ? $_GET['codigoArea'] : null;
 
 $listarIncidenciasFechaUsuario = new IncidenciasFechasUsuario();
+// $lista = $listarIncidenciasFechaUsuario->listarIncidenciasFechaUser($fechaConsulta, $_SESSION['codigoArea']);
+
 $lista = $listarIncidenciasFechaUsuario->listarIncidenciasFechaUser($fechaConsulta, $_SESSION['codigoArea']);
 
 header('Content-Type: application/json');

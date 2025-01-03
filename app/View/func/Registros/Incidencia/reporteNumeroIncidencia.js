@@ -51,7 +51,7 @@ $(document).ready(function () {
 
               doc.text(reportTitle, titleX, titleY);
               doc.setLineWidth(0.5);
-              doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);  
+              doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
 
               doc.setFontSize(8);
               doc.setFont('helvetica', 'normal');
@@ -146,12 +146,15 @@ $(document).ready(function () {
               doc.setPage(i);
               addFooter(doc, i, totalPages);
             }
-
+            // Establecer las propiedades del documento
+            doc.setProperties({
+              title: "Reporte Detallado de Incidencia.pdf"
+            })        
             // Mostrar mensaje de exito de pdf generado
             toastr.success('Reporte detallado de incidencia generado.', 'Mensaje');
             // Retrasar la apertura del PDF y limpiar el campo de entrada
             setTimeout(() => {
-              window.open(doc.output('bloburl'));
+              window.open(doc.output('bloburl'), '_blank');
               $('#modalBuscarIncidencia').modal('hide'); // Cerrar el modal
               $('#numeroIncidencia').val(''); // Limpiar el campo de entrada
             }, 2000);

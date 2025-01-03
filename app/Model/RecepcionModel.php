@@ -229,10 +229,7 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT( * ) AS recepciones_mes_actual 
-                FROM vw_incidencias_pendientes 
-                WHERE EST_codigo IN ( 4 ) 
-                AND INC_FECHA >= DATEFROMPARTS ( YEAR( GETDATE( ) ), MONTH( GETDATE( ) ), 1 )";
+        $sql = "SELECT * FROM vw_recepciones_mes_actual";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -253,35 +250,25 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) AS recepciones_mes_actual FROM INCIDENCIA I
-                INNER JOIN AREA A ON I.ARE_codigo = A.ARE_codigo
-                INNER JOIN CATEGORIA CAT ON I.CAT_codigo = CAT.CAT_codigo
-                INNER JOIN ESTADO E ON I.EST_codigo = E.EST_codigo
-                LEFT JOIN RECEPCION R ON R.INC_numero = I.INC_numero
-                LEFT JOIN ASIGNACION ASI ON ASI.REC_numero = R.REC_numero
-                LEFT JOIN MANTENIMIENTO MAN ON MAN.ASI_codigo = ASI.ASI_codigo
-                LEFT JOIN CIERRE C ON C.MAN_codigo = MAN.MAN_codigo
-                LEFT JOIN ESTADO EC ON C.EST_codigo = EC.EST_codigo
-                LEFT JOIN PRIORIDAD PRI ON PRI.PRI_codigo = R.PRI_codigo
-                LEFT JOIN IMPACTO IMP ON IMP.IMP_codigo = R.IMP_codigo
-                LEFT JOIN CONDICION O ON O.CON_codigo = C.CON_codigo
-                LEFT JOIN USUARIO U ON U.USU_codigo = I.USU_codigo
-                INNER JOIN PERSONA p ON p.PER_codigo = U.PER_codigo
-                WHERE (C.CIE_numero IS NOT NULL AND EC.EST_codigo = 4)
-                OR (C.CIE_numero IS NULL AND E.EST_codigo = 4)
-                AND REC_FECHA >= DATEFROMPARTS(YEAR(GETDATE()), MONTH(GETDATE()), 1)
-                AND a.ARE_codigo = :are_codigo";
+        $sql = "SELECT recepciones_mes_actual 
+        FROM vw_recepciones_mes_actual_area 
+        WHERE area = :are_codigo";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['recepciones_mes_actual'];
+        // Verificamos que la consulta devuelva datos
+        if ($result) {
+            return $result['recepciones_mes_actual'];
+        } else {
+            return 0; // Si no hay resultados, devolver 0
+        }
       } else {
-        echo "Error de conexión con la base de datos.";
+        throw new Exception("Error de conexión con la base de datos.");
         return null;
       }
     } catch (PDOException $e) {
-      echo "Error al contar recepciones del ultimo mes para el usuario: " . $e->getMessage();
+      throw new PDOException ("Error al contar recepciones del ultimo mes para el usuario: " . $e->getMessage());
       return null;
     }
   }

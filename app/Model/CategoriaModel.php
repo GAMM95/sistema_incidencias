@@ -73,7 +73,7 @@ class CategoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT CAT_codigo, CAT_nombre, EST_codigo FROM CATEGORIA 
+        $sql = "SELECT * FROM vw_categorias 
                 ORDER BY CAT_codigo ASC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
@@ -115,7 +115,7 @@ class CategoriaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "UPDATE CATEGORIA SET CAT_nombre = :nombreCategoria WHERE CAT_codigo = :codigoCategoria";
+        $sql = "EXEC sp_editar_categoria :nombreCategoria, :codigoCategoria";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':nombreCategoria', $nombreCategoria, PDO::PARAM_STR);
         $stmt->bindParam(':codigoCategoria', $codigoCategoria, PDO::PARAM_INT);

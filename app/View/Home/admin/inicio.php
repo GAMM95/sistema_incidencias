@@ -1,6 +1,6 @@
 <div class="pcoded-main-container mt-5">
   <div class="pcoded-content">
-    <!-- Inicio de miga de pan -->
+    <!-- Inicio de breadcrumb -->
     <div class="page-header">
       <div class="page-block">
         <div class="row align-items-center">
@@ -17,7 +17,7 @@
         </div>
       </div>
     </div>
-    <!-- Fin de miga de pan -->
+    <!-- Fin de breadcrumb -->
 
     <!-- Inicio de contenido principal -->
     <div class="row">
@@ -30,14 +30,9 @@
             <span class="text-c-blue font-bold">INCIDENCIAS</span>
 
             <?php
-            // Establecer la configuración regional para el idioma español
-            setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish');
-
-            // Establecer la zona horaria
-            date_default_timezone_set('America/Lima');
-
-            // Crear un objeto DateTime para la fecha actual
-            $dateTimeObj = new DateTime('now', new DateTimeZone('America/Lima'));
+            setlocale(LC_TIME, 'es_ES.UTF-8', 'Spanish_Spain', 'Spanish'); // Establecer la configuración regional para el idioma español
+            date_default_timezone_set('America/Lima'); // Establecer la zona horaria
+            $dateTimeObj = new DateTime('now', new DateTimeZone('America/Lima')); // Crear un objeto DateTime para la fecha actual
 
             // Crear un objeto IntlDateFormatter para formatear la fecha
             $formatter = new IntlDateFormatter(
@@ -94,13 +89,6 @@
           <!-- fin de etiquetas inferiores del gráfico -->
         </div>
       </div>
-
-      <!-- <script>
-        document.getElementById('mes-selector').addEventListener('change', function() {
-          var mesNombre = this.options[this.selectedIndex].text;
-          document.getElementById('mes-nombre').textContent = mesNombre;
-        });
-      </script> -->
       <!-- Fin del widget del grafico -->
 
       <!-- Tarjetas de las cantidades  -->
@@ -225,12 +213,12 @@
       </div>
       <!-- Fin del widget de los contadores -->
 
-      <!-- Tabla de incidencias -->
+      <!-- Tabla de incidencias - actividades -->
       <div class="col-xl-12 col-md-12">
         <div class="card table-card">
           <div class="card-header py-2 flex items-center justify-between">
             <!-- Subtitulo -->
-            <h5 class="flex-shrink-0">Incidencias del d&iacute;a</h5>
+            <h5 class="flex-shrink-0">Actividades del d&iacute;a</h5>
 
             <!-- Input de la fecha seleccionada -->
             <div class="flex-grow flex justify-center">
@@ -267,10 +255,10 @@
                 <!-- Encabezado -->
                 <thead>
                   <tr>
-                    <th class="text-center">N&deg; INCIDENCIA</th>
+                    <th class="text-center">INCIDENCIA</th>
                     <th class="text-center">Usuario</th>
-                    <th class="text-center">Fecha</th>
-                    <th class="text-center">Incidencia</th>
+                    <th class="text-center">Fecha Incidencia</th>
+                    <th class="text-center">Asunto</th>
                     <th class="text-center">Documento</th>
                     <th class="text-center">Estado</th>
                   </tr>
@@ -292,3 +280,4 @@
     <!-- Fin del contenido principal -->
   </div>
 </div>
+<script src="./app/View/func/Inicio/func_inicio_admin.js"></script>

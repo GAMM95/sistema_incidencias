@@ -126,7 +126,7 @@ document.addEventListener('DOMContentLoaded', function () {
             </td>
             <td class="text-center text-xs align-middle">${incidencia.INC_documento}</td>
             <td class="text-center text-xs align-middle">
-              <label class="badge ${getBadgeClass(incidencia.ESTADO)}">${incidencia.ESTADO}</label>
+              <label class="badge ${getBadgeClass(incidencia.Estado)}">${incidencia.Estado}</label>
             </td>
           `;
           tbody.appendChild(row);

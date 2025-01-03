@@ -348,23 +348,18 @@ class UsuarioModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
+        $sql = "SELECT * FROM vw_usuario_detalle WHERE USU_codigo = :user_id";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':user_id', $user_id);
+        $stmt->execute();
+        $user = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $user;
+      }else{
+        throw new Exception("Error de conexion a la base de datos.");
+        return null;
       }
-      $sql = "SELECT 
-      USU_nombre, USU_password, PER_dni, PER_nombres, PER_apellidoPaterno, PER_apellidoMaterno,
-      (PER_nombres +' '+ PER_apellidoPaterno +' '+ PER_apellidoMaterno) AS Persona,
-      ROL_nombre, ARE_nombre, PER_celular, PER_email
-      FROM USUARIO u
-      INNER JOIN PERSONA p ON p.PER_codigo = u.PER_codigo
-      INNER JOIN ROL r ON r.ROL_codigo = u.ROL_codigo
-      INNER JOIN AREA a ON a.ARE_codigo = u.ARE_codigo
-      WHERE u.USU_codigo = :user_id";
-      $stmt = $conector->prepare($sql);
-      $stmt->bindParam(':user_id', $user_id);
-      $stmt->execute();
-      $user = $stmt->fetch(PDO::FETCH_ASSOC);
-      return $user;
     } catch (PDOException $e) {
-      echo "Error al setear datos personales del usuario: " . $e->getMessage();
+      throw new PDOException ("Error al setear datos personales del usuario: " . $e->getMessage());
       return null;
     }
   }

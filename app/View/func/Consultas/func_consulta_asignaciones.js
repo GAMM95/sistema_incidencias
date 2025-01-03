@@ -310,3 +310,49 @@ $(document).ready(function () {
     validarFechas();
   });
 });
+
+
+// Funcion para buscar el tipo de bien en el servidor
+$(document).ready(function () {
+  var lastValidResult = ''; // Almacena el último resultado válido
+
+  // Función para buscar el tipo de bien en el servidor
+  function buscarTipoBien(codigo) {
+    // Limitar el código a los primeros 12 dígitos y obtener los primeros 8 dígitos para la búsqueda
+    var codigoLimite = codigo.substring(0, 12); // Solo considerar los primeros 12 dígitos
+    var codigoBusqueda = codigoLimite.substring(0, 8); // Extraer los primeros 8 dígitos
+
+    if (codigoBusqueda.length === 8) {
+      $.ajax({
+        url: 'ajax/getTipoBien.php', // Ruta del archivo PHP que obtiene el tipo de bien
+        type: 'GET',
+        data: { codigoPatrimonial: codigoBusqueda }, // Enviar el código para buscar
+        success: function (response) {
+          // Verificar si el tipo de bien fue encontrado en la respuesta
+          if (response.tipo_bien) {
+            lastValidResult = response.tipo_bien; // Guardar el resultado válido
+            $('#tipoBien').val(lastValidResult);  // Mostrar el tipo de bien en el campo readonly
+          } else {
+            $('#tipoBien').val('No encontrado'); // Mostrar mensaje si no se encuentra el tipo
+          }
+        },
+        error: function () {
+          $('#tipoBien').val('Error al buscar'); // Mostrar mensaje de error en caso de fallo
+        }
+      });
+    } else if (codigo.length === 0) {
+      // Si el código está vacío, limpiar el valor de tipoBien
+      $('#tipoBien').val('');
+      lastValidResult = ''; // Limpiar el último resultado válido
+    } else {
+      // Si el código tiene menos de 8 dígitos, mantener el último resultado válido
+      $('#tipoBien').val(lastValidResult);
+    }
+  }
+
+  // Evento para cuando el valor del campo de código cambia
+  $('#codigoPatrimonial').on('input', function () {
+    var codigo = $(this).val().replace(/[^0-9]/g, ''); // Filtrar para que solo se permitan dígitos
+    buscarTipoBien(codigo); // Llamar a la función de búsqueda
+  });
+});

@@ -394,7 +394,7 @@ class IncidenciaController
   }
 
   // Método de controlador para consultar incidencias filtradas - USUARIO
-  public function consultarIncidenciaUsuario($area = NULL, $estado = null, $fechaInicio = null, $fechaFin = null)
+  public function consultarIncidenciaUsuario($area = NULL, $codigoPatrimonial = null, $estado = null, $fechaInicio = null, $fechaFin = null)
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
@@ -620,6 +620,12 @@ class IncidenciaController
     return $resultadoAuditoriaIncidencias;
   }
 
+  // Metodo para mostrar notificaciones de nuevas incidencias al administrador
+  public function mostrarNotificacionesIncidenciasAdmin()
+  {
+    $resultadoIncidencias = $this->incidenciaModel->notificacionesAdmin();
+    return $resultadoIncidencias;
+  }
 
   // Metodo para consultar eventos de incidencias - auditoria
   public function consultarEventosIncidencias($usuario = null, $fechaInicio = null, $fechaFin = null)

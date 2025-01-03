@@ -149,6 +149,8 @@ if ($action === 'consultar_usuario') {
   <!-- Creacion de PDF -->
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf/2.5.1/jspdf.umd.min.js"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
+  <script src="https://cdn.tailwindcss.com"></script>
+
 
   <!-- Funcionalidades enrutadas -->
   <script src="./app/View/func/Consultas/func_consulta_incidencia_user.js"></script>

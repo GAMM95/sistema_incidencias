@@ -55,7 +55,7 @@
 
       <!-- TIPO DE BIEN -->
       <div class="flex justify-center items-center text-center">
-        <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-3/4 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
+        <input type="text" id="tipoBien" name="tipoBien" class="border p-2 w-1/2 text-xs text-center rounded-md" disabled readonly placeholder="Nombre del bien">
       </div>
 
       <!-- BOTONES DEL FORMULARIO -->
