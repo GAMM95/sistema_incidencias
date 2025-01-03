@@ -63,43 +63,53 @@ $('#reporteAreaMasIncidenciasCategoriaFecha').click(function () {
           const doc = new jsPDF('portrait');
           const logoUrl = './public/assets/escudo.png';
 
-          // Funcion para agregar encabezado
+          // Funcion para agregar encabezado del pdf
           function addHeader(doc, totalRecords) {
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            const fechaImpresion = new Date().toLocaleDateString();
+            const headerText2 = 'Subgerencia de Informática y Sistemas';
+            const reportTitle = 'ÁREAS CON MÁS INCIDENCIAS';
+
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = ' ÁREAS CON MÁS INCIDENCIAS';
-            const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const fechaImpresion = new Date().toLocaleDateString();
 
             // Agregar logo
             doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
             // Titulo principal
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(13);
+            doc.setFontSize(12);
             const titleWidth = doc.getTextWidth(reportTitle);
             const titleX = (pageWidth - titleWidth) / 2;
-            doc.text(reportTitle, titleX, marginY + 10);
-            doc.setLineWidth(0.5); // Ancho de subrayado
-            doc.line(titleX, marginY + 11, titleX + titleWidth, marginY + 11);
+            const titleY = 20;
+            doc.text(reportTitle, titleX, titleY);
+            doc.setLineWidth(0.5);
+            doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
 
             // Subtítulo: cantidad de registros
             const subtitleText = `Cantidad de registros: ${totalRecords}`;
             doc.setFontSize(11);
             const subtitleWidth = doc.getTextWidth(subtitleText);
             const subtitleX = (pageWidth - subtitleWidth) / 2;
-            doc.text(subtitleText, subtitleX, marginY + 17);
+            doc.text(subtitleText, subtitleX, marginY + 25);
 
             // Fecha de impresion 
             doc.setFontSize(8);
-            const headerText2Width = doc.getTextWidth(headerText2);
+            doc.setFont('helvetica', 'normal');
             const fechaText = `Fecha de impresión: ${fechaImpresion}`;
+            const headerText2Width = doc.getTextWidth(headerText2);
             const fechaTextWidth = doc.getTextWidth(fechaText);
-            doc.text(headerText2, pageWidth - marginX - headerText2Width, marginY + logoHeight / 2);
-            doc.text(fechaText, pageWidth - marginX - fechaTextWidth, marginY + logoHeight / 2 + 5);
+            const headerText2X = pageWidth - marginX - headerText2Width;
+            const fechaTextX = pageWidth - marginX - fechaTextWidth;
+            const headerText2Y = marginY + logoHeight / 2;
+            const fechaTextY = headerText2Y + 5;
+
+            doc.text(headerText2, headerText2X, headerText2Y);
+            doc.text(fechaText, fechaTextX, fechaTextY);
           }
 
           // Funcion para agregar el pie de pagina
@@ -116,75 +126,88 @@ $('#reporteAreaMasIncidenciasCategoriaFecha').click(function () {
             doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
-          // Función para agregar el nombre de la categoría y fechas
-          function addCategoryAndDates(doc) {
-            const pageWidth = doc.internal.pageSize.width;
-            const labels = {
-              fechaInicio: 'Fecha de Inicio: ',
-              fechaFin: 'Fecha Fin: ',
-              categoria: 'Categoría:'
-            };
-
-            // Obtener valores
+          // Función para agregar una tabla con la categoría seleccionada
+          function addCategoryTable(doc) {
             const categoriaNombre = $('#nombreCategoriaSeleccionada').val() || '-';
+
+            // Crear tabla de categoría seleccionada
+            doc.autoTable({
+              startY: 40, // Ajustar la altura donde se dibuja la tabla
+              margin: { left: 10 },
+              head: [['CATEGORÍA SELECCIONADA']],
+              body: [[categoriaNombre]],    // Cuerpo con la categoría
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [119, 146, 170],
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 190 } // Ajusta el ancho de la columna
+              }
+            });
+          }
+
+          // Funcion para  agregar la tabla de fechas
+          function addFechasTable(doc) {
+            // Subtitulos de fechas
+            const fechaInicioText = 'Fecha inicial:';
+            const fechaFinText = 'Fecha final:';
+
+            // Obtener las fechas en formato original
             const fechaInicioOriginal = $('#fechaInicioAreaMasAfectada').val();
             const fechaFinOriginal = $('#fechaFinAreaMasAfectada').val();
 
-            // Función para formatear la fecha
+            // Función para formatear la fecha a dd/mm/aaaa
             function formatearFecha(fecha) {
-              if (!fecha) return ' - ';
-              const [yyyy, mm, dd] = fecha.split('-');
-              return `${dd}/${mm}/${yyyy}`;
+              const partes = fecha.split('-'); // Suponiendo que las fechas están en formato aaaa-mm-dd
+              return `${partes[2]}/${partes[1]}/${partes[0]}`; // Retorna dd/mm/aaaa
             }
 
-            // Fechas formateadas
-            const fechas = {
-              inicio: formatearFecha(fechaInicioOriginal),
-              fin: formatearFecha(fechaFinOriginal)
-            };
+            // Formatear las fechas
+            const fechaInicioValue = formatearFecha(fechaInicioOriginal);
+            const fechaFinValue = formatearFecha(fechaFinOriginal);
 
-            // Dibujar datos de Categoria
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
+            // Texto completo para la fila de la tabla
+            const fechaRango = `${fechaInicioText} ${fechaInicioValue}     -     ${fechaFinText} ${fechaFinValue}`;
 
-            // Categoria
-            const categoriaLabelWidth = doc.getTextWidth(labels.categoria);
-            const categoriaValueWidth = doc.getTextWidth(` ${categoriaNombre}`);
-            const totalCategoriaWidth = categoriaLabelWidth + categoriaValueWidth;
-            const startXCategoria = (pageWidth - totalCategoriaWidth) / 2;
-            const titleYCategoria = 27;
-            doc.text(labels.categoria, startXCategoria, titleYCategoria);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${categoriaNombre}`, startXCategoria + categoriaLabelWidth, titleYCategoria);
-
-            // Fechas
-            const fechaInicioWidth = doc.getTextWidth(labels.fechaInicio);
-            const fechaFinWidth = doc.getTextWidth(labels.fechaFin);
-            const fechaInicioValueWidth = doc.getTextWidth(` ${fechas.inicio}`);
-            const fechaFinValueWidth = doc.getTextWidth(` ${fechas.fin}`);
-            const spacing = 15;
-            const totalWidthFechas = fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth + fechaFinValueWidth;
-            const startXFechas = (pageWidth - totalWidthFechas) / 2;
-            const titleYFechas = 32;
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(labels.fechaInicio, startXFechas, titleYFechas);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${fechas.inicio}`, startXFechas + fechaInicioWidth, titleYFechas);
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(labels.fechaFin, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing, titleYFechas);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${fechas.fin}`, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth, titleYFechas);
+            // Crear tabla de fechas con el rango ingresado
+            doc.autoTable({
+              startY: 60, // Ajustar la altura donde se dibuja la tabla
+              margin: { left: 10 },
+              head: [['RANGO DE FECHAS INGRESADO']], // Título de la tabla
+              body: [[fechaRango]], // Contenido de la tabla con el rango de fechas
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [119, 146, 170],
+                textColor: [255, 255, 255], // Color del texto del encabezado
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 190 } // Ajusta el ancho de la columna para abarcar todo el espacio
+              }
+            });
           }
 
           // Funcion para agregar la tablz de datos
           function addTable(doc) {
             let item = 1;
             doc.autoTable({
-              startY: 38, // Altura de la tabla respecto a la parte superior
+              startY: 80, // Altura de la tabla respecto a la parte superior
               margin: { left: 10 },
-              head: [['N°', 'ÁREA', 'CANTIDAD']],
+              head: [['N°', 'Área afectada', 'Total de incidencias']],
               body: data.map(reporte => [
                 item++,
                 reporte.areaMasIncidencia,
@@ -197,7 +220,7 @@ $('#reporteAreaMasIncidenciasCategoriaFecha').click(function () {
                 valign: 'middle'
               },
               headStyles: {
-                fillColor: [9, 4, 6],
+                fillColor: [44, 62, 80], // Color de fondo del encabezado
                 textColor: [255, 255, 255],
                 fontStyle: 'bold',
                 halign: 'center'
@@ -212,7 +235,8 @@ $('#reporteAreaMasIncidenciasCategoriaFecha').click(function () {
 
           // Agregar encabezado, dato de la categoriaSeleccionada, tabla y pie de página
           addHeader(doc, totalRecords);
-          addCategoryAndDates(doc);
+          addCategoryTable(doc);
+          addFechasTable(doc);
           addTable(doc);
 
           // Agregar pie de página en todas las páginas
@@ -221,10 +245,12 @@ $('#reporteAreaMasIncidenciasCategoriaFecha').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
+          
           // Establecer las propiedades del documento
           doc.setProperties({
             title: "Reporte de áreas afectadas por categoría y fechas.pdf"
           });
+
           // Mostrar mensaje de exito de pdf generado
           toastr.success('Reporte de las &aacute;reas con m&aacute;s incidencias por caregor&iacute;a y fechas ingresadas generado.', 'Mensaje');
 

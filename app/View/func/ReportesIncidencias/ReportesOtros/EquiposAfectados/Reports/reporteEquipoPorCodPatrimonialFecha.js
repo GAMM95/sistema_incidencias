@@ -65,41 +65,51 @@ $('#reporteEquiposAfectadosCodigoPatrimonialFecha').click(function () {
 
           // Funcion para agregar encabezado
           function addHeader(doc, totalRecords) {
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            const fechaImpresion = new Date().toLocaleDateString();
+            const headerText2 = 'Subgerencia de Informática y Sistemas';
+            const reportTitle = 'EQUIPOS AFECTADOS';
+
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = 'EQUIPOS CON MÁS INCIDENCIAS';
-            const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const fechaImpresion = new Date().toLocaleDateString();
 
             // Agregar logo
             doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
             // Titulo principal
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(13);
+            doc.setFontSize(12);
             const titleWidth = doc.getTextWidth(reportTitle);
             const titleX = (pageWidth - titleWidth) / 2;
-            doc.text(reportTitle, titleX, marginY + 10);
-            doc.setLineWidth(0.5); // Ancho de subrayado
-            doc.line(titleX, marginY + 11, titleX + titleWidth, marginY + 11);
+            const titleY = 20;
+            doc.text(reportTitle, titleX, titleY);
+            doc.setLineWidth(0.5);
+            doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
 
             // Subtítulo: cantidad de registros
             const subtitleText = `Cantidad de registros: ${totalRecords}`;
             doc.setFontSize(11);
             const subtitleWidth = doc.getTextWidth(subtitleText);
             const subtitleX = (pageWidth - subtitleWidth) / 2;
-            doc.text(subtitleText, subtitleX, marginY + 17);
+            doc.text(subtitleText, subtitleX, marginY + 25);
 
             // Fecha de impresion 
             doc.setFontSize(8);
-            const headerText2Width = doc.getTextWidth(headerText2);
+            doc.setFont('helvetica', 'normal');
             const fechaText = `Fecha de impresión: ${fechaImpresion}`;
+            const headerText2Width = doc.getTextWidth(headerText2);
             const fechaTextWidth = doc.getTextWidth(fechaText);
-            doc.text(headerText2, pageWidth - marginX - headerText2Width, marginY + logoHeight / 2);
-            doc.text(fechaText, pageWidth - marginX - fechaTextWidth, marginY + logoHeight / 2 + 5);
+            const headerText2X = pageWidth - marginX - headerText2Width;
+            const fechaTextX = pageWidth - marginX - fechaTextWidth;
+            const headerText2Y = marginY + logoHeight / 2;
+            const fechaTextY = headerText2Y + 5;
+
+            doc.text(headerText2, headerText2X, headerText2Y);
+            doc.text(fechaText, fechaTextX, fechaTextY);
           }
 
           // Funcion para agregar el pie de pagina
@@ -116,79 +126,90 @@ $('#reporteEquiposAfectadosCodigoPatrimonialFecha').click(function () {
             doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
-          // Función para agregar el nombre de la categoría y fechas
-          function addEquipoAndDates(doc) {
-            const pageWidth = doc.internal.pageSize.width;
-            const labels = {
-              fechaInicio: 'Fecha de Inicio: ',
-              fechaFin: 'Fecha Fin: ',
-              equipo: 'Código patrimonial: '
-            };
-
-            // Obtener valores
+          // Función para agregar una tabla con el codigo patrimonial ingresado
+          function addEquipoTable(doc) {
             const codigoPatrimonial = $('#codigoEquipo').val() || '-';
+
+            // Crear tabla de codigo patrimonial ingresado
+            doc.autoTable({
+              startY: 40, // Ajustar la altura donde se dibuja la tabla
+              margin: { left: 10 },
+              head: [['CÓDIGO PATRIMONIAL']],
+              body: [[codigoPatrimonial]],    // Cuerpo con la categoría
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [119, 146, 170], // Color de fondo del encabezado
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 190 } // Ajusta el ancho de la columna
+              }
+            });
+          }
+
+          // Funcion para agregar una tabla con el rango de fechas ingresado
+          function addFechasTable(doc) {
+            // Subtitulos de fechas
+            const fechaInicioText = 'Fecha inicial:';
+            const fechaFinText = 'Fecha final:';
+
+            // Obtener las fechas en formato original
             const fechaInicioOriginal = $('#fechaInicioIncidenciasEquipos').val();
             const fechaFinOriginal = $('#fechaFinIncidenciasEquipos').val();
 
-            // Función para formatear la fecha
+            // Función para formatear la fecha a dd/mm/aaaa
             function formatearFecha(fecha) {
-              if (!fecha) return ' - ';
-              const [yyyy, mm, dd] = fecha.split('-');
-              return `${dd}/${mm}/${yyyy}`;
+              const partes = fecha.split('-'); // Suponiendo que las fechas están en formato aaaa-mm-dd
+              return `${partes[2]}/${partes[1]}/${partes[0]}`; // Retorna dd/mm/aaaa
             }
 
-            // Fechas formateadas
-            const fechas = {
-              inicio: formatearFecha(fechaInicioOriginal),
-              fin: formatearFecha(fechaFinOriginal)
-            };
+            // Formatear las fechas
+            const fechaInicioValue = formatearFecha(fechaInicioOriginal);
+            const fechaFinValue = formatearFecha(fechaFinOriginal);
 
-            // Dibujar datos de Categoria
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
+            // Texto completo para la fila de la tabla
+            const fechaRango = `${fechaInicioText} ${fechaInicioValue}     -     ${fechaFinText} ${fechaFinValue}`;
 
-            // Equipo
-            const equipoLabelWidth = doc.getTextWidth(labels.equipo);
-            const equipoValueWidth = doc.getTextWidth(` ${codigoPatrimonial}`);
-            const totalEquipoWidth = equipoLabelWidth + equipoValueWidth;
-            const startXEquipo = (pageWidth - totalEquipoWidth) / 2;
-            const startXEquipoValue = startXEquipo + equipoLabelWidth;
-            const titleYEquipo = 27;
-            doc.text(labels.equipo, startXEquipo, titleYEquipo); 
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${codigoPatrimonial}`, startXEquipoValue, titleYEquipo);
-
-            // Fechas
-            const fechaInicioWidth = doc.getTextWidth(labels.fechaInicio);
-            const fechaFinWidth = doc.getTextWidth(labels.fechaFin);
-            const fechaInicioValueWidth = doc.getTextWidth(` ${fechas.inicio}`);
-            const fechaFinValueWidth = doc.getTextWidth(` ${fechas.fin}`);
-            const spacing = 15;
-            const totalWidthFechas = fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth + fechaFinValueWidth;
-            const startXFechas = (pageWidth - totalWidthFechas) / 2;
-            const titleYFechas = 32;
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(labels.fechaInicio, startXFechas, titleYFechas);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${fechas.inicio}`, startXFechas + fechaInicioWidth, titleYFechas);
-
-            doc.setFont('helvetica', 'bold');
-            doc.text(labels.fechaFin, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing, titleYFechas);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${fechas.fin}`, startXFechas + fechaInicioWidth + fechaInicioValueWidth + spacing + fechaFinWidth, titleYFechas);
+            // Crear tabla de fechas con el rango ingresado
+            doc.autoTable({
+              startY: 60, // Ajustar la altura donde se dibuja la tabla
+              margin: { left: 10 },
+              head: [['RANGO DE FECHAS INGRESADO']], // Título de la tabla
+              body: [[fechaRango]], // Contenido de la tabla con el rango de fechas
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [119, 146, 170], // Color de fondo del encabezado
+                textColor: [255, 255, 255], // Color del texto del encabezado
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 190 } // Ajusta el ancho de la columna para abarcar todo el espacio
+              }
+            });
           }
 
           // Funcion para agregar la tablz de datos
           function addTable(doc) {
             let item = 1;
             doc.autoTable({
-              startY: 38, // Altura de la tabla respecto a la parte superior
+              startY: 80, // Altura de la tabla respecto a la parte superior
               margin: { left: 10 },
-              head: [['N°', 'CÓDIGO PATRIMONIAL', 'NOMBRE DE BIEN', 'ÁREA', 'CANTIDAD']],
+              head: [['N°', 'Nombre del equipo', 'Área de pertenecia', 'Total de incidencias']],
               body: data.map(reporte => [
                 item++,
-                reporte.codigoPatrimonial,
                 reporte.nombreBien,
                 reporte.nombreArea,
                 reporte.cantidadIncidencias
@@ -200,7 +221,7 @@ $('#reporteEquiposAfectadosCodigoPatrimonialFecha').click(function () {
                 valign: 'middle'
               },
               headStyles: {
-                fillColor: [9, 4, 6],
+                fillColor: [44, 62, 80], // Color de fondo del encabezado
                 textColor: [255, 255, 255],
                 fontStyle: 'bold',
                 halign: 'center'
@@ -208,10 +229,9 @@ $('#reporteEquiposAfectadosCodigoPatrimonialFecha').click(function () {
               columnStyles: {
                 columnStyles: {
                   0: { cellWidth: 15 }, // Ancho para la columna item
-                  1: { cellWidth: 30 }, // Ancho para la columna codigo patrimonial
-                  2: { cellWidth: 60 }, // Ancho para la columna nombre bien
-                  3: { cellWidth: 60 }, // Ancho para la columna nombre area
-                  4: { cellWidth: 25 } // Ancho para la columna cantidad
+                  1: { cellWidth: 75 }, // Ancho para la columna nombre bien
+                  2: { cellWidth: 75 }, // Ancho para la columna nombre area
+                  3: { cellWidth: 25 } // Ancho para la columna cantidad
                 }
               }
             });
@@ -219,7 +239,8 @@ $('#reporteEquiposAfectadosCodigoPatrimonialFecha').click(function () {
 
           // Agregar encabezado, dato de la categoriaSeleccionada, tabla y pie de página
           addHeader(doc, totalRecords);
-          addEquipoAndDates(doc);
+          addEquipoTable(doc);
+          addFechasTable(doc);
           addTable(doc);
 
           // Agregar pie de página en todas las páginas
@@ -228,12 +249,18 @@ $('#reporteEquiposAfectadosCodigoPatrimonialFecha').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
+
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de equipos afectadas por códigp patrimonial y fechas.pdf"
+          });
+
           // Mostrar mensaje de exito de pdf generado
           toastr.success('Reporte de los equipos con m&aacute;s incidencias por c&oacute;digo patrimonial y fechas ingresadas generado.', 'Mensaje');
 
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado datos para los campos ingresados.', 'Advertencia');
@@ -257,7 +284,7 @@ function validarCamposEquiposMasAfectadosCodPatrimonialFecha() {
 
   var faltaEquipo = ($('#codigoEquipo').val() !== null && $('#codigoEquipo').val().trim() !== '');
   var fechaInicioSeleccionada = ($('#fechaInicioIncidenciasEquipos').val() !== null && $('#fechaInicioIncidenciasEquipos').val().trim() !== '');
-  var fechaFinSeleccionada = ($('#fechaFinIncidenciasEquipos').val() !== null && $('#fechaFinIncidenciasEquipos').val().trim() !== ''); 
+  var fechaFinSeleccionada = ($('#fechaFinIncidenciasEquipos').val() !== null && $('#fechaFinIncidenciasEquipos').val().trim() !== '');
 
   // Verificar si al menos un campo está lleno
   if (faltaEquipo && fechaInicioSeleccionada && fechaFinSeleccionada) {

@@ -110,7 +110,7 @@ $('#reporteAreaMasIncidencias').click(function () {
               valign: 'middle'
             },
             headStyles: {
-              fillColor: [9, 4, 6],
+              fillColor: [44, 62, 80], // Color de fondo del encabezado
               textColor: [255, 255, 255],
               fontStyle: 'bold',
               halign: 'center'

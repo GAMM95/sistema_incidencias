@@ -59,41 +59,51 @@ $('#reporteEquiposAfectadosCodigoPatrimonial').click(function () {
 
           // Funcion para agregar encabezado
           function addHeader(doc, totalRecords) {
+            doc.setFontSize(9);
+            doc.setFont('helvetica', 'normal');
+            const fechaImpresion = new Date().toLocaleDateString();
+            const headerText2 = 'Subgerencia de Informática y Sistemas';
+            const reportTitle = 'EQUIPOS AFECTADOS';
+
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
             const marginY = 5;
             const logoWidth = 25;
             const logoHeight = 25;
-            const reportTitle = 'EQUIPO AFECTADO';
-            const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const fechaImpresion = new Date().toLocaleDateString();
 
             // Agregar logo
             doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
             // Titulo principal
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(13);
+            doc.setFontSize(12);
             const titleWidth = doc.getTextWidth(reportTitle);
             const titleX = (pageWidth - titleWidth) / 2;
-            doc.text(reportTitle, titleX, marginY + 10);
-            doc.setLineWidth(0.5); // Ancho de subrayado
-            doc.line(titleX, marginY + 11, titleX + titleWidth, marginY + 11);
+            const titleY = 20;
+            doc.text(reportTitle, titleX, titleY);
+            doc.setLineWidth(0.5);
+            doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
 
             // Subtítulo: cantidad de registros
             const subtitleText = `Cantidad de registros: ${totalRecords}`;
             doc.setFontSize(11);
             const subtitleWidth = doc.getTextWidth(subtitleText);
             const subtitleX = (pageWidth - subtitleWidth) / 2;
-            doc.text(subtitleText, subtitleX, marginY + 17);
+            doc.text(subtitleText, subtitleX, marginY + 25);
 
             // Fecha de impresion 
             doc.setFontSize(8);
-            const headerText2Width = doc.getTextWidth(headerText2);
+            doc.setFont('helvetica', 'normal');
             const fechaText = `Fecha de impresión: ${fechaImpresion}`;
+            const headerText2Width = doc.getTextWidth(headerText2);
             const fechaTextWidth = doc.getTextWidth(fechaText);
-            doc.text(headerText2, pageWidth - marginX - headerText2Width, marginY + logoHeight / 2);
-            doc.text(fechaText, pageWidth - marginX - fechaTextWidth, marginY + logoHeight / 2 + 5);
+            const headerText2X = pageWidth - marginX - headerText2Width;
+            const fechaTextX = pageWidth - marginX - fechaTextWidth;
+            const headerText2Y = marginY + logoHeight / 2;
+            const fechaTextY = headerText2Y + 5;
+
+            doc.text(headerText2, headerText2X, headerText2Y);
+            doc.text(fechaText, fechaTextX, fechaTextY);
           }
 
           // Funcion para agregar el pie de pagina
@@ -110,42 +120,43 @@ $('#reporteEquiposAfectadosCodigoPatrimonial').click(function () {
             doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
-          // Función para agregar el nombre de la equipo
-          function addEquipo(doc) {
-            const pageWidth = doc.internal.pageSize.width;
-            const labels = {
-              equipo: 'Código patrimonial: '
-            };
-
-            // Obtener valores
+          // Función para agregar una tabla con el codigo patrimonial ingresado
+          function addEquipoTable(doc) {
             const codigoPatrimonial = $('#codigoEquipo').val() || '-';
 
-            // Dibujar datos de la equipo
-            doc.setFont('helvetica', 'bold');
-            doc.setFontSize(11);
-
-            // Equipo
-            const equipoLabelWidth = doc.getTextWidth(labels.equipo);
-            const equipoValueWidth = doc.getTextWidth(` ${codigoPatrimonial}`);
-            const totalEquipoWidth = equipoLabelWidth + equipoValueWidth;
-            const startXEquipo = (pageWidth - totalEquipoWidth) / 2;
-            const titleYEquipo = 29;
-            doc.text(labels.equipo, startXEquipo, titleYEquipo);
-            doc.setFont('helvetica', 'normal');
-            doc.text(` ${codigoPatrimonial}`, startXEquipo + equipoLabelWidth, titleYEquipo);
+            // Crear tabla de codigo patrimonial ingresado
+            doc.autoTable({
+              startY: 40, // Ajustar la altura donde se dibuja la tabla
+              margin: { left: 10 },
+              head: [['CÓDIGO PATRIMONIAL']],
+              body: [[codigoPatrimonial]],    // Cuerpo con la categoría
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [44, 62, 80],
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 190 } // Ajusta el ancho de la columna
+              }
+            });
           }
-
 
           // Funcion para agregar la tablz de datos
           function addTable(doc) {
             let item = 1;
             doc.autoTable({
-              startY: 35, // Altura de la tabla respecto a la parte superior
+              startY: 60, // Altura de la tabla respecto a la parte superior
               margin: { left: 10 },
-              head: [['N°', 'CÓDIGO PATRIMONIAL', 'NOMBRE DE BIEN', 'ÁREA', 'CANTIDAD']],
+              head: [['N°', 'Nombre del equipo', 'Área de pertenecia', 'Total de incidencias']],
               body: data.map(reporte => [
                 item++,
-                reporte.codigoPatrimonial,
                 reporte.nombreBien,
                 reporte.nombreArea,
                 reporte.cantidadIncidencias
@@ -157,24 +168,23 @@ $('#reporteEquiposAfectadosCodigoPatrimonial').click(function () {
                 valign: 'middle'
               },
               headStyles: {
-                fillColor: [9, 4, 6],
+                fillColor: [119, 146, 170],
                 textColor: [255, 255, 255],
                 fontStyle: 'bold',
                 halign: 'center'
               },
               columnStyles: {
                 0: { cellWidth: 15 }, // Ancho para la columna item
-                1: { cellWidth: 30 }, // Ancho para la columna codigo patrimonial
-                2: { cellWidth: 60 }, // Ancho para la columna nombre bien
-                3: { cellWidth: 60 }, // Ancho para la columna nombre area
-                4: { cellWidth: 25 } // Ancho para la columna cantidad
+                1: { cellWidth: 75 }, // Ancho para la columna nombre bien
+                2: { cellWidth: 75 }, // Ancho para la columna nombre area
+                3: { cellWidth: 25 } // Ancho para la columna cantidad
               }
             });
           }
 
-          // Agregar encabezado, dato de la categoriaSeleccionada, tabla y pie de página
+          // Agregar encabezado, codigo patrimonial, tabla y pie de página
           addHeader(doc, totalRecords);
-          addEquipo(doc);
+          addEquipoTable(doc);
           addTable(doc);
 
           // Agregar pie de página en todas las páginas
@@ -183,6 +193,12 @@ $('#reporteEquiposAfectadosCodigoPatrimonial').click(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
+          
+          // Establecer las propiedades del documento
+          doc.setProperties({
+            title: "Reporte de equipos afectados por código patrimonial.pdf"
+          });
+
           // Mostrar mensaje de exito de pdf generado
           toastr.success('Reporte de equipos afectados por c&oacute;digo patrimonial generado.', 'Mensaje');
 

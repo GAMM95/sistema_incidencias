@@ -60,14 +60,13 @@ $('#reporteAreaMasIncidenciasFecha').click(function () {
           const doc = new jsPDF('portrait');
           const logoUrl = './public/assets/escudo.png';
 
-          // Funcion para agregar encabezado
-          function addHeader(doc) {
+          // Funcion para agregar el encabezado del PDF
+          function addHeader(doc, totalRecords) {
             doc.setFontSize(9);
             doc.setFont('helvetica', 'normal');
-
             const fechaImpresion = new Date().toLocaleDateString();
             const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const reportTitle = ' ÁREAS CON MÁS INCIDENCIAS';
+            const reportTitle = 'ÁREAS CON MÁS INCIDENCIAS';
 
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
@@ -75,17 +74,25 @@ $('#reporteAreaMasIncidenciasFecha').click(function () {
             const logoWidth = 25;
             const logoHeight = 25;
 
+            // Agregar logo
             doc.addImage(logoUrl, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
-            // TITULO CENTRAL DEL DOCUMENTO
+            // Titulo principal
             doc.setFont('helvetica', 'bold');
-            doc.setFontSize(15);
+            doc.setFontSize(12);
             const titleWidth = doc.getTextWidth(reportTitle);
             const titleX = (pageWidth - titleWidth) / 2;
-            const titleY = 15;
+            const titleY = 20;
             doc.text(reportTitle, titleX, titleY);
-            doc.setLineWidth(0.5); // Ancho de subrayado
-            doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1); // ubicacion del subrayado del titulo
+            doc.setLineWidth(0.5);
+            doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
+
+            // Subtítulo: cantidad de registros
+            const subtitleText = `Cantidad de registros: ${totalRecords}`;
+            doc.setFontSize(11);
+            const subtitleWidth = doc.getTextWidth(subtitleText);
+            const subtitleX = (pageWidth - subtitleWidth) / 2;
+            doc.text(subtitleText, subtitleX, marginY + 25);
 
             // Fecha de impresion 
             doc.setFontSize(8);
@@ -95,101 +102,14 @@ $('#reporteAreaMasIncidenciasFecha').click(function () {
             const fechaTextWidth = doc.getTextWidth(fechaText);
             const headerText2X = pageWidth - marginX - headerText2Width;
             const fechaTextX = pageWidth - marginX - fechaTextWidth;
-            // Ajustar las posiciones Y para mover los textos hacia arriba
-            const headerText2Y = marginY + 8; // Mover más cerca de la parte superior
-            const fechaTextY = headerText2Y + 4; // Espaciado entre los dos textos
+            const headerText2Y = marginY + logoHeight / 2;
+            const fechaTextY = headerText2Y + 5;
 
             doc.text(headerText2, headerText2X, headerText2Y);
             doc.text(fechaText, fechaTextX, fechaTextY);
           }
 
-          addHeader(doc);
-
-
-          // Subtitulos de fechas
-          const fechaInicioText = 'Fecha de Inicio:';
-          const fechaFinText = 'Fecha de Fin:';
-
-          // Obtener las fechas en formato original
-          const fechaInicioOriginal = $('#fechaInicioAreaMasAfectada').val();
-          const fechaFinOriginal = $('#fechaFinAreaMasAfectada').val();
-
-          // Función para formatear la fecha a dd/mm/aaaa
-          function formatearFecha(fecha) {
-            const partes = fecha.split('-'); // Suponiendo que las fechas están en formato aaaa-mm-dd
-            return `${partes[2]}/${partes[1]}/${partes[0]}`; // Retorna dd/mm/aaaa
-          }
-
-          // Formatear las fechas
-          const fechaInicioValue = ` ${formatearFecha(fechaInicioOriginal)}`;
-          const fechaFinValue = ` ${formatearFecha(fechaFinOriginal)}`;
-
-          // Configuracion de fuentes
-          doc.setFont('helvetica', 'bold');
-          doc.setFontSize(10);
-
-          // Calcular el ancho de los textos
-          const fechaInicioAncho = doc.getTextWidth(fechaInicioText);
-          const fechaInicioValueAncho = doc.getTextWidth(fechaInicioValue);
-          const fechaFinAncho = doc.getTextWidth(fechaFinText);
-          const fechaFinValueAncho = doc.getTextWidth(fechaFinValue);
-
-          const spacing = 10; //espacio entre los dos textos
-
-          // Calcular el ancho total de los textos más el espaciado
-          const totalWidth = fechaInicioAncho + fechaInicioValueAncho + spacing + fechaFinAncho + fechaFinValueAncho;
-
-          // Ancho de la página
-          const pageWidth = doc.internal.pageSize.width;
-
-          // Calcular la posición inicial en X para centrar los textos
-          const startX = (pageWidth - totalWidth) / 2;
-
-          const titleY = 25; // La misma posición Y para ambos textos
-
-          // Dibujar el texto "Fecha de Inicio" y su valor
-          doc.text(fechaInicioText, startX, titleY);
-          doc.setFont('helvetica', 'normal');
-          doc.text(fechaInicioValue, startX + fechaInicioAncho, titleY);
-
-          // Dibujar el texto "Fecha de Fin" y su valor
-          doc.setFont('helvetica', 'bold');
-          doc.text(fechaFinText, startX + fechaInicioAncho + fechaInicioValueAncho + spacing, titleY);
-          doc.setFont('helvetica', 'normal');
-          doc.text(fechaFinValue, startX + fechaInicioAncho + fechaInicioValueAncho + spacing + fechaFinAncho, titleY);
-
-          // Inicializar el contador
-          let item = 1;
-
-          // Lista de incidencias por codigo patrimonial
-          doc.autoTable({
-            startY: 35, // Altura de la tabla respecto a la parte superior
-            margin: { left: 10 },
-            head: [['N°', 'ÁREA AFECTADA', 'TOTAL INCIDENCIAS']],
-            body: data.map(reporte => [
-              item++,
-              reporte.areaMasIncidencia,
-              reporte.cantidadIncidencias,
-            ]),
-            styles: {
-              fontSize: 11,
-              cellPadding: 3,
-              halign: 'center',
-              valign: 'middle'
-            },
-            headStyles: {
-              fillColor: [9, 4, 6],
-              textColor: [255, 255, 255],
-              fontStyle: 'bold',
-              halign: 'center'
-            },
-            columnStyles: {
-              0: { cellWidth: 30 }, // Ancho para la columna item
-              1: { cellWidth: 100 }, // Ancho para la columna area
-              2: { cellWidth: 60 }, // Ancho para la columna cantidad
-            }
-          });
-
+          // Funcion para editar el pie de página del PDF
           function addFooter(doc, pageNumber, totalPages) {
             doc.setFontSize(8);
             doc.setFont('helvetica', 'italic');
@@ -205,6 +125,89 @@ $('#reporteAreaMasIncidenciasFecha').click(function () {
             doc.text(pageInfo, pageWidth - 10 - doc.getTextWidth(pageInfo), footerY);
           }
 
+          // Funcion para  agregar la tabla de fechas
+          function addFechasTable(doc) {
+            // Subtitulos de fechas
+            const fechaInicioText = 'Fecha inicial:';
+            const fechaFinText = 'Fecha final:';
+
+            // Obtener las fechas en formato original
+            const fechaInicioOriginal = $('#fechaInicioAreaMasAfectada').val();
+            const fechaFinOriginal = $('#fechaFinAreaMasAfectada').val();
+
+            // Función para formatear la fecha a dd/mm/aaaa
+            function formatearFecha(fecha) {
+              const partes = fecha.split('-'); // Suponiendo que las fechas están en formato aaaa-mm-dd
+              return `${partes[2]}/${partes[1]}/${partes[0]}`; // Retorna dd/mm/aaaa
+            }
+
+            // Formatear las fechas
+            const fechaInicioValue = formatearFecha(fechaInicioOriginal);
+            const fechaFinValue = formatearFecha(fechaFinOriginal);
+
+            // Texto completo para la fila de la tabla
+            const fechaRango = `${fechaInicioText} ${fechaInicioValue}     -     ${fechaFinText} ${fechaFinValue}`;
+
+            // Crear tabla de fechas con el rango ingresado
+            doc.autoTable({
+              startY: 40, // Ajustar la altura donde se dibuja la tabla
+              margin: { left: 10 },
+              head: [['RANGO DE FECHAS INGRESADO']], // Título de la tabla
+              body: [[fechaRango]], // Contenido de la tabla con el rango de fechas
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [44, 62, 80], // Color de fondo del encabezado
+                textColor: [255, 255, 255], // Color del texto del encabezado
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 190 } // Ajusta el ancho de la columna para abarcar todo el espacio
+              }
+            });
+          }
+
+          // Funcion para agregar la tabla de datos
+          function addTable(doc) {
+            let item = 1;
+            doc.autoTable({
+              startY: 60, // Altura de la tabla respecto a la parte superior
+              margin: { left: 10 },
+              head: [['N°', 'Área afectada', 'Total de incidencias']],
+              body: data.map(reporte => [
+                item++,
+                reporte.areaMasIncidencia,
+                reporte.cantidadIncidencias,
+              ]),
+              styles: {
+                fontSize: 10,
+                cellPadding: 3,
+                halign: 'center',
+                valign: 'middle'
+              },
+              headStyles: {
+                fillColor: [119, 146, 170],
+                textColor: [255, 255, 255],
+                fontStyle: 'bold',
+                halign: 'center'
+              },
+              columnStyles: {
+                0: { cellWidth: 30 }, // Ancho para la columna item
+                1: { cellWidth: 100 }, // Ancho para la columna area
+                2: { cellWidth: 60 }, // Ancho para la columna cantidad
+              }
+            });
+          }
+
+          addHeader(doc, totalRecords);
+          addFechasTable(doc);
+          addTable(doc);
+
           const totalPages = doc.internal.getNumberOfPages();
           for (let i = 1; i <= totalPages; i++) {
             doc.setPage(i);
@@ -215,7 +218,7 @@ $('#reporteAreaMasIncidenciasFecha').click(function () {
           doc.setProperties({
             title: "Reporte de áreas afectadas por fechas.pdf"
           });
-          
+
           // Mostrar mensaje de exito de pdf generado
           toastr.success('Reporte de las 10 primeras &aacute;reas con m&aacute;s incidencias generado.', 'Mensaje');
           // Retrasar la apertura del PDF y limpiar el campo de entrada

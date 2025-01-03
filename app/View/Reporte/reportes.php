@@ -1045,8 +1045,8 @@
                                   <thead class="text-xs text-gray-700 uppercase bg-gray-300">
                                     <tr>
                                       <th scope="col" class="px-1 py-2 text-center">N&deg;</th>
-                                      <th scope="col" class="px-5 py-2 text-center">&Aacute;rea</th>
-                                      <th scope="col" class="px-1 py-2 text-center">Cantidad</th>
+                                      <th scope="col" class="px-5 py-2 text-center">&Aacute;rea afectada</th>
+                                      <th scope="col" class="px-1 py-2 text-center">Total de incidencias</th>
                                     </tr>
                                   </thead>
                                   <!-- Fin de encabezado de la tabla -->
@@ -1141,8 +1141,8 @@
                                       <th scope="col" class="px-1 py-2 text-center">N&deg;</th>
                                       <th scope="col" class="px-3 py-2 text-center">C&oacute;digo Patrimonial</th>
                                       <th scope="col" class="px-5 py-2 text-center">Nombre del bien</th>
-                                      <th scope="col" class="px-5 py-2 text-center">&Aacute;rea</th>
-                                      <th scope="col" class="px-1 py-2 text-center">Cantidad</th>
+                                      <th scope="col" class="px-5 py-2 text-center">&Aacute;rea afectada</th>
+                                      <th scope="col" class="px-1 py-2 text-center">Total incidencias</th>
                                     </tr>
                                   </thead>
                                   <!-- Fin de encabezado de la tabla -->

@@ -125,7 +125,7 @@
               <?php endforeach; ?>
             <?php else: ?>
               <tr>
-                <td colspan="10" class="text-center py-3">No se han asignado incidencias.</td>
+                <td colspan="10" class="text-center py-3">No se le han asignado incidencias.</td>
               </tr>
             <?php endif; ?>
           </tbody>

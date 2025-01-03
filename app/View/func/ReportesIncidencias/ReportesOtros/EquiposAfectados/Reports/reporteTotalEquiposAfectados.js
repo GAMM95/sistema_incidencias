@@ -112,7 +112,7 @@ $('#reporteEquiposAfectados').click(function () {
               valign: 'middle'
             },
             headStyles: {
-              fillColor: [9, 4, 6],
+              fillColor: [44, 62, 80], // Color de fondo del encabezado
               textColor: [255, 255, 255],
               fontStyle: 'bold',
               halign: 'center'
@@ -137,12 +137,18 @@ $('#reporteEquiposAfectados').click(function () {
           doc.setPage(i);
           addFooter(doc, i, totalPages);
         }
+
+        // Establecer las propiedades del documento
+        doc.setProperties({
+          title: "Reporte total de equipos afectados.pdf"
+        });
+
         // Mostrar mensaje de exito de pdf generado
         toastr.success('Reporte total de los equipos con m&aacute;s incidencias generado.', 'Mensaje');
 
         // Retrasar la apertura del PDF y limpiar el campo de entrada
         setTimeout(() => {
-          window.open(doc.output('bloburl'));
+          window.open(doc.output('bloburl'), '_blank');
         }, 2000);
       } catch (error) {
         toastr.error('Hubo un error al generar reporte.', 'Mensaje de error');

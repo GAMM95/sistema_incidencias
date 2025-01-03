@@ -105,22 +105,6 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
             doc.text(headerText2, headerText2X, headerText2Y);
             doc.text(fechaText, fechaTextX, fechaTextY);
           }
-          // addHeader(doc);
-          addHeader(doc, data.length);
-
-          // Funcion para agregar el pie de pagina
-          function addFooter(doc, pageNumber, totalPages) {
-            doc.setFontSize(8);
-            doc.setFont('helvetica', 'italic');
-            const footerY = 285;
-            doc.setLineWidth(0.5);
-            doc.line(10, footerY - 5, doc.internal.pageSize.width - 10, footerY - 5);
-
-            const footerText = 'Sistema de Gestión de Incidencias';
-            const pageInfo = `Página ${pageNumber} de ${totalPages}`;
-            doc.text(footerText, 10, footerY);
-            doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
-          }
 
           // Funcion para agregar el pie de pagina
           function addFooter(doc, pageNumber, totalPages) {
@@ -164,7 +148,7 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
             });
           }
 
-          // Funcion para agregar la tablz de datos
+          // Funcion para agregar la tabla de datos
           function addTable(doc) {
             let item = 1;
             doc.autoTable({
@@ -198,8 +182,7 @@ $('#reporteAreaMasIncidenciasCategoria').click(function () {
 
           // Agregar encabezado, dato de la categoriaSeleccionada, tabla y pie de página
           addHeader(doc, totalRecords);
-          addCategoryTable(doc);  // Agrega esta nueva tabla antes de la tabla principal
-          // addCategory(doc);
+          addCategoryTable(doc); 
           addTable(doc);
 
           // Agregar pie de página en todas las páginas
