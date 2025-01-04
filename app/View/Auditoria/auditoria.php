@@ -326,7 +326,7 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosIncidenciasTotales">Reporte total de eventos</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
@@ -348,7 +348,7 @@
                                       <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
                                       <th scope="col" class="px-3 py-2 text-center">Usuario Evento</th>
                                       <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Referencia</th>
                                       <th scope="col" class="px-3 py-2 text-center">&Aacute;rea</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
@@ -437,9 +437,9 @@
                                     </button>
                                     <div class="dropdown-menu">
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosRecepcionesFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosRecepcionesUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosRecepcionesUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -458,7 +458,7 @@
                                       <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
                                       <th scope="col" class="px-3 py-2 text-center">Usuario Evento</th>
                                       <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Referencia</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
                                     </tr>
@@ -532,7 +532,7 @@
                                 </button>
 
                                 <!-- Botón de nueva consulta -->
-                                <button type="button" id="limpiarCamposEventosAsignaciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                                <button type="button" id="limpiarCamposEventosAsignaciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-400 rounded-md flex justify-center items-center">
                                   <i class="feather icon-refresh-cw"></i>
                                 </button>
 
@@ -543,10 +543,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesAsignaciones">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosAsignacionesFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosAsignacionesUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosAsignacionesUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -563,8 +563,9 @@
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
                                       <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Usuario evento</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Usuario Evento</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Referencia</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
                                     </tr>
@@ -581,6 +582,7 @@
                                           <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['fechaFormateada']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['NombreCompleto']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_operacion']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['referencia']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_ip']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($asignacion['AUD_nombreEquipo']) ?></td>
@@ -647,10 +649,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesMantenimiento">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosMantenimientoFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosMantenimientoUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosMantenimientoUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -663,13 +665,13 @@
                               <div class="max-w-full overflow-hidden sm:rounded-lg">
                                 <table id="tablaEventosMantenimiento" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                   <!-- Encabezado de la tabla -->
-                                  <thead class="text-xs text-gray-700 uppercase bg-purple-300">
+                                  <thead class="text-xs text-gray-700 uppercase bg-teal-200">
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
                                       <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
                                       <th scope="col" class="px-3 py-2 text-center">Usuario evento</th>
                                       <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Referencia</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
                                     </tr>
@@ -753,10 +755,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesCierres">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosCierresFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosCierresUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosCierresUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -769,12 +771,13 @@
                               <div class="max-w-full overflow-hidden sm:rounded-lg">
                                 <table id="tablaEventosCierres" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
                                   <!-- Encabezado de la tabla -->
-                                  <thead class="text-xs text-gray-700 uppercase bg-purple-300">
+                                  <thead class="text-xs text-gray-700 uppercase bg-teal-200">
                                     <tr>
                                       <th scope="col" class="px-3 py-2 text-center">N&deg;</th>
                                       <th scope="col" class="px-3 py-2 text-center">Fecha y Hora</th>
                                       <th scope="col" class="px-3 py-2 text-center">Usuario evento</th>
-                                      <th scope="col" class="px-3 py-2 text-center">Incidencia</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Operaci&oacute;n</th>
+                                      <th scope="col" class="px-3 py-2 text-center">Referencia</th>
                                       <th scope="col" class="px-3 py-2 text-center">IP</th>
                                       <th scope="col" class="px-3 py-2 text-center">Nombre del Equipo</th>
                                     </tr>
@@ -791,7 +794,8 @@
                                           <td class="px-3 py-2 text-center"><?= $item++ ?></td> <!-- Columna de ítem -->
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['fechaFormateada']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['NombreCompleto']) ?></td>
-                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['INC_numero_formato']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['AUD_operacion']) ?></td>
+                                          <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['referencia']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['AUD_ip']) ?></td>
                                           <td class="px-3 py-2 text-center"><?= htmlspecialchars($cierres['AUD_nombreEquipo']) ?></td>
                                         </tr>
@@ -849,11 +853,11 @@
                             <div class="flex justify-center items-center">
                               <!-- Nombre de persona -->
                               <div class="w-full px-2 mb-2" style="max-width: 250px;">
-                                <label for="usuarioEvento" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
-                                <select id="usuarioEvento" name="usuarioEvento" class="border p-2 w-full text-xs cursor-pointer">
+                                <label for="usuarioEventoUsuarios" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
+                                <select id="usuarioEventoUsuarios" name="usuarioEventoUsuarios" class="border p-2 w-full text-xs cursor-pointer">
                                 </select>
-                                <input type="hidden" id="codigoUsuarioEvento" name="codigoUsuarioEvento" readonly>
-                                <input type="hidden" id="nombreUsuarioEvento" name="nombreUsuarioEvento" readonly>
+                                <input type="hidden" id="codigoUsuarioEventoUsuarios" name="codigoUsuarioEventoUsuarios" readonly>
+                                <input type="hidden" id="nombreUsuarioEventoUsuarios" name="nombreUsuarioEventoUsuarios" readonly>
                               </div>
 
                               <!-- Fecha de inicio -->
@@ -889,10 +893,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotalesUsuarios">Reporte total de eventos</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteUserEventosFecha">Reporte por fechas</div>
                                       <div class="dropdown-item hover:text-white cursor-pointer" id="reporteUserEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteUserEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteUserEventosUsuariosFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -957,11 +961,11 @@
                             <div class="flex justify-center items-center">
                               <!-- Nombre de usuario de evento -->
                               <div class="w-full px-2 mb-2" style="max-width: 250px;">
-                                <label for="usuarioEventoPersona" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
-                                <select id="usuarioEventoPersona" name="usuarioEventoPersona" class="border p-2 w-full text-xs cursor-pointer">
+                                <label for="usuarioEventoPersonas" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
+                                <select id="usuarioEventoPersonas" name="usuarioEventoPersonas" class="border p-2 w-full text-xs cursor-pointer">
                                 </select>
-                                <input type="hidden" id="codigoUsuarioEventoPersona" name="codigoUsuarioEventoPersona" readonly>
-                                <input type="hidden" id="nombreUsuarioEventoPersona" name="nombreUsuarioEventoPersona" readonly>
+                                <input type="hidden" id="codigoUsuarioEventoPersonas" name="codigoUsuarioEventoPersonas" readonly>
+                                <input type="hidden" id="nombreUsuarioEventoPersonas" name="nombreUsuarioEventoPersonas" readonly>
                               </div>
                               <!-- Operacion realizada -->
                               <!-- <div class="w-full px-2 mb-2" style="max-width: 150px;">
@@ -1009,10 +1013,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteUserEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosPersonasTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosPersonasFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosPersonasUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosPersonasUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>

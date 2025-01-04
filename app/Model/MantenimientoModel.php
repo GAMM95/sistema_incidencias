@@ -25,11 +25,11 @@ class MantenimientoModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT TOP 1 MAN_codigo FROM MANTENIMIENTO ORDER BY MAN_codigo DESC";
+        $sql = "SELECT MAX(MAN_codigo) AS ultimoCodigo FROM MANTENIMIENTO";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll();
-        return $resultado[0]['codigo'];
+        return $resultado[0]['ultimoCodigo'];
       } else {
         throw new Exception("Error de conexión a la base de datos");
       }
@@ -76,8 +76,11 @@ class MantenimientoModel extends Conexion
         $stmt->bindParam(':asignacion', $asignacion);
         $stmt->execute();
 
+        // Obtener el ultimo codigo registrado de mantenimiento
+        $numMantenimiento = $this->obtenerUltimoCodigoRegistrado();
+
         // Registrar el evento en la auditoría
-        $this->auditoria->registrarEvento('MANTENIMIENTO', 'Encolar mantenimiento', $asignacion);
+        $this->auditoria->registrarEvento('MANTENIMIENTO', 'Encolar mantenimiento', $numMantenimiento);
         return $stmt->rowCount() > 0 ? true : false;
       } else {
         throw new Exception("Error de conexion a la base de datos");
@@ -281,6 +284,30 @@ class MantenimientoModel extends Conexion
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al listar eventos de mantimiento: " . $e->getMessage());
+    }
+  }
+
+  // Metodo para consultar eventos de mantenimiento - auditoria
+  public function buscarEventosMantenimiento($usuario, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_eventos_mantenimiento :usuario, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al consultar eventos de mantenimiento en la tabla de auditoria: " . $e->getMessage());
+      return null;
     }
   }
 }

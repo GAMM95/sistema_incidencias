@@ -164,7 +164,7 @@ class PersonaController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $usuario = isset($_GET['usuarioEventoPersona']) ? (int) $_GET['usuarioEventoPersona'] : null;
+      $usuario = isset($_GET['usuarioEventoPersonas']) ? (int) $_GET['usuarioEventoPersonas'] : null;
       $operacion = isset($_GET['operacionPersona']) ? (int) $_GET['operacionPersona'] : null;
       $fechaInicio = isset($_GET['fechaInicioEventosPersonas']) ? $_GET['fechaInicioEventosPersonas'] : null;
       $fechaFin = isset($_GET['fechaFinEventosPersonas']) ? $_GET['fechaFinEventosPersonas'] : null;

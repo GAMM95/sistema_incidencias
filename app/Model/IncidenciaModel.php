@@ -1304,7 +1304,7 @@ public function contarPendientesUltimoMesUsuario($area)
     try {
       if ($conector != null) {
         $sql = "SELECT * FROM vw_eventos_incidencias
-                  ORDER BY AUD_fecha DESC, AUD_hora DESC";
+                ORDER BY AUD_fecha DESC, AUD_hora DESC";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);

@@ -126,7 +126,7 @@ $('#reporteEventosTotalesUsuario').click(function () {
             doc.setFontSize(11);
 
             // Usuario
-            
+
             const usuarioLabelWidth = doc.getTextWidth(labels.usuario);
             const usuarioValueWidth = doc.getTextWidth(` ${usuarioNombre}`);
             const totalUsuarioWidth = usuarioLabelWidth + usuarioValueWidth;
@@ -193,12 +193,17 @@ $('#reporteEventosTotalesUsuario').click(function () {
             addFooter(doc, i, totalPages);
           }
 
+          // Establecer las propiedades del documento PDF
+          doc.setProperties({
+            title: 'Reporte de eventos por usuario.pdf'
+          });
+
           // Mostrar mensaje de éxito
           toastr.success('Reporte de eventos por usuario generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado eventos para el usuario seleccionado.', 'Advertencia');

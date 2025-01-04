@@ -142,20 +142,23 @@ $(document).ready(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
-
+          // Establecer las propiedades del documento PDF
+          doc.setProperties({
+            title: 'Reporte de auditoría de todos los eventos.pdf'
+          });
           // Mostrar mensaje de exito de pdf generado
-          toastr.success('Reporte de auditoría de todos los eventos generado.', 'Mensaje');
+          toastr.success('Reporte de auditor&iacute;a de todos los eventos generado.', 'Mensaje');
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } catch (error) {
-          toastr.error('Hubo un error al generar el reporte de auditoría de todos los eventos.', 'Mensaje de error');
+          toastr.error('Hubo un error al generar el reporte de auditor&iacute;a de todos los eventos.', 'Mensaje de error');
           console.error('Error al generar el PDF:', error.message);
         }
       },
       error: function (xhr, status, error) {
-        toastr.error('Hubo un error al obtener el reporte de auditoría de todos los eventos.', 'Mensaje de error');
+        toastr.error('Hubo un error al obtener el reporte de auditor&iacute;a de todos los eventos.', 'Mensaje de error');
         console.error('Error en AJAX:', xhr.responseText, 'Status:', status, 'Error:', error);
       }
     });

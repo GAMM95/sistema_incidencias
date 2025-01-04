@@ -404,7 +404,7 @@ class UsuarioController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $usuario = isset($_GET['usuarioEvento']) ? (int) $_GET['usuarioEvento'] : null;
+      $usuario = isset($_GET['usuarioEventoUsuarios']) ? (int) $_GET['usuarioEventoUsuarios'] : null;
       $fechaInicio = isset($_GET['fechaInicioEventosUsuarios']) ? $_GET['fechaInicioEventosUsuarios'] : null;
       $fechaFin = isset($_GET['fechaFinEventosUsuarios']) ? $_GET['fechaFinEventosUsuarios'] : null;
       // Llamar al método para consultar incidencias por área, código patrimonial y fecha

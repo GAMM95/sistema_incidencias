@@ -84,7 +84,7 @@ $(document).ready(function () {
           doc.autoTable({
             startY: 35,
             margin: { left: 8, right: 10 },
-            head: [['N°', 'FECHA Y HORA',  'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+            head: [['N°', 'FECHA Y HORA', 'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
             body: data.map(reporte => [
               item++,
               reporte.fechaFormateada,
@@ -138,20 +138,23 @@ $(document).ready(function () {
             doc.setPage(i);
             addFooter(doc, i, totalPages);
           }
-
+          // Establecer las propiedades del documento PDF
+          doc.setProperties({
+            title: 'Reporte de eventos de inicio de sesión.pdf',
+          });
           // Mostrar mensaje de exito de pdf generado
-          toastr.success('Reporte de eventos de inicio de sesi&oacute;n generado.', 'Mensaje');
+          toastr.success('Reporte de eventos de logueo generado.', 'Mensaje');
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } catch (error) {
-          toastr.error('Hubo un error al generar el reporte eventos de inicio de sesi&oacute;n.', 'Mensaje de error');
+          toastr.error('Hubo un error al generar el reporte eventos de logueo.', 'Mensaje de error');
           console.error('Error al generar el PDF:', error.message);
         }
       },
       error: function (xhr, status, error) {
-        toastr.error('Hubo un error al obtener el reporte de eventos de inicio de sesi&oacute;n.', 'Mensaje de error');
+        toastr.error('Hubo un error al obtener el reporte de eventos de logueo.', 'Mensaje de error');
         console.error('Error en AJAX:', xhr.responseText, 'Status:', status, 'Error:', error);
       }
     });

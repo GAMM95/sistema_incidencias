@@ -210,7 +210,7 @@ class RecepcionModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT COUNT(*) as total FROM vw_recepciones";
+        $sql = "SELECT COUNT(*) as total FROM vw_incidencias_recepcionadas";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -259,16 +259,16 @@ class RecepcionModel extends Conexion
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
         // Verificamos que la consulta devuelva datos
         if ($result) {
-            return $result['recepciones_mes_actual'];
+          return $result['recepciones_mes_actual'];
         } else {
-            return 0; // Si no hay resultados, devolver 0
+          return 0; // Si no hay resultados, devolver 0
         }
       } else {
         throw new Exception("Error de conexión con la base de datos.");
         return null;
       }
     } catch (PDOException $e) {
-      throw new PDOException ("Error al contar recepciones del ultimo mes para el usuario: " . $e->getMessage());
+      throw new PDOException("Error al contar recepciones del ultimo mes para el usuario: " . $e->getMessage());
       return null;
     }
   }
@@ -291,6 +291,30 @@ class RecepcionModel extends Conexion
       }
     } catch (PDOException $e) {
       throw new Exception("Error al listar eventos de recepciones en la tabla de auditoria: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Metodo para consultar eventos de recepciones - auditoria
+  public function buscarEventosRecepciones($usuario, $fechaInicio, $fechaFin)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "EXEC sp_consultar_eventos_recepciones :usuario, :fechaInicio, :fechaFin";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':usuario', $usuario);
+        $stmt->bindParam(':fechaInicio', $fechaInicio);
+        $stmt->bindParam(':fechaFin', $fechaFin);
+        $stmt->execute();
+        $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+        return $resultado;
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+        return null;
+      }
+    } catch (PDOException $e) {
+      throw new Exception("Error al consultar eventos de recepciones en la tabla de auditoria: " . $e->getMessage());
       return null;
     }
   }

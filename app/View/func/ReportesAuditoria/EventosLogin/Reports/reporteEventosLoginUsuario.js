@@ -142,7 +142,7 @@ $('#reporteEventosLoginUsuario').click(function () {
             doc.autoTable({
               startY: 35,
               margin: { left: 8, right: 10 },
-              head: [['N°', 'FECHA Y HORA',  'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+              head: [['N°', 'FECHA Y HORA', 'ROL', 'USUARIO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
               body: data.map(reporte => [
                 item++,
                 reporte.fechaFormateada,
@@ -188,15 +188,20 @@ $('#reporteEventosLoginUsuario').click(function () {
             addFooter(doc, i, totalPages);
           }
 
+          // Establecer las propiedades del documento PDF
+          doc.setProperties({
+            title: 'Reporte de eventos de logueo por usuario.pdf'
+          });
+
           // Mostrar mensaje de éxito
-          toastr.success('Reporte de eventos por usuario generado.', 'Mensaje');
+          toastr.success('Reporte de eventos de logueo por usuario generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
             window.open(doc.output('bloburl'));
           }, 2000);
         } else {
-          toastr.warning('No se ha encontrado eventos para el usuario seleccionado.', 'Advertencia');
+          toastr.warning('No se ha encontrado eventos de logueo para el usuario seleccionado.', 'Advertencia');
         }
       } catch (error) {
         toastr.error('Hubo un error al generar reporte.', 'Mensaje de error');
@@ -204,7 +209,7 @@ $('#reporteEventosLoginUsuario').click(function () {
       }
     },
     error: function (xhr, status, error) {
-      toastr.error('Hubo un error al obtener datos de los eventos.', 'Mensaje de error');
+      toastr.error('Hubo un error al obtener datos de los eventos de logueo.', 'Mensaje de error');
       console.error('Error al realizar la solicitud AJAX:', error);
     }
   });

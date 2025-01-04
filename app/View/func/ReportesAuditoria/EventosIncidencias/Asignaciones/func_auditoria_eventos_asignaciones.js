@@ -71,7 +71,7 @@ $(document).ready(function () {
   }
 
   // Evento para el botón de limpiar campos
-  $('#limpiarCamposEventosasignaciones').on('click', nuevaConsultaEventosAsignaciones);
+  $('#limpiarCamposEventosAsignaciones').on('click', nuevaConsultaEventosAsignaciones);
 
   // Validación y envío del formulario
   $('#formAuditoriaAsignaciones').submit(function (event) {
@@ -164,7 +164,7 @@ $(document).ready(function () {
   }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicioEventosasignaciones, #fechaFinEventosasignaciones').on('change', function () {
+  $('#fechaInicioEventosAsignaciones, #fechaFinEventosAsignaciones').on('change', function () {
     validarFechasEventosAsignaciones();
   });
 });

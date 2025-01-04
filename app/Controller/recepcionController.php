@@ -205,4 +205,18 @@ class RecepcionController
     $resultadoAuditoriaRegistroRecepciones = $this->recepcionModel->listarEventosRecepciones();
     return $resultadoAuditoriaRegistroRecepciones;
   }
+
+  // Metodo para consultar eventos de recepciones - auditoria
+  public function consultarEventosRecepciones($usuario = null, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $usuario = isset($_GET['usuarioEventoRecepciones']) ? (int) $_GET['usuarioEventoRecepciones'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosRecepciones']) ? $_GET['fechaInicioEventosRecepciones'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosRecepciones']) ? $_GET['fechaFinEventosRecepciones'] : null;
+      // Llamar al método para consultar recepciones por usuario y fechas
+      $consultaEventosTotales = $this->recepcionModel->buscarEventosRecepciones($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
 }

@@ -195,4 +195,18 @@ class AsignacionController
     $resultadoAuditoriaRegistroAsignaciones = $this->asignacionModel->listarEventosAsignaciones();
     return $resultadoAuditoriaRegistroAsignaciones;
   }
+
+  // Metodo para consultar eventos de asignaciones - auditoria
+  public function consultarEventosAsignaciones($usuario = null, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $usuario = isset($_GET['usuarioEventoAsignaciones']) ? (int) $_GET['usuarioEventoAsignaciones'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosAsignaciones']) ? $_GET['fechaInicioEventosAsignaciones'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosAsignaciones']) ? $_GET['fechaFinEventosAsignaciones'] : null;
+      // Llamar al método para consultar incidencias por usuario y fechas
+      $consultaEventosTotales = $this->asignacionModel->buscarEventosAsignaciones($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
 }

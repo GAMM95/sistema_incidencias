@@ -163,4 +163,18 @@ class MantenimientoController
     $resultado = $this->mantenimientoModel->listarEventosMantenimiento();
     return $resultado;
   }
+
+  // Metodo para consultar eventos de mantenimiento - auditoria
+  public function consultarEventosMantenimiento($usuario = null, $fechaInicio = null, $fechaFin = null)
+  {
+    if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+      $usuario = isset($_GET['usuarioEventoMantenimiento']) ? (int) $_GET['usuarioEventoMantenimiento'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosMantenimiento']) ? $_GET['fechaInicioEventosMantenimiento'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosMantenimiento']) ? $_GET['fechaFinEventosMantenimiento'] : null;
+      // Llamar al método para consultar recepciones por usuario y fechas
+      $consultaEventosTotales = $this->mantenimientoModel->buscarEventosMantenimiento($usuario, $fechaInicio, $fechaFin);
+      // Retornar el resultado de la consulta
+      return $consultaEventosTotales;
+    }
+  }
 }

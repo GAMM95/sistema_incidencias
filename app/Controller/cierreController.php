@@ -204,4 +204,25 @@ class cierreController
     $resultado = $this->cierreModel->listarCierres();
     return $resultado;
   }
+
+    // Metodo para listar los registros de cierres en la tabla auditoria
+    public function listarEventosCierres()
+    {
+      $resultado = $this->cierreModel->listarEventosCierres();
+      return $resultado;
+    }
+  
+    // Metodo para consultar eventos de cierers - auditoria
+    public function consultarEventosCierres($usuario = null, $fechaInicio = null, $fechaFin = null)
+    {
+      if ($_SERVER['REQUEST_METHOD'] === 'GET') {
+        $usuario = isset($_GET['usuarioEventoCierres']) ? $_GET['usuarioEventoCierres'] : null;
+        $fechaInicio = isset($_GET['fechaInicioEventosCierres']) ? $_GET['fechaInicioEventosCierres'] : null;
+        $fechaFin = isset($_GET['fechaFinEventosCierres']) ? $_GET['fechaFinEventosCierres'] : null;
+        // Llamar al método para consultar recepciones por usuario y fechas
+        $consultaEventosTotales = $this->cierreModel->buscarEventosCierres($usuario, $fechaInicio, $fechaFin);
+        // Retornar el resultado de la consulta
+        return $consultaEventosTotales;
+      }
+    }
 }

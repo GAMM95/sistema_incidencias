@@ -313,4 +313,28 @@ class AsignacionModel extends Conexion
       throw new PDOException("Error al listar eventos de asignaciones: " . $e->getMessage());
     }
   }
+
+    // Metodo para consultar eventos de asignaciones - auditoria
+    public function buscarEventosAsignaciones($usuario, $fechaInicio, $fechaFin)
+    {
+      $conector = parent::getConexion();
+      try {
+        if ($conector != null) {
+          $sql = "EXEC sp_consultar_eventos_asignaciones :usuario, :fechaInicio, :fechaFin";
+          $stmt = $conector->prepare($sql);
+          $stmt->bindParam(':usuario', $usuario);
+          $stmt->bindParam(':fechaInicio', $fechaInicio);
+          $stmt->bindParam(':fechaFin', $fechaFin);
+          $stmt->execute();
+          $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+          return $resultado;
+        } else {
+          throw new Exception("Error de conexión a la base de datos.");
+          return null;
+        }
+      } catch (PDOException $e) {
+        throw new Exception("Error al consultar eventos de asignaciones en la tabla de auditoria: " . $e->getMessage());
+        return null;
+      }
+    }
 }

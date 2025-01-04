@@ -12,7 +12,7 @@ $(document).ready(function () {
     type: 'GET',
     dataType: 'json',
     success: function (data) {
-      var select = $('#usuarioEvento');
+      var select = $('#usuarioEventoUsuarios');
       select.empty();
       select.append('<option value="" selected disabled>Seleccione un usuario</option>');
       $.each(data, function (index, value) {
@@ -25,16 +25,16 @@ $(document).ready(function () {
   });
 
   // Setear campos del usuario seleccionado
-  $('#usuarioEvento').change(function () {
+  $('#usuarioEventoUsuarios').change(function () {
     var selectedOption = $(this).find('option:selected');
     var codigoUsuario = selectedOption.val();
     var nombreUsuario = selectedOption.text();
-    $('#codigoUsuarioEvento').val(codigoUsuario);
-    $('#nombreUsuarioEvento').val(nombreUsuario);
+    $('#codigoUsuarioEventoUsuarios').val(codigoUsuario);
+    $('#nombreUsuarioEventoUsuarios').val(nombreUsuario);
   });
 
   // Buscador para el combo usuario
-  $('#usuarioEvento').select2({
+  $('#usuarioEventoUsuarios').select2({
     allowClear: true,
     width: '100%',
     dropdownCssClass: 'text-xs', // Use Tailwind CSS class
@@ -50,7 +50,7 @@ $(document).ready(function () {
     // Limpiar los campos de fecha y el input de persona (resetea el formulario)
     $('#fechaInicioEventosUsuarios').val('');
     $('#fechaFinEventosUsuarios').val('');
-    $('#usuarioEvento').val(null).trigger('change');  // Reset del select2 con trigger
+    $('#usuarioEventoUsuarios').val(null).trigger('change');  // Reset del select2 con trigger
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
@@ -113,7 +113,7 @@ $(document).ready(function () {
       var valido = false;
       var mensajeError = '';
 
-      var faltaUsuario = ($('#usuarioEvento').val() !== null && $('#usuarioEvento').val().trim() !== '');
+      var faltaUsuario = ($('#usuarioEventoUsuarios').val() !== null && $('#usuarioEventoUsuarios').val().trim() !== '');
       var fechaInicioSeleccionada = ($('#fechaInicioEventosUsuarios').val() !== null && $('#fechaInicioEventosUsuarios').val().trim() !== '');
       var fechaFinSeleccionada = ($('#fechaFinEventosUsuarios').val() !== null && $('#fechaFinEventosUsuarios').val().trim() !== '');
 

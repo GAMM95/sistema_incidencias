@@ -185,21 +185,20 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
             doc.autoTable({
               startY: 36,
               margin: { left: 4 },
-              head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'USUARIO', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
+              head: [['N°', 'FECHA Y HORA', 'EVENTO', 'TABLA', 'ROL', 'NOMBRE COMPLETO', 'ÁREA', 'IP', 'NOMBRE DEL EQUIPO']],
               body: data.map(reporte => [
                 item++,
                 reporte.fechaFormateada,
                 reporte.AUD_operacion,
                 reporte.AUD_tabla,
                 reporte.ROL_nombre,
-                reporte.USU_nombre,
                 reporte.NombreCompleto,
                 reporte.ARE_nombre,
                 reporte.AUD_ip,
                 reporte.AUD_nombreEquipo
               ]),
               styles: {
-                fontSize: 7,
+                fontSize: 7.5,
                 cellPadding: 2,
                 halign: 'center',
                 valign: 'middle'
@@ -211,16 +210,15 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
                 halign: 'center'
               },
               columnStyles: {
-                0: { cellWidth: 8 },
-                1: { cellWidth: 30 },
-                2: { cellWidth: 35 },
-                3: { cellWidth: 25 },
-                4: { cellWidth: 20 },
-                5: { cellWidth: 25 },
-                6: { cellWidth: 38 },
-                7: { cellWidth: 42 },
-                8: { cellWidth: 30 },
-                9: { cellWidth: 35 }
+                0: { cellWidth: 8 }, // Campo de ítem
+                1: { cellWidth: 35 }, // Campo de fecha formateada
+                2: { cellWidth: 40 }, // Campo de operación
+                3: { cellWidth: 30 }, // Campo de tabla
+                4: { cellWidth: 22 }, // Campo de rol
+                5: { cellWidth: 35 }, // Campo de nombre completo
+                6: { cellWidth: 42 }, // Campo area
+                7: { cellWidth: 35 }, // Campo de ip
+                8: { cellWidth: 40 } // Campo de nombre del equipo
               }
             });
           }
@@ -237,12 +235,17 @@ $('#reporteEventosTotalesUsuarioFecha').click(function () {
             addFooter(doc, i, totalPages);
           }
 
+          // Establecer las propiedades del documento PDF
+          doc.setProperties({
+            title: 'Reporte de eventos por usuario y fechas.pdf'
+          });
+
           // Mostrar mensaje de éxito
           toastr.success('Reporte de eventos por usuario y fechas generado.', 'Mensaje');
 
           // Abrir PDF después de una pequeña pausa
           setTimeout(() => {
-            window.open(doc.output('bloburl'));
+            window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } else {
           toastr.warning('No se ha encontrado eventos para los campos ingresados.', 'Advertencia');
