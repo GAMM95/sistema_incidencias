@@ -2152,6 +2152,7 @@ SELECT
   ) AS fechaFormateada,
   A.AUD_fecha,
   A.AUD_hora,
+  A.AUD_usuario,
   P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento, 
   A.AUD_referencia, 
   AR.ARE_nombre AS referencia, 
@@ -2176,6 +2177,7 @@ SELECT
   ) AS fechaFormateada,
   A.AUD_fecha,
   A.AUD_hora,
+  A.AUD_usuario,
   P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento, 
   A.AUD_referencia, 
   B.BIE_codigoIdentificador + ' - ' + B.BIE_nombre AS referencia, 
@@ -2199,6 +2201,7 @@ SELECT
   ) AS fechaFormateada,
   A.AUD_fecha,
   A.AUD_hora,
+  A.AUD_usuario,
   P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
   A.AUD_referencia,
   C.CAT_nombre AS referencia,
@@ -2223,6 +2226,7 @@ SELECT
   ) AS fechaFormateada,
   A.AUD_fecha,
   A.AUD_hora,
+  A.AUD_usuario,
   P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento, 
   A.AUD_referencia, 
   S.SOL_descripcion AS referencia, 
@@ -4689,31 +4693,15 @@ CREATE OR ALTER PROCEDURE sp_consultar_eventos_areas
   @fechaFin DATE = NULL
 AS
 BEGIN
-  SELECT
-    (
-      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
-    ) AS fechaFormateada,
-    A.AUD_fecha,
-    A.AUD_hora,
-    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
-    A.AUD_referencia,
-    AR.ARE_nombre AS referencia,
-    A.AUD_operacion,
-    A.AUD_ip,
-    A.AUD_nombreEquipo 
-  FROM
-    AUDITORIA A
-    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
-    LEFT JOIN AREA AR ON AR.ARE_codigo = A.AUD_referencia 
+  SELECT *
+  FROM vw_eventos_areas
   WHERE
-    A.AUD_tabla = 'AREA' 
-    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
-    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
-    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    (@fechaInicio IS NULL OR AUD_fecha >= @fechaInicio)  
+    AND (@fechaFin IS NULL OR AUD_fecha <= @fechaFin)    
+    AND (@usuario IS NULL OR AUD_usuario = @usuario)     
   ORDER BY
-    AUD_fecha DESC,
-    AUD_hora DESC;
+    AUD_fecha DESC, 
+    AUD_hora DESC;  
 END
 GO
 
@@ -4724,33 +4712,17 @@ CREATE OR ALTER PROCEDURE sp_consultar_eventos_bienes
   @fechaFin DATE = NULL
 AS
 BEGIN
-  SELECT
-    (
-      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
-    ) AS fechaFormateada,
-    A.AUD_fecha,
-    A.AUD_hora,
-    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
-    A.AUD_referencia,
-    B.BIE_codigoIdentificador + ' - ' + B.BIE_nombre AS referencia,
-    A.AUD_operacion,
-    A.AUD_ip,
-    A.AUD_nombreEquipo 
-  FROM
-    AUDITORIA A
-    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
-    LEFT JOIN BIEN b ON b.BIE_codigo = A.AUD_referencia 
+  SELECT *
+  FROM vw_eventos_bienes
   WHERE
-    A.AUD_tabla = 'BIEN' 
-    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
-    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
-    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    (@fechaInicio IS NULL OR AUD_fecha >= @fechaInicio)  
+    AND (@fechaFin IS NULL OR AUD_fecha <= @fechaFin)    
+    AND (@usuario IS NULL OR AUD_usuario = @usuario)     
   ORDER BY
-    AUD_fecha DESC,
-    AUD_hora DESC;
-  END
- GO
+    AUD_fecha DESC, 
+    AUD_hora DESC;  
+END
+GO
 
 -- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE CATEGORIAS
 CREATE OR ALTER PROCEDURE sp_consultar_eventos_categorias
@@ -4759,32 +4731,16 @@ CREATE OR ALTER PROCEDURE sp_consultar_eventos_categorias
   @fechaFin DATE = NULL
 AS
 BEGIN
-  SELECT
-    (
-      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
-    ) AS fechaFormateada,
-    A.AUD_fecha,
-    A.AUD_hora,
-    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
-    A.AUD_referencia,
-    C.CAT_nombre AS referencia,
-    A.AUD_operacion,
-    A.AUD_ip,
-    A.AUD_nombreEquipo 
-  FROM
-    AUDITORIA A
-    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
-    LEFT JOIN CATEGORIA C ON C.CAT_codigo = A.AUD_referencia 
+  SELECT *
+  FROM vw_eventos_categorias
   WHERE
-    A.AUD_tabla = 'CATEGORIA' 
-    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
-    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
-    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    (@fechaInicio IS NULL OR AUD_fecha >= @fechaInicio)  
+    AND (@fechaFin IS NULL OR AUD_fecha <= @fechaFin)    
+    AND (@usuario IS NULL OR AUD_usuario = @usuario)     
   ORDER BY
     AUD_fecha DESC,
-    AUD_hora DESC;
-  END 
+    AUD_hora DESC;  
+END
 GO
 
 -- PROCEDIMIENTO ALMACENADO PARA CONSULTAR EVENTOS DE SOLUCIONES
@@ -4794,35 +4750,17 @@ CREATE OR ALTER PROCEDURE sp_consultar_eventos_soluciones
   @fechaFin DATE = NULL
 AS
 BEGIN
-  SELECT
-    (
-      CONVERT ( VARCHAR ( 10 ), A.AUD_fecha, 103 ) + ' - ' + STUFF( RIGHT( '0' + CONVERT ( VARCHAR ( 7 ), A.AUD_hora, 0 ), 7 ), 6, 0, ' ' ) 
-    ) AS fechaFormateada,
-    A.AUD_fecha,
-    A.AUD_hora,
-    P.PER_nombres + ' ' + P.PER_apellidoPaterno AS UsuarioEvento,
-    A.AUD_referencia,
-    S.SOL_descripcion AS referencia,
-    A.AUD_operacion,
-    A.AUD_ip,
-    A.AUD_nombreEquipo 
-  FROM
-    AUDITORIA A
-    LEFT JOIN USUARIO U ON U.USU_codigo = A.AUD_usuario
-    LEFT JOIN PERSONA P ON P.PER_codigo = U.PER_codigo
-    LEFT JOIN SOLUCION S ON S.SOL_codigo = A.AUD_referencia 
+  SELECT *
+  FROM vw_eventos_soluciones
   WHERE
-    A.AUD_tabla = 'SOLUCION' 
-    AND ( @fechaInicio IS NULL OR A.AUD_fecha >= @fechaInicio ) 
-    AND ( @fechaFin IS NULL OR A.AUD_fecha <= @fechaFin ) 
-    AND ( @usuario IS NULL OR A.AUD_usuario = @usuario ) 
+    (@fechaInicio IS NULL OR AUD_fecha >= @fechaInicio) 
+    AND (@fechaFin IS NULL OR AUD_fecha <= @fechaFin)  
+    AND (@usuario IS NULL OR AUD_usuario = @usuario)    
   ORDER BY
     AUD_fecha DESC,
-    AUD_hora DESC;
-  
-  END
+    AUD_hora DESC;  
+END
 GO
-
 
 PRINT '-----------------------------------------------------------------------------------------------------------------';
 PRINT 'BASE DE DATOS GENERADO';

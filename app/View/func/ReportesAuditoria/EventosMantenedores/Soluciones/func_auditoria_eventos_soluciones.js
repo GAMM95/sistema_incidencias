@@ -48,8 +48,8 @@ $(document).ready(function () {
   // Función para realizar la consulta sin filtros (nueva consulta)
   function nuevaConsultaEventosSoluciones() {
     // Limpiar los campos de fecha y el input de persona (resetea el formulario)
-    $('#fechaInicioEventoSoluciones').val('');
-    $('#fechaFinEventoSoluciones').val('');
+    $('#fechaInicioEventosSoluciones').val('');
+    $('#fechaFinEventosSoluciones').val('');
     $('#usuarioEventoSoluciones').val(null).trigger('change');  // Reset del select2 con trigger
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
@@ -114,8 +114,8 @@ $(document).ready(function () {
       var mensajeError = '';
 
       var faltaUsuario = ($('#usuarioEventoSoluciones').val() !== null && $('#usuarioEventoSoluciones').val().trim() !== '');
-      var fechaInicioSeleccionada = ($('#fechaInicioEventoSoluciones').val() !== null && $('#fechaInicioEventoSoluciones').val().trim() !== '');
-      var fechaFinSeleccionada = ($('#fechaFinEventoSoluciones').val() !== null && $('#fechaFinEventoSoluciones').val().trim() !== '');
+      var fechaInicioSeleccionada = ($('#fechaInicioEventosSoluciones').val() !== null && $('#fechaInicioEventosSoluciones').val().trim() !== '');
+      var fechaFinSeleccionada = ($('#fechaFinEventosSoluciones').val() !== null && $('#fechaFinEventosSoluciones').val().trim() !== '');
 
       // Verificar si al menos un campo está lleno
       if (faltaUsuario || fechaInicioSeleccionada || fechaFinSeleccionada) {
@@ -134,8 +134,8 @@ $(document).ready(function () {
 
   // Función para validar fechas
   function validarFechasEventosSoluciones() {
-    const fechaInicio = new Date($('#fechaInicioEventoSoluciones').val());
-    const fechaFin = new Date($('#fechaFinEventoSoluciones').val());
+    const fechaInicio = new Date($('#fechaInicioEventosSoluciones').val());
+    const fechaFin = new Date($('#fechaFinEventosSoluciones').val());
     const fechaHoy = new Date();
 
     let valido = true;
@@ -164,7 +164,7 @@ $(document).ready(function () {
   }
 
   // Agregar eventos para validar fechas cuando cambien
-  $('#fechaInicioEventoSoluciones, #fechaFinEventoSoluciones').on('change', function () {
+  $('#fechaInicioEventosSoluciones, #fechaFinEventosSoluciones').on('change', function () {
     validarFechasEventosSoluciones();
   });
 });

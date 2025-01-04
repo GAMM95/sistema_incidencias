@@ -1120,10 +1120,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosAreasTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosAreasFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosAreasUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosAreasUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -1226,10 +1226,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosBienesTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosBienesFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosBienesUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosBienesUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -1293,7 +1293,7 @@
                               <!-- Nombre de usuario de evento -->
                               <div class="w-full px-2 mb-2" style="max-width: 250px;">
                                 <label for="usuarioEventoCategorias" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
-                                <select id="usuarioEventoCategoria" name="usuarioEventoCategoria" class="border p-2 w-full text-xs cursor-pointer">
+                                <select id="usuarioEventoCategorias" name="usuarioEventoCategorias" class="border p-2 w-full text-xs cursor-pointer">
                                 </select>
                                 <input type="hidden" id="codigoUsuarioEventoCategorias" name="codigoUsuarioEventoCategorias" readonly>
                                 <input type="hidden" id="nombreUsuarioEventoCategorias" name="nombreUsuarioEventoCategorias" readonly>
@@ -1332,10 +1332,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosCategoriasTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosCategoriasFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosCategoriasUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosCategoriasUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>
@@ -1407,15 +1407,15 @@
 
                               <!-- Fecha de inicio -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaInicioEventoSoluciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
-                                <input type="date" id="fechaInicioEventoSoluciones" name="fechaInicioEventoSoluciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaInicioEventosSoluciones" class="block mb-1 font-bold text-center text-xs">Fecha Inicio:</label>
+                                <input type="date" id="fechaInicioEventosSoluciones" name="fechaInicioEventosSoluciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de inicio -->
 
                               <!-- Fecha de fin -->
                               <div class="w-full sm:w-1/3 md:w-1/6 px-2 mb-2">
-                                <label for="fechaFinEventoSoluciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
-                                <input type="date" id="fechaFinEventoSoluciones" name="fechaFinEventoSoluciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
+                                <label for="fechaFinEventosSoluciones" class="block mb-1 font-bold text-center text-xs">Fecha Fin:</label>
+                                <input type="date" id="fechaFinEventosSoluciones" name="fechaFinEventosSoluciones" class="w-full border p-2 text-xs text-center cursor-pointer rounded-md" max="<?php echo date('Y-m-d'); ?>">
                               </div>
                               <!-- Fin de fecha de fin -->
 
@@ -1438,10 +1438,10 @@
                                       <i class="feather mr-2 icon-file"></i>
                                     </button>
                                     <div class="dropdown-menu">
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosTotales">Reporte total de eventos</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosFecha">Reporte por fechas</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuario">Reporte por usuario</div>
-                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosUsuarioFecha">Reporte por usuario y fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosSolucionesTotales">Reporte total de eventos</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosSolucionesFecha">Reporte por fechas</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosSolucionesUsuario">Reporte por usuario</div>
+                                      <div class="dropdown-item hover:text-white cursor-pointer" id="reporteEventosSolucionesUsuarioFecha">Reporte por usuario y fechas</div>
                                     </div>
                                   </div>
                                 </div>

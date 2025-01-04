@@ -207,7 +207,7 @@ class CategoriaController
   {
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
-      $usuario = isset($_GET['usuarioEventoCategoria']) ? (int) $_GET['usuarioEventoCategoria'] : null;
+      $usuario = isset($_GET['usuarioEventoCategorias']) ? (int) $_GET['usuarioEventoCategorias'] : null;
       $fechaInicio = isset($_GET['fechaInicioEventosCategorias']) ? $_GET['fechaInicioEventosCategorias'] : null;
       $fechaFin = isset($_GET['fechaFinEventosCategorias']) ? $_GET['fechaFinEventosCategorias'] : null;
       // Llamar al método para consultar incidencias por área, código patrimonial y fecha

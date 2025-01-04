@@ -6,10 +6,10 @@ $(document).ready(function () {
   };
 
   // Generacion del PDF al hacer clic en botón de "Totales"
-  $('#reporteEventosPersonasTotales').click(function () {
+  $('#reporteEventosBienesTotales').click(function () {
     // Realizar la solicitud AJAX para obtener los datos
     $.ajax({
-      url: 'ajax/ReportesAuditoria/EventosMantenedores/Personas/getReporteAuditoriaPersonasTotales.php',
+      url: 'ajax/ReportesAuditoria/EventosMantenedores/Bienes/getReporteAuditoriaBienesTotales.php',
       method: 'GET',
       dataType: 'json',
       success: function (data) {
@@ -31,7 +31,7 @@ $(document).ready(function () {
 
             const fechaImpresion = new Date().toLocaleDateString();
             const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const reportTitle = 'REPORTE DE EVENTOS DE PERSONAS';
+            const reportTitle = 'REPORTE DE EVENTOS DE BIENES';
 
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;
@@ -90,7 +90,7 @@ $(document).ready(function () {
               reporte.fechaFormateada,
               reporte.UsuarioEvento,
               reporte.AUD_operacion,
-              reporte.UsuarioReferencia,
+              reporte.referencia,
               reporte.AUD_ip,
               reporte.AUD_nombreEquipo
             ]),
@@ -110,8 +110,8 @@ $(document).ready(function () {
               0: { cellWidth: 10 }, // Ancho para la columna item
               1: { cellWidth: 40 }, // Ancho para la columna fecha y hora
               2: { cellWidth: 40 }, // Ancho para la columna nombre del usuario de evento
-              3: { cellWidth: 50 }, // Ancho para la columna operacion
-              4: { cellWidth: 40 }, // Ancho para la columna referencia
+              3: { cellWidth: 40 }, // Ancho para la columna operacion
+              4: { cellWidth: 50 }, // Ancho para la columna referencia
               5: { cellWidth: 52 }, // Ancho para la columna ip del equipo
               6: { cellWidth: 50 }, // Ancho para la columna nombre del equipo
             }
@@ -140,21 +140,21 @@ $(document).ready(function () {
           }
           // Establecer las propiedades del documento PDF
           doc.setProperties({
-            title: 'Reporte total de eventos de personas.pdf',
+            title: 'Reporte total de eventos de bienes.pdf',
           });
           // Mostrar mensaje de exito de pdf generado
-          toastr.success('Reporte total de eventos de personas generado.', 'Mensaje');
+          toastr.success('Reporte total de eventos de bienes generado.', 'Mensaje');
           // Retrasar la apertura del PDF y limpiar el campo de entrada
           setTimeout(() => {
             window.open(doc.output('bloburl'), '_blank');
           }, 2000);
         } catch (error) {
-          toastr.error('Hubo un error al generar el reporte total eventos de personas.', 'Mensaje de error');
+          toastr.error('Hubo un error al generar el reporte total eventos de bienes.', 'Mensaje de error');
           console.error('Error al generar el PDF:', error.message);
         }
       },
       error: function (xhr, status, error) {
-        toastr.error('Hubo un error al obtener el reporte total de eventos de personas.', 'Mensaje de error');
+        toastr.error('Hubo un error al obtener el reporte total de eventos de bienes.', 'Mensaje de error');
         console.error('Error en AJAX:', xhr.responseText, 'Status:', status, 'Error:', error);
       }
     });

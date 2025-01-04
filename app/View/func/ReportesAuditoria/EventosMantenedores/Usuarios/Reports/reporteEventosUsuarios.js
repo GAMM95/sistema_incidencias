@@ -31,7 +31,7 @@ $(document).ready(function () {
 
             const fechaImpresion = new Date().toLocaleDateString();
             const headerText2 = 'Subgerencia de Informática y Sistemas';
-            const reportTitle = 'REPORTE DE EVENTOS DE INCIDENCIAS';
+            const reportTitle = 'REPORTE DE EVENTOS DE USUARIOS';
 
             const pageWidth = doc.internal.pageSize.width;
             const marginX = 10;

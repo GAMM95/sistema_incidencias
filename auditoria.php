@@ -381,8 +381,28 @@ $resultadoAuditoriaEventosSoluciones = $solucionController->listarEventosSolucio
   <!-- Personas -->
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/Reports/reporteEventosPersonas.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/Reports/reporteEventosPersonasFecha.js"></script>
-  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/Reports/reporteEventosPersonasUsuario.js"></script> 
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/Reports/reporteEventosPersonasUsuario.js"></script>
   <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Personas/Reports/reporteEventosPersonasUsuarioFecha.js"></script>
+  <!-- Areas -->
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Areas/Reports/reporteEventosAreas.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Areas/Reports/reporteEventosAreasFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Areas/Reports/reporteEventosAreasUsuario.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Areas/Reports/reporteEventosAreasUsuarioFecha.js"></script>
+  <!-- Bienes -->
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Bienes/Reports/reporteEventosBienes.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Bienes/Reports/reporteEventosBienesFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Bienes/Reports/reporteEventosBienesUsuario.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Bienes/Reports/reporteEventosBienesUsuarioFecha.js"></script>
+  <!-- Categorias -->
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Categorias/Reports/reporteEventosCategorias.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Categorias/Reports/reporteEventosCategoriasFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Categorias/Reports/reporteEventosCategoriasUsuario.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Categorias/Reports/reporteEventosCategoriasUsuarioFecha.js"></script>
+  <!-- Soluciones -->
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Soluciones/Reports/reporteEventosSoluciones.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Soluciones/Reports/reporteEventosSolucionesFecha.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Soluciones/Reports/reporteEventosSolucionesUsuario.js"></script>
+  <script src="./app/View/func/ReportesAuditoria/EventosMantenedores/Soluciones/Reports/reporteEventosSolucionesUsuarioFecha.js"></script>
 
 </body>
 

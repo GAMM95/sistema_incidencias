@@ -12,7 +12,7 @@ $(document).ready(function () {
     type: 'GET',
     dataType: 'json',
     success: function (data) {
-      var select = $('#usuarioEventoCategoria');
+      var select = $('#usuarioEventoCategorias');
       select.empty();
       select.append('<option value="" selected disabled>Seleccione un usuario</option>');
       $.each(data, function (index, value) {
@@ -25,7 +25,7 @@ $(document).ready(function () {
   });
 
   // Setear campos del usuario seleccionado
-  $('#usuarioEventoCategoria').change(function () {
+  $('#usuarioEventoCategorias').change(function () {
     var selectedOption = $(this).find('option:selected');
     var codigoUsuario = selectedOption.val();
     var nombreUsuario = selectedOption.text();
@@ -34,7 +34,7 @@ $(document).ready(function () {
   });
 
   // Buscador para el combo usuario
-  $('#usuarioEventoCategoria').select2({
+  $('#usuarioEventoCategorias').select2({
     allowClear: true,
     width: '100%',
     dropdownCssClass: 'text-xs', // Use Tailwind CSS class
@@ -50,7 +50,7 @@ $(document).ready(function () {
     // Limpiar los campos de fecha y el input de persona (resetea el formulario)
     $('#fechaInicioEventosCategorias').val('');
     $('#fechaFinEventosCategorias').val('');
-    $('#usuarioEventoCategoria').val(null).trigger('change');  // Reset del select2 con trigger
+    $('#usuarioEventoCategorias').val(null).trigger('change');  // Reset del select2 con trigger
 
     // Realizar la solicitud AJAX para obtener todos los registros (sin filtros)
     $.ajax({
@@ -113,7 +113,7 @@ $(document).ready(function () {
       var valido = false;
       var mensajeError = '';
 
-      var faltaUsuario = ($('#usuarioEventoCategoria').val() !== null && $('#usuarioEventoCategoria').val().trim() !== '');
+      var faltaUsuario = ($('#usuarioEventoCategorias').val() !== null && $('#usuarioEventoCategorias').val().trim() !== '');
       var fechaInicioSeleccionada = ($('#fechaInicioEventosCategorias').val() !== null && $('#fechaInicioEventosCategorias').val().trim() !== '');
       var fechaFinSeleccionada = ($('#fechaFinEventosCategorias').val() !== null && $('#fechaFinEventosCategorias').val().trim() !== '');
 

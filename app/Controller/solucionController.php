@@ -188,8 +188,8 @@ class SolucionController
     if ($_SERVER['REQUEST_METHOD'] === 'GET') {
       // Obtener los valores de los parámetros GET o asignar null si no existen
       $usuario = isset($_GET['usuarioEventoSoluciones']) ? (int) $_GET['usuarioEventoSoluciones'] : null;
-      $fechaInicio = isset($_GET['fechaInicioEventoSoluciones']) ? $_GET['fechaInicioEventoSoluciones'] : null;
-      $fechaFin = isset($_GET['fechaFinEventoSoluciones']) ? $_GET['fechaFinEventoSoluciones'] : null;
+      $fechaInicio = isset($_GET['fechaInicioEventosSoluciones']) ? $_GET['fechaInicioEventosSoluciones'] : null;
+      $fechaFin = isset($_GET['fechaFinEventosSoluciones']) ? $_GET['fechaFinEventosSoluciones'] : null;
       // Llamar al método para consultar incidencias por área, código patrimonial y fecha
       $consultaEventosTotales = $this->solucionModel->buscarEventosSoluciones($usuario, $fechaInicio, $fechaFin);
       // Retornar el resultado de la consulta
