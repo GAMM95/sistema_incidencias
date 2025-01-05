@@ -718,8 +718,8 @@
                                 <label for="usuarioEventoCierres" class="block mb-1 font-bold text-xs">Usuario de evento:</label>
                                 <select id="usuarioEventoCierres" name="usuarioEventoCierres" class="border p-2 w-full text-xs cursor-pointer">
                                 </select>
-                                <input type="hidden" id="codigoUsuarioEventocierres" name="codigoUsuarioEventocierres" readonly>
-                                <input type="hidden" id="nombreUsuarioEventocierres" name="nombreUsuarioEventocierres" readonly>
+                                <input type="hidden" id="codigoUsuarioEventoCierres" name="codigoUsuarioEventoCierres" readonly>
+                                <input type="hidden" id="nombreUsuarioEventoCierres" name="nombreUsuarioEventoCierres" readonly>
                               </div>
 
                               <!-- Fecha de inicio -->

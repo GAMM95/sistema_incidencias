@@ -136,7 +136,7 @@ function generarTablaAsignaciones($resultado, $itemCount, $columnas)
       $estadoDescripcion = htmlspecialchars($item['Estado']);
       $badgeClass = '';
       switch ($estadoDescripcion) {
-        case 'EN ESPERA':
+        case 'EN PROCESO':
           $badgeClass = 'badge-light-danger';
           break;
         case 'RESUELTO':

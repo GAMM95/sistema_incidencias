@@ -76,6 +76,12 @@ function obtenerRegistros($action, $controller, $usuario, $fechaInicio, $fechaFi
     case 'consultarEventosAsignaciones':
       return $controller->consultarEventosAsignaciones($usuario, $fechaInicio, $fechaFin);
       break;
+      case 'consultarEventosMantenimiento':
+        return $controller->consultarEventosMantenimiento($usuario, $fechaInicio, $fechaFin);
+        break;
+        case 'consultarEventosCierres':
+          return $controller->consultarEventosCierres($usuario, $fechaInicio, $fechaFin);
+          break;
     case 'consultarEventosUsuarios':
       return $controller->consultarEventosUsuarios($usuario, $fechaInicio, $fechaFin);
     case 'consultarEventosPersonas':
@@ -107,6 +113,10 @@ function obtenerColumnasParaAccion($action)
       return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosAsignaciones':
       return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
+      case 'consultarEventosMantenimiento':
+        return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
+        case 'consultarEventosCierres':
+          return ['fechaFormateada', 'NombreCompleto', 'AUD_operacion', 'referencia', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosUsuarios':
       return ['fechaFormateada', 'UsuarioEvento', 'AUD_operacion', 'UsuarioReferencia', 'AUD_ip', 'AUD_nombreEquipo'];
     case 'consultarEventosPersonas':
@@ -165,6 +175,22 @@ if ($action) {
     }
   } else if ($action === 'consultarEventosAsignaciones') {
     $resultado = obtenerRegistros($action, $asignacionController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosMantenimiento') {
+    $resultado = obtenerRegistros($action, $mantenimientoController, $usuario, $fechaInicio, $fechaFin);
+    $columnas = obtenerColumnasParaAccion($action);
+    if ($resultado) {
+      echo generarTabla($resultado, 1, $columnas);
+    } else {
+      error_log("No se encontraron registros.");
+    }
+  } else if ($action === 'consultarEventosCierres') {
+    $resultado = obtenerRegistros($action, $cierreController, $usuario, $fechaInicio, $fechaFin);
     $columnas = obtenerColumnasParaAccion($action);
     if ($resultado) {
       echo generarTabla($resultado, 1, $columnas);

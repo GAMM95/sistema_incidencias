@@ -1,3 +1,5 @@
+// import html2canvas from 'html2canvas';
+
 $(document).ready(function () {
   toastr.options = {
     "positionClass": "toast-bottom-right",

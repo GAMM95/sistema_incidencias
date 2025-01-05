@@ -112,7 +112,7 @@
                     $estadoDescripcion = htmlspecialchars($asignaciones['Estado']);
                     $badgeClass = '';
                     switch ($estadoDescripcion) {
-                      case 'EN ESPERA':
+                      case 'EN PROCESO':
                         $badgeClass = 'badge-light-danger';
                         break;
                       case 'RESUELTO':

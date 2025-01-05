@@ -102,8 +102,8 @@
               <?php foreach ($resultadoAsignaciones as $asignaciones) : ?>
                 <?php
                 $numeroAsignacion = htmlspecialchars($asignaciones['ASI_codigo']);
-                $estado = htmlspecialchars($asignaciones['EST_descripcion']);
-                $Finalizado = ($estado === 'RESUELTO'); // Comparación forzada como entero
+                $estado = htmlspecialchars($asignaciones['Estado']);
+                $Finalizado = ($estado === 'FINALIZADO'); // Comparación forzada como entero
                 ?>
                 <tr class='second-table hover:bg-green-100 hover:scale-[101%] transition-all border-b' data-id="<?= $numeroAsignacion; ?>">
                   <th scope='row' class='px-6 py-3 font-medium text-gray-900 whitespace-nowrap hidden'><?= $numeroAsignacion; ?></th>
