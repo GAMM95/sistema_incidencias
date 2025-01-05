@@ -59,7 +59,7 @@ $(function () {
       },
     },
     dataLabels: {
-      enabled: false
+      enabled: true
     },
     colors: ["#1abc9c", "#3498db", "#e74c3c"], 
     series: [{

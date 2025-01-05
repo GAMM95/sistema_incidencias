@@ -1,23 +1,26 @@
 <?php
 require_once '../config/conexion.php';
 
-class Estado
+class Estado extends Conexion
 {
-    private $conector;
+  public function __construct()
+  {
+    parent::__construct();
+  }
 
-    public function __construct()
-    {
-        $this->conector = (new Conexion())->getConexion();
+  public function getEstadoData()
+  {
+    try {
+      $conector = parent::getConexion();
+      $query = "SELECT * FROM Estado";
+      $stmt = $conector->prepare($query);
+      $stmt->execute();
+      $resultado = $stmt->fetchAll();
+      return $resultado;
+    } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
     }
-
-    public function getEstadoData()
-    {
-        $query = "SELECT * FROM Estado";
-        $stmt = $this->conector->prepare($query);
-        $stmt->execute();
-        $resultado = $stmt->fetchAll();
-        return $resultado;
-    }
+  }
 }
 
 $estadoModel = new Estado();

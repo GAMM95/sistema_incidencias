@@ -865,7 +865,7 @@
                   </div>
                   <!-- Fin de botones alineados horizontalmente -->
                 </div>
-                
+
                 <div class="relative sm:rounded-lg mt-2">
                   <div class="max-w-full overflow-hidden sm:rounded-lg">
                     <table id="tablaIncidenciasArea" class="bg-white w-full text-xs text-left rtl:text-right text-gray-500">
@@ -1180,12 +1180,29 @@
                             <!-- Widget del grafico -->
                             <div id="grafico" class="w-full">
                               <div class="card support-bar overflow-hidden w-full">
-                                <div class="card-body w-full">
-                                  <span class="text-c-blue font-bold">INCIDENCIAS ANUALES</span>
-                                  <!-- Integrar el selector de mes en la línea de texto sin bordes -->
-                                  <p class="mb-3 mt-3"> Total de incidencias en el a&ntilde;o <?php echo date('Y'); ?>. </p>
+                                <div class="card-body w-full flex flex-col items-start">
+                                  <!-- Título principal -->
+                                  <span class="text-c-blue text-3xl font-bold mb-3">INCIDENCIAS ANUALES</span>
+
+                                  <!-- Subtítulos -->
+                                  <div class="flex items-center justify-between w-full">
+                                    <!-- Selector de año -->
+                                    <div class="flex items-center">
+                                      <p class="mb-3 mt-2 flex items-center">
+                                      <p class="mr-2">Incidencias en el año</p> <!-- Aumentar margen derecho -->
+                                      <select id="anioSeleccionado" name="anioSeleccionado" class="p-2 text-xs cursor-pointer ml-2 border-0"> <!-- Aumentar margen izquierdo -->
+                                      </select>
+                                      </p>
+                                    </div>
+
+                                    <!-- Total de incidencias -->
+                                    <p class="mb-3 mt-3" id="totalIncidencias">Total de incidencias: </p>
+                                  </div>
                                 </div>
+
+                                <!-- Grafica -->
                                 <div id="support-chart_report"></div>
+
                                 <!-- etiquetas inferiores del gráfico -->
                                 <div class="card-footer bg-primary text-white">
                                   <div class="row text-center">
@@ -1241,6 +1258,11 @@
                                 </div>
                                 <!-- fin de etiquetas inferiores del gráfico -->
                               </div>
+
+                              <!-- Boton para generar reporte -->
+                              <div class="flex justify-center space-x-2">
+                                <button type="button" id="reporteGrafica" class="bn h-10 btn-secondary text-xs text-white font-bold py-2 px-3  rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
+                              </div>
                             </div>
                             <!-- Fin del widget del grafico -->
 
@@ -1249,7 +1271,7 @@
                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-                            <!-- <script>
+                            <script>
                               // Pasar datos de PHP a JavaScript
                               var incidenciasPorMes = <?php echo json_encode([
                                                         (int)$cantidades['incidencias_enero'],
@@ -1265,7 +1287,7 @@
                                                         (int)$cantidades['incidencias_noviembre'],
                                                         (int)$cantidades['incidencias_diciembre']
                                                       ]); ?>;
-                            </script> -->
+                            </script>
                             <!-- Fin de las tarjetas de las cantidades -->
                           </form>
                         </div>

@@ -578,34 +578,34 @@ class IncidenciaModel extends Conexion
   }
 
   // METODO PARA CONTAR LOS PENDIENTES EN EL MES ACTUAL PARA EL USUARIO
-public function contarPendientesUltimoMesUsuario($area)
-{
+  public function contarPendientesUltimoMesUsuario($area)
+  {
     $conector = parent::getConexion();
     try {
-        if ($conector != null) {
-            $sql = "SELECT pendientes_mes_actual 
+      if ($conector != null) {
+        $sql = "SELECT pendientes_mes_actual 
                     FROM vw_pendientes_mes_actual_area 
                     WHERE area = :are_codigo";
-            $stmt = $conector->prepare($sql);
-            $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
-            $stmt->execute();
-            $result = $stmt->fetch(PDO::FETCH_ASSOC);
-            
-            // Verificar si se obtuvo algún resultado
-            if ($result) {
-                return $result['pendientes_mes_actual'];
-            } else {
-                return 0; // Si no hay resultados, devolver 0
-            }
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
+        $stmt->execute();
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+
+        // Verificar si se obtuvo algún resultado
+        if ($result) {
+          return $result['pendientes_mes_actual'];
         } else {
-            throw new Exception("Error de conexión con la base de datos.");
-            return null;
+          return 0; // Si no hay resultados, devolver 0
         }
-    } catch (PDOException $e) {
-        throw new PDOException ("Error al contar pendientes del ultimo mes para el usuario: " . $e->getMessage());
+      } else {
+        throw new Exception("Error de conexión con la base de datos.");
         return null;
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al contar pendientes del ultimo mes para el usuario: " . $e->getMessage());
+      return null;
     }
-}
+  }
 
 
   // METODOS PARA CONSULTAS
@@ -826,7 +826,7 @@ public function contarPendientesUltimoMesUsuario($area)
         //         WHERE i.INC_fecha >= DATEADD(MONTH, -1, GETDATE()) 
         //         GROUP BY a.ARE_nombre
         //         ORDER BY Incidencias DESC";
-                $sql = "SELECT * FROM vw_area_mas_incidencias_mes";
+        $sql = "SELECT * FROM vw_area_mas_incidencias_mes";
         $stmt = $conector->prepare($sql);
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
@@ -1293,6 +1293,29 @@ public function contarPendientesUltimoMesUsuario($area)
       }
     } catch (PDOException $e) {
       throw new PDOException("Error al obtener las incidencias de diciembre: " . $e->getMessage());
+      return null;
+    }
+  }
+
+  // Meotodo para contar incidencias por año
+  public function contarIncidenciasPorAnio($anio)
+  {
+    $conector = parent::getConexion();
+    try {
+      if ($conector != null) {
+        $sql = "SELECT COUNT(*) AS total_incidencias_anio
+              FROM INCIDENCIA
+              WHERE YEAR(INC_fecha) = :anio";
+        $stmt = $conector->prepare($sql);
+        $stmt->bindParam(':anio', $anio, PDO::PARAM_INT);
+        $stmt->execute();
+        $resultado = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $resultado['total_incidencias_anio'];
+      } else {
+        throw new Exception("Error de conexión a la base de datos.");
+      }
+    } catch (PDOException $e) {
+      throw new PDOException("Error al obtener las incidencias de un año especificado: " . $e->getMessage());
       return null;
     }
   }

@@ -3,7 +3,8 @@
 require 'app/Model/IncidenciaModel.php';
 require 'app/Model/BienModel.php';
 $area = $_SESSION['codigoArea'];
-
+// Obtener el año actual
+$anio = date('Y'); // Esto devuelve el año actual en formato "YYYY"
 
 class IncidenciaController
 {
@@ -641,12 +642,54 @@ class IncidenciaController
     }
   }
 
-  // Metodo para mostrar las incidencias por cada mes
-  public function mostrarCantidadIncidenciasMes()
-  {
-    $anio = 2024;
+  // // Metodo para mostrar las incidencias por cada mes
+  // public function mostrarCantidadIncidenciasMes($anio = null)
+  // {
 
+  //   try {
+  //     $cantidadIncidenciasEnero = $this->incidenciaModel->contarIncidenciasEnero($anio);
+  //     $cantidadIncidenciasFebrero = $this->incidenciaModel->contarIncidenciasFebrero($anio);
+  //     $cantidadIncidenciasMarzo = $this->incidenciaModel->contarIncidenciasMarzo($anio);
+  //     $cantidadIncidenciasAbril = $this->incidenciaModel->contarIncidenciasAbril($anio);
+  //     $cantidadIncidenciasMayo = $this->incidenciaModel->contarIncidenciasMayo($anio);
+  //     $cantidadIncidenciasJunio = $this->incidenciaModel->contarIncidenciasJunio($anio);
+  //     $cantidadIncidenciasJulio = $this->incidenciaModel->contarIncidenciasJulio($anio);
+  //     $cantidadIncidenciasAgosto = $this->incidenciaModel->contarIncidenciasAgosto($anio);
+  //     $cantidadIncidenciasSetiembre = $this->incidenciaModel->contarIncidenciasSetiembre($anio);
+  //     $cantidadIncidenciasOctubre = $this->incidenciaModel->contarIncidenciasOctubre($anio);
+  //     $cantidadIncidenciasNoviembre = $this->incidenciaModel->contarIncidenciasNoviembre($anio);
+  //     $cantidadIncidenciasDiciembre = $this->incidenciaModel->contarIncidenciasDiciembre($anio);
+
+  //     return [
+  //       'incidencias_enero' => $cantidadIncidenciasEnero,
+  //       'incidencias_febrero' => $cantidadIncidenciasFebrero,
+  //       'incidencias_marzo' => $cantidadIncidenciasMarzo,
+  //       'incidencias_abril' => $cantidadIncidenciasAbril,
+  //       'incidencias_mayo' => $cantidadIncidenciasMayo,
+  //       'incidencias_junio' => $cantidadIncidenciasJunio,
+  //       'incidencias_julio' => $cantidadIncidenciasJulio,
+  //       'incidencias_agosto' => $cantidadIncidenciasAgosto,
+  //       'incidencias_setiembre' => $cantidadIncidenciasSetiembre,
+  //       'incidencias_octubre' => $cantidadIncidenciasOctubre,
+  //       'incidencias_noviembre' => $cantidadIncidenciasNoviembre,
+  //       'incidencias_diciembre' => $cantidadIncidenciasDiciembre
+  //     ];
+  //   } catch (Exception $e) {
+  //     throw new Exception('Error al obtener las cantidades de incidencias mensuales: ' . $e->getMessage());
+  //   }
+  // }
+
+  
+  // Metodo para mostrar las incidencias por cada mes
+  public function mostrarCantidadIncidenciasMes($anio = null)
+  {
     try {
+      // Si no se pasa un año como parámetro, se usa el año actual
+      if ($anio === null) {
+        $anio = date('Y'); // Obtener el año actual
+      }
+
+      // Obtener la cantidad de incidencias por mes utilizando el año especificado o el actual
       $cantidadIncidenciasEnero = $this->incidenciaModel->contarIncidenciasEnero($anio);
       $cantidadIncidenciasFebrero = $this->incidenciaModel->contarIncidenciasFebrero($anio);
       $cantidadIncidenciasMarzo = $this->incidenciaModel->contarIncidenciasMarzo($anio);
@@ -659,7 +702,9 @@ class IncidenciaController
       $cantidadIncidenciasOctubre = $this->incidenciaModel->contarIncidenciasOctubre($anio);
       $cantidadIncidenciasNoviembre = $this->incidenciaModel->contarIncidenciasNoviembre($anio);
       $cantidadIncidenciasDiciembre = $this->incidenciaModel->contarIncidenciasDiciembre($anio);
+      $totalIncidenciasAnio = $this->incidenciaModel->contarIncidenciasPorAnio($anio);
 
+      // Retornar los resultados en un array
       return [
         'incidencias_enero' => $cantidadIncidenciasEnero,
         'incidencias_febrero' => $cantidadIncidenciasFebrero,
@@ -672,7 +717,8 @@ class IncidenciaController
         'incidencias_setiembre' => $cantidadIncidenciasSetiembre,
         'incidencias_octubre' => $cantidadIncidenciasOctubre,
         'incidencias_noviembre' => $cantidadIncidenciasNoviembre,
-        'incidencias_diciembre' => $cantidadIncidenciasDiciembre
+        'incidencias_diciembre' => $cantidadIncidenciasDiciembre,
+        'total_incidencias_anio' => $totalIncidenciasAnio
       ];
     } catch (Exception $e) {
       throw new Exception('Error al obtener las cantidades de incidencias mensuales: ' . $e->getMessage());

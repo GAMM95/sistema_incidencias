@@ -1,25 +1,28 @@
 <?php
 require_once '../config/conexion.php';
 
-class AnioModel
+class AnioModel extends Conexion
 {
-    private $db;
+  public function __construct()
+  {
+    parent::__construct();
+  }
 
-    public function __construct()
-    {
-        $this->db = (new Conexion())->getConexion();
+  public function getAnio()
+  {
+    try {
+      $conector = parent::getConexion();
+      $sql = "SELECT DISTINCT YEAR(INC_fecha) as YEAR
+              FROM INCIDENCIA
+              ORDER BY YEAR DESC";
+      $stmt = $conector->prepare($sql);
+      $stmt->execute();
+      $resultado = $stmt->fetchAll(PDO::FETCH_ASSOC);
+      return $resultado;
+    } catch (PDOException $e) {
+      echo "Error: " . $e->getMessage();
     }
-
-    public function getAnio()
-    {
-        $query = "SELECT DISTINCT YEAR(FechaIncidencia) as Year
-        FROM INCIDENCIA
-        ORDER BY Year Asc";
-        $stmt = $this->db->prepare($query);
-        $stmt->execute();
-        $resultado = $stmt->fetchAll();
-        return $resultado;
-    }
+  }
 }
 
 $anioModel = new AnioModel();

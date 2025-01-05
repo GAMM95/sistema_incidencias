@@ -582,17 +582,18 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasAreaFecha.js"></script>
 
   <!-- Reportes otros -->
+  <!-- Areas con mas incidencias -->
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteTotalAreasAfectadas.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorFecha.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoria.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoriaFecha.js"></script>
-
+  <!-- Equipos mas afectados -->
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteTotalEquiposAfectados.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquiposPorFecha.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodigoPatrimonial.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodPatrimonialFecha.js"></script>
-
-  <script src="./app/View/func/Inicio/func_inicio_admin.js"></script>
+  <!-- Graficos -->
+  <!-- <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script> -->
 
 </body>
 
