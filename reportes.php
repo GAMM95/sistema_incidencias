@@ -593,7 +593,7 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodigoPatrimonial.js"></script>
   <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodPatrimonialFecha.js"></script>
   <!-- Graficos -->
-  <!-- <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script> -->
+  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/Report/reporteGrafica.js"></script>
 
 </body>
 

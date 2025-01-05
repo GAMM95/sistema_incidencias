@@ -975,7 +975,7 @@
                       <ul class="nav flex-column nav-pills" id="v-pills-tab" role="tablist" aria-orientation="vertical">
                         <li><a class="nav-link text-left active" id="v-pills-area-tab" data-toggle="pill" href="#v-pills-area" role="tab" aria-controls="v-pills-area" aria-selected="false">&Aacute;reas con m&aacute;s incidencias</a></li>
                         <li><a class="nav-link text-left" id="v-pills-codPatrimonial-tab" data-toggle="pill" href="#v-pills-codPatrimonial" role="tab" aria-controls="v-pills-codPatrimonial" aria-selected="false">Equipos m&aacute;s afectados</a></li>
-                        <li><a class="nav-link text-left" id="v-pills-graficos-tab" data-toggle="pill" href="#v-pills-graficos" role="tab" aria-controls="v-pills-graficos" aria-selected="false">Gr&aacute;ficos</a></li>
+                        <li><a class="nav-link text-left" id="v-pills-graficos-tab" data-toggle="pill" href="#v-pills-graficos" role="tab" aria-controls="v-pills-graficos" aria-selected="false">Gr&aacute;fica anual</a></li>
                       </ul>
                     </div>
                     <!-- Fin de pestañas verticales -->
@@ -1262,6 +1262,10 @@
                               <!-- Boton para generar reporte -->
                               <div class="flex justify-center space-x-2">
                                 <button type="button" id="reporteGrafica" class="bn h-10 btn-secondary text-xs text-white font-bold py-2 px-3  rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
+                              </div>
+
+                              <div class="flex justify-center space-x-2">
+                                <button type="button" id="reporteGrafica2" class="bn h-10 btn-secondary text-xs text-white font-bold py-2 px-3  rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
                               </div>
                             </div>
                             <!-- Fin del widget del grafico -->
