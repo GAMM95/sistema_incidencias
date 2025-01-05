@@ -1263,10 +1263,6 @@
                               <div class="flex justify-center space-x-2">
                                 <button type="button" id="reporteGrafica" class="bn h-10 btn-secondary text-xs text-white font-bold py-2 px-3  rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
                               </div>
-
-                              <div class="flex justify-center space-x-2">
-                                <button type="button" id="reporteGrafica2" class="bn h-10 btn-secondary text-xs text-white font-bold py-2 px-3  rounded-md"> <i class="feather mr-2 icon-file"></i>Generar reporte</button>
-                              </div>
                             </div>
                             <!-- Fin del widget del grafico -->
 
@@ -1274,6 +1270,7 @@
                             <script src="https://cdn.jsdelivr.net/npm/apexcharts"></script>
                             <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
                             <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+                            <script src="https://cdnjs.cloudflare.com/ajax/libs/html2canvas/0.4.2/html2canvas.min.js"></script>
 
                             <script>
                               // Pasar datos de PHP a JavaScript

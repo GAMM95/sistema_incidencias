@@ -23,7 +23,7 @@ $('#reporteGrafica').click(function () {
     dataType: 'json',
     success: function (data) {
       console.log('Total incidencias por año:', data);
-
+      
       if (data.success) {
         const totalIncidencias = data.total_incidencias_anio;
 
@@ -52,12 +52,12 @@ $('#reporteGrafica').click(function () {
               const logoImage = new Image();
               logoImage.src = logoUrl;
 
-              logoImage.onload = function () {
+              logoImage.onload = function() {
                 doc.addImage(logoImage, 'PNG', marginX, marginY, logoWidth, logoHeight);
 
                 // Titulo principal
                 doc.setFont('helvetica', 'bold');
-                doc.setFontSize(16);
+                doc.setFontSize(12);
                 const titleWidth = doc.getTextWidth(reportTitle);
                 const titleX = (pageWidth - titleWidth) / 2;
                 const titleY = 20;
@@ -100,34 +100,6 @@ $('#reporteGrafica').click(function () {
               const pageInfo = `Página ${pageNumber} de ${totalPages}`;
               doc.text(footerText, 10, footerY);
               doc.text(pageInfo, doc.internal.pageSize.width - 10 - doc.getTextWidth(pageInfo), footerY);
-            }
-
-            function addChartToPDF() {
-              const chartElement = document.getElementById('support-chart_report');
-
-              if (chartElement) {
-                // Envuelve html2canvas en una promesa explícita
-                new Promise((resolve, reject) => {
-                  html2canvas(chartElement, { useCORS: true }).then(canvas => {
-                    resolve(canvas);
-                  }).catch(err => {
-                    reject(err);
-                  });
-                }).then((canvas) => {
-                  const imgData = canvas.toDataURL('image/png');
-                  const doc = new jsPDF('landscape');
-                  const pageWidth = doc.internal.pageSize.width;
-
-                  // Añadir la imagen de la gráfica a la izquierda de la tabla
-                  doc.addImage(imgData, 'PNG', 10, 50, 90, 60); // Ajusta la posición y tamaño
-
-                  // Ahora agregar la tabla
-                  addTable(doc, incidenciasPorMes);
-
-                }).catch(error => {
-                  console.error('Error al generar la imagen de la gráfica:', error);
-                });
-              }
             }
 
             // Agregar la tabla de incidencias
@@ -183,7 +155,6 @@ $('#reporteGrafica').click(function () {
 
                   // Agregar encabezado, tabla de incidencias y pie de página al PDF
                   addHeader(doc, totalIncidencias);
-                  addChartToPDF();
                   addTable(doc, incidenciasPorMes);
 
                   // Agregar pie de página en todas las páginas
@@ -199,7 +170,7 @@ $('#reporteGrafica').click(function () {
                   });
 
                   // Mostrar mensaje de éxito
-                  toastr.success('Reporte generado.', 'Mensaje');
+                  toastr.success('Reporte generado.','Mensaje');
 
                   // Abrir el PDF generado
                   setTimeout(() => {
@@ -230,3 +201,32 @@ $('#reporteGrafica').click(function () {
     }
   });
 });
+
+
+         // function addChartToPDF() {
+            //   const chartElement = document.getElementById('support-chart_report');
+
+            //   if (chartElement) {
+            //     // Envuelve html2canvas en una promesa explícita
+            //     new Promise((resolve, reject) => {
+            //       html2canvas(chartElement, { useCORS: true }).then(canvas => {
+            //         resolve(canvas);
+            //       }).catch(err => {
+            //         reject(err);
+            //       });
+            //     }).then((canvas) => {
+            //       const imgData = canvas.toDataURL('image/png');
+            //       const doc = new jsPDF('landscape');
+            //       const pageWidth = doc.internal.pageSize.width;
+
+            //       // Añadir la imagen de la gráfica a la izquierda de la tabla
+            //       doc.addImage(imgData, 'PNG', 10, 50, 90, 60); // Ajusta la posición y tamaño
+
+            //       // Ahora agregar la tabla
+            //       addTable(doc, incidenciasPorMes);
+
+            //     }).catch(error => {
+            //       console.error('Error al generar la imagen de la gráfica:', error);
+            //     });
+            //   }
+            // }

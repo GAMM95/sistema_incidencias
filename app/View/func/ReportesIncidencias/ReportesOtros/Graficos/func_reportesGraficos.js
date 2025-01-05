@@ -14,6 +14,9 @@ $(function () {
         columnWidth: '50%'
       },
     },
+    stroke: {
+      curve: 'smooth'
+    },
     dataLabels: {
       enabled: true
     },
@@ -24,6 +27,21 @@ $(function () {
     }],
     xaxis: {
       categories: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+      title: {
+        text: 'Mes'
+      }
+    },
+    yaxis: {
+      title: {
+        text: 'Cantidad'
+      }
+    },
+    legend: {
+      position: 'bottom',  // Mover la leyenda a la parte inferior
+      horizontalAlign: 'center',  // Centrar la leyenda
+      floating: false,  // Asegúrate de que no esté flotante
+      offsetY: 0,  // Ajusta el desplazamiento vertical
+      offsetX: 0  // Ajusta el desplazamiento horizontal
     },
     tooltip: {
       fixed: {
