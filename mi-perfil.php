@@ -57,15 +57,15 @@ switch ($action) {
   if ($rol === 'Administrador') {
     include('app/View/partials/admin/navbar.php');
     include('app/View/partials/admin/header.php');
-    include('app/View/miPerfil.php');
+    include('app/View/Perfil/miPerfil.php');
   } else if ($rol === 'Soporte') {
     include('app/View/partials/soporte/navbar.php');
     include('app/View/partials/soporte/header.php');
-    include('app/View/miPerfil.php');
+    include('app/View/Perfil/miPerfil.php');
   } else {
     include('app/View/partials/user/navbar.php');
     include('app/View/partials/user/header.php');
-    include('app/View/miPerfil.php');
+    include('app/View/Perfil/miPerfil.php');
   }
   ?>
   <!-- [ Main Content ] end -->

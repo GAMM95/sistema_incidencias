@@ -1427,7 +1427,7 @@
                                 </button>
 
                                 <!-- Botón de nueva consulta -->
-                                <button type="button" id="limpiarCamposEventosSoluciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-500 rounded-md flex justify-center items-center">
+                                <button type="button" id="limpiarCamposEventosSoluciones" class="h-10 w-12 text-xs text-white font-bold py-1 px-3 bg-gray-400 rounded-md flex justify-center items-center">
                                   <i class="feather icon-refresh-cw"></i>
                                 </button>
 
