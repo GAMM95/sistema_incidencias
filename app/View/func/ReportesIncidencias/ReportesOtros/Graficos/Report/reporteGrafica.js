@@ -33,7 +33,7 @@ $('#reporteGrafica').click(function () {
         if (totalIncidencias > 0) {
           try {
             const { jsPDF } = window.jspdf;
-            const doc = new jsPDF('landscape');
+            const doc = new jsPDF('portrait');
             const logoUrl = './public/assets/escudo.png';
 
             // Encabezado del PDF
@@ -59,10 +59,10 @@ $('#reporteGrafica').click(function () {
 
                 // Titulo principal
                 doc.setFont('helvetica', 'bold');
-                doc.setFontSize(16);
+                doc.setFontSize(14);
                 const titleWidth = doc.getTextWidth(reportTitle);
                 const titleX = (pageWidth - titleWidth) / 2;
-                const titleY = 20;
+                const titleY = 25;
                 doc.text(reportTitle, titleX, titleY);
                 doc.setLineWidth(0.5);
                 doc.line(titleX, titleY + 1, titleX + titleWidth, titleY + 1);
@@ -72,7 +72,7 @@ $('#reporteGrafica').click(function () {
                 doc.setFontSize(11);
                 const subtitleWidth = doc.getTextWidth(subtitleText);
                 const subtitleX = (pageWidth - subtitleWidth) / 2;
-                doc.text(subtitleText, subtitleX, marginY + 25);
+                doc.text(subtitleText, subtitleX, marginY + 30);
 
                 // Fecha de impresión 
                 doc.setFontSize(8);
@@ -94,7 +94,7 @@ $('#reporteGrafica').click(function () {
             function addFooter(doc, pageNumber, totalPages) {
               doc.setFontSize(8);
               doc.setFont('helvetica', 'italic');
-              const footerY = 200;
+              const footerY = 285;
               doc.setLineWidth(0.5);
               doc.line(10, footerY - 5, doc.internal.pageSize.width - 10, footerY - 5);
 
@@ -135,16 +135,16 @@ $('#reporteGrafica').click(function () {
             // Agregar la tabla de incidencias
             function addTable(doc, incidenciasData) {
               doc.autoTable({
-                startY: 40,
-                margin: { left: 200 },
+                startY: 60,
+                margin: { left: 80 },
                 head: [['Mes', 'Incidencias']],
                 body: incidenciasData.map(incidencia => [
                   incidencia.mes,
                   incidencia.totalIncidencias
                 ]),
                 styles: {
-                  fontSize: 8.5,
-                  cellPadding: 1.5,
+                  fontSize: 10,
+                  cellPadding: 2,
                   halign: 'center',
                   valign: 'middle',
                   overflow: 'linebreak'  // Ajuste para manejar contenido largo
@@ -156,8 +156,8 @@ $('#reporteGrafica').click(function () {
                   halign: 'center'
                 },
                 columnStyles: {
-                  0: { cellWidth: 25 },
-                  1: { cellWidth: 20 }
+                  0: { cellWidth: 30 },
+                  1: { cellWidth: 25 }
                 },
                 pageBreak: 'auto'  // Permite dividir la tabla en múltiples páginas si es necesario
               });
