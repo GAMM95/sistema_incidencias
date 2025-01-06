@@ -94,9 +94,9 @@ switch ($action) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Registros/Incidencia/func_incidencia_user.js"></script>
-  <script src="./app/View/func/Registros/Incidencia/reporteDetalleIncidencia.js"></script>
-  <script src="./app/View/func/Mantenedores/tipoBien.js"></script>
+  <script src="./public/func/Registros/Incidencia/func_incidencia_user.js"></script>
+  <script src="./public/func/Registros/Incidencia/reporteDetalleIncidencia.js"></script>
+  <script src="./public/func/Mantenedores/tipoBien.js"></script>
 
 </body>
 

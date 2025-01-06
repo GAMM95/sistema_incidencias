@@ -125,7 +125,7 @@ switch ($action) {
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Registros/Recepcion/func_recepcion_admin.js"></script>
+  <script src="./public/func/Registros/Recepcion/func_recepcion_admin.js"></script>
 
 </body>
 

@@ -59,6 +59,7 @@ $(document).ready(function () {
   });
 });
 
+
 $(document).ready(function () {
   var state = new URLSearchParams(window.location.search).get('state');
   var message = new URLSearchParams(window.location.search).get('message');
@@ -189,4 +190,3 @@ $(document).ready(function () {
     $('.modal.flex').removeClass('flex').addClass('hidden'); // Ocultar modal
   });
 });
-

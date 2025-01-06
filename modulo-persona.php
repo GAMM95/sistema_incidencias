@@ -82,7 +82,7 @@ switch ($action) {
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Mantenedores/func_persona.js"></script>
+  <script src="./public/func/Mantenedores/func_persona.js"></script>
 
 </body>
 

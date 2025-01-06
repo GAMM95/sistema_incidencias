@@ -83,7 +83,7 @@ switch ($action) {
   <!-- [ Pre-loader ] End -->
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Login/func_login.js"></script>
+  <script src="./public/func/Login/func_login.js"></script>
 </body>
 
 </html>

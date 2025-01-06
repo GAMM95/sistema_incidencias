@@ -98,8 +98,8 @@ switch ($action) {
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Perfil/func_perfil.js"></script>
-  <script src="./app/View/func/Perfil/func_cambiarPassword.js"></script>
+  <script src="./public/func/Perfil/func_perfil.js"></script>
+  <script src="./public/func/Perfil/func_cambiarPassword.js"></script>
 </body>
 
 </html>

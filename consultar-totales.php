@@ -159,7 +159,7 @@ if ($action === 'consultar') {
   <script src="https://cdn.tailwindcss.com"></script>
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Consultas/func_consulta_totales.js"></script>
+  <script src="./public/func/Consultas/func_consulta_totales.js"></script>
 
 </body>
 

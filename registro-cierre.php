@@ -118,8 +118,8 @@ switch ($action) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/jspdf-autotable/3.5.20/jspdf.plugin.autotable.min.js"></script>
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Registros/Cierre/func_cierre_admin.js"></script>
-  <script src="./app/View/func/Registros/Cierre/reporteDetalleCierre.js"></script>
+  <script src="./public/func/Registros/Cierre/func_cierre_admin.js"></script>
+  <script src="./public/func/Registros/Cierre/reporteDetalleCierre.js"></script>
 </body>
 
 </html>

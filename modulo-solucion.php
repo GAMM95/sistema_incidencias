@@ -98,7 +98,7 @@ switch ($action) {
   <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Mantenedores/func_solucion.js"></script>
+  <script src="./public/func/Mantenedores/func_solucion.js"></script>
 
 </body>
 

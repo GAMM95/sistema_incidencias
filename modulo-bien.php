@@ -84,7 +84,7 @@ switch ($action) {
   <script src="https://cdnjs.cloudflare.com/ajax/libs/toastr.js/latest/toastr.min.js"></script>
 
   <!-- funcionalidades enrutadas -->
-  <script src="./app/View/func/Mantenedores/func_tipoBien.js"></script>
+  <script src="./public/func/Mantenedores/func_tipoBien.js"></script>
 
 </body>
 

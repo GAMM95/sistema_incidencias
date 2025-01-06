@@ -1312,4 +1312,4 @@
 </div>
 
 <script src="https://cdn.tailwindcss.com"></script>
-<script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script>
+<script src="./public/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script>

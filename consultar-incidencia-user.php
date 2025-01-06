@@ -153,7 +153,7 @@ if ($action === 'consultar_usuario') {
 
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/Consultas/func_consulta_incidencia_user.js"></script>
+  <script src="./public/func/Consultas/func_consulta_incidencia_user.js"></script>
 
 </body>
 

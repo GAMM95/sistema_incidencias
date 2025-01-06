@@ -280,4 +280,4 @@
     <!-- Fin del contenido principal -->
   </div>
 </div>
-<script src="./app/View/func/Inicio/func_inicio_admin.js"></script>
+<script src="./public/func/Inicio/func_inicio_admin.js"></script>

@@ -537,64 +537,64 @@ if ($rol === 'Administrador' || $rol === 'Soporte') {
   <link rel="stylesheet" href="app/View/partials/scrollbar-styles.css">
 
   <!-- Funcionalidades enrutadas -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/func_reportesGenerales.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/func_reportesCerradas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/func_reportesAsignaciones.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/func_reporteDetalles.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/func_reportesAreas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/func_reportesEquipo.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/func_reportesGenerales.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/func_reportesCerradas.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/func_reportesAsignaciones.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReporteDetalle/func_reporteDetalles.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesAreas/func_reportesAreas.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesEquipos/func_reportesEquipo.js"></script>
 
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/func_reportesAreasAfectadas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/func_reportesAreasAfectadas.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/func_reportesEquiposAfectados.js"></script>
 
   <!-- graficos -->
-  <!-- <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script> -->
+  <!-- <script src="./public/func/ReportesIncidencias/ReportesOtros/Graficos/func_reportesGraficos.js"></script> -->
 
   <!-- Reportes incidencias totales -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteIncidenciasTotalesFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteTotalIncidencias.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasTotales/Reports/reporteIncidenciasTotalesFecha.js"></script>
   <!-- Rporte pendiente de cierre -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/PendientesCierre/reportePendientesCierre.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/PendientesCierre/reportePendientesCierre.js"></script>
   <!-- Reportes incidencias cerradas -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteTotalIncidenciasCerradas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasUsuario.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasUsuarioFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteTotalIncidenciasCerradas.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasUsuario.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasCerradas/Reports/reporteIncidenciasCerradasUsuarioFecha.js"></script>
   <!-- Reportes incidencias asignadas -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteTotalIncidenciasAsignadas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasUsuario.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasUsuarioFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteTotalIncidenciasAsignadas.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasUsuario.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesGenerales/IncidenciasAsignadas/Reports/reporteIncidenciasAsignadasUsuarioFecha.js"></script>
 
   <!-- Reportes de detalle -->
-  <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleIncidencia.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleIncidencia.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReporteDetalle/Reports/reporteDetalleCierre.js"></script>
 
   <!-- Reportes por codigo patrimonial - equipos -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteTotalEquipos.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquiposFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquipoCodPatrimonial.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquipoCodPatrimonialFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesEquipos/Reports/reporteTotalEquipos.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquiposFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquipoCodPatrimonial.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesEquipos/Reports/reporteEquipoCodPatrimonialFecha.js"></script>
 
   <!-- Reportes por area -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteTotalAreas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasArea.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasAreaFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesAreas/Reports/reporteTotalAreas.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasArea.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesAreas/Reports/reporteIncidenciasAreaFecha.js"></script>
 
   <!-- Reportes otros -->
   <!-- Areas con mas incidencias -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteTotalAreasAfectadas.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoria.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoriaFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteTotalAreasAfectadas.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoria.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/AreasAfectadas/Reports/reporteAreasPorCategoriaFecha.js"></script>
   <!-- Equipos mas afectados -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteTotalEquiposAfectados.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquiposPorFecha.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodigoPatrimonial.js"></script>
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodPatrimonialFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteTotalEquiposAfectados.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquiposPorFecha.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodigoPatrimonial.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/EquiposAfectados/Reports/reporteEquipoPorCodPatrimonialFecha.js"></script>
   <!-- Graficos -->
-  <script src="./app/View/func/ReportesIncidencias/ReportesOtros/Graficos/Report/reporteGrafica.js"></script>
+  <script src="./public/func/ReportesIncidencias/ReportesOtros/Graficos/Report/reporteGrafica.js"></script>
 
 </body>
 

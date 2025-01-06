@@ -47,7 +47,7 @@
         </div>
 
         <!-- Formulario de inicio de sesión -->
-        <form action="index.php?action=login" method="POST" class="form max-w-sm mx-auto">
+        <form id="loginForm" action="index.php?action=login" method="POST" class="form max-w-sm mx-auto">
           <!-- Campo de entrada para usuario -->
           <div class="inputDiv w-60 mb-2 mx-auto">
             <div class="input flex items-center border rounded-2xl p-2">
