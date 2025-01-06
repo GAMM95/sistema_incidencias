@@ -494,8 +494,8 @@ class IncidenciaModel extends Conexion
     $conector = parent::getConexion();
     try {
       if ($conector != null) {
-        $sql = "SELECT * FROM vw_incidencias
-                WHERE ARE_codigo = :are_codigo
+        $sql = "SELECT * FROM vw_incidencias 
+                WHERE ARE_codigo = :are_codigo AND EST_codigo <>2
                 ORDER BY INC_numero DESC";
         $stmt = $conector->prepare($sql);
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT);

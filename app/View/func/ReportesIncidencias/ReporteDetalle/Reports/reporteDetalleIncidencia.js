@@ -37,7 +37,7 @@ $(document).ready(function () {
 
               const fechaImpresion = new Date().toLocaleDateString();
               const headerText2 = 'Subgerencia de Informática y Sistemas';
-              const reportTitle = 'REPORTE DETALLADO DE INCIDENCIA';
+              const reportTitle = 'REPORTE DE INCIDENCIA';
 
               const pageWidth = doc.internal.pageSize.width;
               const marginX = 10;

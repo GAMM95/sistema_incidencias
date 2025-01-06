@@ -443,6 +443,7 @@ SELECT
   A.ARE_codigo,
   A.ARE_nombre,
   E.EST_descripcion,
+  E.EST_codigo,
   p.PER_nombres + ' ' + p.PER_apellidoPaterno AS Usuario
 FROM 
   INCIDENCIA I

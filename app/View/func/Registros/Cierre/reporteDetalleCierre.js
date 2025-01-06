@@ -38,7 +38,7 @@ $(document).ready(function () {
 
               const fechaImpresion = new Date().toLocaleDateString();
               const headerText2 = 'Subgerencia de Informática y Sistemas';
-              const reportTitle = 'REPORTE DETALLADO DE CIERRE';
+              const reportTitle = 'REPORTE DE CIERRE';
 
               const pageWidth = doc.internal.pageSize.width;
               const marginX = 10;

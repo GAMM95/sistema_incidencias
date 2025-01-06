@@ -202,7 +202,7 @@
               <th scope="col" class="px-6 py-2 text-center">&Aacute;rea</th>
               <th scope="col" class="px-6 py-2 hidden">descripcion</th>
               <th scope="col" class="px-6 py-2 hidden">Estado</th>
-              <th scope="col" class="px-6 py-2 ">Estado</th>
+              <th scope="col" class="px-6 py-2 text-center">Estado</th>
               <th scope="col" class="px-6 py-2 hidden">Usuario</th>
               <th scope="col" class="px-6 py-2 text-center">Acci&oacute;n</th>
             </tr>
