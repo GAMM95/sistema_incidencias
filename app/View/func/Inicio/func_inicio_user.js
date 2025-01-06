@@ -3,7 +3,7 @@ $(function () {
   var options1 = {
     chart: {
       type: 'area',
-      height: 200
+      height: 300
     },
     plotOptions: {
       bar: {

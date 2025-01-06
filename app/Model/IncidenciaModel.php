@@ -566,7 +566,12 @@ class IncidenciaModel extends Conexion
         $stmt->bindParam(':are_codigo', $area, PDO::PARAM_INT); // Vinculamos el parámetro
         $stmt->execute();
         $result = $stmt->fetch(PDO::FETCH_ASSOC);
-        return $result['incidencias_mes_actual'];
+        // return $result['incidencias_mes_actual'];
+        if ($result) {
+          return $result['incidencias_mes_actual'];
+        } else {
+          return 0; // Si no hay resultados, devolver 0
+        }
       } else {
         throw new Exception("Error de conexión con la base de datos.");
         return null;
