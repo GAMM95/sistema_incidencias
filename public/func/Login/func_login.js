@@ -65,9 +65,9 @@ $(document).ready(function () {
   var message = new URLSearchParams(window.location.search).get('message');
 
   if (state === 'failed') {
-    toastr.error(message || 'Credenciales incorrectas.', 'Inicio de sesión fallido.');
+    toastr.error(message || 'Credenciales incorrectas.', 'Inicio de sesi&oacute;n fallido.');
   } else if (state === 'inactive') {
-    toastr.error('Usuario inactivo. Por favor, contacte al administrador.', 'Inicio de sesión fallido.');
+    toastr.error('Usuario inactivo. Por favor, contacte al administrador.', 'Inicio de sesi&oacute;n fallido.');
   }
 });
 
@@ -79,43 +79,6 @@ $(document).ready(function () {
     "progressBar": true,
     "timeOut": "3000"
   };
-
-
-
-
-  // // Verificar si hay un parámetro de estado en la URL
-  // var state = new URLSearchParams(window.location.search).get('state');
-  // if (state === 'failed') {
-  //   toastr.error('Credenciales incorrectas.', 'Inicio de sesi&oacute;n fallido.');
-  // } else if (state === 'inactive') {
-  //   toastr.error('Usuario inactivo. Por favor, contacte al administrador.', 'Inicio de sesi&oacute;n fallido.');
-  // }
-
-  // Manejar la presentación del formulario
-  // $('.form').submit(function (event) {
-  //   var valido = true;
-  //   var mensajeError = '';
-
-  //   var faltaUsername = ($('#username').val().trim() === '');
-  //   var faltaPassword = ($('#password').val().trim() === '');
-
-  //   if (faltaUsername && faltaPassword) {
-  //     mensajeError = 'Por favor, complete ambos campos.';
-  //     valido = false;
-  //   } else if (faltaUsername) {
-  //     mensajeError = 'Por favor, ingrese su nombre de usuario.';
-  //     valido = false;
-  //   } else if (faltaPassword) {
-  //     mensajeError = 'Por favor, ingrese su contraseña.';
-  //     valido = false;
-  //   }
-
-  //   // Mostrar mensaje de error si hay
-  //   if (!valido) {
-  //     toastr.warning(mensajeError, 'Advertencia');
-  //   }
-  //   return valido;
-  // });
 
   // Manejar la presentación del formulario
   $('.form').submit(function (event) {
@@ -137,11 +100,11 @@ $(document).ready(function () {
       mensajeError = 'Por favor, ingrese su nombre de usuario.';
       valido = false;
     } else if (faltaPassword) {
-      mensajeError = 'Por favor, ingrese su contraseña.';
+      mensajeError = 'Por favor, ingrese su contrase&ntilde;a.';
       valido = false;
     } else if (username.toLowerCase() !== 'admin' && faltaDni) {
       // Si el usuario no es "ADMIN", validar los dígitos del DNI
-      mensajeError = 'Por favor, ingrese los 2 últimos dígitos de su DNI.';
+      mensajeError = 'Por favor, ingrese los 2 &uacute;ltimos d&iacute;gitos de su DNI.';
       valido = false;
     }
 

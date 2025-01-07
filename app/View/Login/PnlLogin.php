@@ -75,7 +75,7 @@
           <div class="inputDiv w-60 mb-3 mx-auto" id="twoStepAuth" style="display: none;">
             <p class="mb-2 text-center text-green-600 text-md">Autenticaci&oacute;n en 2 pasos</p>
             <div class="input flex items-center border rounded-2xl p-2">
-              <input type='password' id='digitos' placeholder='2 &uacute;ltimos dígitos de su DNI'
+              <input type='password' id='digitos' placeholder='2 &uacute;ltimos d&iacute;gitos de su n&uacute;mero de tel&eacute;fono' name='digitos' maxlength="2"
                 name='digitos' maxlength="2"
                 pattern="\d{1,12}" oninput="this.value = this.value.replace(/[^0-9]/g, '');"
                 class="w-full max-w-xs outline-none text-md font-poppins ml-2 text-gray-600 text-center">
@@ -83,7 +83,7 @@
           </div>
 
           <!-- Enlace para pedir ayuda -->
-          <p class="mb-2 text-center text-gray-800 text-md">¿Necesitas asistencia?
+          <p class="mb-2 text-center text-gray-800 text-md">&iquest;Necesitas asistencia?
             <a class="text-md font-bold cursor-pointer" data-toggle="modal" data-target="#exampleModalCenter" style="color: #159A80;">Pedir ayuda</a>
           </p>
 
